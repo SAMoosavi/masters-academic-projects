@@ -1,0 +1,67 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[margin=30mm]{geometry}
+\usepackage{xepersian}
+
+% تنظیم فونت‌ها (بر اساس آنچه روی لینوکس خود نصب دارید)
+\settextfont{Vazirmatn} 
+\setlatintextfont{Liberation Serif}
+
+% تنظیمات بیب‌لتکس به همراه حذف فیلدهای اضافی برای استاندارد دقیق IEEE
+\usepackage[backend=biber,style=ieee,isbn=false,url=false,eprint=false]{biblatex}
+\addbibresource{seminar.bib}
+
+% اصلاح دقیق ساختار مراجع بدون خطای ماکرو
+\defbibenvironment{bibliography}
+  {\list
+     {\printtext[labelnumberwidth]{%
+        \printfield{labelprefix}%
+        \printfield{labelnumber}}}
+     {\setbox0\hbox{\printtext[labelnumberwidth]{0}}%
+      \leftmargin\wd0\advance\leftmargin\labelsep%
+      \itemindent0pt%
+      \parsep\itemsep%
+      \topsep0pt%
+      \partopsep0pt%
+      \def\makelabel##1{##1\hss}}} % این خط اصلاح شد
+  {\endlist}
+  {\item}
+
+\begin{document}
+
+\begin{center}
+{\Large \textbf{برگه موضوع سمینار}}\\[1cm]
+\end{center}
+
+\noindent\textbf{عنوان سمینار:}
+حریم خصوصی و امنیت در شبکه اقتضایی خودرویی (VANET)
+
+\vspace{0.5cm}
+
+\noindent\textbf{نام دانشجو:}
+سید علی موسوی فخرآبادی
+
+\vspace{0.5cm}
+
+\noindent\textbf{شماره دانشجویی:}
+404131010
+
+\vspace{0.5cm}
+
+\noindent\textbf{استاد راهنما:}
+دکتر بابک صادقیان
+
+\vspace{1cm}
+
+\section*{مراجع}
+\begin{latin}
+\nocite{*}
+\printbibliography[heading=none]
+\end{latin}
+
+\vspace{1cm}
+\noindent\textbf{امضای استاد راهنما:}
+
+
+
+\end{document}

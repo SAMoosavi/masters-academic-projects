@@ -1,0 +1,22 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{polyglossia}
+\setmainlanguage{farsi}
+\usepackage{fontspec}
+\setmainfont{Vazirmatn}
+\begin{document}
+\begin{tikzpicture}
+% Circle
+\draw[thick, blue!70!black, fill=blue!10] (0,0) circle (2cm);
+% Gear teeth
+\foreach \a in {0,20,...,340} {
+  \draw[blue!70!black, fill=blue!30] (\a:1.7cm) -- (\a:2cm) -- (\a+10:2cm) -- (\a+10:1.7cm);
+}
+% Inner circle
+\draw[blue!70!black, fill=blue!5] (0,0) circle (1.2cm);
+% Text
+\node[blue!70!black, font=\bfseries\large] at (0,0.4) {AUT};
+\node[blue!70!black, font=\small] at (0,-0.2) {امیرکبیر};
+\end{tikzpicture}
+\end{document}

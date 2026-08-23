@@ -1,0 +1,1405 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{al-aniPrivacySafetyImprovement2023}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=0ce16cfd969b03485e99bb6e249b923c}{%
+           family={Al-ani},
+           familyi={A\bibinithyphendelim a\bibinitperiod},
+           given={Ruqayah},
+           giveni={R\bibinitperiod}}}%
+        {{hash=80747f3f73cb050c3dbe367f7b4c670c}{%
+           family={Baker},
+           familyi={B\bibinitperiod},
+           given={Thar},
+           giveni={T\bibinitperiod}}}%
+        {{hash=78b85e16af77a1b542f32ece926f004b}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Bo},
+           giveni={B\bibinitperiod}}}%
+        {{hash=6a336359cddb96bbe91e58adf66384fd}{%
+           family={Shi},
+           familyi={S\bibinitperiod},
+           given={Qi},
+           giveni={Q\bibinitperiod}}}%
+      }
+      \strng{namehash}{e70d29110e9639b3d9eda91036d2c4b3}
+      \strng{fullhash}{df8539f81b02f4ae3d701a8888698bc9}
+      \strng{fullhashraw}{df8539f81b02f4ae3d701a8888698bc9}
+      \strng{bibnamehash}{df8539f81b02f4ae3d701a8888698bc9}
+      \strng{authorbibnamehash}{df8539f81b02f4ae3d701a8888698bc9}
+      \strng{authornamehash}{e70d29110e9639b3d9eda91036d2c4b3}
+      \strng{authorfullhash}{df8539f81b02f4ae3d701a8888698bc9}
+      \strng{authorfullhashraw}{df8539f81b02f4ae3d701a8888698bc9}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Vehicular Ad-hoc NETwork (VANET) safety applications allow vehicles to exchange messages with surrounding vehicles periodically to improve the contextual awareness of the drivers about the driving environment which significantly enhances traffic safety. However, these messages usually contain sensitive information such as the Spatio-temporal information of each vehicle which might be exploited by malicious entities for various purposes (e.g. monitoring the vehicle for a long period and breaching the driver’s privacy). Researchers have proposed different schemes to enhance the privacy level of drivers and their vehicles alike. However, most of the existing schemes have a negative impact on safety applications; they stop broadcasting messages for a period which increases the chance of accidents. In this paper, we propose a Safety-related Privacy Scheme (SRPS) that enhances both the privacy and safety of VANET safety applications by reducing silent periods without degrading the privacy level. While the vehicle continues monitoring neighbour vehicles if an accident is expected, it exits the silent period and starts sharing its location with its neighbour vehicles. The SRPS consists of two algorithms based on the status of the vehicle (i.e. silent vs. active). These algorithms use a multi-target tracking algorithm to search for an effective context to change pseudonyms and avoid potential accidents. Four simulators are used to implement SRPS. The latter has been compared with five pseudonym-changing schemes (PPC, RSP, CSP, SLOW, and CAPS). The simulation results indicate that SRPS achieves an efficient balance between security, privacy, and safety when compared to the other schemes.}
+      \field{day}{1}
+      \field{issn}{1615-5270}
+      \field{journaltitle}{International Journal of Information Security}
+      \field{langid}{english}
+      \field{month}{8}
+      \field{number}{4}
+      \field{shortjournal}{Int. J. Inf. Secur.}
+      \field{title}{Privacy and Safety Improvement of {{VANET}} Data via a Safety-Related Privacy Scheme}
+      \field{urlday}{9}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{22}
+      \field{year}{2023}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{763\bibrangedash 783}
+      \range{pages}{21}
+      \verb{doi}
+      \verb 10.1007/s10207-023-00662-6
+      \endverb
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/ZV2VYZIX/Al-ani et al. - 2023 - Privacy and safety improvement of VANET data via a safety-related privacy scheme.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1007/s10207-023-00662-6
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1007/s10207-023-00662-6
+      \endverb
+      \keyw{Privacy,Pseudonym,Safety,Silent period,Tracker,VANET}
+    \endentry
+    \entry{farsimadanReviewSecurityChallenges2025}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=5c68fd25ff3ed51b7ab9d54ad5e56beb}{%
+           family={Farsimadan},
+           familyi={F\bibinitperiod},
+           given={Eslam},
+           giveni={E\bibinitperiod}}}%
+        {{hash=09d063d809f7b829ef23aeff575e4591}{%
+           family={Moradi},
+           familyi={M\bibinitperiod},
+           given={Leila},
+           giveni={L\bibinitperiod}}}%
+        {{hash=ef6329bb273cec2c4632c5d3cf605280}{%
+           family={Palmieri},
+           familyi={P\bibinitperiod},
+           given={Francesco},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{0d4c5e144bf8d70bcd09eef18e7767d3}
+      \strng{fullhash}{063a4ef7f086ede4ed876be04e42c69f}
+      \strng{fullhashraw}{063a4ef7f086ede4ed876be04e42c69f}
+      \strng{bibnamehash}{063a4ef7f086ede4ed876be04e42c69f}
+      \strng{authorbibnamehash}{063a4ef7f086ede4ed876be04e42c69f}
+      \strng{authornamehash}{0d4c5e144bf8d70bcd09eef18e7767d3}
+      \strng{authorfullhash}{063a4ef7f086ede4ed876be04e42c69f}
+      \strng{authorfullhashraw}{063a4ef7f086ede4ed876be04e42c69f}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The Vehicular Ad-hoc Network (VANET) is emerging as a new networking/communication model that offers remarkable approaches for controlling and managing vehicular traffic. In this scenario, Virtual traffic light (VTL) techniques, advanced navigation support, and fleet management facilities attempt to handle traffic management and control concerns by leveraging vehicular network communication paradigms. The most important communication models in vehicular networks are characterized as vehicle-to-everything (V2X) communications technology. In V2X communications, security issues, and related countermeasures are crucial, as they are in other wireless technologies. Our survey provides a systematic overview of various research directions by highlighting and investigating the most critical V2X security issues and related countermeasures. First, we discuss the points mentioned in the previous papers, including the architecture, main characteristics, and communication models of the V2X networks. Furthermore, some of the most significant applications of these mission-critical networks reported in the published papers and the main security challenges and requirements will be highlighted. We also arrange corresponding (existing) resources, to investigate different solutions for securing V2X communications. Finally, a few suggestions for future research related to V2X security challenges are presented. In general, this article reviews and summarizes the studies of the last ten years. This survey will help make it easier for scholars studying V2X communication security and related fields to keep track of the academic frontier, by offering a sufficiently clear landscape and a roadmap.}
+      \field{issn}{2169-3536}
+      \field{journaltitle}{IEEE Access}
+      \field{title}{A {{Review}} on {{Security Challenges}} in {{V2X Communications Technology}} for {{VANETs}}}
+      \field{urlday}{27}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{volume}{13}
+      \field{year}{2025}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{31069\bibrangedash 31094}
+      \range{pages}{26}
+      \verb{doi}
+      \verb 10.1109/ACCESS.2025.3541035
+      \endverb
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/J6SW94JL/Farsimadan et al. - 2025 - A Review on Security Challenges in V2X Communications Technology for VANETs.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/document/10879476
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/document/10879476
+      \endverb
+      \keyw{6G mobile communication,Communications technology,cryptography,Cryptography,cyberattack,machine learning,privacy,Privacy,Reviews,Safety,security,Security,security solutions,Surveys,V2X communications,VANET,Vehicle-to-everything,Vehicular ad hoc networks}
+    \endentry
+    \entry{fengBPASBlockchainAssistedPrivacyPreserving2020}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=60d32e5e5c0aeb219b221bc422c03542}{%
+           family={Feng},
+           familyi={F\bibinitperiod},
+           given={Qi},
+           giveni={Q\bibinitperiod}}}%
+        {{hash=8019f2fb65ab14a726f08aaaa09059ad}{%
+           family={He},
+           familyi={H\bibinitperiod},
+           given={Debiao},
+           giveni={D\bibinitperiod}}}%
+        {{hash=293aa951928de5b545b038b510c6e434}{%
+           family={Zeadally},
+           familyi={Z\bibinitperiod},
+           given={Sherali},
+           giveni={S\bibinitperiod}}}%
+        {{hash=0b2e555904a51fcf14cb334b659f8afb}{%
+           family={Liang},
+           familyi={L\bibinitperiod},
+           given={Kaitai},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{4ceda0929793eac7e077b4d3d02f9505}
+      \strng{fullhash}{aee7934ef7f8120021f5ea2f18371cac}
+      \strng{fullhashraw}{aee7934ef7f8120021f5ea2f18371cac}
+      \strng{bibnamehash}{aee7934ef7f8120021f5ea2f18371cac}
+      \strng{authorbibnamehash}{aee7934ef7f8120021f5ea2f18371cac}
+      \strng{authornamehash}{4ceda0929793eac7e077b4d3d02f9505}
+      \strng{authorfullhash}{aee7934ef7f8120021f5ea2f18371cac}
+      \strng{authorfullhashraw}{aee7934ef7f8120021f5ea2f18371cac}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{If all vehicles are connected together through a wireless communication channel, vehicular ad hoc networks (VANETs) can support a wide range of real-time traffic information services, such as intelligent routing, weather monitoring, emergency call, etc. However, the accuracy and credibility of the transmitted messages among the VANETs are of paramount importance as life may depend on it. In this article we introduce a novel framework called blockchain-assisted privacy-preserving authentication system (BPAS) that provides authentication automatically in VANETs and preserves vehicle privacy at the same time. This design is highly efficient and scalable. It does not require any online registration centre (except for system initialization and vehicle registration), and allows conditional tracing and dynamic revocation of misbehaving vehicles. In this article, we conduct an in-depth security analysis and a comprehensive performance evaluation (which is based on the Hyperledger Fabric platform) for our proposed framework. The results demonstrate that our framework is an efficient solution for the development of a decentralized authentication system in VANETs.}
+      \field{issn}{1941-0050}
+      \field{journaltitle}{IEEE Transactions on Industrial Informatics}
+      \field{month}{6}
+      \field{number}{6}
+      \field{shorttitle}{{{BPAS}}}
+      \field{title}{{{BPAS}}: {{Blockchain-Assisted Privacy-Preserving Authentication System}} for {{Vehicular Ad Hoc Networks}}}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{16}
+      \field{year}{2020}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{4146\bibrangedash 4155}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1109/TII.2019.2948053
+      \endverb
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/SEXJXE4I/8873608.html
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/abstract/document/8873608
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/abstract/document/8873608
+      \endverb
+      \keyw{Authentication,blockchain,Blockchain,Privacy,Public key,smart contract,Vehicular ad hoc networks,vehicular ad hoc networks (VANETs)}
+    \endentry
+    \entry{feraudoDIVADIDbasedReputation2024}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=af9deb72c12b816e4cfaf1dd4f5881fd}{%
+           family={Feraudo},
+           familyi={F\bibinitperiod},
+           given={Angelo},
+           giveni={A\bibinitperiod}}}%
+        {{hash=4e645743a88129ce034f025aa65ae34b}{%
+           family={Romandini},
+           familyi={R\bibinitperiod},
+           given={Nicolò},
+           giveni={N\bibinitperiod}}}%
+        {{hash=32bd0ae23c1be9240c2896e08c7c9634}{%
+           family={Mazzocca},
+           familyi={M\bibinitperiod},
+           given={Carlo},
+           giveni={C\bibinitperiod}}}%
+        {{hash=5fe486f268a2846439b84cd1e3138498}{%
+           family={Montanari},
+           familyi={M\bibinitperiod},
+           given={Rebecca},
+           giveni={R\bibinitperiod}}}%
+        {{hash=7dc39ea7034dbbcf776b9604249506e8}{%
+           family={Bellavista},
+           familyi={B\bibinitperiod},
+           given={Paolo},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{ec88a73933be6bcbb11b49e61654c747}
+      \strng{fullhash}{e21afef702578fbf3f8d50fb283d341a}
+      \strng{fullhashraw}{e21afef702578fbf3f8d50fb283d341a}
+      \strng{bibnamehash}{e21afef702578fbf3f8d50fb283d341a}
+      \strng{authorbibnamehash}{e21afef702578fbf3f8d50fb283d341a}
+      \strng{authornamehash}{ec88a73933be6bcbb11b49e61654c747}
+      \strng{authorfullhash}{e21afef702578fbf3f8d50fb283d341a}
+      \strng{authorfullhashraw}{e21afef702578fbf3f8d50fb283d341a}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Today’s advancement in Vehicular Ad-hoc Networks (VANET) constitutes a cornerstone in ensuring traffic safety in Intelligent Transportation Systems (ITS). In this context, vehicle-to-vehicle (V2V) communications are a pivotal enabler for road safety, traffic optimization, and pedestrian protection. However, V2V communications lack effective and efficient security solutions that can adequately ensure the trustworthiness of the source of the transmitted content. In this work, we originally propose DIVA, i.e., a Decentralized Identifier-based reputation system for secure transmission in VAnets. In particular, we claim the suitability of utilizing IOTA, a Direct Acyclic Graph (DAG)-based ledger, to securely store reputation scores and of leveraging Decentralized Identifiers (DIDs) to identify participating vehicles. DIVA also incorporates and implements a reputation algorithm that computes reputation scores by analyzing both safety and non-safety messages, exchanged among vehicles and Road Side Units (RSUs) in compliance with the related European Telecommunications Standards Institute (ETSI) standards. Thus, DIVA can effectively identify malicious contributors and decrease their reputation scores. The reported experimental results clearly show the feasibility and effectiveness of DIVA, by working on an extended and comprehensive dataset of realistic V2V messages; the dataset has been made openly accessible to the research community, also to increase result reproducibility.}
+      \field{day}{1}
+      \field{issn}{1389-1286}
+      \field{journaltitle}{Computer Networks}
+      \field{month}{5}
+      \field{shortjournal}{Computer Networks}
+      \field{shorttitle}{{{DIVA}}}
+      \field{title}{{{DIVA}}: {{A DID-based}} Reputation System for Secure Transmission in {{VANETs}} Using {{IOTA}}}
+      \field{urlday}{19}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{volume}{244}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{110332}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1016/j.comnet.2024.110332
+      \endverb
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/TMU6XJ2R/Feraudo et al. - 2024 - DIVA A DID-based reputation system for secure transmission in VANETs using IOTA.pdf;/home/sam/snap/zotero-snap/common/Zotero/storage/7JUINCXN/S1389128624001646.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.sciencedirect.com/science/article/pii/S1389128624001646
+      \endverb
+      \verb{url}
+      \verb https://www.sciencedirect.com/science/article/pii/S1389128624001646
+      \endverb
+      \keyw{Authentication,DAG,Decentralized identifiers,IOTA,Security,V2V,VANETs}
+    \endentry
+    \entry{ghovanlooyghajarSBTMSScalableBlockchain2021}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=ae7ad3e4331dbd81a5bd10e4f382526c}{%
+           family={Ghovanlooy\bibnamedelima Ghajar},
+           familyi={G\bibinitperiod\bibinitdelim G\bibinitperiod},
+           given={Fatemeh},
+           giveni={F\bibinitperiod}}}%
+        {{hash=915082ae077fe2c8089618a882a4e2ed}{%
+           family={Salimi\bibnamedelima Sratakhti},
+           familyi={S\bibinitperiod\bibinitdelim S\bibinitperiod},
+           given={Javad},
+           giveni={J\bibinitperiod}}}%
+        {{hash=8e5c982a088560959c0f830cd2a4dafb}{%
+           family={Sikora},
+           familyi={S\bibinitperiod},
+           given={Axel},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Multidisciplinary Digital Publishing Institute}%
+      }
+      \strng{namehash}{9be9afefbdb012b94f644bb2643d36ab}
+      \strng{fullhash}{6e804fff11187fce2919528081632fb7}
+      \strng{fullhashraw}{6e804fff11187fce2919528081632fb7}
+      \strng{bibnamehash}{6e804fff11187fce2919528081632fb7}
+      \strng{authorbibnamehash}{6e804fff11187fce2919528081632fb7}
+      \strng{authornamehash}{9be9afefbdb012b94f644bb2643d36ab}
+      \strng{authorfullhash}{6e804fff11187fce2919528081632fb7}
+      \strng{authorfullhashraw}{6e804fff11187fce2919528081632fb7}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{With many advances in sensor technology and the Internet of Things, Vehicle Ad Hoc Network (VANET) is becoming a new generation. VANET’s current technical challenges are deploying decentralized architecture and protecting privacy. Because Blockchain features are decentralized, distributed, mass storage, and non-manipulation features, this paper designs a new decentralized architecture using Blockchain technology called Blockchain-based VANET. Blockchain-based VANET can effectively resolve centralized problems and mutual distrust between VANET units. To achieve this, it is needed to provide scalability on the blockchain to run for VANET. In this system, our focus is on the reliability of incoming messages on the network. Vehicles check the validity of the received messages using the proposed Bayesian formula for trust management system and some information saved in the Blockchain. Then, based on the validation result, the vehicle computes a rate for each message type and message source vehicle. Vehicles upload the computed rates to Roadside Units (RSUs) in order to calculate the net reliability value. Finally, RSUs using a sharding consensus mechanism generate blocks, including the net reliability value as a transaction. In this system, all RSUs collaboratively maintain the latest updated Blockchain. Our experimental results show that the proposed system is effective, scalable and dependable in data gathering, computing, organization, and retrieval of trust values in VANET.}
+      \field{issn}{2076-3417}
+      \field{journaltitle}{Applied Sciences}
+      \field{langid}{english}
+      \field{month}{1}
+      \field{number}{24}
+      \field{shorttitle}{{{SBTMS}}}
+      \field{title}{{{SBTMS}}: {{Scalable Blockchain Trust Management System}} for {{VANET}}}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{11}
+      \field{year}{2021}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{11947}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/app112411947
+      \endverb
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/LUU59JV8/Ghovanlooy Ghajar et al. - 2021 - SBTMS Scalable Blockchain Trust Management System for VANET.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.mdpi.com/2076-3417/11/24/11947
+      \endverb
+      \verb{url}
+      \verb https://www.mdpi.com/2076-3417/11/24/11947
+      \endverb
+      \keyw{blockchain-based system,sharding algorithm,trust management system,VANET}
+    \endentry
+    \entry{hozouriOverviewVANETVehicular2023}{online}{}{}
+      \name{author}{4}{}{%
+        {{hash=949bcc40c63d60f3b267fe82b509767c}{%
+           family={Hozouri},
+           familyi={H\bibinitperiod},
+           given={Ali},
+           giveni={A\bibinitperiod}}}%
+        {{hash=fb9521306d83b88f9d79309ddcc971d0}{%
+           family={Mirzaei},
+           familyi={M\bibinitperiod},
+           given={Abbas},
+           giveni={A\bibinitperiod}}}%
+        {{hash=a59142c53653cce97b39ffddf17681b2}{%
+           family={RazaghZadeh},
+           familyi={R\bibinitperiod},
+           given={Shiva},
+           giveni={S\bibinitperiod}}}%
+        {{hash=f0de0a7513bbdb193e7f73c842c3e1ef}{%
+           family={Yousefi},
+           familyi={Y\bibinitperiod},
+           given={Davoud},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{113e27b2a5e0608d98cdbe555eac2c7e}
+      \strng{fullhash}{c39fb090f6cb2ed10f02a7505d187306}
+      \strng{fullhashraw}{c39fb090f6cb2ed10f02a7505d187306}
+      \strng{bibnamehash}{c39fb090f6cb2ed10f02a7505d187306}
+      \strng{authorbibnamehash}{c39fb090f6cb2ed10f02a7505d187306}
+      \strng{authornamehash}{113e27b2a5e0608d98cdbe555eac2c7e}
+      \strng{authorfullhash}{c39fb090f6cb2ed10f02a7505d187306}
+      \strng{authorfullhashraw}{c39fb090f6cb2ed10f02a7505d187306}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Today, with the development of intercity and metropolitan roadways and with various cars moving in various directions, there is a greater need than ever for a network to coordinate commutes. Nowadays, people spend a lot of time in their vehicles. Smart automobiles have developed to make that time safer, more effective, more fun, pollution-free, and affordable. However, maintaining the optimum use of resources and addressing rising needs continues to be a challenge given the popularity of vehicle users and the growing diversity of requests for various services. As a result, VANET will require modernized working practices in the future. Modern intelligent transportation management and driver assistance systems are created using cutting-edge communication technology. Vehicular Ad-hoc networks promise to increase transportation effectiveness, accident prevention, and pedestrian comfort by allowing automobiles and road infrastructure to communicate entertainment and traffic information. By constructing thorough frameworks, workflow patterns, and update procedures, including block-chain, artificial intelligence, and SDN (Software Defined Networking), this paper addresses VANET-related technologies, future advances, and related challenges. An overview of the VANET upgrade solution is given in this document in order to handle potential future problems.}
+      \field{day}{12}
+      \field{eprintclass}{cs.NI}
+      \field{eprinttype}{arXiv}
+      \field{month}{9}
+      \field{pubstate}{prepublished}
+      \field{title}{An Overview of {{VANET}} Vehicular Networks}
+      \field{urlday}{8}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{year}{2023}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.48550/arXiv.2309.06555
+      \endverb
+      \verb{eprint}
+      \verb 2309.06555
+      \endverb
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/VY5HMTVW/Hozouri et al. - 2023 - An overview of VANET vehicular networks.pdf;/home/sam/snap/zotero-snap/common/Zotero/storage/FCSFGB77/2309.html
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/2309.06555
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/2309.06555
+      \endverb
+      \keyw{Computer Science - Networking and Internet Architecture}
+    \endentry
+    \entry{IOTATANGLE20}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=ddee41351596f14d3d1ada5d9566bba2}{%
+           family={Fartitchou},
+           familyi={F\bibinitperiod},
+           given={Mohamed},
+           giveni={M\bibinitperiod}}}%
+        {{hash=125e5b794bde65a034febe7dcbc3a6cf}{%
+           family={Boussouf},
+           familyi={B\bibinitperiod},
+           given={Jamal},
+           giveni={J\bibinitperiod}}}%
+        {{hash=b56a79d4e6861db00a88ce6b2bc6d716}{%
+           family={El\bibnamedelima Makkaoui},
+           familyi={E\bibinitperiod\bibinitdelim M\bibinitperiod},
+           given={Khalid},
+           giveni={K\bibinitperiod}}}%
+        {{hash=b75e9f6f1a3deeeaa414b4835d0c7fce}{%
+           family={Maleh},
+           familyi={M\bibinitperiod},
+           given={Yassine},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=f8e11adc95d22639cd04b9727de2437f}{%
+           family={El\bibnamedelima Allali},
+           familyi={E\bibinitperiod\bibinitdelim A\bibinitperiod},
+           given={Zakaria},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Taylor \& Francis}%
+      }
+      \strng{namehash}{93f145224756d3b3d70a1e66f0f47abb}
+      \strng{fullhash}{e43da26e17603d3468d89a6c0862b8c3}
+      \strng{fullhashraw}{e43da26e17603d3468d89a6c0862b8c3}
+      \strng{bibnamehash}{e43da26e17603d3468d89a6c0862b8c3}
+      \strng{authorbibnamehash}{e43da26e17603d3468d89a6c0862b8c3}
+      \strng{authornamehash}{93f145224756d3b3d70a1e66f0f47abb}
+      \strng{authorfullhash}{e43da26e17603d3468d89a6c0862b8c3}
+      \strng{authorfullhashraw}{e43da26e17603d3468d89a6c0862b8c3}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{The IOTA Tangle cryptocurrency represents the next evolution in distributed ledger technology, designed to facilitate transactions in the Internet of Things applications. Compared to traditional bl...}
+      \field{journaltitle}{EDPACS}
+      \field{langid}{english}
+      \field{number}{5}
+      \field{shorttitle}{{{IOTA TANGLE}} 2.0}
+      \field{title}{{{IOTA TANGLE}} 2.0: {{AN OVERVIEW}}}
+      \field{urlday}{3}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{68}
+      \field{year}{2023}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{15\bibrangedash 26}
+      \range{pages}{12}
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/ZES7V6G2/IOTA TANGLE 2.0 AN OVERVIEW.pdf;/home/sam/snap/zotero-snap/common/Zotero/storage/I2R5FWT2/07366981.2023.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.tandfonline.com/doi/abs/10.1080/07366981.2023.2293322
+      \endverb
+      \verb{url}
+      \verb https://www.tandfonline.com/doi/abs/10.1080/07366981.2023.2293322
+      \endverb
+    \endentry
+    \entry{linGSISSecurePrivacyPreserving2007}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=0f170196437f43807bc37f2429e37fad}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Xiaodong},
+           giveni={X\bibinitperiod}}}%
+        {{hash=3c97054de91babb1eecb8d47f6eb344b}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={Xiaoting},
+           giveni={X\bibinitperiod}}}%
+        {{hash=ce5fdbdb4f9bd683aa8ae1da3103a2c3}{%
+           family={Ho},
+           familyi={H\bibinitperiod},
+           given={Pin-Han},
+           giveni={P\bibinithyphendelim H\bibinitperiod}}}%
+        {{hash=cada02a68f59df42ef9678d5d73027f9}{%
+           family={Shen},
+           familyi={S\bibinitperiod},
+           given={Xuemin},
+           giveni={X\bibinitperiod}}}%
+      }
+      \strng{namehash}{6c1bdf3d6da6e117d56c3074f21a37f3}
+      \strng{fullhash}{6da8a62c705f8360e4ebec78492cc944}
+      \strng{fullhashraw}{6da8a62c705f8360e4ebec78492cc944}
+      \strng{bibnamehash}{6da8a62c705f8360e4ebec78492cc944}
+      \strng{authorbibnamehash}{6da8a62c705f8360e4ebec78492cc944}
+      \strng{authornamehash}{6c1bdf3d6da6e117d56c3074f21a37f3}
+      \strng{authorfullhash}{6da8a62c705f8360e4ebec78492cc944}
+      \strng{authorfullhashraw}{6da8a62c705f8360e4ebec78492cc944}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{In this paper, we first identify some unique design requirements in the aspects of security and privacy preservation for communications between different communication devices in vehicular ad hoc networks. We then propose a secure and privacy-preserving protocol based on group signature and identity (ID)-based signature techniques. We demonstrate that the proposed protocol cannot only guarantee the requirements of security and privacy but can also provide the desired traceability of each vehicle in the case where the ID of the message sender has to be revealed by the authority for any dispute event. Extensive simulation is conducted to verify the efficiency, effectiveness, and applicability of the proposed protocol in various application scenarios under different road systems.}
+      \field{issn}{1939-9359}
+      \field{journaltitle}{IEEE Transactions on Vehicular Technology}
+      \field{month}{11}
+      \field{number}{6}
+      \field{shorttitle}{{{GSIS}}}
+      \field{title}{{{GSIS}}: {{A Secure}} and {{Privacy-Preserving Protocol}} for {{Vehicular Communications}}}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{56}
+      \field{year}{2007}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{3442\bibrangedash 3456}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1109/TVT.2007.906878
+      \endverb
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/PJA82TVK/4357367.html
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/abstract/document/4357367
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/abstract/document/4357367
+      \endverb
+      \keyw{Access protocols,Ad hoc networks,Communication industry,Conditional privacy,group signature,Group signature,identity (ID)-based signature,Identity-based signature,Privacy,Road safety,Road vehicles,security,Security,Streaming media,Sun,Telecommunication traffic,vehicular communications,Vehicular communications,Web and internet services}
+    \endentry
+    \entry{luConnectedVehiclesSolutions2014}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=7bf520d871ba2fca7691cb3f41614e6a}{%
+           family={Lu},
+           familyi={L\bibinitperiod},
+           given={Ning},
+           giveni={N\bibinitperiod}}}%
+        {{hash=28a8e51797a8d75496cb5c753ba8f14c}{%
+           family={Cheng},
+           familyi={C\bibinitperiod},
+           given={Nan},
+           giveni={N\bibinitperiod}}}%
+        {{hash=803fb0c7ba592ff2ac5109218a4a8211}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Ning},
+           giveni={N\bibinitperiod}}}%
+        {{hash=cada02a68f59df42ef9678d5d73027f9}{%
+           family={Shen},
+           familyi={S\bibinitperiod},
+           given={Xuemin},
+           giveni={X\bibinitperiod}}}%
+        {{hash=ca5feeb3c81e3a63d10a316ad8efcd8e}{%
+           family={Mark},
+           familyi={M\bibinitperiod},
+           given={Jon\bibnamedelima W.},
+           giveni={J\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \strng{namehash}{0def9b0ddbf8363108f335b045324799}
+      \strng{fullhash}{95d9c03958977598b24b8235ed20580c}
+      \strng{fullhashraw}{95d9c03958977598b24b8235ed20580c}
+      \strng{bibnamehash}{95d9c03958977598b24b8235ed20580c}
+      \strng{authorbibnamehash}{95d9c03958977598b24b8235ed20580c}
+      \strng{authornamehash}{0def9b0ddbf8363108f335b045324799}
+      \strng{authorfullhash}{95d9c03958977598b24b8235ed20580c}
+      \strng{authorfullhashraw}{95d9c03958977598b24b8235ed20580c}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Providing various wireless connectivities for vehicles enables the communication between vehicles and their internal and external environments. Such a connected vehicle solution is expected to be the next frontier for automotive revolution and the key to the evolution to next generation intelligent transportation systems (ITSs). Moreover, connected vehicles are also the building blocks of emerging Internet of Vehicles (IoV). Extensive research activities and numerous industrial initiatives have paved the way for the coming era of connected vehicles. In this paper, we focus on wireless technologies and potential challenges to provide vehicle-to-x connectivity. In particular, we discuss the challenges and review the state-of-the-art wireless solutions for vehicle-to-sensor, vehicle-to-vehicle, vehicle-to-Internet, and vehicle-to-road infrastructure connectivities. We also identify future research issues for building connected vehicles.}
+      \field{issn}{2327-4662}
+      \field{journaltitle}{IEEE Internet of Things Journal}
+      \field{month}{8}
+      \field{number}{4}
+      \field{shorttitle}{Connected {{Vehicles}}}
+      \field{title}{Connected {{Vehicles}}: {{Solutions}} and {{Challenges}}}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{1}
+      \field{year}{2014}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{289\bibrangedash 299}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1109/JIOT.2014.2327587
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/abstract/document/6823640
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/abstract/document/6823640
+      \endverb
+      \keyw{Communication system security,Connected vehicles,intelligent transportation systems (ITSs),Internet of Vehicles (IoV),intra-vehicle wireless sensor networks,Reliability,Safety,Vehicles,vehicular networks,Wireless communication,Wireless sensor networks,Zigbee}
+    \endentry
+    \entry{luPseudonymChangingSocial2012}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=a4bd0369a6304d0e6da94850d723c961}{%
+           family={Lu},
+           familyi={L\bibinitperiod},
+           given={Rongxing},
+           giveni={R\bibinitperiod}}}%
+        {{hash=0f170196437f43807bc37f2429e37fad}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Xiaodong},
+           giveni={X\bibinitperiod}}}%
+        {{hash=a02872d732074e0506e0b3cb61f92618}{%
+           family={Luan},
+           familyi={L\bibinitperiod},
+           given={Tom\bibnamedelima H.},
+           giveni={T\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+        {{hash=47d8dc99e307fa56470c398b78efa698}{%
+           family={Liang},
+           familyi={L\bibinitperiod},
+           given={Xiaohui},
+           giveni={X\bibinitperiod}}}%
+        {{hash=cada02a68f59df42ef9678d5d73027f9}{%
+           family={Shen},
+           familyi={S\bibinitperiod},
+           given={Xuemin},
+           giveni={X\bibinitperiod}}}%
+      }
+      \strng{namehash}{b3d14dbe336d0a9fcbcc6c27f6732b1e}
+      \strng{fullhash}{a080730c149357c4502e2385b17ba06e}
+      \strng{fullhashraw}{a080730c149357c4502e2385b17ba06e}
+      \strng{bibnamehash}{a080730c149357c4502e2385b17ba06e}
+      \strng{authorbibnamehash}{a080730c149357c4502e2385b17ba06e}
+      \strng{authornamehash}{b3d14dbe336d0a9fcbcc6c27f6732b1e}
+      \strng{authorfullhash}{a080730c149357c4502e2385b17ba06e}
+      \strng{authorfullhashraw}{a080730c149357c4502e2385b17ba06e}
+      \field{extraname}{2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{As a prime target of the quality of privacy in vehicular ad hoc networks (VANETs), location privacy is imperative for VANETs to fully flourish. Although frequent pseudonym changing provides a promising solution for location privacy in VANETs, if the pseudonyms are changed in an improper time or location, such a solution may become invalid. To cope with the issue, in this paper, we present an effective pseudonym changing at social spots (PCS) strategy to achieve the provable location privacy. In particular, we first introduce the social spots where several vehicles may gather, e.g., a road intersection when the traffic light turns red or a free parking lot near a shopping mall. By taking the anonymity set size as the location privacy metric, we then develop two anonymity set analytic models to quantitatively investigate the location privacy that is achieved by the PCS strategy. In addition, we use game-theoretic techniques to prove the feasibility of the PCS strategy in practice. Extensive performance evaluations are conducted to demonstrate that better location privacy can be achieved when a vehicle changes its pseudonyms at some highly social spots and that the proposed PCS strategy can assist vehicles to intelligently change their pseudonyms at the right moment and place.}
+      \field{issn}{1939-9359}
+      \field{journaltitle}{IEEE Transactions on Vehicular Technology}
+      \field{month}{1}
+      \field{number}{1}
+      \field{shorttitle}{Pseudonym {{Changing}} at {{Social Spots}}}
+      \field{title}{Pseudonym {{Changing}} at {{Social Spots}}: {{An Effective Strategy}} for {{Location Privacy}} in {{VANETs}}}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{61}
+      \field{year}{2012}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{86\bibrangedash 96}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1109/TVT.2011.2162864
+      \endverb
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/KNFHGJS4/5960806.html
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/abstract/document/5960806
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/abstract/document/5960806
+      \endverb
+      \keyw{Analytical models,Authentication,Location privacy,Monitoring,Privacy,Roads,Safety,security,social spots,Vehicles,vehicular ad hoc networks (VANETs)}
+    \endentry
+    \entry{mariaBAIVEfficientBlockchainBased2022}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=5fc6876842ad5e5657a52869bd1c35b2}{%
+           family={Maria},
+           familyi={M\bibinitperiod},
+           given={Azees},
+           giveni={A\bibinitperiod}}}%
+        {{hash=6e34fd2a3b8d4ac9e0bf7e296a78b6f1}{%
+           family={Rajasekaran},
+           familyi={R\bibinitperiod},
+           given={Arun\bibnamedelima Sekar},
+           giveni={A\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=2877c90c5af5288a8df92b5be52346a4}{%
+           family={Al-Turjman},
+           familyi={A\bibinithyphendelim T\bibinitperiod},
+           given={Fadi},
+           giveni={F\bibinitperiod}}}%
+        {{hash=d1ecaba177c4e9555a0e5fa82ad8d0b0}{%
+           family={Altrjman},
+           familyi={A\bibinitperiod},
+           given={Chadi},
+           giveni={C\bibinitperiod}}}%
+        {{hash=b4a78831d9cd7c234ab3297adc0f89cc}{%
+           family={Mostarda},
+           familyi={M\bibinitperiod},
+           given={Leonardo},
+           giveni={L\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Multidisciplinary Digital Publishing Institute}%
+      }
+      \strng{namehash}{1effe9bdfbcf3ea47fd68e6e742b3dd8}
+      \strng{fullhash}{6126f63597d2f55eb0095f53aed78cc0}
+      \strng{fullhashraw}{6126f63597d2f55eb0095f53aed78cc0}
+      \strng{bibnamehash}{6126f63597d2f55eb0095f53aed78cc0}
+      \strng{authorbibnamehash}{6126f63597d2f55eb0095f53aed78cc0}
+      \strng{authornamehash}{1effe9bdfbcf3ea47fd68e6e742b3dd8}
+      \strng{authorfullhash}{6126f63597d2f55eb0095f53aed78cc0}
+      \strng{authorfullhashraw}{6126f63597d2f55eb0095f53aed78cc0}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Recent development in intelligent transport systems (ITS) has led to the improvement of driving experience in vehicular ad-hoc network (VANET) systems. Providing a low computational cost with high serving capability, however, is a critical phenomenon in the current VANET system. In the existing scenario, when the authenticated vehicle user moves from one roadside unit (RSU) to another RSU region, re-authentication of the vehicle user is required by the current RSU, which increases the computational complexity. To overcome the above-mentioned challenge, a blockchain-based authentication protocol is developed in this work. In this suggested process, blockchain is integrated with VANET, which enables the authentication of the vehicle user without the involvement of a trusted authority. Moreover, the integrity of the message and privacy of vehicle users are preserved in the blockchain network. Even though many blockchain-based schemes have been proposed recently, the existing schemes were not focused on conditional anonymity. However, in our proposed scheme, conditional privacy is introduced to revoke the malicious vehicles in the case of disputes and to avoid further damage to the VANET system. As a result, the proposed scheme provides an efficient mechanism for anonymous authentication, privacy, and integrity preservation with conditional tracking. Finally, the defense against different security threats is explained in the security analysis section, and the performance investigation section shows the competence and efficacy of our method with similar related methods.}
+      \field{issn}{2079-9292}
+      \field{journaltitle}{Electronics}
+      \field{langid}{english}
+      \field{month}{1}
+      \field{number}{3}
+      \field{shorttitle}{{{BAIV}}}
+      \field{title}{{{BAIV}}: {{An Efficient Blockchain-Based Anonymous Authentication}} and {{Integrity Preservation Scheme}} for {{Secure Communication}} in {{VANETs}}}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{11}
+      \field{year}{2022}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{488}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/electronics11030488
+      \endverb
+      \verb{urlraw}
+      \verb https://www.mdpi.com/2079-9292/11/3/488
+      \endverb
+      \verb{url}
+      \verb https://www.mdpi.com/2079-9292/11/3/488
+      \endverb
+      \keyw{authentication,blockchain,integrity,revocation,security}
+    \endentry
+    \entry{mazzoccaSurveyDecentralizedIdentifiers2024}{online}{}{}
+      \name{author}{6}{}{%
+        {{hash=32bd0ae23c1be9240c2896e08c7c9634}{%
+           family={Mazzocca},
+           familyi={M\bibinitperiod},
+           given={Carlo},
+           giveni={C\bibinitperiod}}}%
+        {{hash=18f689e13e4f26ff421990f6e128ca4e}{%
+           family={Acar},
+           familyi={A\bibinitperiod},
+           given={Abbas},
+           giveni={A\bibinitperiod}}}%
+        {{hash=eaba5a793cde84a37a1be8496e4bc956}{%
+           family={Uluagac},
+           familyi={U\bibinitperiod},
+           given={Selcuk},
+           giveni={S\bibinitperiod}}}%
+        {{hash=5fe486f268a2846439b84cd1e3138498}{%
+           family={Montanari},
+           familyi={M\bibinitperiod},
+           given={Rebecca},
+           giveni={R\bibinitperiod}}}%
+        {{hash=7dc39ea7034dbbcf776b9604249506e8}{%
+           family={Bellavista},
+           familyi={B\bibinitperiod},
+           given={Paolo},
+           giveni={P\bibinitperiod}}}%
+        {{hash=c1c6cc37d38b38f6ff327e1eabebda0c}{%
+           family={Conti},
+           familyi={C\bibinitperiod},
+           given={Mauro},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {arXiv.org}%
+      }
+      \strng{namehash}{700859b1623d32aa7b342e504c7f89b0}
+      \strng{fullhash}{ea80eb3e0bf1e4d87b81458412025f74}
+      \strng{fullhashraw}{ea80eb3e0bf1e4d87b81458412025f74}
+      \strng{bibnamehash}{ea80eb3e0bf1e4d87b81458412025f74}
+      \strng{authorbibnamehash}{ea80eb3e0bf1e4d87b81458412025f74}
+      \strng{authornamehash}{700859b1623d32aa7b342e504c7f89b0}
+      \strng{authorfullhash}{ea80eb3e0bf1e4d87b81458412025f74}
+      \strng{authorfullhashraw}{ea80eb3e0bf1e4d87b81458412025f74}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Digital identity has always been considered the keystone for implementing secure and trustworthy communications among parties. The ever-evolving digital landscape has gone through many technological transformations that have also affected the way entities are digitally identified. During this digital evolution, identity management has shifted from centralized to decentralized approaches. The last era of this journey is represented by the emerging Self-Sovereign Identity (SSI), which gives users full control over their data. SSI leverages decentralized identifiers (DIDs) and verifiable credentials (VCs), which have been recently standardized by the World Wide Web Community (W3C). These technologies have the potential to build more secure and decentralized digital identity systems, remarkably contributing to strengthening the security of communications that typically involve many distributed participants. It is worth noting that the scope of DIDs and VCs extends beyond individuals, encompassing a broad range of entities including cloud, edge, and Internet of Things (IoT) resources. However, due to their novelty, existing literature lacks a comprehensive survey on how DIDs and VCs have been employed in different application domains, which go beyond SSI systems. This paper provides readers with a comprehensive overview of such technologies from different perspectives. Specifically, we first provide the background on DIDs and VCs. Then, we analyze available implementations and offer an in-depth review of how these technologies have been employed across different use-case scenarios. Furthermore, we examine recent regulations and initiatives that have been emerging worldwide. Finally, we present some challenges that hinder their adoption in real-world scenarios and future research directions.}
+      \field{day}{4}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{title}{A {{Survey}} on {{Decentralized Identifiers}} and {{Verifiable Credentials}}}
+      \field{urlday}{26}
+      \field{urlmonth}{4}
+      \field{urlyear}{2026}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{doi}
+      \verb 10.1109/COMST.2025.3543197
+      \endverb
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/493X8B7S/Mazzocca et al. - 2024 - A Survey on Decentralized Identifiers and Verifiable Credentials.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2402.02455v2
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2402.02455v2
+      \endverb
+    \endentry
+    \entry{niSecuringFogComputing2018}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=8a34600af60d74c26b91aac058873a0e}{%
+           family={Ni},
+           familyi={N\bibinitperiod},
+           given={Jianbing},
+           giveni={J\bibinitperiod}}}%
+        {{hash=9bfa804dfdc761140a406609d2cc9beb}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Kuan},
+           giveni={K\bibinitperiod}}}%
+        {{hash=0f170196437f43807bc37f2429e37fad}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Xiaodong},
+           giveni={X\bibinitperiod}}}%
+        {{hash=cada02a68f59df42ef9678d5d73027f9}{%
+           family={Shen},
+           familyi={S\bibinitperiod},
+           given={Xuemin},
+           giveni={X\bibinitperiod}}}%
+      }
+      \strng{namehash}{78e339be44f2b1b2d0e67b0ce5eee322}
+      \strng{fullhash}{d3a3d37cd02b53a9288a2c6f6f963096}
+      \strng{fullhashraw}{d3a3d37cd02b53a9288a2c6f6f963096}
+      \strng{bibnamehash}{d3a3d37cd02b53a9288a2c6f6f963096}
+      \strng{authorbibnamehash}{d3a3d37cd02b53a9288a2c6f6f963096}
+      \strng{authornamehash}{78e339be44f2b1b2d0e67b0ce5eee322}
+      \strng{authorfullhash}{d3a3d37cd02b53a9288a2c6f6f963096}
+      \strng{authorfullhashraw}{d3a3d37cd02b53a9288a2c6f6f963096}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Internet of Things (IoT) allows billions of physical objects to be connected to collect and exchange data for offering various applications, such as environmental monitoring, infrastructure management, and home automation. On the other hand, IoT has unsupported features (e.g., low latency, location awareness, and geographic distribution) that are critical for some IoT applications, including smart traffic lights, home energy management and augmented reality. To support these features, fog computing is integrated into IoT to extend computing, storage and networking resources to the network edge. Unfortunately, it is confronted with various security and privacy risks, which raise serious concerns towards users. In this survey, we review the architecture and features of fog computing and study critical roles of fog nodes, including real-time services, transient storage, data dissemination and decentralized computation. We also examine fog-assisted IoT applications based on different roles of fog nodes. Then, we present security and privacy threats towards IoT applications and discuss the security and privacy requirements in fog computing. Further, we demonstrate potential challenges to secure fog computing and review the state-of-the-art solutions used to address security and privacy issues in fog computing for IoT applications. Finally, by defining several open research issues, it is expected to draw more attention and efforts into this new architecture.}
+      \field{issn}{1553-877X}
+      \field{journaltitle}{IEEE Communications Surveys \& Tutorials}
+      \field{number}{1}
+      \field{shorttitle}{Securing {{Fog Computing}} for {{Internet}} of {{Things Applications}}}
+      \field{title}{Securing {{Fog Computing}} for {{Internet}} of {{Things Applications}}: {{Challenges}} and {{Solutions}}}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{20}
+      \field{year}{2018}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{601\bibrangedash 628}
+      \range{pages}{28}
+      \verb{doi}
+      \verb 10.1109/COMST.2017.2762345
+      \endverb
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/5DCKXGWE/8066283.html
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/abstract/document/8066283
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/abstract/document/8066283
+      \endverb
+      \keyw{Cloud computing,Computer architecture,Data privacy,edge computing,Edge computing,Fog computing,Internet of Things,Privacy,Real-time systems,Security,security and privacy}
+    \endentry
+    \entry{rahmawatiagustinaSystematicLiteratureReview2025}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=7699b6ba580dd0ef80ddd80c586dcab6}{%
+           family={Rahmawati\bibnamedelima Agustina},
+           familyi={R\bibinitperiod\bibinitdelim A\bibinitperiod},
+           given={Esti},
+           giveni={E\bibinitperiod}}}%
+        {{hash=132d33dc58e13c7526d5e5bc50c51b5b}{%
+           family={Ramli},
+           familyi={R\bibinitperiod},
+           given={Kalamullah},
+           giveni={K\bibinitperiod}}}%
+        {{hash=561a645636bef033a98da4cfc4f53267}{%
+           family={Rahman\bibnamedelima Hakim},
+           familyi={R\bibinitperiod\bibinitdelim H\bibinitperiod},
+           given={Arif},
+           giveni={A\bibinitperiod}}}%
+        {{hash=c0b14d8d500882e6a04bad630ae8bc14}{%
+           family={Harwahyu},
+           familyi={H\bibinitperiod},
+           given={Ruki},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{2097add2a3a135b621f11890b703af83}
+      \strng{fullhash}{1e7028e6f43523bed78fe7145c68a17c}
+      \strng{fullhashraw}{1e7028e6f43523bed78fe7145c68a17c}
+      \strng{bibnamehash}{1e7028e6f43523bed78fe7145c68a17c}
+      \strng{authorbibnamehash}{1e7028e6f43523bed78fe7145c68a17c}
+      \strng{authornamehash}{2097add2a3a135b621f11890b703af83}
+      \strng{authorfullhash}{1e7028e6f43523bed78fe7145c68a17c}
+      \strng{authorfullhashraw}{1e7028e6f43523bed78fe7145c68a17c}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Privacy preservation is a fundamental requirement in vehicular ad hoc networks (VANETs) because it addresses sensitive vehicle and driver data. The use of pseudonyms instead of actual vehicle identities is one way to protect vehicle owners from the unauthorized tracking or linking of vehicle movements. In this paper, we conduct a systematic literature review to identify the implementation of pseudonyms in existing privacy preservation schemes via the Kitchenham method. To our knowledge, no study has presented an analysis of the implementation of comprehensive pseudonym life cycles in the last five years. We classify VANET system models and their advancements with the support of emerging technologies, mapping the integration of these technologies to the implementation of the pseudonym life cycle. Furthermore, we categorize the privacy analyses employed in existing schemes. Finally, we identify research gaps and future research directions to advance the development of robust privacy preservation schemes in VANETs. Of the 594 reviewed research papers, 113 satisfied our requirements for primary research (PR). Among them, 71\% adopted VANET standard system models, 12\% implemented a comprehensive pseudonym life cycle, and 73\% conducted both formal and informal security and privacy analyses. We highlight research challenges and suggest future research topics for developing robust privacy-preserving schemes in VANETs.}
+      \field{issn}{2169-3536}
+      \field{journaltitle}{IEEE Access}
+      \field{shorttitle}{A {{Systematic Literature Review}} on {{Privacy Preservation}} in {{VANETs}}}
+      \field{title}{A {{Systematic Literature Review}} on {{Privacy Preservation}} in {{VANETs}}: {{Trends}}, {{Challenges}}, and {{Future Directions}}}
+      \field{urlday}{27}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{volume}{13}
+      \field{year}{2025}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{88421\bibrangedash 88444}
+      \range{pages}{24}
+      \verb{doi}
+      \verb 10.1109/ACCESS.2025.3570491
+      \endverb
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/EPACVW8V/Rahmawati Agustina et al. - 2025 - A Systematic Literature Review on Privacy Preservation in VANETs Trends, Challenges, and Future Dir.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/document/11005499
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/document/11005499
+      \endverb
+      \keyw{Analytical models,Authentication,comprehensive pseudonym lifecycle,Cryptography,Market research,Planning,Privacy,Privacy preservation,Security,Surveys,Systematic literature review,VANET security,Vehicular ad hoc networks}
+    \endentry
+    \entry{razaBlockchainBasedReputationTrust2024}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=e81ecbc87e214a1748313bf6475f4266}{%
+           family={Raza},
+           familyi={R\bibinitperiod},
+           given={Abir},
+           giveni={A\bibinitperiod}}}%
+        {{hash=2d0d9ccb830ccf02281b051c34537c79}{%
+           family={Badidi},
+           familyi={B\bibinitperiod},
+           given={Elarbi},
+           giveni={E\bibinitperiod}}}%
+        {{hash=637f0423151e7951fb018c8c43baf844}{%
+           family={Hayajneh},
+           familyi={H\bibinitperiod},
+           given={Mohammad},
+           giveni={M\bibinitperiod}}}%
+        {{hash=9ee02af21007dc30b768723302348ae3}{%
+           family={Barka},
+           familyi={B\bibinitperiod},
+           given={Ezedin},
+           giveni={E\bibinitperiod}}}%
+        {{hash=8212da4d594c4cd29d20e254fbe04209}{%
+           family={Harrouss},
+           familyi={H\bibinitperiod},
+           given={Omar\bibnamedelima El},
+           giveni={O\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \strng{namehash}{06f0a8aa8b3f21ba229b7208b31bd7d1}
+      \strng{fullhash}{1335d81a112549491b78d9333dedad8f}
+      \strng{fullhashraw}{1335d81a112549491b78d9333dedad8f}
+      \strng{bibnamehash}{1335d81a112549491b78d9333dedad8f}
+      \strng{authorbibnamehash}{1335d81a112549491b78d9333dedad8f}
+      \strng{authornamehash}{06f0a8aa8b3f21ba229b7208b31bd7d1}
+      \strng{authorfullhash}{1335d81a112549491b78d9333dedad8f}
+      \strng{authorfullhashraw}{1335d81a112549491b78d9333dedad8f}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{In a smart city environment, various intelligent devices, applications, and digital networks collaborate to provide technological solutions for the public good. The exponential data generated from intelligent interactions among stakeholders within the smart city ecosystem raises concerns regarding security and privacy. Maintaining data openness while safeguarding it against social engineering attacks, network breaches, and data masking threats is paramount to achieving resilience. Blockchain technology has demonstrated great promise in addressing these challenges due to its decentralized, consistent, and tamper-proof nature. Our paper explores how blockchain can address the challenges of integrity, security, and privacy in smart city operations. Despite significant research efforts, the subject remains in need of a comprehensive survey. Consequently, we conduct a study on state-of-the-art blockchain-based reputation and trust management methods within the three fundamental components of a smart city: energy, healthcare, and transportation. The trust and reputation mechanisms are analyzed to identify their strengths and limitations. The investigation reveals that the existing trust schemes are resource-constrained and encounter scalability limitations, high energy consumption, and incompatibility with existing systems.}
+      \field{issn}{2169-3536}
+      \field{journaltitle}{IEEE Access}
+      \field{shorttitle}{Blockchain-{{Based Reputation}} and {{Trust Management}} for {{Smart Grids}}, {{Healthcare}}, and {{Transportation}}}
+      \field{title}{Blockchain-{{Based Reputation}} and {{Trust Management}} for {{Smart Grids}}, {{Healthcare}}, and {{Transportation}}: {{A Review}}}
+      \field{urlday}{27}
+      \field{urlmonth}{2}
+      \field{urlyear}{2026}
+      \field{volume}{12}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{196887\bibrangedash 196913}
+      \range{pages}{27}
+      \verb{doi}
+      \verb 10.1109/ACCESS.2024.3521428
+      \endverb
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/Y74U5BHE/Raza et al. - 2024 - Blockchain-Based Reputation and Trust Management for Smart Grids, Healthcare, and Transportation A.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/document/10812739
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/document/10812739
+      \endverb
+      \keyw{Blockchain,Blockchains,consensus algorithm,cryptography,Databases,distributed ledger technology (DLT),Medical services,Reviews,Search problems,Security,Smart cities,smart city,Smart devices,smart grid,Smart grids,trust management,Trust management,vehicular ad-hoc network (VANET)}
+    \endentry
+    \entry{sealeyIOTATangle202022}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{hash=009cbfcd89ea1325f679cc71a53faec4}{%
+           family={Sealey},
+           familyi={S\bibinitperiod},
+           given={Nathan},
+           giveni={N\bibinitperiod}}}%
+        {{hash=4e47423822efbeb495a48f98eb1f4cf3}{%
+           family={Aijaz},
+           familyi={A\bibinitperiod},
+           given={Adnan},
+           giveni={A\bibinitperiod}}}%
+        {{hash=25d27ad85742232d0dcc045367b24a29}{%
+           family={Holden},
+           familyi={H\bibinitperiod},
+           given={Ben},
+           giveni={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{f7fb43dfcf901b4cd377c03e7bef7e80}
+      \strng{fullhash}{75ac15c3b802bbfc7fc5c510726e7d29}
+      \strng{fullhashraw}{75ac15c3b802bbfc7fc5c510726e7d29}
+      \strng{bibnamehash}{75ac15c3b802bbfc7fc5c510726e7d29}
+      \strng{authorbibnamehash}{75ac15c3b802bbfc7fc5c510726e7d29}
+      \strng{authornamehash}{f7fb43dfcf901b4cd377c03e7bef7e80}
+      \strng{authorfullhash}{75ac15c3b802bbfc7fc5c510726e7d29}
+      \strng{authorfullhashraw}{75ac15c3b802bbfc7fc5c510726e7d29}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{IOTA Tangle is a distributed ledger technology (DLT), primarily designed for Internet-of-Things (IoT) networks and applications. IOTA Tangle utilizes a direct acyclic graph (DAG) structure for the ledger, with its protocol offering features attractive to the IoT domain, over most blockchain alternatives, such as feeless transactions, higher achievable transactions per second (TPS), and lower energy consumption. The original IOTA implementation relied on a bootstrap centralized coordinator solution for consensus which limited its degree of decentralization and scalability. This concern, alongside other limitations to its adoption, such as lack of smart contracts, are being addressed with the release of IOTA 2.0. This update brings with it significant changes in order to remove the coordinator and achieve a scalable decentralized solution. To this end, this paper provides a technical overview of the key features of IOTA 2.0 while discussing their relevance and benefits for the wider IoT ecosystem. The paper also provides performance insights and future research directions for IOTA 2.0.}
+      \field{booktitle}{2022 {{International Conference}} on {{Smart Applications}}, {{Communications}} and {{Networking}} ({{SmartNets}})}
+      \field{eventtitle}{2022 {{International Conference}} on {{Smart Applications}}, {{Communications}} and {{Networking}} ({{SmartNets}})}
+      \field{month}{11}
+      \field{shorttitle}{{{IOTA Tangle}} 2.0}
+      \field{title}{{{IOTA Tangle}} 2.0: {{Toward}} a {{Scalable}}, {{Decentralized}}, {{Smart}}, and {{Autonomous IoT Ecosystem}}}
+      \field{urlday}{3}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{year}{2022}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{01\bibrangedash 08}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1109/SmartNets55823.2022.9994016
+      \endverb
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/BPU8VDV7/Sealey et al. - 2022 - IOTA Tangle 2.0 Toward a Scalable, Decentralized, Smart, and Autonomous IoT Ecosystem.pdf;/home/sam/snap/zotero-snap/common/Zotero/storage/FE86AIF2/9994016.html
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/abstract/document/9994016
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/abstract/document/9994016
+      \endverb
+      \keyw{Blockchain,Blockchains,consensus,Distributed ledger,DLT,Ecosystems,Energy consumption,IoT,IOTA,machine economy,Scalability,smart contracts,Smart contracts,Tangle}
+    \endentry
+    \entry{SecuringVehicularAd}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=756ed0cd8aa667ed054955df57db4330}{%
+           family={Raya},
+           familyi={R\bibinitperiod},
+           given={Maxim},
+           giveni={M\bibinitperiod}}}%
+        {{hash=2b954638b586f9eb53d1c8d19f5689d0}{%
+           family={Hubaux},
+           familyi={H\bibinitperiod},
+           given={Jean-Pierre},
+           giveni={J\bibinithyphendelim P\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {SAGE Publications Sage UK: London, England}%
+      }
+      \strng{namehash}{748f89e386aceb77cd978e535ef5b2ef}
+      \strng{fullhash}{748f89e386aceb77cd978e535ef5b2ef}
+      \strng{fullhashraw}{748f89e386aceb77cd978e535ef5b2ef}
+      \strng{bibnamehash}{748f89e386aceb77cd978e535ef5b2ef}
+      \strng{authorbibnamehash}{748f89e386aceb77cd978e535ef5b2ef}
+      \strng{authornamehash}{748f89e386aceb77cd978e535ef5b2ef}
+      \strng{authorfullhash}{748f89e386aceb77cd978e535ef5b2ef}
+      \strng{authorfullhashraw}{748f89e386aceb77cd978e535ef5b2ef}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of computer security}
+      \field{number}{1}
+      \field{shortjournal}{Journal of computer security}
+      \field{title}{Securing vehicular ad hoc networks}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{15}
+      \field{year}{2007}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{39\bibrangedash 68}
+      \range{pages}{30}
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/A3XEDZDU/JCS-2007-15103.html
+      \endverb
+      \verb{urlraw}
+      \verb https://journals.sagepub.com/doi/abs/10.3233/JCS-2007-15103
+      \endverb
+      \verb{url}
+      \verb https://journals.sagepub.com/doi/abs/10.3233/JCS-2007-15103
+      \endverb
+    \endentry
+    \entry{silvanoIotaTangleCryptocurrency2020}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=a62408c08399fc6366817931aa65707d}{%
+           family={Silvano},
+           familyi={S\bibinitperiod},
+           given={Wellington\bibnamedelima Fernandes},
+           giveni={W\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=cc1ac05673380dc12591db2c973c7ee5}{%
+           family={Marcelino},
+           familyi={M\bibinitperiod},
+           given={Roderval},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{5449dc59812c02fd40ac81bebd1b27fb}
+      \strng{fullhash}{5449dc59812c02fd40ac81bebd1b27fb}
+      \strng{fullhashraw}{5449dc59812c02fd40ac81bebd1b27fb}
+      \strng{bibnamehash}{5449dc59812c02fd40ac81bebd1b27fb}
+      \strng{authorbibnamehash}{5449dc59812c02fd40ac81bebd1b27fb}
+      \strng{authornamehash}{5449dc59812c02fd40ac81bebd1b27fb}
+      \strng{authorfullhash}{5449dc59812c02fd40ac81bebd1b27fb}
+      \strng{authorfullhashraw}{5449dc59812c02fd40ac81bebd1b27fb}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{The emergence of distributed ledger technologies (DLT) and design limitations of Blockchain systems for some types of applications led to the development of cryptocurrency alternatives for various purposes. Iota is a cryptocurrency with a new architecture called Tangle, which promises high scalability, no fees, and near-instant transfers, focused on the Internet-of-Things (IoT) solutions. This paper aims to present a systematic community’s visions of this new technology and to provide minimum background to understand the Iota Tangle and ecosystem generated by this distributed Ledger. The first parts of this article describe the ecosystem behind Iota, theoretical mathematical foundation, and its challenges and solutions for implementation. In the second part, we presented systematic research about Iota Tangle in academic databases: IEEE, ScienceDirect, Scopus, and Research Gate. We select the articles those of high impact which can be filtered with the H5-index indicator. This criterion aims to guarantee that the papers analyzed underwent a careful selection process, evaluated by peers. The methodology used helped have a global vision of Iota, including that this innovation is not only understood as a cryptocurrency but can be considered as a “distributed communication protocol”, absence of fees, low latency, and low computational cost for sending transactions. However, there exist several challenges in the vanguard of development of this ledger. It could also be identified that this technology enables many possibilities, however, it is fundamental to understand the potentials and limitations of this ecosystem to generate the best use cases.}
+      \field{day}{1}
+      \field{issn}{0167-739X}
+      \field{journaltitle}{Future Generation Computer Systems}
+      \field{month}{11}
+      \field{shortjournal}{Future Generation Computer Systems}
+      \field{shorttitle}{Iota {{Tangle}}}
+      \field{title}{Iota {{Tangle}}: {{A}} Cryptocurrency to Communicate {{Internet-of-Things}} Data}
+      \field{urlday}{3}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{112}
+      \field{year}{2020}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{307\bibrangedash 319}
+      \range{pages}{13}
+      \verb{doi}
+      \verb 10.1016/j.future.2020.05.047
+      \endverb
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/XNVPQUXG/Silvano and Marcelino - 2020 - Iota Tangle A cryptocurrency to communicate Internet-of-Things data.pdf;/home/sam/snap/zotero-snap/common/Zotero/storage/5L2M2TTJ/S0167739X19329048.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.sciencedirect.com/science/article/pii/S0167739X19329048
+      \endverb
+      \verb{url}
+      \verb https://www.sciencedirect.com/science/article/pii/S0167739X19329048
+      \endverb
+      \keyw{Distributed computing,DLT,IoT,Iota,Iota Tangle}
+    \endentry
+    \entry{VanetSecurityPrivacy}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=6a2898d31c174ecfcfa291a8d550d08c}{%
+           family={Mansour},
+           familyi={M\bibinitperiod},
+           given={Marvy\bibnamedelima B},
+           giveni={M\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=e541c5ad13340d8f66e9fe5cd9eb364e}{%
+           family={Salama},
+           familyi={S\bibinitperiod},
+           given={Cherif},
+           giveni={C\bibinitperiod}}}%
+        {{hash=2e56016486cfad9ce3fe323e25b5d95f}{%
+           family={Mohamed},
+           familyi={M\bibinitperiod},
+           given={Hoda\bibnamedelima K},
+           giveni={H\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=1d3f78509b1cc30fc3eebf801c0545aa}{%
+           family={Hammad},
+           familyi={H\bibinitperiod},
+           given={Sherif\bibnamedelima A},
+           giveni={S\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \strng{namehash}{a4b86e03b43f1b9adcfc85776eb75993}
+      \strng{fullhash}{85c50fd2a77e36a7f0afcceae8a4581b}
+      \strng{fullhashraw}{85c50fd2a77e36a7f0afcceae8a4581b}
+      \strng{bibnamehash}{85c50fd2a77e36a7f0afcceae8a4581b}
+      \strng{authorbibnamehash}{85c50fd2a77e36a7f0afcceae8a4581b}
+      \strng{authornamehash}{a4b86e03b43f1b9adcfc85776eb75993}
+      \strng{authorfullhash}{85c50fd2a77e36a7f0afcceae8a4581b}
+      \strng{authorfullhashraw}{85c50fd2a77e36a7f0afcceae8a4581b}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{International Journal of Network Security \& Its Applications (IJNSA) Vol}
+      \field{shortjournal}{International Journal of Network Security \& Its Applications (IJNSA) Vol}
+      \field{title}{VANET security and privacy-an overview}
+      \field{urlday}{9}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{10}
+      \field{year}{2018}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/BRXJWD2B/Vanet Security and Privacy – an Overview EIRP Proceedings.pdf;/home/sam/snap/zotero-snap/common/Zotero/storage/IJ5HYVRB/497.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.dp.univ-danubius.ro/index.php/EIRP/article/view/497
+      \endverb
+      \verb{url}
+      \verb https://www.dp.univ-danubius.ro/index.php/EIRP/article/view/497
+      \endverb
+    \endentry
+    \entry{xuInternetVehiclesBig2018}{article}{}{}
+      \name{author}{7}{}{%
+        {{hash=0337b06ae14bab7dbde8fc6e1bc3a5ea}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Wenchao},
+           giveni={W\bibinitperiod}}}%
+        {{hash=e3660e9130602acf15b854ef6c312930}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Haibo},
+           giveni={H\bibinitperiod}}}%
+        {{hash=28a8e51797a8d75496cb5c753ba8f14c}{%
+           family={Cheng},
+           familyi={C\bibinitperiod},
+           given={Nan},
+           giveni={N\bibinitperiod}}}%
+        {{hash=42106f999266480b0c25c85e4129e478}{%
+           family={Lyu},
+           familyi={L\bibinitperiod},
+           given={Feng},
+           giveni={F\bibinitperiod}}}%
+        {{hash=cfb40a09dd5da20aecda3bfff4847782}{%
+           family={Shi},
+           familyi={S\bibinitperiod},
+           given={Weisen},
+           giveni={W\bibinitperiod}}}%
+        {{hash=5a0b8d1e757946a10c3c2bc5ef493e87}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Jiayin},
+           giveni={J\bibinitperiod}}}%
+        {{hash=cada02a68f59df42ef9678d5d73027f9}{%
+           family={Shen},
+           familyi={S\bibinitperiod},
+           given={Xuemin},
+           giveni={X\bibinitperiod}}}%
+      }
+      \strng{namehash}{b00d4791ad3699ab2803d60a08c607fd}
+      \strng{fullhash}{1ffb86fc3108f65cd8e39c63e98eef20}
+      \strng{fullhashraw}{1ffb86fc3108f65cd8e39c63e98eef20}
+      \strng{bibnamehash}{b00d4791ad3699ab2803d60a08c607fd}
+      \strng{authorbibnamehash}{b00d4791ad3699ab2803d60a08c607fd}
+      \strng{authornamehash}{b00d4791ad3699ab2803d60a08c607fd}
+      \strng{authorfullhash}{1ffb86fc3108f65cd8e39c63e98eef20}
+      \strng{authorfullhashraw}{1ffb86fc3108f65cd8e39c63e98eef20}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{As the rapid development of automotive telematics, modern vehicles are expected to be connected through heterogeneous radio access technologies and are able to exchange massive information with their surrounding environment. By significantly expanding the network scale and conducting both real time and long term information processing, the traditional Vehicular Ad- Hoc Networks ( VANETs ) are evolving to the Internet of Vehicles ( IoV ), which promises efficient and intelligent prospect for the future transportation system. On the other hand, vehicles are not only consuming but also generating a huge amount and enormous types of data, which are referred to as Big Data. In this article, we first investigate the relationship between IoV and big data in vehicular environment, mainly on how IoV supports the transmission, storage, computing of the big data, and in return how IoV benefits from big data in terms of IoV characterization, performance evaluation and big data assisted communication protocol design. We then investigate the application of IoV big data for autonomous vehicles. Finally the emerging issues of the big data enabled IoV are discussed.}
+      \field{issn}{2329-9274}
+      \field{journaltitle}{IEEE/CAA Journal of Automatica Sinica}
+      \field{month}{1}
+      \field{number}{1}
+      \field{title}{Internet of Vehicles in Big Data Era}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{volume}{5}
+      \field{year}{2018}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{19\bibrangedash 35}
+      \range{pages}{17}
+      \verb{doi}
+      \verb 10.1109/JAS.2017.7510736
+      \endverb
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/7BJMSUEU/Xu et al. - 2018 - Internet of vehicles in big data era.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/abstract/document/8232587
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/abstract/document/8232587
+      \endverb
+      \keyw{Big Data,Intelligent vehicles,Internet,Monitoring,Roads,Safety,Sensors}
+    \endentry
+    \entry{zhangRAISEEfficientRSUAided2008}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=08835018e7f90fcf262517bf88eb4d72}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={C.},
+           giveni={C\bibinitperiod}}}%
+        {{hash=d54334745e5a0b56a24e9d644566f3e4}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={X.},
+           giveni={X\bibinitperiod}}}%
+        {{hash=0e91d0af9acc03103b78d4adfbbe76a9}{%
+           family={Lu},
+           familyi={L\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+        {{hash=353f872978865aa0d0cb31d995da38df}{%
+           family={Ho},
+           familyi={H\bibinitperiod},
+           given={P.-H.},
+           giveni={P\bibinithyphendelim H\bibinitperiod}}}%
+      }
+      \strng{namehash}{4e3e11954b4f06d72a19b3b6e6aac580}
+      \strng{fullhash}{7f03dfb558217bab2e51e8603dd7a7eb}
+      \strng{fullhashraw}{7f03dfb558217bab2e51e8603dd7a7eb}
+      \strng{bibnamehash}{7f03dfb558217bab2e51e8603dd7a7eb}
+      \strng{authorbibnamehash}{7f03dfb558217bab2e51e8603dd7a7eb}
+      \strng{authornamehash}{4e3e11954b4f06d72a19b3b6e6aac580}
+      \strng{authorfullhash}{7f03dfb558217bab2e51e8603dd7a7eb}
+      \strng{authorfullhashraw}{7f03dfb558217bab2e51e8603dd7a7eb}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Addressing security and privacy issues is a prerequisite for a market-ready vehicular communication network. Although recent related studies have already addressed most of these issues, few of them have taken scalability issues into consideration. When the traffic density becomes larger, a vehicle cannot verify all signatures of the messages sent by its neighbors in a timely manner, which results in message loss. Communication overhead as another issue has also not been well addressed in previously reported studies. To deal with these issues, this paper introduces a novel RSU-aided messages authentication scheme, called RAISE. With RAISE, roadside units (RSUs) are responsible for verifying the authenticity of the messages sent from vehicles and for notifying the results back to vehicles. In addition, our scheme adopts the k-anonymity approach to protect user identity privacy, where an adversary cannot associate a message with a particular vehicle. Extensive simulations are conducted to verify the proposed scheme, which demonstrates that RAISE yields much better performance than any of the previously reported counterparts in terms of message loss ratio and delay.}
+      \field{booktitle}{2008 {{IEEE International Conference}} on {{Communications}}}
+      \field{eventtitle}{2008 {{IEEE International Conference}} on {{Communications}}}
+      \field{issn}{1938-1883}
+      \field{month}{5}
+      \field{shorttitle}{{{RAISE}}}
+      \field{title}{{{RAISE}}: {{An Efficient RSU-Aided Message Authentication Scheme}} in {{Vehicular Communication Networks}}}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{year}{2008}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \true{nocite}
+      \field{pages}{1451\bibrangedash 1457}
+      \range{pages}{7}
+      \verb{doi}
+      \verb 10.1109/ICC.2008.281
+      \endverb
+      \verb{file}
+      \verb /home/sam/snap/zotero-snap/common/Zotero/storage/2QRNF8H7/4533317.html
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/abstract/document/4533317
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/abstract/document/4533317
+      \endverb
+      \keyw{Ad hoc networks,Communication networks,Communication system security,Message authentication,Privacy,Protection,Public key,Road safety,Road vehicles,Scalability}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

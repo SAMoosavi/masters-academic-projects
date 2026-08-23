@@ -1,0 +1,15 @@
+[1] Config.pm:328> INFO - This is Biber 2.21
+[1] Config.pm:331> INFO - Logfile is 'seminar.blg'
+[186] biber:342> INFO - === Mon Jun 15, 2026, 14:48:32
+[210] Biber.pm:421> INFO - Reading 'seminar.bcf'
+[339] Biber.pm:999> INFO - Using all citekeys in bib section 0
+[363] Biber.pm:4487> INFO - Processing section 0
+[384] Biber.pm:4678> INFO - Looking for bibtex file 'seminar.bib' for section 0
+[389] bibtex.pm:1713> INFO - LaTeX decoding ...
+[470] bibtex.pm:1519> INFO - Found BibTeX data source 'seminar.bib'
+[929] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[929] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[929] Biber.pm:4307> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'en-US'
+[930] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[971] bbl.pm:676> INFO - Writing 'seminar.bbl' with encoding 'UTF-8'
+[1004] bbl.pm:779> INFO - Output to seminar.bbl
