@@ -1,0 +1,68 @@
+[[wu2025-collusion]]
+
+## Setup
+
+$$
+\begin{aligned}
+&P \in \mathbb{G},\quad s\in\mathbb{Z}_q^* \\
+&P_{pub}=sP \\
+&H_{1,2,3}:\{0,1\}^*\rightarrow\mathbb{Z}_q^*
+\end{aligned}
+$$
+
+## Partial Private Key Extract
+
+$$
+\begin{aligned}
+&r_{ID}\in\mathbb{Z}_q^*,\quad R_{ID}=r_{ID}P \\
+&h_1=H_1(ID,R_{ID},P_{pub}) \\
+&d_{ID}=r_{ID}+h_1 s \\
+&D_{ID}=(d_{ID},R_{ID})
+\end{aligned}
+$$
+
+## Set Secret Value
+
+$$
+\begin{aligned}
+&x_i\in\mathbb{Z}_q^* \\
+&X_i=x_i P
+\end{aligned}
+$$
+
+## Set Private/Public Key
+
+$$
+\begin{aligned}
+&SK_i=(x_i,d_{ID}) \\
+&PK_i=(X_i,R_{ID})
+\end{aligned}
+$$
+
+## Signature
+
+$$
+\begin{aligned}
+&t\in\mathbb{Z}_q^*,\quad T=tP \\
+&h_2=H_2(m,PID,X_i,R_{ID},T) \\
+&\tau=t+h_2(x_i+d_{ID})\pmod q \\
+&\sigma_i=(T,\tau)
+\end{aligned}
+$$
+
+## Aggregate
+
+$$
+\begin{aligned}
+&T'=\sum T,\quad \tau'=\sum\tau \\
+&\sigma_{agg}=(T',\tau')
+\end{aligned}
+$$
+
+## Verification
+
+$$
+\begin{aligned}
+\tau' P\stackrel{?}{=} T'+\sum h_2(X_i+R_{ID}+h_1 P_{pub})
+\end{aligned}
+$$

@@ -1,0 +1,33 @@
+{
+	"nodes":[
+		{"id":"hdr_cls","type":"text","text":"##### CLS (Pairing-Based)","x":-420,"y":0,"width":400,"height":60},
+		{"id":"empty_cls","type":"text","text":"*(empty)*","x":0,"y":0,"width":380,"height":60},
+		{"id":"hdr_pfcls","type":"text","text":"##### PF-CLS (Pairing-Free)","x":-420,"y":700,"width":400,"height":60},
+		{"id":"f_wei2025","type":"file","file":"schemes/wei2025.md","x":0,"y":700,"width":380,"height":600},
+		{"id":"hdr_clas","type":"text","text":"##### CLAS (Pairing-Based)","x":-420,"y":1400,"width":400,"height":60},
+		{"id":"f_cahyadi2022","type":"file","file":"schemes/cahyadi2022.md","x":0,"y":1400,"width":380,"height":600},
+		{"id":"f_wang2022","type":"file","file":"schemes/wang2022.md","x":400,"y":1400,"width":380,"height":600},
+		{"id":"f_tao2026","type":"file","file":"schemes/tao2026.md","x":800,"y":1400,"width":380,"height":600},
+		{"id":"hdr_pfclas","type":"text","text":"##### PF-CLAS (Pairing-Free)","x":-420,"y":2100,"width":400,"height":60},
+		{"id":"f_gong2023","type":"file","file":"schemes/gong2023.md","x":0,"y":2100,"width":380,"height":600},
+		{"id":"f_han2022","type":"file","file":"schemes/han2022.md","x":400,"y":2100,"width":380,"height":600},
+		{"id":"f_zheng2023","type":"file","file":"schemes/zheng2023.md","x":800,"y":2100,"width":380,"height":600},
+		{"id":"f_wang2025ecae","type":"file","file":"schemes/wang2025-ecae.md","x":1200,"y":2100,"width":380,"height":600},
+		{"id":"f_xu2023","type":"file","file":"schemes/xu2023.md","x":1600,"y":2100,"width":380,"height":600},
+		{"id":"f_wu2025pseudo","type":"file","file":"schemes/wu2025-pseudonyms.md","x":2000,"y":2100,"width":380,"height":600},
+		{"id":"f_wu2025coll","type":"file","file":"schemes/wu2025-collusion.md","x":2400,"y":2100,"width":380,"height":600},
+		{"id":"f_vallent2021","type":"file","file":"schemes/vallent2021.md","x":2800,"y":2100,"width":380,"height":600},
+		{"id":"f_yue2025","type":"file","file":"schemes/yue2025.md","x":3200,"y":2100,"width":380,"height":600},
+		{"id":"hdr_hecc","type":"text","text":"##### HECC","x":-420,"y":2800,"width":400,"height":60},
+		{"id":"f_iqbal2023","type":"file","file":"schemes/iqbal2023.md","x":0,"y":2800,"width":380,"height":600},
+		{"id":"hdr_detect","type":"text","text":"##### Detect Malicious","x":-420,"y":3500,"width":400,"height":60},
+		{"id":"f_wang2025det","type":"file","file":"schemes/wang2025-detectable.md","x":0,"y":3500,"width":380,"height":600},
+		{"id":"hdr_crypt","type":"text","text":"##### Cryptanalysis","x":-420,"y":4200,"width":400,"height":60},
+		{"id":"f_shim2023","type":"file","file":"summaries/shim2023.md","x":0,"y":4200,"width":380,"height":600},
+		{"id":"f_shim2026","type":"file","file":"summaries/shim2026.md","x":400,"y":4200,"width":380,"height":600},
+		{"id":"f_zhang2014","type":"file","file":"schemes/zhang2014.md","x":800,"y":4200,"width":380,"height":600},
+		{"id":"f_gong2023c","type":"file","file":"schemes/gong2023.md","x":1200,"y":4200,"width":380,"height":600},
+		{"id":"f_wei2025c","type":"file","file":"schemes/wei2025.md","x":1600,"y":4200,"width":380,"height":600}
+	],
+	"edges":[]
+}

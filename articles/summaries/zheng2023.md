@@ -31,9 +31,10 @@ This is the scheme that Yue et al. (2025) found vulnerable to rogue key attacks.
 **Pairing-free ECC CLAS:**
 - KGC: $s$, $P_{pub} = sP$
 - User: $D_i = sH(ID_i)$, $x_i$, $PK_i = x_iP$
-- Sign: $\sigma_i = r_i + h_i(x_i + D_i) \mod q$
-- Aggregate: $\sigma = \sum \sigma_i$, $R = \sum R_i$
-- Verify: $e(\sigma P, P) = e(R, P) \cdot \prod e(h_i PK_i + D_i, P_{pub})$
+- Sign: Pick $r_i \in \mathbb{Z}_q^*$, $U_i = r_i P$, $h_{2i} = H_2(PID_i, X_i)$, $h_{3i} = H_3(M_i, PID_i, X_i, U_i, T_i)$, $s_i = r_i + h_{2i} \cdot x_i + h_{3i} \cdot d_i \mod q$
+- Signature: $\sigma_i = (U_i, s_i)$
+- Aggregate: $s = \sum_{i=1}^n s_i$
+- **Verify (pairing-free):** $sP = \sum_{i=1}^n W_i + \sum_{i=1}^n X_i h_{3i}$ where $W_i = h_{2i} K_{pub}$
 
 ## Protocol / Scheme
 

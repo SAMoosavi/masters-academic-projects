@@ -11,14 +11,17 @@
             "id": "fe3627d2782dd0e6",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "math-notation.md",
-                "mode": "source",
-                "source": false
+                "file": "Signature Schemes.canvas",
+                "viewState": {
+                  "x": 786.8210255961123,
+                  "y": 4705.856433977092,
+                  "zoom": -0.381347856738386
+                }
               },
-              "icon": "lucide-file",
-              "title": "math-notation"
+              "icon": "lucide-layout-dashboard",
+              "title": "Signature Schemes"
             }
           }
         ]
@@ -187,25 +190,37 @@
   },
   "active": "fe3627d2782dd0e6",
   "lastOpenFiles": [
-    "categories/Cryptanalysis.md",
+    "schemes/zheng2023.md",
+    "schemes/zhang2014.md",
+    "schemes/xu2023.md",
+    "schemes/wu2025-collusion.md",
+    "schemes/iqbal2023.md",
+    "schemes/gong2023.md",
+    "comparison-charts/attack-resistance.png",
+    "categories/CLS.md",
+    "categories/Signcryption.md",
+    "Signature Schemes.canvas",
+    "schemes/wang2025-detectable.md",
+    "schemes/yue2025.md",
+    "schemes/vallent2021.md",
+    "schemes/wu2025-pseudonyms.md",
+    "schemes/wang2025-ecae.md",
+    "schemes/han2022.md",
+    "schemes/tao2026.md",
+    "schemes/wang2022.md",
+    "schemes/cahyadi2022.md",
+    "schemes/wei2025.md",
+    "schemes",
     "categories/Standard-Model.md",
     "categories/Type-III.md",
-    "categories/Signcryption.md",
+    "categories/CLAS.md",
     "categories/Detect-Invalid.md",
     "categories/Pairing-Free.md",
-    "categories/CLAS.md",
-    "categories/CLS.md",
+    "categories/Cryptanalysis.md",
+    "summaries/gong2023.md",
     "categories",
-    "analysis-report.md",
-    "math-notation.md",
-    "protocols.md",
     "comparison-charts/timeline.png",
     "comparison-charts/security-comparison.png",
-    "comparison-charts/categories.png",
-    "comparison-charts/attack-resistance.png",
-    "summaries/han2022.md",
-    "summaries/dai2022.md",
-    "summaries/cahyadi2022-survey.md",
-    "summaries/cahyadi2022-clas-scheme.md"
+    "comparison-charts/categories.png"
   ]
 }
