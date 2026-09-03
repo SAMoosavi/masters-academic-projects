@@ -1,0 +1,599 @@
+ICT Express 12 (2026) 566–570
+
+Contents lists available at ScienceDirect
+
+ICT Express
+journal homepage: www.elsevier.com/locate/icte
+
+On the security of aggregate signature–based conditional privacy-preserving
+authentication schemes for VANETs
+Kyung-Ah Shim
+
+∗
+
+, Hyeokdong Kwon
+
+National Institute for Mathematical Sciences, Daejeon, South Korea
+
+ARTICLE
+
+INFO
+
+Keywords:
+Authentication protocol
+Certificateless aggregate signature
+Conditional privacy
+Intelligent transportation systems
+Public key replacement
+Type I forgery
+VANET
+
+ABSTRACT
+Certificateless aggregate signature (CLAS) schemes enable multiple vehicles to combine their individual
+signatures into a single compact authenticator, significantly reducing transmission and verification overhead in
+bandwidth-constrained vehicular ad-hoc networks (VANETs). This efficiency makes CLAS particularly attractive
+for real-time authentication in large-scale intelligent transportation systems (ITS). However, we show that two
+representative CLAS-based conditional privacy-preserving authentication schemes, proposed by Zhu–Guan and
+Chen–Guan, are vulnerable to a Type I adversary capable of replacing a vehicle’s public key. Such an adversary
+can forge valid signatures on arbitrary messages without obtaining the vehicle’s partial private key due to
+the lack of cryptographic binding between public keys and ephemeral randomness, which allows algebraic
+elimination of the master public key during verification. We analyze the root causes of this flaw and propose
+hash-based countermeasures that enforce strong binding among all public components. Our results further
+reveal that conventional linear hash-dependent CLAS constructions face inherent limitations in balancing
+security, ultra-low latency, and scalability. Thus, a next-generation CLAS design paradigm is required one that
+moves beyond traditional linear architectures to achieve deployment-level performance in current 5G-V2X
+environments while being inherently scalable toward future 6G-enabled intelligent transportation systems.
+
+1. Introduction
+Vehicular Ad-hoc Networks (VANETs) have emerged as a fundamental communication infrastructure for intelligent transportation systems (ITS), enabling real-time vehicle-to-vehicle (V2V) and vehicleto-infrastructure (V2I) communications to improve road safety, traffic
+efficiency, and user experience [1–3]. In practical deployments such as
+5G-V2X and ETSI ITS-G5, authentication must be completed within a
+sub-10 ms latency budget to support the timely dissemination of safetycritical messages. However, due to their open wireless medium, high
+mobility, and large-scale deployment, VANETs are inherently exposed
+to various security and privacy threats, including message fabrication,
+impersonation, and vehicle tracking. To address these challenges, a
+variety of authentication mechanisms have been proposed based on
+public-key infrastructure (PKI), identity-based cryptography (IBC), and
+certificateless public key cryptography (CL-PKC). Among them, CLPKC [4] has received considerable attention as it eliminates certificate
+management overhead in PKI while avoiding the key escrow problem
+inherent in IBC.
+From a cryptographic perspective, CL-PKC combines the advantages
+of PKI and IBC by decoupling key generation between a trusted authority and users. Specifically, the trusted authority issues each user
+
+a partial private key, while the user independently selects a secret
+value to derive the full private key and the corresponding public key.
+This key generation mechanism gives rise to two standard adversary
+models. A Type I adversary is allowed to replace users’ public keys
+but does not have access to the trusted authority’s master secret key,
+whereas a Type II adversary knows the master secret key but cannot
+perform public-key replacement. The security of certificateless signature schemes is commonly defined as existential unforgeability against
+adaptive chosen-message attacks under these adversary models.
+Aggregate signature techniques further enhance scalability by compressing multiple individual signatures into a single compact signature that can be verified efficiently. Certificateless aggregate signature
+(CLAS) schemes integrate aggregate signatures with CL-PKC, thereby
+reducing communication overhead and enabling efficient batch verification in large-scale VANET environments. Since vehicles typically
+broadcast messages without prior trust relationships, security against
+public-key replacement attacks by Type I adversaries is particularly
+critical for CLAS-based VANET authentication schemes. Accordingly,
+several CLAS-based conditional privacy-preserving authentication
+(CPP) schemes have been proposed for VANET security [5–11]. In
+
+∗ Corresponding author.
+
+E-mail addresses: kashim@nims.re.kr (K.-A. Shim), hyeokdong@nims.re.kr (H. Kwon).
+https://doi.org/10.1016/j.icte.2026.02.012
+Received 27 October 2025; Received in revised form 19 February 2026; Accepted 24 February 2026
+Available online 26 February 2026
+2405-9595/© 2026 The Authors. Published by Elsevier B.V. on behalf of The Korean Institute of Communications and Information Sciences. This is an open access
+article under the CC BY license (http://creativecommons.org/licenses/by/4.0/).
+
+ICT Express 12 (2026) 566–570
+
+K.-A. Shim and H. Kwon
+
+• TA retrieves 𝐼𝐷𝑖 , 𝐾𝑖 via PID𝑖,𝑗 lookup, chooses 𝑎𝑖,𝑗 ∈ Z∗𝑞 , sets
+𝐴𝑖,𝑗 = 𝑎𝑖,𝑗 ⋅ 𝑃 , and computes
+
+particular, Zhu and Guan introduced a pairing-free CLAS scheme to reduce computational overhead [12], and Chen and Guan later enhanced
+privacy protection through dynamic pseudonym generation [13].
+In this paper, we demonstrate that both the Zhu-Guan and ChenGuan schemes suffer from a critical vulnerability against Type I adversaries under public-key replacement. We show that such an adversary
+can forge valid signatures on arbitrary messages without obtaining the
+victim’s partial private key. Our analysis reveals that this vulnerability
+originates from the linear structure of the verification equation, which
+enables algebraic cancellation of the master public key once public-key
+replacement is performed. To mitigate this issue, we propose a refined
+countermeasure that introduces hash-based binding among all public
+components and analyze its verification cost, which requires 3𝑛 + 2
+scalar multiplications for 𝑛 aggregated signatures. While this countermeasure can restore security, the resulting heavy hash-dependent
+structure incurs non-negligible computational overhead. These findings
+highlight the need for a next-generation CLAS design paradigm that
+achieves strong security while maintaining lightweight efficiency for
+practical large-scale VANET deployments.
+The remainder of this paper is organized as follows. Section 2
+reviews the Zhu–Guan and Chen–Guan CLAS-based authentication
+schemes in detail. Section 3 presents the Type I forgery attacks against
+these schemes and analyzes their underlying causes along with possible
+countermeasures. Section 4 discusses the necessity of a new CLAS
+design paradigm that simultaneously ensures both strong security and
+practical efficiency for large-scale VANET deployment.
+
+ℎ3𝑖,𝑗 = 𝐻3 (PID𝑖,𝑗 , 𝑋𝑖,𝑗 , 𝐴𝑖,𝑗 ),
+
+𝑐𝑖,𝑗 = 𝑎𝑖,𝑗 + 𝑠 ⋅ ℎ3𝑖,𝑗 .
+
+• TA sends 𝐷𝑖,𝑗 = (𝐴𝑖,𝑗 , 𝑐𝑖,𝑗 ) to 𝑉𝑖 .
+• On receiving 𝐷𝑖,𝑗 , 𝑉𝑖 verifies the partial private key via:
+?
+
+𝑐𝑖,𝑗 ⋅ 𝑃 = 𝐴𝑖,𝑗 + 𝑃pub ⋅ 𝐻3 (PID𝑖,𝑗 , 𝑋𝑖,𝑗 , 𝐴𝑖,𝑗 )
+[Key Pair Construction.] Vehicle 𝑉𝑖 sets SK𝑖,𝑗 = (𝑥𝑖,𝑗 , 𝑐𝑖,𝑗 ) and PK𝑖,𝑗 =
+(𝑋𝑖,𝑗 , 𝐴𝑖,𝑗 ) as a secret key and a public key, respectively.
+[Signature Generation.] To sign a message 𝑚, 𝑉𝑖 chooses 𝑏𝑖,𝑗 ∈ Z∗𝑞
+and computes 𝐵𝑖,𝑗 = 𝑏𝑖,𝑗 ⋅ 𝑃 and ℎ4𝑖,𝑗 = 𝐻4 (PID𝑖,𝑗 , 𝑋𝑖,𝑗 , 𝐵𝑖,𝑗 , 𝑚, 𝑡𝑖,𝑗 ), and
+𝑧𝑖,𝑗 = 𝑏𝑖,𝑗 + 𝑐𝑖,𝑗 + 𝑥𝑖,𝑗 ⋅ ℎ4𝑖,𝑗 . Output 𝜎𝑖,𝑗 = (𝐵𝑖,𝑗 , 𝑧𝑖,𝑗 ) as a signature. Then 𝑉𝑖
+{
+}
+sends PID𝑖,𝑗 , PK𝑖,𝑗 , 𝑚, 𝑡𝑖,𝑗 , 𝜎𝑖,𝑗 .
+[Single Signature Verification.] Upon receiving (PID𝑖,𝑗 , PK𝑖,𝑗 , 𝑚, 𝑡𝑖,𝑗 ,
+𝜎𝑖,𝑗 ), a verifier performs:
+• Check freshness of 𝑡𝑖,𝑗 . If it is fresh, compute ℎ3𝑖,𝑗 = 𝐻3 (PID𝑖,𝑗 , 𝑋𝑖,𝑗 ,
+𝐴𝑖,𝑗 ), ℎ4𝑖,𝑗 = 𝐻4 (PID𝑖,𝑗 , 𝑋𝑖,𝑗 , 𝐵𝑖,𝑗 , 𝑚, 𝑡𝑖,𝑗 ).
+?
+
+• Accept if 𝑧𝑖,𝑗 ⋅ 𝑃 = 𝐵𝑖,𝑗 + 𝐴𝑖,𝑗 + ℎ3𝑖,𝑗 ⋅ 𝑃pub + ℎ4𝑖,𝑗 ⋅ 𝑋𝑖,𝑗 .
+[Aggregate Signature Generation.] For signature aggregation, RSU
+∑
+verifies each 𝜎𝑘 and computes 𝑧agg = 𝑛𝑘=1 𝑧𝑘 . Then 𝜎agg = (𝐵1 , 𝐵2 , … ,
+𝐵𝑛 , 𝑧agg ) is an aggregate signature. RSU sends with messages {PID𝑘 ,
+PK𝑘 , 𝑚𝑘 , 𝑡𝑘 }𝑛𝑘=1 .
+
+2. Review of two conditional privacy-preserving authentication
+schemes
+
+[Aggregate Signature Verification.] For aggregate signature verification, the verifier checks
+
+In this section, we review two conditional privacy-preserving authentication schemes in [12,13]
+
+𝑛
+? ∑(
+
+𝑛
+∑
+)
+𝐵𝑘 + 𝐴𝑘 + ℎ4𝑘 ⋅ 𝑋𝑘 + 𝑃pub ⋅
+ℎ3𝑘
+
+𝑧agg ⋅ 𝑃 =
+
+𝑘=1
+
+2.1. The Zhu-Guan authentication scheme
+
+𝑘=1
+
+where ℎ3𝑘 = 𝐻3 (PID𝑘 , 𝑋𝑘 , 𝐴𝑘 ) and ℎ4𝑘 = 𝐻4 (PID𝑘 , 𝑋𝑘 , 𝐵𝑘 , 𝑚𝑘 , 𝑡𝑘 ). If it is
+valid, accept 𝜎agg .
+
+[System Setup.] The Trusted Authority (TA) initializes the system
+with security parameter 𝜆 and performs:
+
+2.2. The Chen-Guan authentication scheme
+
+• Select a cyclic additive group 𝐺 of order 𝑞 over an elliptic curve
+𝐸(F𝑝 ), where 𝑞 is a 𝜆-bit prime, and 𝑃 is the generator of 𝐺.
+
+[System Setup.] The Trusted Authority (TA) executes the setup algorithm as follows:
+
+• Choose a master secret key 𝑠 ∈ Z∗𝑞 and computes the public
+key 𝑃pub = 𝑠𝑃 and define four one-way collision-resistant hash
+functions 𝐻𝑖 .
+(
+• Publish the system parameters as Param = 𝑞, 𝐺, 𝑃 , 𝑃pub , 𝐻1 , 𝐻2 ,
+)
+𝐻3 , 𝐻 4 .
+
+• Select a cyclic additive group 𝐺 of prime order 𝑞 with generator
+𝑃 over elliptic curve 𝐸 and choose master secret 𝑠 ∈ Z∗𝑞 and
+compute 𝑃pub = 𝑠 ⋅ 𝑃 .
+• Define four one-way collision-resistant hash functions 𝐻𝑖 and
+symmetric encryption/decryption algorithms 𝖤𝗇𝖼𝑡 (⋅)/𝖣𝖾𝖼𝑡 (⋅) under
+symmetric key 𝑡.
+• Publish public parameters as param = {𝑞, 𝐺, 𝑃 , 𝑃pub , 𝐻1 , 𝐻2 , 𝐻3 ,
+}
+𝐻4 and keep 𝑠 secret.
+
+[Vehicle Registration.] For registration, vehicles perform the followings:
+• Vehicle 𝑉𝑖 submits its identity 𝐼𝐷𝑖 , password 𝐾𝑖 , and related
+information to TA via a secure channel.
+• TA verifies and stores (𝐼𝐷𝑖 , 𝐾𝑖 ), and generates two hash seeds
+Seed1𝑖 and Seed2𝑖 . The seeds are sent securely to 𝑉𝑖 and stored
+in both the TA and the vehicle’s memory.
+
+[Vehicle Registration.] For registration, vehicles perform the followings:
+• Vehicle 𝑉𝑖 provides biometric data 𝖡𝗂𝗈𝑖 (e.g., fingerprint) securely
+to TA.
+• TA validates 𝖡𝗂𝗈𝑖 , and computes biometric identity 𝖡𝖨𝖣𝑖 = 𝖨𝖣𝗀𝖾𝗇
+(𝖡𝗂𝗈𝑖 ). TA generates random hash seeds 𝖲𝖾𝖾𝖽𝑖,1 and 𝖲𝖾𝖾𝖽𝑖,2 , sends
+them securely to 𝑉𝑖 .
+• TA and 𝑉𝑖 store {𝖡𝗂𝗈𝑖 , 𝖡𝖨𝖣𝑖 , 𝖲𝖾𝖾𝖽𝑖,1 , 𝖲𝖾𝖾𝖽𝑖,2 }.
+
+[Dynamic Pseudonym Generation.] Vehicle 𝑉𝑖 computes its 𝑗th
+1 = 𝐻 (Seed1 ⋅ 𝑗), 𝑆 2 = 𝐻 (Seed2 ⋅ 𝑗) and PID
+pseudonym as 𝑆𝑖,𝑗
+1
+𝑖
+1
+𝑖
+𝑖,𝑗 =
+𝑖,𝑗
+1
+2
+𝐻1 (𝑆𝑖,𝑗 ⊕ 𝑆𝑖,𝑗 ).
+[Secret Value Setting.] Vehicle 𝑉𝑖 chooses a secret 𝑥𝑖,𝑗 ∈ Z∗𝑞 and
+computes the corresponding public key component 𝑋𝑖,𝑗 = 𝑥𝑖,𝑗 ⋅ 𝑃 .
+
+[Dynamic Pseudonym Generation.] For pseudonym generation, vehicles perform the followings:
+
+[Partial Private Key Extraction.] TA generates a partial private key
+of a vehicle as follows:
+
+• 𝑉𝑖 computes 𝑆𝐷𝑖,1 = 𝐻1 (𝖲𝖾𝖾𝖽𝑖,1 ), 𝑆𝐷𝑖,2 = 𝐻1 (𝖲𝖾𝖾𝖽𝑖,2 ) and identity
+hash 𝐼𝐷𝑖 = 𝐻1 (𝑆𝐷𝑖,1 ⊕ 𝑆𝐷𝑖,2 ).
+
+• 𝑉𝑖 sends (PID𝑖,𝑗 , 𝑋𝑖,𝑗 , 𝐻2 (PID𝑖,𝑗 , 𝐾𝑖 , 𝑋𝑖,𝑗 , 𝑡𝑖,𝑗 )) to TA.
+567
+
+ICT Express 12 (2026) 566–570
+
+K.-A. Shim and H. Kwon
+
+• If 𝐼𝐷𝑖 matches precomputed 𝐼𝐷𝑖∗ at TA, then 𝖯𝖨𝖣𝑖 = 𝖤𝗇𝖼𝑡
+(𝖡𝖨𝖣𝑖 ‖𝐼𝐷𝑖 )‖𝑡𝑖 else 𝑉𝑖 is revoked.
+[Secret Value Setting.] 𝑉𝑖 selects 𝑥𝑖 ∈ Z∗𝑞 and computes 𝑋𝑖 = 𝑥𝑖 ⋅𝑃 .
+
+• [Public-key Replacement.] The adversary 𝐼 chooses random
+′ = 𝑥 𝑃 and 𝐴′ =
+secret values 𝑥𝑖,𝑗 , 𝑎′𝑖,𝑗 ∈ Z∗𝑞 , and computes 𝑋𝑖,𝑗
+𝑖,𝑗
+𝑖,𝑗
+𝑎′𝑖,𝑗 𝑃 . Next, 𝐼 replaces the public key 𝑃 𝐾𝑖,𝑗 = (𝑋𝑖,𝑗 , 𝐴𝑖,𝑗 ) of the
+′ = (𝑋 ′ , 𝐴′ ).
+legitimate vehicle 𝑉𝑖 with the new public key 𝑃 𝐾𝑖,𝑗
+𝑖,𝑗
+𝑖,𝑗
+
+[Partial Private Key Generation.] TA generates vehicles’ partial private keys as follows:
+
+• [Signature Forgery.] To sign a message 𝑚′ with timestamp 𝑡𝑖,𝑗 ,
+𝐼 chooses a random 𝑏𝑖,𝑗 ∈ Z∗𝑞 and computes
+
+• 𝑉𝑖 sends (𝖯𝖨𝖣𝑖 , ℎ2 , 𝑡𝑖 ) to TA, where ℎ2 = 𝐻2 (𝖲𝖾𝖾𝖽𝑖,1 ) ⊕ 𝐻2 (𝖲𝖾𝖾𝖽𝑖,2 ).
+• TA decrypts 𝖯𝖨𝖣𝑖 to obtain 𝖡𝖨𝖣𝑖 = 𝖣𝖾𝖼𝑡 (𝖯𝖨𝖣𝑖 ) and verifies 𝖡𝖨𝖣𝑖 , retrieves 𝖲𝖾𝖾𝖽∗𝑖,1 , 𝖲𝖾𝖾𝖽∗𝑖,2 and computes ℎ∗2 = 𝐻2 (𝖲𝖾𝖾𝖽∗𝑖,1 ) ⊕ 𝐻2 (𝖲𝖾𝖾𝖽∗𝑖,2 ).
+• If ℎ2 =
+∈ Z∗𝑞 , computes 𝑅𝑖
+𝐻3 (𝖯𝖨𝖣𝑖 , 𝑃pub , 𝑅𝑖 , 𝑋𝑖 ), 𝑑𝑖 = 𝑟𝑖 + 𝑠 ⋅ ℎ3𝑖 .
+ℎ∗2 , TA selects 𝑟𝑖
+
+=
+
+𝑟𝑖 ⋅ 𝑃 , ℎ3𝑖
+
+′
+ℎ3𝑖,𝑗 = 𝐻1 (𝑃 𝐼𝐷𝑖,𝑗 , 𝑋𝑖,𝑗
+, 𝐴′𝑖,𝑗 ), 𝐵𝑖,𝑗 = −ℎ3𝑖,𝑗 𝑃pub ,
+′
+ℎ4𝑖,𝑗 = 𝐻1 (𝑃 𝐼𝐷𝑖,𝑗 , 𝑋𝑖,𝑗
+, 𝐵𝑖,𝑗 , 𝑚′ , 𝑡𝑖,𝑗 ),
+
+=
+
+𝑧𝑖,𝑗 = 𝑎′𝑖,𝑗 + 𝑥′𝑖,𝑗 ℎ4𝑖,𝑗 .
+′
+Finally, 𝐼 outputs 𝜎𝑖,𝑗
+= (𝐵𝑖,𝑗 , 𝑧𝑖,𝑗 ) as a signature forgery on
+𝑚′ ∥ 𝑡𝑖,𝑗 under the vehicle 𝑉𝑖 .
+
+• TA sends partial private key 𝐷𝑖 = (𝑅𝑖 , 𝑑𝑖 ) to 𝑉𝑖 .
+
+• [Validity.] The signature forgery is valid since it passes the
+verification equation as
+
+[Full Key Generation.] For full key generation, vehicles perform the
+followings:
+
+′
+′
+𝐵𝑖,𝑗
++ 𝐴′𝑖,𝑗 + ℎ3𝑖,𝑗 ⋅ 𝑃pub + ℎ4𝑖,𝑗 ⋅ 𝑋𝑖,𝑗
+
+?
+
+• 𝑉𝑖 checks the validity 𝑑𝑖 ⋅ 𝑃 = 𝑅𝑖 + ℎ3𝑖 ⋅ 𝑃pub .
+
+′
+= −ℎ3𝑖,𝑗 𝑃pub + 𝐴′𝑖,𝑗 + ℎ3𝑖,𝑗 ⋅ 𝑃pub + ℎ4𝑖,𝑗 ⋅ 𝑋𝑖,𝑗
+
+• If it is valid, 𝑉𝑖 computes 𝗏𝗌𝗄𝑖 = 𝑥𝑖 ⋅ℎ3𝑖 +𝑑𝑖 , and 𝗏𝗉𝗄𝑖 = (𝑈𝑖 , 𝑅𝑖 ), 𝑈𝑖 =
+𝑅𝑖 + ℎ3𝑖 ⋅ 𝑋𝑖 as a secret key and a public key, respectively.
+
+′
+= 𝐴′𝑖,𝑗 + ℎ4𝑖,𝑗 ⋅ 𝑋𝑖,𝑗
+= (𝑎′𝑖,𝑗 + 𝑥′𝑖,𝑗 ℎ4𝑖,𝑗 )𝑃 = 𝑧𝑖,𝑗 𝑃 .
+
+• This attack shows that 𝐼 can replace a legitimate vehicle’s
+public key with its own and successfully forge valid signatures on
+arbitrary messages without access to the vehicle’s partial private
+key.
+
+[Individual Signature Generation and Verification.] For signature
+generation/verification, vehicles perform as follows:
+• 𝑉𝑖 chooses 𝑏𝑖 ∈ Z∗𝑞 , computes 𝐵𝑖 = 𝑏𝑖 ⋅ 𝑃 , ℎ4𝑖 = 𝐻4 (𝖯𝖨𝖣𝑖 , 𝑃pub , 𝗏𝗉𝗄𝑖 ,
+𝐵𝑖 , 𝑋𝑖 , 𝑚𝑖 , 𝑡𝑖 ), 𝑐𝑖 = 𝑏𝑖 + 𝗏𝗌𝗄𝑖 + 𝑥𝑖 ⋅ ℎ4𝑖 , and outputs signature 𝜎𝑖 =
+(𝐵𝑖 , 𝑐𝑖 ), broadcasts {𝖯𝖨𝖣𝑖 , 𝑚𝑖 , 𝜎𝑖 , 𝑡𝑖 }.
+• Verifier checks freshness of 𝑡𝑖 and verifies
+
+3.2. Type I attack on the Chen-Guan scheme
+
+?
+
+We show that the Chen-Guan scheme is also insecure against Type I
+forgery attacks. An adversary 𝐼 aims to forge a valid signature for a
+target vehicle 𝑉𝑖 via public-key replacement.
+
+𝑐𝑖 ⋅ 𝑃 = 𝐵𝑖 + 𝑈𝑖 + ℎ3𝑖 ⋅ 𝑃pub + ℎ4𝑖 ⋅ 𝑋𝑖
+[Aggregate Signature and Verification.] For aggregate signature
+generation/verification, RSU and AS perform as follows:
+
+• [Public-key Replacement.] The adversary 𝐼 first selects random numbers 𝑟′𝑖 , 𝑥′𝑖 ∈ Z∗𝑞 , and computes
+
+∑𝑛
+• After checking timestamp, RSU computes 𝑐agg =
+𝑖=1 𝑐𝑖 , and
+outputs 𝜎agg = (𝐵1 , … , 𝐵𝑛 , 𝑐agg ) as an aggregate signature.
+
+𝑋𝑖′ = 𝑥′𝑖 ⋅ 𝑃 , 𝑈𝑖′ = 𝑅′𝑖 + ℎ3𝑖 𝑋𝑖′ ,
+
+• For each 𝑖, AS computes ℎ3𝑖 = 𝐻3 (𝖯𝖨𝖣𝑖 , 𝑃pub , 𝑅𝑖 , 𝑋𝑖 ) and ℎ4𝑖 =
+𝐻4 (𝖯𝖨𝖣𝑖 , 𝑃pub , 𝗏𝗉𝗄𝑖 , 𝐵𝑖 , 𝑋𝑖 , 𝑚𝑖 , 𝑡𝑖 ).
+
+where ℎ3𝑖 = 𝐻3 (𝑃 𝐼𝐷𝑖 , 𝑃pub , 𝑅′𝑖 , 𝑋𝑖′ ). Using these components, the
+adversary replaces 𝑉𝑖 ’s public key 𝗏𝗉𝗄𝑖 = (𝑈𝑖 , 𝑅𝑖 ) with 𝗏𝗉𝗄′𝑖 =
+(𝑈𝑖′ , 𝑅𝑖 ).
+• [Signature Forgery.] Since the adversary can access the signing
+oracle, 𝐼 can obtain a signature 𝜎𝑖 = (𝐵𝑖 , 𝑐𝑖 ) on 𝑚𝑖 under the
+replaced public key, where 𝐵𝑖 = 𝑏𝑖 𝑃 , 𝑐𝑖 = 𝑏𝑖 +𝗏𝗌𝗄𝑖 +𝑥𝑖 ⋅ℎ4𝑖 and ℎ4𝑖 =
+𝐻4 (𝖯𝖨𝖣𝑖 , 𝑃pub , 𝗏𝗉𝗄𝑖 , 𝐵𝑖 , 𝑋𝑖′ , 𝑚𝑖 , 𝑡𝑖 ). Then, by using its own secret key
+𝑥′𝑖 corresponding to the replaced public key, 𝐼 computes
+
+• and verifies the below equality
+𝑛
+? ∑
+
+𝑐agg ⋅ 𝑃 =
+
+𝑖=1
+
+𝐵𝑖 +
+
+𝑛
+∑
+𝑖=1
+
+𝑈𝑖 +
+
+𝑛
+∑
+
+ℎ3𝑖 ⋅ 𝑃pub +
+
+𝑖=1
+
+𝑛
+∑
+
+ℎ4𝑖 ⋅ 𝑋𝑖 .
+
+𝑖=1
+
+If it is valid, accept 𝜎agg , otherwise, reject.
+Remarks. Although the Zhu-Guan and Chen-Guan schemes use almost
+identical procedures for signature generation and verification, the key
+difference lies in their key composition methods. Specifically, the ZhuGuan scheme directly combines the TA’s partial key 𝑐 = 𝑎+𝑠⋅ℎ3 with the
+signer’s secret 𝑥, while the Chen-Guan scheme constructs a mixed key
+𝗏𝗌𝗄 = 𝑥 ⋅ ℎ3 + 𝑑, integrating both components through the hash value ℎ3 .
+This structural variation does not affect the form of the final verification
+equation, but it influences how the secret and public keys are related,
+which in turn affects security analysis and forgery strategies.
+
+𝜃 = 𝑏𝑖 − 𝑥′𝑖 ℎ4𝑖 = 𝑏𝑖 + 𝗏𝗌𝗄𝑖 .
+Then, by using the value 𝜃, 𝐼 can forge signatures on arbitrary
+messages as follows. For a message 𝑚′ and timestamp 𝑡′ ,
+𝑐𝑖′ = 𝜃 + 𝑥′𝑖 ⋅ ℎ4𝑖 ,
+where ℎ4𝑖 = 𝐻4 (𝑃 𝐼𝐷𝑖 , 𝑃pub , 𝗏𝗉𝗄′𝑖 , 𝐵𝑖 , 𝑋𝑖′ , 𝑚′ , 𝑡′ ). Finally, 𝐼 outputs
+the signature 𝜎𝑖′ = (𝐵𝑖 , 𝑐𝑖′ ) as a signature forgery on 𝑚′ ∥ 𝑡′ for
+𝑃 𝐼𝐷𝑖 and 𝗏𝗉𝗄′𝑖 .
+• [Validity.] The signature 𝜎𝑖′ = (𝐵𝑖 , 𝑐𝑖′ ) passes the verification
+equation as
+
+3. Security analysis and type I forgery attacks
+In this section, we show that the two authentication schemes are
+insecure against Type I forgery attacks.
+
+𝐵𝑖 + 𝑈𝑖′ + ℎ3𝑖 ⋅ 𝑃pub + ℎ4𝑖 ⋅ 𝑋𝑖′
+= 𝑏𝑖 𝑃 + 𝑅′𝑖 + ℎ3𝑖 𝑋𝑖′ + ℎ3𝑖 ⋅ 𝑃pub + 𝑥′𝑖 ⋅ ℎ4𝑖
+
+3.1. Type I attack on the Zhu-Guan scheme
+
+= (𝑏𝑖 + 𝑟′𝑖 + ℎ3𝑖 ⋅ 𝑥′𝑖 + ℎ3𝑖 ⋅ 𝑠) + 𝑥′𝑖 ⋅ ℎ4𝑖 = 𝜃 ⋅ 𝑃 + 𝑥′𝑖 ⋅ ℎ4𝑖 = 𝑐𝑖′ ⋅ 𝑃 .
+
+Let 𝐼 be a Type I adversary. The adversary can replace the public
+key of a target legitimate vehicle 𝑉𝑖 with its own public key. The attack
+on the Zhu-Guan scheme proceeds as follows:
+
+• Finally, 𝐼 succeeds in forging signatures on arbitrary messages
+without requiring the target vehicle’s partial private key.
+568
+
+ICT Express 12 (2026) 566–570
+
+K.-A. Shim and H. Kwon
+
+When multiple users collude to forge an aggregate signature, using 𝐴𝑖,𝑗
+alone could allow a replaced public key to cancel or manipulate the
+contribution of non-colluding users. By binding 𝐴𝑖,𝑗 to an additional
+hash component ℎ6𝑖,𝑗 , this possibility is eliminated, ensuring robustness
+against insider collusion attempts.
+In the Chen-Guan scheme, the modified signing and verification are
+
+3.3. Structural causes and countermeasures
+We adopt the formal security model for CLAS schemes, considering
+both Type I and Type II adversaries. In this model, a vehicle’s signing
+capability is determined by a TA-issued partial private key and a userchosen secret value. A Type I adversary does not know the TA master
+secret key but is allowed to arbitrarily replace public keys and request
+signatures under the replaced keys, while a Type II adversary knows
+the master secret key but cannot replace public keys. The security of
+the proposed analysis is defined with respect to existential unforgeability against adaptive chosen-message attacks (EUF-CMA) under these
+adversary models. The signing oracle queries made after public-key
+replacement are explicitly allowed under the standard Type I adversary
+model. In particular, 𝐼 may replace a target vehicle’s public key with
+an adversary-chosen one and then obtain valid signatures with respect
+to the replaced key, as long as the TA master secret is not revealed.
+For detailed formal definitions and security games, we refer the reader
+to [12,13]. The authors claim that their CLAS scheme is secure against
+Type I and Type II adversaries in the random oracle model under the
+hardness of the ECDLP (Elliptic Curev Discrete Logarithm Problem),
+where the hash function is modeled as a random oracle. However, our
+attacks demonstrate that their security proofs are flawed and that the
+claimed security guarantee does not hold.
+The vulnerabilities in both the Zhu-Guan and Chen-Guan CLAS
+schemes stem from two fundamental structural causes. (i) The verification equations are constructed as linear combinations of independently
+chosen elements, including public keys, ephemeral randomness, and
+hash outputs. This structural linearity allows a Type I adversary, under
+public-key replacement, to algebraically manipulate the ephemeral
+component 𝐵 so as to cancel the TA’s master public key term ℎ3 ⋅ 𝑃pub ,
+thereby bypassing the intended trust anchoring without knowledge of
+the master secret 𝑠. (ii) The schemes fail to tightly bind extracted
+signing material to the message context. Through a signing oracle
+query, an adversary can extract reusable secret information without
+knowing either the TA’s master secret or the victim’s partial private
+key. In particular, in the Chen-Guan scheme, the extracted value 𝜃 is not
+cryptographically bound to the message or timestamp, which enables
+its reuse to forge valid signatures on different messages.
+These two structural flaws, namely linear verifiability and insufficient message binding, not only undermine formal security guarantees
+but also pose serious risks in practical VANET deployments. An attacker
+exploiting these weaknesses could inject forged safety messages in
+real time, threatening the reliability and safety of large-scale vehicular
+networks.
+
+𝑐𝑖 = ℎ5𝑖 𝑏𝑖 + ℎ6𝑖 𝗏𝗌𝗄𝑖 + 𝑥𝑖 ⋅ ℎ4𝑖 .
+?
+
+𝑐𝑖 ⋅ 𝑃 = ℎ5𝑖 𝐵𝑖 + ℎ6𝑖 (𝑈𝑖 + ℎ3𝑖 ⋅ 𝑃pub ) + ℎ4𝑖 ⋅ 𝑋𝑖 ,
+where the new challenge is defined as
+ℎ5𝑖 = 𝐻5 (𝖯𝖨𝖣𝑖 , 𝑃pub , 𝗏𝗉𝗄𝑖 , 𝐵𝑖 , 𝑋𝑖 , 𝑚𝑖 , 𝑡𝑖 ),
+ℎ6𝑖 = 𝐻6 (𝖯𝖨𝖣𝑖 , 𝑃pub , 𝗏𝗉𝗄𝑖 , 𝐵𝑖 , 𝑋𝑖 , 𝑚𝑖 , 𝑡𝑖 ).
+By incorporating the hash values, an adversary who recovers the
+quantity ℎ5𝑖 𝑏𝑖 + ℎ6𝑖 𝗏𝗌𝗄𝑖 from a prior signature cannot reuse it to forge
+a valid signature on a different message, since the value inherently
+depends on the original message and the signer’s randomness.
+Practical Limitation. While this modification successfully restores
+security, it increases aggregate verification overhead to approximately
+3𝑛 + 2 scalar multiplications. This cost is non-trivial for high-density
+VANET scenarios and highlights that heavy hash-dependent linear
+constructions are fundamentally inefficient for real-time deployment.
+These results make it clear that CLAS schemes must evolve beyond linear hash-binding architectures. A next-generation CLAS design
+paradigm is required–one that inherently prevents algebraic manipulation while achieving strong security, ultra-low latency, and massive
+scalability for practical 5G-V2X and future 6G-enabled ITS deployments.
+4. Conclusion
+We have demonstrated that the Zhu–Guan and Chen–Guan CLASbased conditional privacy-preserving authentication schemes for
+VANETs are vulnerable to Type I attacks under public-key replacement.
+We analyzed the root causes of these vulnerabilities and proposed
+a hash-based countermeasure that prevents algebraic manipulation.
+However, our analysis reveals that fully eliminating such attacks inevitably requires hashing all public keys and random values, which
+introduces a substantial computational cost, approximately 3𝑛+2 scalar
+multiplications during aggregate verification.
+This result indicates that, although the security of existing CLAS designs can be restored, their heavy hash-dependent structure introduces
+non-negligible latency and scalability limitations in practical deployments. Therefore, an important direction for future research is to move
+beyond linear hash-binding architectures and develop a new CLAS
+design paradigm. Specifically, promising approaches include replacing purely linear aggregation with non-linearly bound authentication
+components, such as (i) message-dependent randomness embedded in
+the aggregation process, (ii) algebraically non-malleable encodings,
+or (iii) lightweight zero-knowledge or challenge–response mechanisms
+that break linear manipulability while preserving batch verifiability.
+These approaches inherently prevent algebraic recombination attacks
+and enable sublinear verification scalability in dense VANET scenarios. A concrete and fully specified CLAS construction following these
+directions is left as future work.
+
+Countermeasures. To mitigate this algebraic manipulability, we introduce additional hash-derived challenges ℎ5𝑖,𝑗 and ℎ6𝑖,𝑗 that jointly bind
+each signer’s pseudonym, public key, and randomness to the ephemeral
+component. In the Zhu-Guan scheme, the signing and verification
+equations are modified as:
+𝑧𝑖,𝑗 = ℎ5𝑖,𝑗 𝑏𝑖,𝑗 + ℎ6𝑖,𝑗 𝑐𝑖,𝑗 + 𝑥𝑖,𝑗 ⋅ ℎ4𝑖,𝑗 ,
+?
+
+𝑧𝑖,𝑗 ⋅ 𝑃 = ℎ5𝑖,𝑗 𝐵𝑖,𝑗 + ℎ6𝑖,𝑗 𝐴𝑖,𝑗 + ℎ3𝑖,𝑗 ⋅ 𝑃pub + ℎ4𝑖,𝑗 ⋅ 𝑋𝑖,𝑗 ,
+where the new challenge is defined as
+ℎ5𝑖,𝑗 = 𝐻5 (PID𝑖,𝑗 , 𝑋𝑖,𝑗 , 𝐴𝑖,𝑗 , 𝐵𝑖,𝑗 ).
+ℎ6𝑖,𝑗 = 𝐻6 (PID𝑖,𝑗 , 𝑋𝑖,𝑗 , 𝐴𝑖,𝑗 , 𝐵𝑖,𝑗 ).
+By binding ℎ5𝑖,𝑗 to the signer’s pseudonym and all public components
+(𝑋𝑖,𝑗 , 𝐴𝑖,𝑗 , 𝐵𝑖,𝑗 ), the scheme enforces a stronger linkage between the
+signature randomness and public keys. Consequently, any malicious
+attempt to craft a public key that eliminates the influence of 𝑃pub will
+fail to satisfy the verification equation, thereby mitigating the Type
+I forgery attack. Although multiplying ℎ5𝑖,𝑗 with 𝐵𝑖,𝑗 is sufficient to
+prevent our Type I attack, the additional multiplication of ℎ6𝑖,𝑗 with 𝐴𝑖,𝑗
+is further required to ensure resistance against insider colluding attacks.
+
+CRediT authorship contribution statement
+Kyung-Ah Shim: Writing – review & editing, Writing – original draft, Visualization, Validation, Supervision, Software, Resources,
+Project administration, Methodology, Funding acquisition, Formal analysis, Data curation, Conceptualization. Hyeokdong Kwon: Writing –
+review & editing, Investigation.
+569
+
+ICT Express 12 (2026) 566–570
+
+K.-A. Shim and H. Kwon
+
+Declaration of competing interest
+
+[4] Sattam S. Al-Riyami, Kenneth G. Patersony, Certificateless public key
+cryptography, in: Proc. ASIACRYPT, 2003, pp. 452–473.
+[5] J. Cui, et al., An efficient certificateless aggregate signature without pairings for
+vehicular ad hoc networks, 451–452 (2018) 1–15.
+[6] Q. Mei, et al., Efficient certificateless aggregate signature with conditional
+privacy preservation in IoV, IEEE Syst. J. 15 (1) (2021) 245–256.
+[7] Q. Zhang, et al., Efficient certificateless aggregate designated verifier signature
+with conditional privacy preserving in VANETs, IEEE IoT J. 11 (15) (2024)
+26191–26202.
+[8] F. Zhu, et al., A security-enhanced certificateless conditional privacy-preserving
+authentication scheme for vehicular ad hoc networks, IEEE Trans. Intell. Transp.
+Syst. 24 (10) (2023) 10456–10466.
+[9] Z. Gong, et al., PCAS: Cryptanalysis and improvement of pairing-free certificateless aggregate signature scheme with conditional privacy-preserving for VANETs,
+Ad Hoc Netw. 144 (2023).
+[10] Y. Zhou, et al., An efficient and provably secure identity authentication scheme
+for VANET, IEEE IoT J. 10 (19) (2023) 17170–17183.
+[11] Z. Xu, et al., A security-enhanced conditional privacy-preserving certificateless
+aggregate signature scheme for vehicular ad-hoc networks, IEEE IoT J. 11 (8)
+(2024) 13482–13495.
+[12] D. Zhu, Y. Guan, Secure and lightweight conditional privacy-preserving identity
+authentication scheme for VANET, IEEE Sens. J. 24 (21) (2024) 35743–35756.
+[13] S. Chen, Y. Guan, Efficient certificateless conditional privacy-preserving authentication scheme with dynamic pseudonyms for VANETs, IEEE Sens. J. 25 (14)
+(2025) 27611–27627.
+
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to
+influence the work reported in this paper.
+Acknowledgments
+This research was supported by the National Institute for Mathematical Sciences funded by Ministry of Science and ICT of Korea
+(B25710000).
+References
+[1] B. Saoud, et al., Artificial intelligence, internet of things and 6G methodologies
+in the context of vehicular ad-hoc networks (VANETs): Survey, ICT Express 10
+(2024) 959–980.
+[2] M.Y.I. Idris, et al., Cognitive radio and machine learning modalities for enhancing
+the smart transportation system: A systematic literature review, ICT Express 10
+(2024) 693–734.
+[3] N.W. Lo, et al., Edge-enhanced decentralized vehicle authentication protocol for
+IoV, ICT Express 11 (2025) 624–630.
+
+570
+
+

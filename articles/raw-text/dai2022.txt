@@ -1,0 +1,1158 @@
+IEEE INTERNET OF THINGS JOURNAL, VOL. 10, NO. 6, 15 MARCH 2023
+
+5063
+
+Pairing-Free Certificateless Aggregate Signcryption
+Scheme for Vehicular Sensor Networks
+Cong Dai and Zhongwei Xu
+
+Abstract—Smart vehicle applications play an increasingly significant role in constructing intelligent transportation systems.
+Vehicles with sensors are able to form temporary vehicular
+sensor networks dynamically, in which a mass of data are collected, shared, and aggregated to the traffic administration for
+improving road safety and efficiency. In such networks, vehicles exchange urgent or sensitive information with others in
+open wireless channels. To ensure secure and privacy-preserving
+communications, we develop a new pairing-free certificateless aggregate signcryption scheme based on the elliptic curve
+cryptosystem. The certificateless setting prevents the proposed
+scheme from both certificate management and key escrow issues.
+Aggregate signcryption without pairings realizes the aggregation
+and simultaneous authentication of multisource data by efficient cryptographic computing. The proposed scheme is proved
+to achieve confidentiality and unforgeability with the random
+oracle model. The security analysis shows that the proposed
+scheme provides forward secrecy, immunity to various known
+attacks, and pseudonym-based conditional privacy for vehicles.
+The performance analysis demonstrates that it satisfies more
+security properties with higher computation efficiency and lower
+communication overhead than state-of-the-art schemes.
+Index Terms—Certificateless aggregate signcryption (CLASC),
+elliptic curve cryptography (ECC), vehicular sensor networks
+(VSNs).
+
+each other via wireless vehicle-to-vehicle (V2V) communications. Vehicles also exchange data via wireless vehicle-toinfrastructure (V2I) and infrastructure-to-vehicle (I2V) communications with RSUs situated along major roadways. The
+data gathered by RSUs are then forwarded to AS for analysis through secure wired channels. Because of the open and
+dynamic nature of wireless communication media, VSNs are
+vulnerable to various attacks, such as impersonation, eavesdropping, modification, tracking, etc. [7]. For example, an
+adversary acts as an impostor to gain benefit or avoid punishment, or tampers sensing data to block traffic and encumber
+public safety, or collects vehicle information to conduct behavior analysis without authorization. To deal with the above
+problems, it is a common practice to establish a security mechanism to ensure secure and authenticated data sharing, laying
+the foundation for node trust in collaborative networks [8].
+Furthermore, data flows in VSNs tend to shot up in the rush
+time. Massive amounts of information being moved around
+online at the same time makes serious impacts on system
+performance. To avoid network congestion, data diffusion is
+according to the characterization of sensed information [9]. It
+is also an important issue to compress the classified data into
+an aggregated message to conserve network bandwidth.
+
+I. I NTRODUCTION
+EHICULAR sensor networks (VSNs) [1], [2], [3], [4],
+[5], [6], as a subset of vehicular ad hoc networks
+(VANETs), unveils its massive effects in intelligent transportation systems. A typical model for VSNs is in a two-layer
+structure. The upper layer consists of trusted authorities and
+application servers (AS) generally held by the local traffic administration. Entities in the upper layer communicate
+with each other through secure wired channels. Vehicles as
+nodes and roadside units (RSUs) as small base stations compose the lower layer. Each vehicle is equipped with various
+sensing devices, such as distance sensors, cameras, GPS,
+and a wireless-enabled onboard unit (OBU). Vehicles collect driving parameters, road conditions, etc., to share with
+
+V
+
+Manuscript received 31 March 2022; revised 20 June 2022 and
+14 September 2022; accepted 10 November 2022. Date of publication
+15 November 2022; date of current version 7 March 2023. This work
+was supported by the National Natural Science Foundation of China under
+Grant U1734211. (Corresponding author: Zhongwei Xu.)
+Cong Dai is with the College of Electronic and Information Engineering,
+Tongji University, Shanghai 201804, China, and also with the Third Research
+Institute of the Ministry of Public Security, Shanghai 201204, China (e-mail:
+daicong116@outlook.com).
+Zhongwei Xu is with the College of Electronic and Information
+Engineering, Tongji University, Shanghai 201804, China (e-mail:
+xuzhongweish@163.com).
+Digital Object Identifier 10.1109/JIOT.2022.3222237
+
+A. Contributions
+For secure and efficient private-preserving data exchange for
+VSN environments, we are motivated to develop a pairing-free
+certificateless aggregate signcryption (CLASC) scheme for
+VSNs that can satisfy desirable security properties, i.e., confidentiality, unforgeability, nonrepudiation, forward secrecy,
+attack resistance, and conditional traceability with rather low
+computation and communication costs.
+The contributions are listed as follows.
+1) We have put forward an aggregate signcryption scheme
+in the certificateless-based setting without expensive
+bilinear pairing operations and MapToPoint hash functions.
+2) The proposed scheme improves performance in two
+ways. One is to sign and encrypt simultaneously to
+reduce computational steps. The other is to aggregate
+multiple individual signatures into one to be verified
+only once, which further decreases the computational
+complexity of verification and shortens the amount of
+information for many-to-one data transmissions.
+3) We have done in-depth analysis based on the intractable
+problems in elliptic curve cryptography (ECC) to
+prove the proposed scheme achieves confidentiality,
+
+2327-4662 c
+ 2022 IEEE. Personal use is permitted, but republication/redistribution requires IEEE permission.
+See https://www.ieee.org/publications/rights/index.html for more information.
+Authorized licensed use limited to: UNIVERSIDAD DE VIGO. Downloaded on October 07,2024 at 12:24:44 UTC from IEEE Xplore. Restrictions apply.
+
+5064
+
+IEEE INTERNET OF THINGS JOURNAL, VOL. 10, NO. 6, 15 MARCH 2023
+
+unforgeability, nonrepudiation, forward secrecy, and
+resistance to common attacks. Moreover, it establishes
+a pseudonym-based anonymous communication mechanism for vehicles to realize conditional traceability.
+4) The proposed scheme cuts the computation and communication costs by about a quarter through aggregation. Compared with the existing CLASC schemes, the
+proposed scheme meets higher security requirements
+with less computation overhead.
+
+TABLE I
+N OTATIONS
+
+B. Organization of This Article
+The organization of the remaining sections is as follows. Section II introduces the overall idea of the existing
+research. Section III presents some preliminaries, including
+cryptography and assumptions, system model, and security requirements. Section IV elaborates a novel pairing-free
+CLASC scheme. Sections V and V detail the security and
+performance analyses on the proposed scheme, respectively.
+Finally, Section VI draws the conclusion.
+II. R ELATED W ORK
+In conventional public key infrastructure (PKI), a certificate
+authority (CA) is required to maintain a certificate pool for
+users, which causes huge computation, communication, and
+storage burdens [10]. To spread the load, some users considered fully trusted are dynamically elected to play the role of
+CA [11], but the decision of dynamic CAs results in extra
+work. Identity-based public key cryptography (ID-PKC) was
+designed to solve this problem. In the ID-based setting, a private key generation (PKG) center creates keys for users in
+such a way that user public keys are strings derived from
+their identities [12]. ID-PKC eliminates certificates but suffers from the key escrow problem as all user private keys are
+available to PKC. To overcome the difficulties of both PKI and
+ID-PKC, researchers have turned to certificateless public key
+cryptography (CL-PKC) [13], in which a private key consists
+of two parts: one extracted by a key generation center (KGC)
+and the other generated by its owner. The final private key is
+unknown to KGC, and the corresponding public key is published by its owner, so CL-PKC gets rid of the aforementioned
+problems.
+Dozens of authentication schemes for VANETs based on
+CL-PKC [4], [6], [14], [15], [16], [17], [18], [19], [20], [21],
+[22], [23] have been developed over the past few years. These
+schemes mainly focus on the issues of message integrity and
+source authentication, adopting the concept of aggregate signature [24] in which multiple signatures are aggregated into
+a short one to ensure nonrepudiation for the messages from
+different sources simultaneously. Most of the above schemes
+employ the pseudonym mechanism to achieve conditional privacy, that means no one but the tracing authority (TRA) can
+track a vehicle’s real identity.
+To prevent the leakage of sensitive individual information
+like personal preferences and driving parameters, confidentiality is also crucial to VSNs. Signcryption [25], as a cryptographic primitive combining digital signature and encryption
+to satisfy confidentiality and unforgeability in one logical step,
+
+is much more efficient than the traditional sign-then-encrypt
+approach. Lu and Xie [26] first proposed a CLASC scheme
+in a way combining certificateless signcryption and aggregate
+signature. Hereafter, Eslami and Pakniat [27], Yin et al. [28],
+Basudan et al. [29], Kim et al. [30], Dohare et al. [31]
+also put forward their own CLASC schemes, respectively.
+All the above CLASC works adopt the time-consuming bilinear pairing operation, resulting in low computation efficiency.
+Ullah et al. [32] designed an ECC-based CLASC scheme
+specifically for smart camera applications. Yu and Ren [33]
+constructed an ECC-based CLASC scheme for Internet of
+Things (IoT) devices. Both approaches are pairing-free, but
+vulnerable to ESL attacks [34], [35].
+
+III. P RELIMINARIES
+This section introduces some background knowledge, i.e.,
+ECC and assumptions, system model, algorithm definition,
+security model, and requirements. The notations used in this
+article are listed in Table I.
+
+A. Elliptic Curve Cryptography and Assumptions
+Assume GF(p) is a finite field where p is a very large prime
+number. An elliptic curve Ep (a, b) over GF(p) is defined as
+a set of all the points (x, y) ∈ GF(p) × GF(p) satisfying the
+following cubic equation y2 = x3 +ax+b mod p where a, b ∈
+GF(p) and 4a3 + 27b2 = 0 mod p. The set of points and an
+infinity point constitute a cyclic additive group G of prime
+order q with generator P.
+1) Elliptic Curve Discrete Logarithm (ECDL) Assumption:
+Given two random points P1 , P2 ∈ G, where P2 = νP1
+and ν ∈ Z∗q , it is hard to compute ν.
+2) Computational Diffie–Hellman (CDH) Assumption:
+Given two random points νP, τ P ∈ G, where ν, τ ∈ Z∗q ,
+it is hard to compute ντ P.
+
+Authorized licensed use limited to: UNIVERSIDAD DE VIGO. Downloaded on October 07,2024 at 12:24:44 UTC from IEEE Xplore. Restrictions apply.
+
+DAI AND XU: PAIRING-FREE CERTIFICATELESS AGGREGATE SIGNCRYPTION SCHEME
+
+5065
+
+Algorithm 1 System Setup
+Input: λ
+Output: params, s
+1: SS(λ)
+2:
+select G of λ-bit prime order q with generator P
+3:
+generate randomly s ∈ Z∗q
+4:
+PPub ← sP
+5:
+choose H1 , H2 , H3 :{0, 1}∗ → Z∗q
+6:
+params ← {G, q, P, PPub , H1 , H2 , H3 }
+7:
+return param, s
+
+Fig. 1.
+
+System model.
+
+B. System Model
+As shown in Fig. 1, there are five types of entities, i.e.,
+KGC, TRA, AS, vehicles, and RSUs.
+1) KGC: It initializes the system, and assigns other entities’
+partial private keys.
+2) TRA: It takes charge of the registration and identity
+management for AS, RSUs, and vehicles.
+3) AS: It analyzes the sensing data from vehicles to
+optimize traffic flow and improve road efficiency.
+4) Vehicle: It is equipped with various sensors and an OBU
+able to perform cryptographic operations and wireless
+communication.
+5) RSU: It acts as an intermediary between AS and vehicles, typically located along the roadside. Once receiving the signcrypted messages from vehicles to AS, it
+aggregates them and forwards the result to AS.
+KGC, TRA, and AS have sufficient computing and storage capabilities, while OBUs and RSUs have restricted and
+moderate resources, respectively.
+C. Security Requirements
+Confidentiality and Unforgeability: Both are the basic security requirements for CLASC schemes.
+Nonrepudiation: Neither side of communication can deny
+having processed the message.
+Forward Secrecy: Compromises of signcrypters’ private
+keys should not compromise past session keys.
+Attack Resistance: The scheme can resist various known
+attacks, including man-in-the-middle attacks, DoS attacks,
+replay attacks, ESL attacks, etc.
+Conditional Traceability: Vehicles can change their real
+identities into different ciphertexts at set intervals to avoid
+being tracked for behavior analysis. Meanwhile, TRA can
+recover real identities against malicious vehicles.
+IV. P ROPOSED CLASC S CHEME
+This section describes a secure and efficient CLASC scheme
+along with its correctness proof and application in VSNs.
+
+Algorithm 2 Partial Private Key Extraction
+Input: s, ID
+Output: (dID , YID )
+1: PPKE(s, ID)
+2:
+generate randomly yID ∈ Z∗q
+3:
+YID ← yID P
+4:
+hID ← H1 (ID, YID , PPub )
+5:
+dID ← yID + hID s mod q
+6:
+return (dID , YID )
+
+Algorithm 3 Secret Value Generation
+Input: ID, (dID , YID )
+Output: xID , (skID , PKID )
+1: SVG(ID, (dID , YID ))
+2:
+generate randomly xID ∈ Z∗q
+3:
+XID ← xID P
+4:
+KID ← XID + YID
+5:
+skID ← (xID , dID )
+6:
+PKID ← (KID , YID )
+7:
+return xID , (skID , PKID )
+
+A. Algorithm Definition
+The proposed scheme contains seven algorithms, i.e., system
+setup, partial private key extraction, secret value generation, signcryption, unsigncryption, aggregation, and aggregate
+unsigncryption.
+System Setup (SS): As presented in Algorithm 1, given a
+security parameter λ as input, it outputs a cyclic group G of
+prime order q with generator P, the master private/public key
+pair (s, PPub ), and three cryptographic one-way hash functions,
+i.e., H1 , H2 , and H3 . The results except for s are considered the
+default system parameters params in the following algorithms.
+Partial Private Key Extraction (PPKE): As detailed in
+Algorithm 2, given s, an entity identity ID as input, it outputs
+the partial private key (dID , YID ).
+Secret Value Generation (SVG): As discussed in
+Algorithm 3, given ID, (dID , YID ) as input, it outputs
+the secret value xID and private/public key pair (skID , PKID ).
+Signcryption (SC): As elaborated in Algorithm 4, given the
+ith entity with IDi as the signcrypter, B with IDB as the
+receiver, and IDi , IDB , skIDi , PKIDB , a message mi with its
+timestamp ti as input, it outputs a signcrypted message σi .
+
+Authorized licensed use limited to: UNIVERSIDAD DE VIGO. Downloaded on October 07,2024 at 12:24:44 UTC from IEEE Xplore. Restrictions apply.
+
+5066
+
+IEEE INTERNET OF THINGS JOURNAL, VOL. 10, NO. 6, 15 MARCH 2023
+
+Algorithm 4 Signcryption
+Input: IDi , skIDi , IDB , PKIDB , mi , ti
+Output: σi
+1: SC(IDi , skIDi , IDB , PKIDB , mi , ti )
+2:
+generate randomly ui,1 , ui,2 ∈ Z∗q
+3:
+ui ← (ui,1 xIDi + ui,2 dIDi )(xIDi + dIDi )−1
+4:
+Ui ← ui P
+5:
+hIDB ← H1 (IDB , YIDB , PPub )
+6:
+Ki ← ui (KIDB + hIDB PPub )
+7:
+zi ← H2 (IDB , Ui , Ki , ti )
+8:
+ci ← mi ⊕ zi
+9:
+hi ← H3 (mi , IDi , PKIDi , Ui , Ki , ti )
+10:
+wi ← ui + hi (xIDi + dIDi ) mod q
+11:
+σi ← (Ui , ci , wi )
+12:
+return σi
+Algorithm 5 Unsigncryption
+Input: IDi , PKIDi , ti , IDB , skIDB , σi
+Output: mi or ⊥
+1: USC(IDi , PKIDi , ti , IDB , skIDB , σi )
+2:
+if ti is expired
+3:
+return ⊥
+4:
+hIDi , Ki , zi , mi , hi ←
+5:
+DEC(IDi , PKIDi , ti , IDB , skIDB , σi )
+6:
+if wi P = Ui + hi (KIDi + hIDi PPub )
+7:
+return ⊥
+8:
+return mi
+9:
+10: DEC(IDi , PKIDi , ti , IDB , skIDB , σi )
+11:
+hIDi ← H1 (IDi , YIDi , PPub )
+12:
+13:
+14:
+15:
+16:
+
+Ki ← (xIDB + dIDB )Ui
+zi ← H2 (IDB , Ui , Ki , ti )
+mi ← ci ⊕ zi
+hi ← H3 (mi , IDi , PKIDi , Ui , Ki , ti )
+return hIDi , Ki , zi , mi , hi
+
+Algorithm 7 Aggregate Unsigncryption
+Input: {IDi , PKIDi , ti |1 ≤ i ≤ n}, IDB , skIDB , σ
+Output: {mi |1 ≤ i ≤ n} or ⊥
+1: AUSC({IDi , PKIDi , ti |1 ≤ i ≤ n}, IDB , skIDB , σ )
+2:
+for i = 1, . . . , n
+3:
+hIDi , Ki , zi , mi , hi ←
+4:
+DEC(IDi , PKIDi , ti , IDB , skIDB , σi )
+
+
+5:
+if WP = ni=1 Ui + ni=1 hi (KIDi + hIDi PPub )
+6:
+return ⊥
+7:
+return {mi |1 ≤ i ≤ n}
+
+skIDB , σ as input, it outputs {mi |1 ≤ i ≤ n} if the verification
+holds, or else it aborts with ⊥.
+In case messages are of arbitrary length, the XOR operation
+here can be replaced with a symmetric encryption algorithm.
+B. Correctness Proof
+The correctness of the ciphertext decryption can be justified
+as follows:
+
+
+ui KIDB + hIDB PPub
+
+
+= ui xIDB P + yIDB P + hIDB sP
+
+
+
+= xIDB + yIDB + hIDB s (ui P)
+
+
+= xIDB + dIDB Ui .
+The correctness of the signature verification can be justified
+as follows:
+
+
+
+wi P = ui + hi xIDi + dIDi P
+
+
+
+= ui + hi xIDi + yIDi + hIDi s P
+
+
+
+= ui P + hi xIDi P + yIDi P + hIDi (sP)
+
+
+= Ui + hi KIDi + hIDi PPub .
+The correctness of the aggregate signature verification can
+be justified as follows:
+n
+
+
+n
+
+
+
+
+ui + hi xIDi + dIDi P
+
+Algorithm 6 Aggregation
+Input: {ti , σi |1 ≤ i ≤ n}
+Output: σ or ⊥
+1: AGG({ti , σi |1 ≤ i ≤ n})
+2:
+for i = 1, . . . , n
+3:
+if ti is expired
+4:
+return ⊥
+
+5:
+W ← ni=1 wi
+6:
+σ ← ({Ui , ci |1 ≤ i ≤ n}, W)
+7:
+return σ
+
+C. Scheme Application
+
+Unsigncryption (USC): As illustrated in Algorithm 5, given
+IDi , PKIDi , ti , IDB , skIDB , σi as input, it outputs mi if the
+verification holds, or else it aborts with ⊥.
+Aggregation (AGG): As described in Algorithm 6, given
+{ti , σi |1 ≤ i ≤ n} as input, it outputs an aggregate result σ if
+the verification holds, or else it aborts with ⊥.
+Aggregate Unsigncryption (AUSC): As shown in
+Algorithm 7, given {IDi , PKIDi , ti |1 ≤ i ≤ n}, IDB ,
+
+The proposed scheme consists of three phases, i.e., initialization, registration, and data transmission.
+Initialization Phase: KGC runs SS(λ) to get params and s,
+secretly keeps s, and publishes params.
+After the release of params, TRA sets its private/public key
+pair as follows.
+1) TRA sends its identity IDTRA to KGC via a secure
+channel.
+2) KGC runs PPKE(s, IDTRA ) to get (dIDTRA , YIDTRA ), and
+sends {dIDTRA , YIDTRA } to TRA via a secure channel.
+
+WP =
+
+wi P =
+
+i=1
+
+=
+
+n
+
+
+i=1
+n
+
+
+
+ui P +
+hi xIDi + dIDi P
+
+i=1
+
+=
+
+n
+
+
+i=1
+n
+
+
+
+Ui +
+hi KIDi + hIDi PPub .
+
+i=1
+
+i=1
+
+Authorized licensed use limited to: UNIVERSIDAD DE VIGO. Downloaded on October 07,2024 at 12:24:44 UTC from IEEE Xplore. Restrictions apply.
+
+DAI AND XU: PAIRING-FREE CERTIFICATELESS AGGREGATE SIGNCRYPTION SCHEME
+
+3) TRA checks whether dIDTRA P = YIDTRA + hIDTRA PPub
+holds. If the equation does not hold, it asks for a reissue;
+otherwise, it runs SVG(IDTRA , (dIDTRA , YIDTRA )) to get
+(skIDTRA , PKIDTRA ), secretly keeps skIDTRA , and publishes
+PKIDTRA .
+Registration Phase: AS and RSUs send their identities to
+TRA for registration, and set their private/public key pairs as
+TRA does, except that their identities are handed over to KGC
+by TRA.
+Vehicles also send their real identities to TRA for registration. Upon receiving Vi ’s real identity RIDi , TRA generates
+an initial pseudonym idi from which KGC extracts (didi , Yidi ).
+Vi sets its initial private key as follows.
+1) Vi randomly generates ri ∈ Z∗q , computes Ri = ri P, and
+sends {Ri , RIDi } to TRA via a secure channel.
+2) TRA selects idi ’s timestamp Tidi , sets idi,1 = Ri , computes zidi = H2 (IDTRA , Ri , (xIDTRA + dIDTRA )Ri , Tidi ),
+idi,2 = RIDi ⊕ zidi , and sends idi = (idi,1 , idi,2 , Tidi )
+to KGC via a secure channel.
+3) KGC runs PPKE(s, idi ) to get (didi , Yidi ), and sends
+{idi,1 , Tidi , didi , Yidi } to Vi via a secure channel.
+4) Vi computes zidi = H2 (IDTRA , idi,1 , ri (KIDTRA +
+hIDTRA PPub ), Tidi ), idi,2 = RIDi ⊕ zidi to reconstruct
+idi , and checks whether didi P = Yidi + hidi PPub hold.
+If the equation does not hold, Vi asks for a reissue;
+otherwise, Vi randomly generates xidi ∈ Z∗q , and saves
+skidi = (xidi , didi ) in its OBU.
+Here idi is just for the generation of skidi , and skidi is just
+for the application of IDi which is the pseudo identity used in
+data exchange. Vi applies for IDi following the aforementioned
+method, except that Vi sets ri = (ri,1 xidi + ri,2 didi )(xidi + didi )−1
+with two random value ri,1 , ri,2 ∈ Z∗q . After the verification on
+(dIDi , YIDi ), Vi runs SVG(IDi , (dIDi , YIDi )) to get (skIDi , PKIDi ),
+saves IDi , skIDi in its OBU, and publishes PKIDi .
+Pseudo identities allow vehicles to send messages in a
+pseudonym way to prevent disclosure of their real identities.
+Only the owner and TRA can link a pseudo identity to the
+real one, so that conditional privacy is achieved.
+To avoid being tracked by adversaries, vehicles change
+their pseudonyms regularly. Vi with IDi sets ri = (ri,1 xIDi +
+ri,2 dIDi )(xIDi + dIDi )−1 to apply for a new pseudo identity.
+Vi repeats the process to maintain a pseudonym pool, and
+update the pool dynamically by removing the used identities
+and adding newly requested ones.
+Data Transmission Phase: Signcryption and unsigncryption are employed to ensure the confidentiality, integrity, and
+authenticity in sensing data transmission for V2V, V2I, and
+I2V communications.
+RSUs tend to receive surges of messages from vehicles in
+heavy traffic, and forwarding such amounts of data to AS
+frequently results in high communication cost. RSUs run the
+aggregation to improve transmission efficiency.
+Given V1 , V2 , . . . , Vn with ID1 , ID2 , . . . , IDn , respectively,
+in RSUj ’s servant region, the detailed steps for them to send
+sensing data to AS individually are described as follows.
+1) For 1 ≤ i ≤ n, Vi converts its sensing data into mi at ti ,
+runs SC(IDi , skIDi , IDAS , PKIDAS , mi , ti ) to get σi , and
+sends {IDi , PKIDi , ti , σi } to RSUj .
+
+5067
+
+2) RSUj runs AGG({ti , σi |1 ≤ i ≤ n}) to get σ , and sends
+{{IDi , PKIDi , ti |1 ≤ i ≤ n}, σ } to AS.
+3) AS runs AUSC({IDi , PKIDi , ti |1 ≤ i ≤ n}, IDAS ,
+skIDAS , σ ) to get {mi |1 ≤ i ≤ n}.
+RSUs are responsible to eliminate the messages from misbehaving sources in aggregation. The basic method is to check
+the timestamps of vehicle identities, and an advanced one is to
+establish a vehicle behavior judging mechanism. To deal with
+the self-organized and fast-moving features of VSNs, a reasonable approach is to employ the blockchain technology for
+distributed and tamper-proof record keeping. In blockchainenabled implementations, RSUs serve as blockchain nodes for
+they have certain resources [36]. Upon receiving a duplicate
+or malformed message with IDi , RSUj packages IDi and the
+behavior into a transaction, uploads it to the blockchain, and
+calls the voting function to add a new misbehavior record with
+IDi into the blockchain. By querying the records stored in the
+blockchain, RSUs can identify the unwelcome identities, and
+discard messages with them.
+V. S ECURITY A NALYSIS
+This section gives the formal proofs with the random oracle
+model (ROM) and ProVerif, and makes the informal analysis
+to demonstrate that the proposed scheme meets all the security
+requirements.
+A. Formal Proof
+As stated in [13], depending on the potential adversary
+behaviors, there are two types of adversaries as follows.
+1) Type-I Adversary (Public-Key-Replacement Attack): A1
+can replace any user’s public key with a chosen value,
+but cannot access the master private key.
+2) Type-II Adversary (Malicious-KGC Attack): A2 can
+access the master private key, but cannot replace any
+user’s public key.
+The security model is defined by interactions between challenger and adversary. The challenger C responds to the queries
+from A1 and A2 .
+Theorem 1 (Confidentiality): The proposed scheme
+achieves indistinguishability under adaptive chosen ciphertext
+attack (IND-CCA2) in the ROM under the CDH assumption.
+The proof of Theorem 1 follows from Lemmas 1 and 2.
+Lemma 1: Assuming that A1 makes at most qHi queries
+on the Hi oracle where i = 1, 2, qPPK queries on the
+partial-private-key oracle, and qUSC queries on the unsigncryption oracle, if A1 can break the IND-CCA2 security
+of the proposed scheme with a nonnegligible advantage ε,
+the CDH problem can be solved by C with a probability
+≥ ε(1 − [1/qH1 ])qPPK (1 − [qUSC /2λ ])(1/qH1 qH2 ).
+Proof: Given n + 1 random points νP, τ1 P, . . . , τn P ∈
+G, C interacts with A1 in Game 1 as follows.
+1) Setup Phase: C sets PPub = νP, and sends params
+to A1 .
+2) Query Phase: Given IDI as the target identity, A1
+adaptively launches the following queries.
+a) User-Creation Query: C maintains an initially
+empty list LUC , which contains tuples in the form
+
+Authorized licensed use limited to: UNIVERSIDAD DE VIGO. Downloaded on October 07,2024 at 12:24:44 UTC from IEEE Xplore. Restrictions apply.
+
+5068
+
+IEEE INTERNET OF THINGS JOURNAL, VOL. 10, NO. 6, 15 MARCH 2023
+
+of (IDi , xIDi , dIDi , PKIDi , hIDi ). Upon receiving a
+query on IDi , if such tuple exists in LUC , C
+returns PKIDi ; otherwise, C randomly generates
+xIDi , hIDi ∈ Z∗q , and computes XIDi = xIDi P. If
+IDi = IDI , C randomly generates dIDi ∈ Z∗q , and
+computes YIDi = dIDi P − hIDi PPub . If IDi = IDI ,
+C sets dIDi =  where  stands for an unknown
+value, randomly generates yIDi ∈ Z∗q , and computes YIDi = yIDi P. C then sets PKIDi = (XIDi +
+YIDi , YIDi ), inserts (IDi , xIDi , dIDi , PKIDi , hIDi ) into
+LUC , and returns PKIDi . The user-creation oracle is
+always queried before other ones.
+b) Partial-Private-Key Query: Upon receiving a query
+on IDi , if IDi = IDI , C retrieves the tuple with
+IDi from LUC , and returns (dIDi , YIDi ); otherwise,
+C aborts the process.
+c) Secret-Value Query: Upon receiving a query on
+IDi , C fetches the tuple with IDi from LUC , and
+returns xIDi .
+d) Public-Key-Replacement Query: Upon receiving a
+query on (IDi , PKIDi ), C gets the tuple with IDi
+from LUC , and updates the tuple by setting PKIDi =
+PKIDi , xIDi = .
+e) H1 Query: Upon receiving a query on
+(IDi , YIDi , PPub ), C recovers (IDi , xIDi , dIDi ,
+PKIDi , hIDi ) from LUC , and returns hIDi .
+f) H2 Query: C maintains an initially empty list LH2 ,
+which contains tuples in the form of (IDB , Ui ,
+Ki , ti , zi ). Upon receiving a query on (IDB , Ui ,
+Ki , ti ), if such tuple exists in LH2 , C returns zi ;
+otherwise, C randomly generates zi ∈ Z∗q , inserts
+(IDB , Ui , Ki , ti , zi ) into LH2 , and returns zi .
+g) H3 Query: C maintains an initially empty list
+LH3 , which contains tuples in the form of
+(mi , IDi , PKIDi , Ui , Ki , ti , hi ). Upon receiving a
+query on (mi , IDi , PKIDi , Ui , Ki , ti ), if such tuple
+exists in LH3 , C returns hi ; otherwise, C randomly
+generates hi ∈ Z∗q , inserts (mi , IDi , PKIDi , Ui ,
+Ki , ti , hi ) into LH3 , and returns hi .
+h) Signcryption Query: Upon receiving a query on
+(IDi , IDB , mi , ti ) (or (IDi , xIDi , IDB , mi , ti ) if PKIDi
+has been replaced with PKIDi ), C recovers the
+tuples with IDi and IDB individually from LUC , and
+operates as follows. If IDi = IDI , C performs the
+signcryption, and returns the result. If IDi = IDI ,
+C randomly generates hi , wi ∈ Z∗q , computes Ui =
+wi P − hi (KIDi + hIDi PPub ), Ki = (xIDB + dIDB )Ui ,
+gets zi from the H2 oracle to compute ci = mi ⊕ zi ,
+inserts (mi , IDi , PKIDi , Ui , Ki , ti , hi ) into LH3 , and
+returns σi = (Ui , ci , wi ). Note that if any hash conflicts occur, C just generates another two random
+elements.
+i) Unsigncryption Query: Upon receiving a query on
+({IDi , ti |1 ≤ i ≤ n}, IDB , σ ) (or ({IDi , ti |1 ≤
+i ≤ n}, IDB , xIDB , σ ) if PKIDB has been
+replaced with PKIDB ), C recovers the tuples with
+ID1 , ID2 , . . . , IDn and IDB individually from LUC ,
+and operates as follows. If IDB = IDI , C
+
+performs the aggregate unsigncryption, and returns
+the result. If IDB = IDI , for 1 ≤ i ≤ n, C recovers
+(mi , IDi , PKIDi , Ui , Ki , ti , hi ) from LH3 . If anyone
+does not exist, 
+C rejects 
+σ ; otherwise, C checks
+whether WP = ni=1 Ui + ni=1 hi (KIDi +hIDi PPub )
+holds. If the equation does not hold, C rejects σ ;
+otherwise, C returns {mi |1 ≤ i ≤ n}.
+3) Challenge Phase: A1 sends {{ID∗i , m∗i,0 , m∗i,1 , ti∗ |1 ≤ i ≤
+n}, ID∗B } to C, where m∗i,0 and m∗i,1 are of equal length. If
+IDB = IDI , C aborts the process; otherwise, C randomly
+picks b ∈ {0, 1}. For 1 ≤ i ≤ n, C sets Ui∗ = τi P,
+randomly generates c∗i ∈ Z∗q , w∗i ∈ Z∗q , and sets σi∗ =
+(Ui∗ , c∗i , w∗i ). C then aggregates σ1∗ , σ2∗ , . . . , σn∗ to get
+σ ∗ , and sends σ ∗ to A1 .
+4) Guess Phase: A1 continues to probe C with a polynomially bounded number of queries. But, A1 can make
+neither the partial-private-key queries on ID∗B nor the
+unsigncryption queries on messages with {IDi |1 ≤ i ≤
+n} and ID∗B , where {IDi |1 ≤ i ≤ n} ∩ {ID∗i |1 ≤ i ≤ n} =
+∅, unless {PKID∗i |1 ≤ i ≤ n} or PKID∗B has been substituted after the challenge phase. A1 then outputs b as the
+guess of b, and wins the game if b = b. If ID∗B = IDI ,
+A1 will not be conscious of that σ ∗ is invalid unless A1
+performs an H2 query on (ID∗B , Ui∗ , Ki∗ , ti∗ ) where 1 ≤
+i ≤ n. Obviously, (P, νP, τi P) forms a random instance
+of the CDH problem. Once the query runs, C arrives at
+∗
+∗
+∗
+∗
+the solution as ντi P = h−1
+ID∗B (Ki − (xIDB + yIDB )Ui ).
+To analyze the probability, we define three events as follows.
+1) E1 : C does not abort in partial-private-key and unsigncryption queries. Pr [E1 ] ≥ (1 − [1/qH1 ])qPPK (1 −
+[qUSC /2λ ]).
+2) E2 : A1 picks IDI as the receiver identity in the challenge
+phase. Pr [E2 |E1 ] ≥ (1/qH1 ).
+3) E3 : A1 makes the specified H2 query in the guess phase.
+Pr [E3 |E2 ∧ E1 ] ≥ (1/qH2 )
+Thus, C solves the CDH problem with a nonnegligible
+probability ≥ ε(1 − [1/qH1 ])qPPK (1 − [qUSC /2λ ])(1/qH1 qH2 ).
+Lemma 1 is proved.
+Lemma 2: Assuming that A2 makes at most qHi queries
+on the Hi oracle where i = 1, 2, qSV queries on the secretvalue oracle, and qUSC queries on the unsigncryption oracle,
+if A2 can break the IND-CCA2 security of the proposed
+scheme with a nonnegligible advantage ε, the CDH problem
+can be solved by C with a probability ≥ ε(1 − [1/qH1 ])qSV (1 −
+[qUSC /2λ ])(1/qH1 qH2 ).
+Proof: Given n + 1 random points νP, τ1 P, . . . , τn P ∈
+G, C interacts with A2 in Game 2 as follows.
+1) Setup Phase: C runs SS(λ) to get params and s, and
+sends both to A2 .
+2) Query Phase: C maintains the same lists as those in
+Game 1. Given IDI as the target identity, A2 adaptively
+launches the following queries.
+a) User-Creation Query: Upon receiving a query on
+IDi , if such tuple exists in LUC , C returns PKIDi ;
+otherwise, C operates as follows. If IDi = IDI , C
+randomly generates xIDi ∈ Z∗q , computes XIDi =
+xIDi P. If IDi = IDI , C sets XIDi = νP, xIDi =
+. C then randomly generates yIDi , hIDi ∈ Z∗q ,
+
+Authorized licensed use limited to: UNIVERSIDAD DE VIGO. Downloaded on October 07,2024 at 12:24:44 UTC from IEEE Xplore. Restrictions apply.
+
+DAI AND XU: PAIRING-FREE CERTIFICATELESS AGGREGATE SIGNCRYPTION SCHEME
+
+computes dID = yID + hID s mod q, YIDi =
+yIDi P, sets PKIDi = (XIDi + YIDi , YIDi ), inserts
+(IDi , xIDi , dIDi , PKIDi , hIDi ) into LUC , and returns
+PKIDi .
+b) Secret-Value Query: Upon receiving a query on
+IDi , if IDi = IDI , C retrieves the tuple with IDi
+from LUC , and returns xIDi ; otherwise, C aborts the
+process.
+c) H1 , H2 , H3 , Signcryption, and Unsigncryption
+Queries: The responses are similar to those in the
+corresponding phase of Game 1.
+3) Challenge Phase: The interaction is similar to that in
+the corresponding phase of Game 1.
+4) Guess Phase: A2 continues to probe C with a polynomially bounded number of queries. But, A2 can make
+neither the secret-value queries on ID∗B nor the unsigncryption queries on messages with {IDi |1 ≤ i ≤ n} and
+ID∗B , where {IDi |1 ≤ i ≤ n} ∩ {ID∗i |1 ≤ i ≤ n} = ∅.
+A2 then outputs b as the guess of b, and wins the
+game if b = b. If ID∗B = IDI , A2 will not be conscious of that σ ∗ is invalid unless A2 issues an H2
+query on (ID∗B , Ui∗ , Ki∗ , ti∗ ) where 1 ≤ i ≤ n. Once the
+query runs, C arrives at the solution to (P, νP, τi P) as
+ντi P = Ki∗ − dID∗B Ui∗ .
+Similar to the analysis in Game 1, C solves
+the CDH problem with a nonnegligible probability
+≥ ε(1 − [1/qH1 ])qSV (1 − [qUSC /2λ ])(1/qH1 qH2 ). Lemma 2 is
+proved.
+According to Lemmas 1 and 2, that A1 and A2 win Games 1
+and 2, respectively, with a nonnegligible probability results in a
+contradiction to the CDH assumption, so the proposed scheme
+is IND-CCA2 secure in the ROM. Theorem 1 is proved.
+Theorem 2 (Unforgeability): The proposed scheme
+achieves existential unforgeability under chosen message
+attack (EUF-CMA) in the ROM under the ECDL assumption.
+The proof of Theorem 2 follows from Lemmas 3 and 4.
+Lemma 3: Assuming that A1 makes at most qH1 queries
+on the H1 oracle, qPPK queries on the partial-private-key oracle, and qUSC queries on the unsigncryption oracle, if A1 can
+break the EUF-CMA security of the proposed scheme with a
+nonnegligible advantage ε, the ECDL problem can be solved
+by C with a probability ≥ ε(1 − [1/qH1 ])qPPK (1/qH1 ).
+Proof: Given a random point νP ∈ G, C interacts with
+A1 in Game 3 as follows.
+1) Setup and Query Phases: The processes run in the same
+way as those in the corresponding phases of Game 1.
+2) Forgery Phase: A1 selects n signcrypter identities
+ID∗1 , ID∗2 , . . . , ID∗n and a receiver identity ID∗B . To
+/ {IDi |1 ≤ i ≤ n},
+prevent termination due to IDI ∈
+A1 sets ID∗1 = IDI without loss of generality. A1
+then forges σ ∗ on {ID∗i , m∗i , ti∗ |1 ≤ i ≤ n} and ID∗B .
+σ ∗ is valid, and A1 never launches the partial-privatekey queries on ID∗1 or the signcryption queries on
+(ID∗1 , ID∗B , m∗1 , t1∗ ) to get σ1∗ in the process. According to
+the Forking Lemma [37], A1 can output another forgery
+σ1∗ = (U1∗ , c∗1 , v∗1 , w∗1 ) with the same random tape but
+h∗1 = h∗1 . Given both U1∗ = w∗1 P − h∗1 (KID∗1 + hID∗1 PPub )
+and U1∗ = w∗1 P − h∗1 (KID∗1 + hID∗1 PPub ) hold, C can
+crack a random instance of the ECDL problem (P, νP)
+
+5069
+
+∗
+∗ −1 ∗
+∗
+∗
+by extracting ν = h−1
+ID∗1 ((h1 − h1 ) (w1 − w1 ) − (xID1 +
+yID∗1 )).
+To analyze the probability, we define two events as follows.
+1) E1 : C does not abort in partial-private-key queries.
+Pr [E1 ] ≥ (1 − [1/qH1 ])qPPK .
+2) E2 : C does not abort in the forgery phase. Pr [E2 |E1 ] ≥
+(1/qH1 ).
+Thus, C solves the ECDL problem with a nonnegligible
+probability ≥ ε(1 − [1/qH1 ])qPPK (1/qH1 ). Lemma 3 is proved.
+Lemma 4: Assuming that A2 makes at most qH1 queries on
+the H1 oracle, qSV queries on the secret-value oracle, and qUSC
+queries on the unsigncryption oracle, if A2 can break the EUFCMA security of the proposed scheme with a nonnegligible
+advantage ε, the ECDL problem can be solved by C with a
+probability ≥ ε(1 − [1/qH1 ])qSV (1/qH1 ).
+Proof: Given a random point νP ∈ G, C interacts with
+A2 in Game 4 as follows.
+1) Setup and Query Phases: The processes run in the same
+way as those in the corresponding phases of Game 2.
+2) Forgery Phase: Similarly, A2 also forges σ ∗ on
+{ID∗i , m∗i , ti∗ |1 ≤ i ≤ n} and ID∗B , where ID∗1 =
+IDI . σ ∗ is valid, and A2 never launches the secretvalue queries on ID∗1 or the signcryption queries on
+(ID∗1 , ID∗B , m∗1 , t1∗ ) to get σ1∗ in the process. According to
+the Forking Lemma [37], A2 can output another forgery
+σ1∗ = (U1∗ , c∗1 , v∗1 , w∗1 ) with the same random tape but
+h∗1 = h∗1 . Given both U1∗ = w∗1 P − h∗1 (KID∗1 + hID∗1 PPub )
+and U1∗ = w∗1 P − h∗1 (KID∗1 + hID∗1 PPub ) hold, C can
+crack a random instance of the ECDL problem (P, νP)
+by extracting ν = (h∗1 − h∗1 )−1 (w∗1 − w∗1 ) − dID∗1 .
+Similar to the analysis in Game 3, C solves the
+ECDL problem with a nonnegligible probability ≥ ε(1 −
+[1/qH1 ])qSV (1/qH1 ). Lemma 4 is proved.
+According to Lemmas 3 and 4, that A1 and A2 win Games
+3 and 4, respectively, with a nonnegligible probability results
+in a contradiction to the ECDL assumption, so the proposed
+scheme is EUF-CMA secure in the ROM. Theorem 2 is
+proved.
+We also validate the key and message delivery processes
+under the Dolev–Yao model with an automatic testing
+tool ProVerif [38]. Two types of queries are utilized to
+check the security provision under A1 and A2 . One is
+“query attacker (mi)” used to verify the reachability property of mi . The other is “query IDi:bitstring, mi:bitstring;
+event(acceptMess(IDi,mi)) ==> event(scMess(IDi,mi))” used
+to check whether the referred events are done in the normal order. The events scMess(IDi,mi) and acceptMess(IDi,mi)
+refer to the signcryption and acceptance of mi , respectively.
+Following conclusions are drawn in the verification summary. “Query not attacker(mi[]) is true.” denotes that
+the message is not available to the attacker. “Query
+event(acceptMess(IDi,mi)) ==> event(scMess(IDi,mi)) is
+true.” indicates that the receiver indeed shares the message
+with the signcrypter.
+
+B. Informal Analysis
+Confidentiality and Unforgeability: As proved in the formal
+security analysis, the proposed scheme fulfills these properties.
+
+Authorized licensed use limited to: UNIVERSIDAD DE VIGO. Downloaded on October 07,2024 at 12:24:44 UTC from IEEE Xplore. Restrictions apply.
+
+5070
+
+IEEE INTERNET OF THINGS JOURNAL, VOL. 10, NO. 6, 15 MARCH 2023
+
+TABLE II
+S ECURITY C OMPARISON B ETWEEN THE S CHEMES
+
+TABLE III
+PARAMETERS FOR PAIRING -BASED AND ECC-BASED C RYPTOSYSTEMS
+
+Nonrepudiation: Because (un)signcryption involves the
+operator’s private key which is available only to its owner,
+the proposed scheme satisfies nonrepudiation.
+Forward Secrecy: Even if (xIDi , dIDi ) is leaked, adversaries cannot compute Ki = (ui,1 xIDi + ui,2 dIDi )(xIDi +
+dIDi )−1 (KIDB + hIDB PPub ) without ui,1 and ui,2 which are
+randomly generated every time unless they break the CDH
+problem. Moreover, to solve out for Ki from the equation Ki = (wi − hi (xIDi + dIDi ))(KIDB + hIDB PPub ) where
+hi = H3 (ci ⊕H2 (IDB , Ui , Ki , ti ), IDi , PKIDi , Ui , Ki , ti ) is barely
+impossible owing to one-way hash functions H2 and H3 .
+Attack Resistance: The proposed scheme can resist the
+following attacks.
+1) Man-in-the-Middle Attacks: The confidentiality property
+prevents adversaries from extracting any confidential
+data from the intercepted messages. The unforgeability
+property keeps adversaries from impersonating legitimate entities to send messages.
+2) DoS Attacks: The unforgeability property ensures secure
+timestamp delivery and verification to address DoS
+attacks [39]. Moreover, each vehicle replenishes its
+pseudonym pool when there is a connection to TRA
+available. The stocked identities support data transmission in absence of TRA and KGC, which alleviates the
+impact of single-point-of-failure on the system.
+3) Replay Attacks: Tamper-resistant timestamps {ti |1 ≤ i ≤
+n} and nonces {Ui |1 ≤ i ≤ n} are adopted to avoid
+expired or duplicate messages.
+4) ESL Attacks: Even if ui,1 and ui,2 as the ephemeral
+secrets are leaked, adversaries cannot compute Ki =
+(ui,1 xIDi + ui,2 dIDi )(xIDi + dIDi )−1 (xIDB + dIDB )P unless
+they break the CDH problem. Also, adversaries cannot
+extract dIDi (or xIDi ) from wi = (ui,1 xIDi +ui,2 dIDi )(xIDi +
+dIDi )−1 + hi (xIDi + dIDi ) without the knowledge of hi .
+Conditional Traceability: RIDi is encrypted to form IDi ,
+and ri,1 , ri,2 involved in the process are randomly generated,
+so that adversaries cannot link IDi to its alternate or RIDi . On
+the other hand, TRA is allowed to trace Vi by recovering RIDi
+from IDi with IDTRA and skIDTRA .
+VI. P ERFORMANCE A NALYSIS
+This section compares the proposed scheme with the related
+CLASC schemes for IoT applications, i.e., Eslami et al.’s [27],
+
+TABLE IV
+E XECUTION T IME OF C RYPTOGRAPHIC O PERATIONS
+
+Basudan et al.’s [29], Yu and Ren [33], and Luo and Ma [40]
+schemes. The first two are pairing-based and the last two are
+ECC-based.
+A. Security Comparison
+The security comparison between the schemes is shown in
+Table II. The proposed scheme meets all the security requirements, while the others fail on two or three for no forward
+secrecy in [40], no secure timestamp verification in [27], [29],
+and [33], vulnerability to ELS attacks and tracking in [27],
+[29], [33], and [40].
+B. Efficiency Comparison
+We consider the parameters for pairing-based and ECCbased cryptosystems as shown in Table III. We refer to the
+computational evaluations in [41], which has been adopted
+in [16], [42], and [43]. The cryptographic operations are
+evaluated using MIRACL on the platform consisting of an
+Intel I7-4770 processor with 3.40-GHz clock frequency, 4-GB
+memory, and the Windows 7 operating system. We list the
+execution time of some involved cryptographic operations in
+Table IV. Here, we just consider the time-consuming ones, i.e.,
+bilinear pairing, MapToPoint hash, point addition and scalar
+multiplication operations, and ignore other trivial ones.
+The efficiency comparison between the schemes is shown
+in Table V, taking the algorithm running time and output
+size as the computation and communication costs, respectively.
+Dedicated short-range communication (DSRC) specifies that a
+vehicle should send basic safety message every 300 ms [23],
+so it is expected for 100 vehicles in a servant region to
+generate around 350 messages per second. We evaluate the
+signcryption, unsigncryption, and aggregate unsigncryption
+(for n = 350), as well as the signcryption and aggregation (for
+n = 350) outputs. For convenience of performance evaluation,
+
+Authorized licensed use limited to: UNIVERSIDAD DE VIGO. Downloaded on October 07,2024 at 12:24:44 UTC from IEEE Xplore. Restrictions apply.
+
+DAI AND XU: PAIRING-FREE CERTIFICATELESS AGGREGATE SIGNCRYPTION SCHEME
+
+5071
+
+TABLE V
+E FFICIENCY C OMPARISON B ETWEEN THE S CHEMES
+
+Fig. 3.
+
+Fig. 2.
+
+Running time of aggregate unsigncryption for n = 100, 350, 500.
+
+we assume that both elements in Z∗q and messages are 160
+bits in length, and their sizes are denoted as |Z∗q | and |m|,
+respectively. We also demonstrate the running time of aggregate unsigncryption for n = 100, 350, 500 in Fig. 2, and the
+output sizes of aggregation for n = 100, 350, 500 in Fig. 3.
+In the proposed scheme, the aggregate unsigncryption gains
+an advantage of 24.60% for n = 100, 24.78% for n = 350,
+24.80% for n = 500 in the running time over the approach
+to unsigncrypt n times, and the aggregation leads to a reduction of 24.75% for n = 100, 24.93% for n = 350, 24.95%
+for n = 500 in the output size. It can be observed that the
+ECC-based schemes are much more efficient than the pairingbased ones. For the signcryption, aggregation, and aggregate
+unsigncryption can be run in parallel, we take the running time
+of the most time-consuming aggregate unsigncryption algorithm as the total time. On the aggregate unsigncryption for
+n = 350, the proposed scheme takes only 466.4302 ms, and
+improves computation efficiency of 92.99%, 90.35%, 0.13%,
+and 39.88% compared with the schemes in [27], [29], [33],
+and [40], respectively.
+VII. C ONCLUSION
+In this article, we have presented a secure and efficient ECCbased CLASC scheme for VSNs, which is constructed in a
+pairing-free certificateless environment to be resource-efficient
+and free from key escrow pitfalls. Aggregate signcryption
+
+Output sizes of aggregation for n = 100, 350, 500.
+
+greatly reduces the computational complexity on both sides
+of communication and compresses the amount of data transmitted. The proposed scheme is proved IND-CCA2 and
+EUF-CMA secure in the ROM based on the intractable CDH
+and ECDL problems and is verified to work normally using
+ProVerif. It also ensures security against the compromises of
+signcrypters’ private keys or ephemeral secrets and resists various known attacks. Pseudo identities are adopted to preserve
+conditional privacy for vehicles. Compared with other related
+CLASC schemes for IoT applications, the proposed scheme
+satisfies more security properties with lower computation and
+communication costs. In the future work, we plan to exploit the
+CLASC technique in the blockchain-based system to design a
+novel authentication scheme for VANETs.
+C ONFLICT OF I NTEREST
+The authors declare that they have no conflict of interest.
+R EFERENCES
+[1] U. Lee, B. Zhou, M. Gerla, E. Magistretti, P. Bellavista, and A. Corradi,
+“Mobeyes: Smart mobs for urban monitoring with a vehicular sensor
+network,” IEEE Wireless Commun., vol. 13, no. 5, pp. 52–57, Oct. 2006.
+[2] C. Zhang, R. Lu, X. Lin, P.-H. Ho, and X. Shen, “An efficient identitybased batch verification scheme for vehicular sensor networks,” in Proc.
+IEEE INFOCOM 27th Conf. Comput. Commun., 2008, pp. 246–250.
+[3] K.-A. Shim, “CPAS: An efficient conditional privacy-preserving authentication scheme for vehicular sensor networks,” IEEE Trans. Veh.
+Technol., vol. 61, no. 4, pp. 1874–1883, May 2012.
+[4] S.-J. Horng, S.-F. Tzeng, P.-H. Huang, X. Wang, T. Li, and M. K. Khan,
+“An efficient certificateless aggregate signature with conditional privacypreserving for vehicular sensor networks,” Inf. Sci., vol. 317, pp. 48–66,
+Oct. 2015.
+[5] N.-W. Lo and J.-L. Tsai, “An efficient conditional privacy-preserving
+authentication scheme for vehicular sensor networks without pairings,” IEEE Trans. Intell. Transp. Syst., vol. 17, no. 5, pp. 1319–1328,
+May 2016.
+
+Authorized licensed use limited to: UNIVERSIDAD DE VIGO. Downloaded on October 07,2024 at 12:24:44 UTC from IEEE Xplore. Restrictions apply.
+
+5072
+
+IEEE INTERNET OF THINGS JOURNAL, VOL. 10, NO. 6, 15 MARCH 2023
+
+[6] Y. Zhao, G. Dan, A. Ruan, J. Huang, and H. Xiong, “A certificateless
+and privacy-preserving authentication with fault-tolerance for vehicular
+sensor networks,” in Proc. IEEE Conf. Depend. Secure Comput. (DSC),
+2021, pp. 1–7.
+[7] M. S. Sheikh, J. Liang, W. Wang, and A. Guerrieri, “Security and
+privacy in vehicular ad hoc network and vehicle cloud computing:
+A survey,” Wireless Commun. Mobile Comput., vol. 2020, Jan. 2020,
+Art. no. 5129620.
+[8] N. Haddadou, A. Rachedi, and Y. Ghamri-Doudane, “A job market signaling scheme for incentive and trust management in vehicular ad hoc
+networks,” IEEE Trans. Veh. Technol., vol. 64, no. 8, pp. 3657–3674,
+Aug. 2015.
+[9] N. Haddadou, A. Rachedi, and Y. Ghamri-Doudane, “Modeling and
+performance evaluation of advanced diffusion with classified data in
+vehicular sensor networks,” Wireless Commun. Mobile Comput., vol. 11,
+no. 12, pp. 1689–1701, 2011.
+[10] M. Obaidat, M. Khodjaeva, J. Holst, and M. Ben Zid, Security and
+Privacy Challenges in Vehicular Ad Hoc Networks. Cham, Switzerland:
+Springer Int., 2020, pp. 223–251.
+[11] T. Gazdar, A. Benslimane, A. Belghith, and A. Rachedi, “A secure
+cluster-based architecture for certificates management in vehicular
+networks,” Security Commun. Netw., vol. 7, no. 3, pp. 665–683, 2014.
+[12] A. Shamir, “Identity-based cryptosystems and signature schemes,” in
+Advances in Cryptology. Berlin, Germany: Springer, 1985, pp. 47–53.
+[13] S. S. Al-Riyami and K. G. Paterson, “Certificateless public key cryptography,” in Advances in Cryptology (ASIACRYPT). Berlin, Germany:
+Springer, 2003, pp. 452–473.
+[14] L. Cheng, Q. Wen, Z. Jin, H. Zhang, and L. Zhou, “Cryptanalysis and
+improvement of a certificateless aggregate signature scheme,” Inf. Sci.,
+vol. 295, pp. 337–346, Feb. 2015.
+[15] X. Yang, C. Chen, T. Ma, Y. Li, and C. Wang, “An improved certificateless aggregate signature scheme for vehicular ad-hoc networks,” in Proc.
+IEEE 3rd Adv. Inf. Technol. Electron. Autom. Control Conf. (IAEAC),
+2018, pp. 2334–2338.
+[16] J. Cui, J. Zhang, H. Zhong, R. Shi, and Y. Xu, “An efficient certificateless
+aggregate signature without pairings for vehicular ad hoc networks,” Inf.
+Sci., vols. 451–452, pp. 1–15, Jul. 2018.
+[17] H. Zhong, S. Han, J. Cui, J. Zhang, and Y. Xu, “Privacy-preserving
+authentication scheme with full aggregation in VANET,” Inf. Sci.,
+vol. 476, pp. 211–221, Feb. 2019.
+[18] I. A. Kamil and S. O. Ogundoyin, “An improved certificateless aggregate signature scheme without bilinear pairings for vehicular ad hoc
+networks,” J. Inf. Security Appl., vol. 44, pp. 184–200, Feb. 2019.
+[19] Y. Zhao, Y. Hou, L. Wang, S. Kumari, M. K. Khan, and H. Xiong, “An
+efficient certificateless aggregate signature scheme for the Internet of
+Vehicles,” Trans. Emerg. Telecommun. Technol., vol. 31, no. 5, p. e3708,
+2020.
+[20] Z. Xu, D. He, N. Kumar, K.-K. R. Choo, and A. Peinado, “Efficient
+certificateless aggregate signature scheme for performing secure routing in VANETs,” Security Commun. Netw., vol. 2020, Feb. 2020,
+Art. no. 5276813.
+[21] Q. Mei, H. Xiong, J. Chen, M. Yang, S. Kumari, and M. K. Khan,
+“Efficient certificateless aggregate signature with conditional privacy
+preservation in IoV,” IEEE Syst. J., vol. 15, no. 1, pp. 245–256,
+Mar. 2021.
+[22] G. Thumbur, G. S. Rao, P. V. Reddy, N. B. Gayathri, D. V. R. K. Reddy,
+and M. Padmavathamma, “Efficient and secure certificateless aggregate
+signature-based authentication scheme for vehicular ad hoc networks,”
+IEEE Internet Things J., vol. 8, no. 3, pp. 1908–1920, Feb. 2021.
+[23] Y. Han, W. Song, Z. Zhou, H. Wang, and B. Yuan, “eCLAS: An efficient
+pairing-free certificateless aggregate signature for secure VANET communication,” IEEE Syst. J., vol. 16, no. 1, pp. 1637–1648, Mar. 2022.
+[24] D. Boneh, C. Gentry, B. Lynn, and H. Shacham, “Aggregate and verifiably encrypted signatures from bilinear maps,” in Proc. 22nd Int. Conf.
+Theory Appl. Cryptograph. Techn., 2003, pp. 416–432.
+[25] Y. Zheng, “Digital signcryption or how to achieve cost(signature
+& encryption) « cost(signature) + cost(encryption),” in Advances in
+Cryptology (CRYPTO). Berlin, Germany: Springer, 1997, pp. 165–179.
+[26] H. Lu and Q. Xie, “An efficient certificateless aggregate signcryption
+scheme from pairings,” in Proc. Int. Conf. Electron. Commun. Control
+(ICECC), 2011, pp. 132–135.
+[27] Z. Eslami and N. Pakniat, “Certificateless aggregate signcryption:
+Security model and a concrete construction secure in the random oracle model,” J. King Saud Univ. Comput. Inf. Sci., vol. 26, no. 3,
+pp. 276–286, 2014.
+
+[28] S. Yin, H. Li, and J. Liu, “A new provable secure certificateless aggregate
+signcryption scheme,” J. Inf. Hiding Multim. Signal Process., vol. 7,
+pp. 1274–1281, Nov. 2016.
+[29] S. Basudan, X. Lin, and K. Sankaranarayanan, “A privacy-preserving
+vehicular Crowdsensing-based road surface condition monitoring system
+using fog computing,” IEEE Internet Things J., vol. 4, no. 3,
+pp. 772–782, Jun. 2017.
+[30] T.-H. Kim et al., “CASCF: Certificateless aggregated SignCryption
+framework for Internet-of-Things infrastructure,” IEEE Access, vol. 8,
+pp. 94748–94756, 2020.
+[31] I. Dohare, K. Singh, A. Ahmadian, S. Mohan, and P. K. Reddy M,
+“Certificateless aggregated signcryption scheme (CLASS) for cloudfog centric industry 4.0,” IEEE Trans. Ind. Informat., vol. 18, no. 9,
+pp. 6349–6357, Sep. 2022.
+[32] S. Ullah, F. Russo, L. Marcenaro, and B. Rinner, “AggregateSigncryption for securing smart camera IoT applications,” in Proc.
+Global Internet Things Summit (GIoTS), 2018, pp. 1–6.
+[33] H. Yu and R. Ren, “Certificateless elliptic curve aggregate Signcryption
+scheme,” IEEE Syst. J., vol. 16, no. 2, pp. 2347–2354, Jun. 2022.
+[34] S. H. Islam and F. Li, “Leakage-free and provably secure certificateless
+signcryption scheme using bilinear pairings,” Comput. J., vol. 58, no. 10,
+pp. 2636–2648, Oct. 2015.
+[35] L. Cao and W. Ge, “Analysis of certificateless signcryption schemes and
+construction of a secure and efficient pairing-free one based on ECC,”
+KSII Trans. Internet Inf. Syst., vol. 12, no. 9, pp. 4527–4547, 2018.
+[36] T. Su, S. Shao, S. Guo, and M. Lei, “Blockchain-based Internet of
+Vehicles privacy protection system,” Wireless Commun. Mobile Comput.,
+vol. 2020, Sep. 2020, Art. no. 8870438.
+[37] D. Pointcheval and J. Stern, “Security arguments for digital signatures
+and blind signatures,” J. Cryptol., vol. 13, no. 3, pp. 361–396, 2000.
+[38] B. Blanchet, “An efficient cryptographic protocol verifier based on prolog rules,” in Proc. 14th IEEE Comput. Security Found. Workshop, 2001,
+pp. 82–96.
+[39] X. Zeng, G. Xu, X. Zheng, Y. Xiang, and W. Zhou, “E-AUA: An efficient
+anonymous user authentication protocol for mobile IoT,” IEEE Internet
+Things J., vol. 6, no. 2, pp. 1506–1519, Apr. 2019.
+[40] W. Luo and W. Ma, “Secure and efficient data sharing scheme based on
+certificateless hybrid signcryption for cloud storage,” Electronics, vol. 8,
+no. 5, p. 590, 2019.
+[41] D. He, S. Zeadally, B. Xu, and X. Huang, “An efficient identitybased conditional privacy-preserving authentication scheme for vehicular ad hoc networks,” IEEE Trans. Inf. Forensics Security, vol. 10,
+pp. 2681–2691, 2015.
+[42] N. B. Gayathri, G. Thumbur, P. R. Kumar, M. Z. U. Rahman,
+P. V. Reddy, and A. Lay-Ekuakille, “Efficient and secure pairing-free certificateless aggregate signature scheme for healthcare wireless medical
+sensor networks,” IEEE Internet Things J., vol. 6, no. 5, pp. 9064–9075,
+Oct. 2019.
+[43] H. Du, Q. Wen, S. Zhang, and M. Gao, “A new provably secure certificateless signature scheme for Internet of Things,” Ad Hoc Netw.,
+vol. 100, Apr. 2020, Art. no. 102074.
+
+Cong Dai received the M.S. degree from Shanghai
+Jiao Tong University, Shanghai, China, in 2010.
+She is currently pursuing the Ph.D. degree in computer science and technology with the College
+of Electronic and Information Engineering, Tongji
+University, Shanghai.
+Her research interest includes cryptography and
+information security.
+
+Zhongwei Xu received the Ph.D. degree from Tongji
+University, Shanghai, China, in 2005.
+Since 2009, he has been a Professor with Tongji
+University. He is currently the Chief of the Interlock
+Station of Inspection and the Test Center of the
+China Academy of Railway Sciences, Shanghai.
+His research interest includes automated debugging,
+testing, and formal verification.
+
+Authorized licensed use limited to: UNIVERSIDAD DE VIGO. Downloaded on October 07,2024 at 12:24:44 UTC from IEEE Xplore. Restrictions apply.
+
+

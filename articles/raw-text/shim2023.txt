@@ -1,0 +1,851 @@
+Received 17 February 2023, accepted 20 March 2023, date of publication 3 April 2023, date of current version 7 April 2023.
+Digital Object Identifier 10.1109/ACCESS.2023.3263738
+
+Security Analysis of Conditional
+Privacy-Preserving Authentication
+Schemes for VANETs
+KYUNG-AH SHIM , (Member, IEEE)
+National Institute for Mathematical Sciences, Yuseong-gu, Daejeon 34047, South Korea
+
+e-mail: kashim@nims.re.kr
+This work was supported by the National Institute for Mathematical Sciences funded by Ministry of Science and ICT of Korea under
+Grant B23720000.
+
+ABSTRACT In order to solve security and privacy-preservation issues in VANETs, a number of conditional
+privacy-preservation schemes based on certificateless signature (CLS) schemes and certificateless aggregate
+signature (CLAS) schemes have been proposed. However, most of them were insecure against several types
+of attacks. Recently, Wang et al. and Xiong et al. proposed new conditional privacy-preserving authentication
+schemes based on CLAS and CLS schemes, respectively, for VANETs. We present malicious-but-passive
+KGC attacks on Wang et al.’ scheme, and forgery attacks and key recovery attacks on Xiong et al.’ scheme,
+where KGC or anyone can generate valid signatures on any messages for any vehicles without being
+traced by TA. Our attacks break their unforgeability and traceability. At last, we discuss their causes and
+countermeasures.
+INDEX TERMS Certificateless signature scheme, certificateless aggregate signature, forgery attack, key
+recovery attack, malicious-but-passive KGC attack.
+
+I. INTRODUCTION
+
+ITS and VANET technologies play an important role in
+real-time traffic condition monitoring, prevention of collisions, safety, blind crossing, dynamic route scheduling and
+provide users with various improved services [1], [2], [3].
+However, security and privacy-preservation in VANETs are
+still challenging issues.
+Al-Riyami and Paterson [4] proposed certificateless
+public-key cryptography to resolve the certificate management problem of public-key cryptography [5] and the
+key-escrow problem of identity (ID)-based cryptography [6].
+In certificateless public-key cryptography, a user private key
+is computed by combining a partial private key generated
+by Key Generate Center (KGC) with a user-chosen secret.
+Certificateless public-key cryptography does not require
+public-key certificates and ciphertext/signatures are transmitted with users’ public keys. With these advantages, certificateless signature (CLS) schemes seem to be suitable
+for achieving authenticity and integrity of transmitted data
+The associate editor coordinating the review of this manuscript and
+approving it for publication was Zheng Yan
+33956
+
+.
+
+in VANET and IoT environments. An aggregate signature
+scheme [7] allows to aggregate k different signatures on k different messages of k different signers into a single signature
+which reduces communication overhead and computational
+cost. In particular, the aggregation of multiple signatures is
+an indispensable technique to save channel bandwidth in
+VANET and IoT environments. Also, the verification of an
+aggregate signature of k signatures is more efficient than the
+verifications of k individual signatures.
+There are two types attacks in the CLS schemes, a type I
+attack and a type II attack, based on the compromise of
+the two kinds of secrets, a master secret and user secret
+keys. Security of the type I attack means that the scheme
+is unforgeable under the compromise of the secret key of a
+target user, while that of the type II attack means that it is
+unforgeable under the compromise of the master secret of the
+KGC. Au et al. presented malicious-but-passive KGC attacks
+as a special case of the type II attacks, where the KGC could
+control the system parameters dishonestly to forge users’
+valid signatures. Since Al-Riyami and Paterson constructed
+the first certificateless scheme [4], a number of certificateless signature (CLS) schemes and certificateless aggregate
+
+This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 License.
+For more information, see https://creativecommons.org/licenses/by-nc-nd/4.0/
+
+VOLUME 11, 2023
+
+K.-A. Shim: Security Analysis of Conditional Privacy-Preserving Authentication Schemes for VANETs
+
+TABLE 1. Notations of Wang et al.’s scheme and Xiong et al.’s scheme.
+
+signature (CLAS) schemes have been proposed. However,
+most of them were insecure against type I, type II, maliciousbut-passive KGC attack or universal forgery attacks. As the
+demand for anonymity control, i.e. to achieve both anonymity
+and traceability, it is a challenge to trace the real identities of
+vehicles in case of dispute. After that, to achieve anonymity,
+a number of conditional privacy-preserving authentication
+schemes based on CLS schemes or CLAS schemes [8], [9],
+[10], [11], [12], [13], [14], [15], [16], [17] have been proposed. It turned out that some of them were incorrect or
+cryptanalyzed and most of them were proven secure in the
+random oracle model (ROM) [18], [19], [20], [21], [22], [23],
+[24]. Which might not be secure when random oracles are
+instantiated with concrete hash functions in real applications.
+Recently, Wang et al. [25] and Xiong et al. [26] proposed
+new conditional privacy-preserving authentication schemes
+based on CLAS and CLS schemes, respectively, for VANETs.
+We break their unforgeability and traceability by demonstrating several attacks on the two schemes. Our main contributions are as follows:
+• We first show that Wang et al.’ scheme is insecure against the malicious-but-passive attacks. Our
+attacks show that given a computational Diffie-Hellman
+instance is easily solved. In this case, KGC can generate signatures on incorrect information impersonating a
+certain vehicle and succeeds in framing the vehicle.
+• We show that, in Xiong et al.’s scheme, anyone can forge
+valid signatures on any messages for any vehicles from
+only one signature without being traced by TA. We also
+present the key recovery attacks that recover the partial
+private keys and private keys of any vehicles from two
+signatures.
+• At last, we discuss their causes and countermeasures.
+To prevent the malicious-but-passive KGC attacks, the
+algebraic structure of every group element in system
+VOLUME 11, 2023
+
+parameters except the generators should be destroyed by
+using the hash functions. To prevent our key recovery
+attacks, a new random value should be used for each
+signing.
+This paper is composed as follows. Section II describes
+Wang et al.’s scheme and Xiong et al.’s scheme. In Section III,
+we present the malicious-but-passive attacks on Wang et al.’s
+scheme, and forgery attacks and key recovery attacks on
+Xiong et al.’ scheme. We then briefly discuss their causes
+and countermeasures in Section IV. In Section V, we give
+concluding remarks.
+II. DESCRIPTION OF TWO CLS SCHEMES
+
+In this section, we describe two privacy-preserving authentication schemes for VANETs, Wang et al.’s scheme [25] and
+Xiong et al.’ scheme [26]. Notations of the two schemes are
+described in TABLE 1.
+A. WANG ET AL.’S SCHEME
+•
+
+Setup. For a security parameter ν, TRA and KGC generate system parameters as follows:
+1) They choose a prime q > 2ν and two cyclic groups
+G1 , G2 with order q.
+2) They choose a bilinear map e : G1 × G1 → G2 .
+3) KGC selects P, Q ∈R G1 , s ∈R Zq∗ and computes
+Ppub = sP.
+4) TRA chooses k ∈R Zq∗ and calculates K = kP.
+5) KGC and TRA select three secure hash functions
+H1 , H2 and H3 .
+6) Finally, they publish the system public parameters
+params = (G1 , G2 , q, e, P, Q, Ppub , H1 , H2 , H3 ),
+where the identity tracking key k and the master
+secret key s should be kept secret.
+33957
+
+K.-A. Shim: Security Analysis of Conditional Privacy-Preserving Authentication Schemes for VANETs
+
+•
+
+Pseudonym Generation Before vehicles exchange
+information in VANETs, they should register with TRA.
+TRA assigns vehicles’ pseudonyms as follows:
+1) TRA assigns pseudonyms PIDi,j to Vhi , where
+PIDi,j is the j-th pseudonym of Vhi .
+2) Vhi chooses ti,j ∈R Zq∗ , calculates Ti,j = ti,j P and
+sends (IDi , Ti,j ) to TRA via a secure channel.
+3) After checking the validity of IDi , TRA calculates
+PIDi,1,j = IDi ⊕ H1 (kP + Ti,j ),
+PIDi,j = {PIDi,1,j , Ti,j },
+and sends PIDi,j to Vhi .
+4) If a malicious issue happens, TRA with the tracking key k can trace its real identity IDi from
+PIDi,j = {PIDi,1,j , Ti,j } by calculating
+IDi = PIDi,1,j ⊕ H1 (kP + Ti,j ).
+
+•
+
+Partial Private Key Generation. KGC with the master
+secret key s computes a partial private key di of a vehicle
+Vhi as follows:
+1) Select ri ∈R Zq∗ and calculate
+Ri = ri P, ki = H2 (PIDi,j , Ri ),
+di = ri + ki s mod q.
+
+2) Then di is a partial private key of Vhi and sends di
+to Vhi through a secure channel.
+• Public/Private Key Generation. After sending a message, a vehicle Vhi regenerates its new public and private
+keys.
+1) Vhi calculates Xi = xi P.
+2) Then PKi = (Xi , Ri ) is a public key and (di , xi ) is
+a private key.
+• Signature Generation. To generate a signature of a
+message mi , a vehicle Vhi does the followings:
+1) First, the OBU of Vhi picks a current timestamp
+TSi , chooses ui ∈R Zq∗ and calculates
+
+where
+ki = H2 (PIDi,j , Ri ),
+hi = H3 (mi ∥TSi , PIDi,j , Ui , Vi , Wi , PKi ).
+If the equation holds, RSU accepts the signature,
+otherwise, RSU rejects it.
+• Aggregate. After receiving n distinct signatures {σi =
+(Ui , Vi , Wi )}ni=1 on messages {mi ∥TSi }ni=1 from different
+vehicles Vhi (i = 1, · · · , n), RSU computes
+U=
+
+n
+X
+
+Vi ,
+
+W =
+
+i=1
+
+n
+X
+
+Wi .
+
+i=1
+
+i=1
+
+i=1
+
+i=1
+
+where
+ki = H2 (PIDi,j , Ri ),
+hi = H3 (mi ∥TSi , PIDi,j , Ui , Vi , Wi , PKi ).
+If the equation holds, accept the aggregate signature, otherwise, reject it.
+B. XIONG ET AL.’S SCHEME: CPPA-D
+•
+
+System Initialization. To initialize Xiong et al.’s
+scheme, TA does the followings:
+1) Select a non-singular elliptic curve
+E : y2 = x 3 + ax + b mod p
+such that 4a3 +27b2 ̸= 0 for a, b ∈ Fp and prime p.
+2) Choose a group G of prime order q on E and a
+generator P of G.
+3) Choose s ∈R Zq∗ and calculate
+Ppub = sP,
+where (s, Ppub ) is a master private key and a master
+public key, respectively.
+4) Assign a real identity RIDj of a vehicle Vj ,
+5) Select three secure hash functions H , H1 and H2 ,
+and publish the system parameters
+
+(mi , TSi , PKi , PIDi,j , Ui , Vi , Wi )
+
+33958
+
+V =
+
+At last, an aggregate signature σ = (U , V , W ) is transmitted to TMC.
+• Aggregate Verification Upon receiving an aggregate signature σ
+=
+(U , V , W ) and a tuple
+(mi , TSi , PIDi,j , PKi ), TMC does the followings:
+1) First, check the freshness of timestamp TSi (i =
+1, 2, . . . , n).
+2) If they are fresh then check whether the equation
+holds or not
+n
+n
+n
+X
+X
+X
+e(W , P) = e(
+Ri +
+ki Ppub +
+hi Xi +U , Q),
+
+Then, σi = (Ui , Vi , Wi ) is a signature of mi ∥TSi .
+2) Vhi sends
+
+e(Wi , P) = e(Ri + ki Ppub + hi Xi + Ui , Q),
+
+Ui ,
+
+i=1
+
+Ui = ui P, Vi = ui Q,
+hi = H3 (mi ∥TSi , PIDi,j , Ui , Vi , Wi , PKi ),
+Wi = (di + hi xi )Q + Vi .
+
+to RSU. Every time Vhi sends a signature, Vhi uses
+a new pseudonym.
+• Single Signature Verification. After receiving signature σi = (Ui , Vi , Wi ) on mi ∥TSi , RSU does the
+followings:
+1) First, check the freshness of timestamp TSi .
+2) If TSi is fresh, then check the following equation
+
+n
+X
+
+para = (p, q, P, Ppub, H , H1 , H2 )
+to all vehicles and RSUs.
+•
+
+Pseudo Identity and Partial Key Generation. Before
+joining the VANETs, to generate vehicles’s pseudo identities, TA does the followings:
+VOLUME 11, 2023
+
+K.-A. Shim: Security Analysis of Conditional Privacy-Preserving Authentication Schemes for VANETs
+
+1) Select aj,i ∈R Zq∗ and calculate
+Aj,i = aj,i P,
+PIDj,i = RIDj ⊕ H (aj,i Ppub ),
+wj,i = H1 (PIDj,i ||Tj,i ),
+δj,i = aj,i + wj,i s mod q,
+where Tj,i is a period of PIDj,i . Then the partial
+private key of Vj is δj,i .
+2) < Aj,i , PIDj,i , Tj,i >ni=1 are sent to Vj , where δj,i
+should be transmitted secretly.
+•
+
+Vehicle Key Generation. A vehicle Vj chooses Sj ∈R Zq∗
+and calculates
+Spubj = Sj P.
+Then Spubj and Sj are the public key and the private key
+of Vj , respectively.
+
+•
+
+Message Signing. For the generation of authentication
+message between the vehicles and RSUs, a vehicle Vj
+does the followings:
+1) For a message Mj,i , Vj using {Aj,i , PIDj,i , δj,i , Tj,i }
+checks the validity of δj,i as
+δj,i P = Aj,i + wj,i Ppub ,
+where wj,i = H1 (PIDj,i ||Tj,i ). If the equation
+holds, then Vj calculates
+αj,i = H2 (Mj,i ||PIDj,i ||Spubj ||tj,i ),
+βj,i = δj,i + αj,i Sj mod q,
+where tj,i is the current timestamp.
+2) Then, Vj broadcasts the authentication message
+< Aj,i , Mj,i , PIDj,i , Tj,i , Spubj , βj,i , tj,i >
+to vehicles and nearby RSUs.
+
+•
+
+Verification. All vehicles and RSUs verify the received
+message < Aj,i , Mj,i , PIDj,i , Tj,i , Spubj , βj,i , tj,i > as
+follows:
+1) If tj,i is not fresh then the recipient rejects the
+message.
+2) Otherwise, the recipient checks the following
+equation
+βj,i P = Aj,i + wj,i Ppub + αj,i Spubj ,
+where
+wj,i = H1 (PIDj,i ||Tj,i )
+and
+αj,i = H2 (Mj,i ||PIDj,i ||Spubj ||tj,i ).
+If it holds, accept the message, otherwise, reject it.
+
+VOLUME 11, 2023
+
+III. CRYPTANALYSIS OF TWO SCHEMES
+
+There are two kinds of secrets in the CLS and CLAS schemes:
+one is the master secret of the KGC and the secret key of each
+user. Obviously, if the two kinds of secrets are compromised
+then the schemes are entirely broken, but if one of the secret
+keys is compromised then the scheme must be secure. Based
+on the kinds of the secret keys, the attacks on the scheme
+can be divided into two types attacks, a type I attack and a
+type II attack. Security of the type I attack means that the
+scheme is unforgeable under the compromise of the secret
+key of a target user, while that of the type II attack means
+that it is unforgeable under the compromise of the master
+secret of the KGC. A malicious-but-passive KGC attacks as
+a special case of the type II attacks, where the KGC could
+control the system parameters dishonestly to forge users’
+valid signatures. The two types of adversaries are defined in
+terms of their capabilities:
+• A type I adversary is a malicious third party who can
+replace a user public key
+• A type II adversary is a malicious third party who can
+replace a vehicle public key and a type II adversary is a
+malicious KGC who knows the master secret, but cannot
+replace a user public key. Additionally, a malicious-butpassive-KGC is a kind of the type II adversary who can
+generate the system parameters maliciously.
+Details on the two formal adversarial models and system
+model are defined in [25], [26].
+The CLS and CLAS schemes are still digital signature
+schemes. Thus, general forgery attacks on the digital signature schemes are possible, where an attacker has no information on the secret keys. Adversarial models of our forgery
+attacks and key recovery attacks on Xiong et al.’s scheme are
+defined as follows:
+• Adversary’s capability: an adversary can obtain authentication messages in VANETs: it is plausible since
+every authentication messages in VANETs are broadcast, so anyone can get them.
+• Adversary’s goal: an adversary’s goal is to generate valid
+authentication messages in VANET which cannot be
+traced correctly by TA.
+Now, we present malicious-but-passive-KGC attacks on
+Wang et al.’s scheme, and forgery attacks and key recovery
+attacks on Xiong et al.’s scheme.
+A. MALICIOUS-BUT-PASSIVE KGC ATTACKS ON WANG
+ET AL.’S SCHEME
+
+In malicious-but-passive-KGC attacks, the KGC can generate
+the system parameters maliciously in the Setup phase to
+forge users’ signatures. Unlike Wang et al.’s claim in [25],
+we show that it is vulnerable to the malicious-but-passiveKGC attacks.
+• [Maliciously Generation of System Parameters.] In
+the Setup phase, a malicious KGC first picks α ∈R Zq∗
+and calculates
+Q = αP.
+33959
+
+K.-A. Shim: Security Analysis of Conditional Privacy-Preserving Authentication Schemes for VANETs
+
+Then, KGC publishes
+params = (G1 , G2 , q, e, P, Q, Ppub , H1 , H2 , H3 )
+as the public system parameters.
+•
+
+[Collect Signatures.] Next, KGC obtains a valid signature σi = (Ui , Vi , Wi ) of a message mi for {PKi , PIDi,j },
+where
+Ui = ui P, Vi = ui Q,
+Wi = (di + hi xi )Q + Vi ,
+hi = H3 (mi ∥TSi , PIDi,j , Ui , Vi , PKi ).
+
+KGC can get valid signatures from the signing oracle at
+any time. In reality, the signatures are transmitted via a
+public channel.
+• The KGC who knows α can get the value di Q by computing
+Wi − αhi Xi − Vi = di Q
+since hi xi Q = αhi Xi .
+•
+
+[Forging Signatures.] Finally, KGC who with (α, di Q)
+can generate signatures of any messages m′ under
+{PKi = (Ri , Xi ), PIDi,j } as:
+– Pick ui ∈ Zq∗ and calculate
+Ui′ = u′i P, Vi′ = u′i Q,
+h′i = H3 (m′i ∥TSi′ , PIDi,j , Ui′ , Vi′ , PKi ),
+Wi = di Q + αh′i Xi + Vi′ .
+– Then σi′ = (Ui′ , Vi′ , Wi′ ) is a valid signature of m′ :
+it passes following verification equation
+e(Wi′ , P) = e(Ri + ki Ppub + hi Xi + Ui′ , Q),
+since
+e(Wi′ , P) = e(di Q + αh′i Xi + Vi′ , P)
+= e((ri + ki s)Q + αh′i Xi + Vi′ , P)
+= e(Ri + ki Ppub + h′i Xi + Ui , Q),
+where ki = H2 (PIDi,j , Ri ).
+– Finally, KGC can generate valid signatures of any
+messages under {PKi , PIDi,j }.
+
+•
+
+[Framing.] In this case, KGC can generate signatures
+on incorrect information impersonating the vehicle Vhi
+with the real identity IDi . If a problem happens, then
+TRA with the tracking key k traces its real identity from
+the pseudonym PIDi,j = {PIDi,1,j , Ti,j } by calculating
+IDi = PIDi,1,j ⊕ H1 (kP + Ti,j ).
+
+Then TRA recovers the real identity IDi and succeeds in
+framing the vehicle Vhi .
+• In Wang et al.’s scheme, each pseudonym and a pair
+of public/private key for a vehicle are used only once.
+In our attack, the KGC can get xi Q corresponding to the
+public key PKi = (Xi , Ri ) and then can generate valid
+33960
+
+signatures of any messages under {PKi , PIDi,j } at any
+time. Even if the public key PKi is reused, there is no
+way for the verifier to know the fact unless the previous
+signature under {PKi , PIDi,j } are stored and compared
+with the received signature.
+B. INCORRECTNESS OF THE AGGREGATION
+VERIFICATION IN WANG ET AL.’S SCHEME
+
+In aggregate verification algorithm of Wang et al.’s scheme,
+they use the hash values.
+ki = H2 (PIDi,j , Ri ), i = 1, · · · , n,
+hi = Hi (mi ∥TSi , PIDi,j , Ui , Vi , Wi , PKi )
+to verify the aggregate signatures. However, the verifier cannot compute the hash values ki , hi (i = 1, . . . , n) required
+in the Aggregate Verification algorithm since {Ui , Vi , Wi }ni=1
+are not transmitted. In other words, the aggregate signature
+σ = (U , V , W ) does not contain {Ui , Vi , Wi }ni=1 . Therefore,
+their Aggregation Verification algorithm is incorrect.
+In order to fix the Aggregate Verification algorithm,
+{Ui , Vi , Wi }ni=1 should be transmitted with the aggregate signature σ . If {Ui , Vi , Wi }ni=1 are transmitted with the aggregate
+signature then the size of the aggregate signature is 3n elements in the underlying group. In this case, the aggregation
+is equivalent to sending n individual signatures, so it doesn’t
+affect efficiency at all.
+C. FORGERY ATTACKS ON XIONG ET AL.’S SCHEME
+
+We show that Xiong et al.’s scheme is insecure against forgery
+attacks: anyone can produce valid signatures of any message
+for any vehicles from only one authentication message. The
+forged signature cannot be traced correctly by TA. The attacks
+consist of three phases, Collect Authentication Messages,
+Forging Signatures, Untraceable, which are mounted as
+follows:
+• [Collect Authentication Messages.] Suppose that an
+authentication message
+< Aj,i , Mj,i , PIDj,i , Tj,i , Spubj , βj,i , tj,i >
+is given to A, where βj,i is a valid signature of the
+message Mj,i under {Aj,i , PIDj,i , Tj,i } and
+βj,i = δj,i + αj,i Sj mod q,
+αj,i = H2 (Mj,i ||PIDj,i ||Spubj ||tj,i ).
+In reality, anyone can obtain the authentication message
+since it is broadcast by the vehicles.
+• [Forging Signatures.] Then A can generate a valid
+′ with a new timestamp
+signature on a new message Mj,i
+′
+tj,i as: compute
+′
+′
+′
+αj,i
+= H2 (Mj,i
+||PIDj,i ||Spubj ||tj,i
+),
+
+and set
+′
+αj,i − αj,i
+= η.
+VOLUME 11, 2023
+
+K.-A. Shim: Security Analysis of Conditional Privacy-Preserving Authentication Schemes for VANETs
+
+Then
+
+and
+′
+βj,i = δj,i + αj,i Sj = δj,i + (αj,i
++ η)Sj
+′
+= (δj,i + ηSj ) + αj,i Sj
+′
+= (aj,i + wj,i s + ηSj ) + αj,i
+Sj .
+
+′
+′
+βj,i
+= δj,i + αj,i
+Sj mod q,
+′
+′
+′
+αj,i
+= H2 (Mj,i
+||PIDj,i ||Spubj ||tj,i
+).
+•
+
+Next, A calculates
+
+′
+′
+βj,i − βj,i
+= δj,i + αj,i Sj − δj,i + αj,i
+Sj
+
+A′j,i = Aj,i + ηSpubj = (aj,i + wj,i s + ηSj )P.
+
+′
+= (αj,i − αj,i
+)Sj · · · (∗).
+
+Then,
+
+′ are all known values, A
+Next, since βj,i , βj,i , αj,i and αj,i
+obtains the secret key Sj by computing
+
+′
+′
+< A′j,i , Mj,i
+, PIDj,i , Tj,i , A′j,i , βj,i , tj,i
+)>
+
+′
+′ −1
+Sj = (βj,i − βj,i
+)(αj,i − αj,i
+)
+
+is a new authentication message including a valid sig′ ||t ′ under {A , PID , T }: it satisfies the
+nature of Mj,i
+j,i
+j,i j,i
+j,i
+verification equation
+
+from (∗). Subsequently, A who know Sj obtains the
+partial private key δj,i by computing
+
+′
+βj,i P = A′j,i + wj,i Ppub + αj,i
+Spubj ,
+
+where
+
+[Recovering Private Keys.] Then A can recover the
+entire private key of Vj as follow: Ai computes
+
+′
+δj,i = βj,i − αj,i
+Sj .
+
+[Forging Signatures.] Finally, A who knows (Sj , δj,i )
+can produce valid signatures on any messages under
+{Aj,i , PIDj,i , Tj,i } within the period Tj,i .
+• [Untraceable.] Assume that A who knows (Sj , δj,i ) generates a signature βj,i on a new message Mj,i with a new
+timestamp tj,i under < Aj,i , PIDj,i , Tj,i >. Afterward,
+when a problem occurs, to trace its real identity, TA computes
+
+•
+′
+′
+′
+αj,i
+= H2 (Mj,i
+||PIDj,i ||Spubj ||tj,i
+),
+
+since
+′
+A′j,i + wj,i Ppub + αj,i
+Spubj
+
+= Aj,i + ηSpubj + wj,i Ppub + (αj,i − η)Spubj
+= Aj,i + wj,i Ppub + αj,i Spubj = βj,i P.
+•
+
+[Untraceable.] In this case, TA cannot trace the real
+identity of the vehicle corresponding to the authen′ , PID , T , β , t ′
+tication message < A′j,i , Mj,i
+j,i j,i j,i j,i >.
+In order to trace its real identity, TA computes
+PIDj ⊕ H (sA′j,i ) = PIDj ⊕ H (s[aj,i + ηSj ]P).
+However, the above value is not equal to the original
+value H (sAj,i ) corresponding to PIDj,i . Thus, TA cannot
+recover its real identity RIDj and fails to trace its real
+identity. Consequently, A can produce valid signatures
+and authentication messages on any incorrect information, which cannot be traced by TA.
+
+D. KEY RECOVERY ATTACKS ON XIONG ET AL.’S SCHEME
+
+Next attacks show that anyone can recover the entire
+private key of a vehicle Vj from only two authentication
+messages. So, anyone can generate valid signatures on any
+messages under the vehicles which cannot be traced correctly
+by TA. The key recovery attacks on Xiong et al.’s scheme are
+mounted as follows:
+• [Collect Authentication Messages.] Suppose that two
+authentication messages
+< Aj,i , Mj,i , PIDj,i , Tj,i , Spubj , βj,i , tj,i >,
+′
+′
+′
+< Aj,i , Mj,i
+, PIDj,i , Tj,i , Spubj , βj,i
+, tj,i
+>
+
+of a vehicle Vj within the same period Tj,i are given to
+A, where
+βj,i = δj,i + αj,i Sj mod q,
+αj,i = H2 (Mj,i ||PIDj,i ||Spubj ||tj,i ),
+VOLUME 11, 2023
+
+PIDj ⊕ H (sAj,i ) = PIDj ⊕ H (s(aj,i P) = RIDj
+from < Aj,i , Mj,i , PIDj,i , Tj,i , Spubj , tj,i >. Then,
+TA confirms that the authentication message is signed
+by the vehicle Vj with the real identity RIDj . Consequently, A succeeds in framing the honest vehicle Vj
+by generating signatures on incorrect messages under
+< Aj,i , PIDj,i , Tj,i > .
+IV. CAUSES AND COUNTERMEASURES
+
+We discuss causes and countermeasures of the two schemes
+against our attacks.
+A. THE MALICIOUS-BUT-PASSIVE KGC ATTACKS ON
+WANG ET AL.’S SCHEME
+
+The malicious-but-passive KGC attacks illustrate how the
+malicious KGC manipulates the system parameters to generate users’ valid signatures on any messages. Vulnerability
+of Wang et al.’s scheme against the attacks are due to the
+following facts:
+• Security of Wang et al.’s scheme relies on the intractability of computing (ri +ki s)Q from (ri +ki s)P = Ri +ki Ppub
+and Q (it is the Computational Diffie-Hellman problem),
+but it is easily solved if one knows the discrete logarithm
+of Q.
+• Thus, if the KGC chooses α ∈R Zq∗ and calculates Q =
+αP as the system parameter then the KGC can obtain the
+secret value di Q by computing
+α(ri + ki s)P = di (αP) = di Q,
+where di = (ri + ki s).
+33961
+
+K.-A. Shim: Security Analysis of Conditional Privacy-Preserving Authentication Schemes for VANETs
+
+The KGC who knows the secret value di Q can produce
+valid signatures on any messages under {PKi , PIDi,1,j }
+at any time.
+If one destroys the algebraic structure of the group elements in the system parameters, it can prevent our maliciousbut-passive KGC attacks. In other words, to prevent the
+malicious-but-passive KGC attacks, the algebraic structure
+of every group element in system parameters except the
+generators should be destroyed. It can be possible by using
+the hash functions.
+• In Wang et al.’s scheme, the algebraic structure of Q
+should be hidden by the hash function to prevent the
+KGC’s attacks using the discrete logarithms of the public
+group elements.
+• To prevent the attacks, the KGC use H4 (Q) instead of Q,
+where H4 : G1 → G1 is a secure hash function. Then the
+KGC cannot know the discrete logarithms of Q which
+can prevent our malicious-but-passive KGC attacks.
+In reality, the KGC can manipulate the system parameters
+so that the KGC succeeds to forge any signature on behalf of
+the victim. Although the underlying mathematical problems
+are hard, the KGC’s malicious behaviors make the specific
+cases of the problems resolved. Thus, secure CLS schemes
+should be secure against these malicious-but-passive KGC
+attacks.
+•
+
+B. THE FORGERY ATTACKS AND KEY RECOVERY ATTACKS
+ON XIONG ET AL.’S SCHEME
+
+Our forgery attacks and key recovery attacks break unforgeability and traceability of Xiong et al.’s scheme. Their causes
+and countermeasures are as follows:
+• The cause of our forgery attacks is due to the fact that
+there is no way to verify the integrity of the value Aj,i .
+In other words, the attack can be prevented by including
+Aj,i into the inputs of the hash functions, H1 and H2 ,
+in the partial private key extraction and signing as
+wj,i = H1 (PIDj,i ||Tj,i ||Aj,i ),
+αj,i = H2 (Mj,i ||PIDj,i ||Spubj ||Aj,i ||tj,i ).
+Then anyone cannot manipulate Aj,i that satisfies the verification equation since Aj,i and its related hash values
+change at the same time. Therefore, the attacks using the
+′ = η are impossible.
+difference αj,i − αj,i
+• The cause of the key recovery attacks is due to the
+fact that the random value is not being used to generate each signature. If {Aj,i , PIDj,i , Tj,i , Spubj } should
+be used only once for signing, i.e. it is designed
+as a one-time signature scheme, then, anyone cannot obtain two signatures of two different messages
+under {Aj,i , PIDj,i , Tj,i , Sj,i }. However, Xiong et al.’s
+scheme uses {Aj,i , PIDj,i , Tj,i , Spubj } several times in
+the period Tj,i . Thus, to prevent our key recovery
+attacks, a new random value should be used for each
+signing.
+33962
+
+V. CONCLUSION
+
+Recently, Wang et al. and Xiong et al. proposed new conditional privacy-preserving authentication schemes based on
+CLS and CLAS schemes, respectively, for VANETs. We first
+showed that Wang et al.’s scheme was insecure against the
+malicious-but-passive attacks. We then show that, in Xiong
+et al.’s scheme, anyone could recover the private keys of any
+vehicles from only one signature and forged valid signatures
+on any messages from two signatures without being traced by
+TA. At last, we discussed their causes and countermeasures.
+REFERENCES
+[1] S. Chang, H. Zhu, M. Dong, K. Ota, X. Liu, and X. Shen, ‘‘Private and
+flexible urban message delivery,’’ IEEE Trans. Veh. Technol., vol. 65, no. 7,
+pp. 4900–4910, Jul. 2016.
+[2] M. S. Sheikh and J. Liang, ‘‘A comprehensive survey on VANET security
+services in traffic management system,’’ Wireless Commun. Mobile Comput., vol. 2019, pp. 1–23, Sep. 2019.
+[3] H.-X. Hu, B. Tang, Y. Zhang, and W. Wang, ‘‘Vehicular ad hoc network
+representation learning for recommendations in Internet of Things,’’ IEEE
+Trans. Ind. Informat., vol. 16, no. 4, pp. 2583–2591, Apr. 2020.
+[4] S. S. Al-Riyami and K. G. Paterson, ‘‘Certificateless public key cryptography,’’ in Asiacrypt, vol. 2894. Berlin, Germany: Springer, 2003,
+pp. 452–473.
+[5] W. Diffie and M. Hellman, ‘‘New directions in cryptography,’’ IEEE Trans.
+Inf. Theory, vol. IT-22, no. 6, pp. 644–654, Nov. 1976.
+[6] A. Shamir, ‘‘Identity-based cryptosystems and signature schemes,’’ in
+Advances in Cryptology—CRYPTO (Lecture Notes in Computer Science),
+vol. 196, G. R. Blakley and D. Chaum, Eds. Heidelberg, Germany:
+Springer-Verlag, 1984, pp. 47–53.
+[7] D. Boneh, C. Gentry, B. Lynn, and H. Shacham, ‘‘Aggregate and verifiably
+encrypted signatures from bilinear maps,’’ in Proc. Int. Conf. Theory Appl.
+Cryptograph. Techn. Warsaw, Poland: Springer, May 2003, pp. 416–432.
+[8] H. Zhong, S. Han, J. Cui, J. Zhang, and Y. Xu, ‘‘Privacy-preserving
+authentication scheme with full aggregation in VANET,’’ Inf. Sci., vol. 476,
+pp. 211–221, Feb. 2019.
+[9] J. Cui, L. Wei, H. Zhong, J. Zhang, Y. Xu, and L. Liu, ‘‘Edge computing in
+VANETs—An efficient and privacy-preserving cooperative downloading
+scheme,’’ IEEE J. Sel. Areas Commun., vol. 38, no. 6, pp. 1191–1204,
+Jun. 2020.
+[10] Y. Zhao, Y. Hou, L. Wang, S. Kumari, M. K. Khan, and H. Xiong,
+‘‘An efficient certificateless aggregate signature scheme for the Internet of
+Vehicles,’’ Trans. Emerg. Telecommun. Technol., vol. 31, no. 5, May 2020,
+Art. no. e3708.
+[11] G. Thumbur, G. S. Rao, P. V. Reddy, N. B. Gayathri, D. V. R. K. Reddy,
+and M. Padmavathamma, ‘‘Efficient and secure certificateless aggregate
+signature-based authentication scheme for vehicular ad hoc networks,’’
+IEEE Internet Things J., vol. 8, no. 3, pp. 1908–1920, Feb. 2021.
+[12] X. Ye, G. Xu, X. Cheng, Y. Li, and Z. Qin, ‘‘Certificateless-based anonymous authentication and aggregate signature scheme for vehicular ad
+hoc networks,’’ Wireless Commun. Mobile Comput., vol. 2021, pp. 1–16,
+Mar. 2021.
+[13] J. Zhang, J. Cui, H. Zhong, Z. Chen, and L. Liu, ‘‘PA-CRT: Chinese
+remainder theorem based conditional privacy-preserving authentication
+scheme in vehicular ad-hoc networks,’’ IEEE Trans. Depend. Sec. Comput.,
+vol. 18, no. 2, pp. 722–735, Mar./Apr. 2021.
+[14] Y. Ren, X. Li, S.-F. Sun, X. Yuan, and X. Zhang, ‘‘Privacypreserving batch verification signature scheme based on blockchain
+for vehicular ad-hoc networks,’’ J. Inf. Secur. Appl., vol. 58, May 2021,
+Art. no. 102698. [Online]. Available: https://www.sciencedirect.com/
+science/article/pii/S2214212620308450
+[15] I. A. Kamil and S. O. Ogundoyin, ‘‘A lightweight certificateless authentication scheme and group key agreement with dynamic updating mechanism for LTE-V-based Internet of Vehicles in smart cities,’’ J. Inf.
+Secur. Appl., vol. 63, Dec. 2021, Art. no. 102994. [Online]. Available:
+https://www.sciencedirect.com/science/article/pii/S2214212621002027
+[16] M. Azees, P. Vijayakumar, and L. J. Deboarh, ‘‘EAAP: Efficient anonymous authentication with conditional privacy-preserving scheme for vehicular ad hoc networks,’’ IEEE Trans. Intell. Transp. Syst., vol. 18, no. 9,
+pp. 2467–2476, Sep. 2017.
+VOLUME 11, 2023
+
+K.-A. Shim: Security Analysis of Conditional Privacy-Preserving Authentication Schemes for VANETs
+
+[17] P. Vijayakumar, V. Chang, L. J. Deborah, B. Balusamy, and P. Shynu,
+‘‘Computationally efficient privacy preserving anonymous mutual and
+batch authentication schemes for vehicular ad hoc networks,’’ Future
+Gener. Comput. Syst., vol. 78, pp. 943–955, Jan. 2018.
+[18] I. A. Kamil and S. O. Ogundoyin, ‘‘On the security of privacy-preserving
+authentication scheme with full aggregation in vehicular ad hoc network,’’
+Secur. Privacy, vol. 3, no. 3, p. e104, May 2020.
+[19] K.-A. Shim, ‘‘Cryptanalysis of two signature schemes for IoT-based
+mobile payments and healthcare wireless medical sensor networks,’’ IEEE
+Access, vol. 8, pp. 167203–167208, 2020.
+[20] K.-A. Shim, ‘‘Design principles of secure certificateless signature and
+aggregate signature schemes for IoT environments,’’ IEEE Access, vol. 10,
+pp. 124848–124857, 2022.
+[21] K.-H. Yeh, ‘‘A secure transaction scheme with certificateless cryptographic
+primitives for IoT-based mobile payments,’’ IEEE Syst. J., vol. 12, no. 2,
+pp. 2027–2038, Jun. 2018.
+[22] N. B. Gayathri, G. Thumbur, P. Rajesh Kumar, M. Z. U. Rahman,
+P. V. Reddy, and A. Lay-Ekuakille, ‘‘Efficient and secure pairing-free
+certificateless aggregate signature scheme for healthcare wireless medical
+sensor networks,’’ IEEE Internet Things J., vol. 6, no. 5, pp. 9064–9075,
+Oct. 2019.
+[23] L. Deng, B. Ning, and Y. Jiang, ‘‘A lightweight certificateless aggregation
+signature scheme with provably security in the standard model,’’ IEEE Syst.
+J., vol. 14, no. 3, pp. 4242–4251, Sep. 2020.
+[24] Q. Mei, H. Xiong, J. Chen, M. Yang, S. Kumari, and M. K. Khan, ‘‘Efficient
+certificateless aggregate signature with conditional privacy preservation in
+IoV,’’ IEEE Syst. J., vol. 15, no. 1, pp. 245–256, Mar. 2021.
+
+VOLUME 11, 2023
+
+[25] H. Wang, L. Wang, K. Zhang, J. Li, and Y. Luo, ‘‘A conditional privacypreserving certificateless aggregate signature scheme in the standard model
+for VANETs,’’ IEEE Access, vol. 10, pp. 15605–15618, 2022.
+[26] W. Xiong, R. Wang, Y. Wang, F. Zhou, and X. Luo, ‘‘CPPA-D: Efficient conditional privacy-preserving authentication scheme with doubleinsurance in VANETs,’’ IEEE Trans. Veh. Technol., vol. 70, no. 4,
+pp. 3456–3468, Apr. 2021.
+
+KYUNG-AH SHIM (Member, IEEE) received the
+Ph.D. degree in mathematics from Ewha Womans
+University, Seoul, South Korea. She is a Senior
+Researcher with the National Institute for Mathematical Sciences. Her research interests include
+public-key cryptography, post-quantum cryptography, cryptographic protocols, and information
+security.
+
+33963
+
+

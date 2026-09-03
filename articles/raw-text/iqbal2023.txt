@@ -1,0 +1,12877 @@
+future internet
+Article
+
+An Efficient and Secure Certificateless Aggregate Signature
+Scheme for Vehicular Ad hoc Networks
+Asad Iqbal 1 , Muhammad Zubair 1 , Muhammad Asghar Khan 2 , Insaf Ullah 2 , Ghani Ur-Rehman 1 ,
+Alexey V. Shvetsov 3,4, * and Fazal Noor 5, *
+1
+
+2
+
+3
+
+4
+
+5
+
+*
+
+Citation: Iqbal, A.; Zubair, M.; Khan,
+M.A.; Ullah, I.; Ur-Rehman, G.;
+Shvetsov, A.V.; Noor, F. An Efficient
+and Secure Certificateless Aggregate
+Signature Scheme for Vehicular Ad
+hoc Networks. Future Internet 2023,
+15, 266. https://doi.org/10.3390/
+fi15080266
+Academic Editor: Izzat Alsmadi
+
+Department of Computer Science, Khushal Khan Khattak University, Karak 27200, Pakistan;
+asadiqbal628@gmail.com (A.I.); dr.muhammadzubair@kkkuk.edu.pk (M.Z.);
+ghani.rehman@kkkuk.edu.pk (G.U.-R.)
+Faculty of Engineering Sciences and Technology, Hamdard University, Islamabad 44000, Pakistan;
+m.asghar@hamdard.edu.pk (M.A.K.); insaf.ullah@hamdard.edu.pk (I.U.)
+Department of Smart Technologies, Moscow Polytechnic University, St. Bolshaya Semenovskaya, 38,
+107023 Moscow, Russia
+Department of Car Transport Operation and Car Service, North-Eastern Federal University, St. Belinsky, 58,
+677000 Yakutsk, Russia
+Department of Computer and Information Systems, Islamic University of Madinah,
+Madinah 400411, Saudi Arabia
+Correspondence: a.shvetsov@vvsu.ru (A.V.S.); mfnoor@iu.edu.sa (F.N.)
+
+Abstract: Vehicular ad hoc networks (VANETs) have become an essential part of the intelligent transportation system because they provide secure communication among vehicles, enhance vehicle safety,
+and improve the driving experience. However, due to the openness and vulnerability of wireless
+networks, the participating vehicles in a VANET system are prone to a variety of cyberattacks. To
+secure the privacy of vehicles and assure the authenticity, integrity, and nonrepudiation of messages,
+numerous signature schemes have been employed in the literature on VANETs. The majority of
+these solutions, however, are either not fully secured or entail high computational costs. To address
+the above issues and to enable secure communication between the vehicle and the roadside unit
+(RSU), we propose a certificateless aggregate signature (CLAS) scheme based on hyperelliptic curve
+cryptography (HECC). This scheme enables participating vehicles to share their identities with
+trusted authorities via an open wireless channel without revealing their identities to unauthorized
+participants. Another advantage of this approach is its capacity to release the partial private key to
+participating devices via an open wireless channel while keeping its identity secret from any other
+third parties. A provable security analysis through the random oracle model (ROM), which relies
+on the hyperelliptic curve discrete logarithm problem, is performed, and we have proven that the
+proposed scheme is unforgeable against Type 1 (FGR1 ) and Type 2 (FGR2 ) forgers. The proposed
+scheme is compared with relevant schemes in terms of computational cost and communication
+overhead, and the results demonstrate that the proposed scheme is more efficient than the existing
+schemes in maintaining high-security levels.
+
+Received: 23 June 2023
+Revised: 27 July 2023
+Accepted: 9 August 2023
+Published: 10 August 2023
+
+Copyright: © 2023 by the authors.
+Licensee MDPI, Basel, Switzerland.
+This article is an open access article
+distributed under the terms and
+conditions of the Creative Commons
+Attribution (CC BY) license (https://
+creativecommons.org/licenses/by/
+4.0/).
+
+Keywords: vehicular ad hoc network; security; certificateless aggregate signature; hyperelliptic
+curve cryptography
+
+1. Introduction
+Vehicular ad hoc network (VANET) is an advanced version of the mobile ad hoc network (MANET), which was developed to enhance the safety, efficiency, and convenience of
+transportation [1]. VANET is a set of applications designed to offer new services connected
+to the traffic management system, designed to help various users to be better informed and
+use the transportation network to be safer, more connected, and significantly more intelligent. VANET can be established for monitoring and controlling traffic using the concept
+
+Future Internet 2023, 15, 266. https://doi.org/10.3390/fi15080266
+
+https://www.mdpi.com/journal/futureinternet
+
+Future Internet 2023, 15, x FOR PEER REVIEW
+Future Internet 2023, 15, 266
+
+2 of 17
+2 of 16
+
+traﬃc using the concept of vehicle-to-everything (V2X) communication, which includes
+of vehicle-to-everything
+which
+includes
+to infrastructure
+vehicle
+to infrastructure (V2X)
+(V2I), communication,
+vehicle to sensor
+(V2S),
+vehiclevehicle
+to pedestrian
+(V2P), and
+(V2I), vehicle to sensor (V2S), vehicle to pedestrian (V2P), and Vehicle to Vehicle (V2V)
+Vehicle to Vehicle (V2V) communication [2,3]. The general architecture of a VANET is
+communication [2,3]. The general architecture of a VANET is shown in Figure 1, which
+shown in Figure 1, which includes vehicles with built-in 5G-enabled onboard units
+includes vehicles with built-in 5G-enabled onboard units (OBUs), 5G-enabled roadside
+(OBUs), 5G-enabled roadside units (RSUs), and trusted authorities (TAs). TA is a service
+units (RSUs), and trusted authorities (TAs). TA is a service provider, ensuring the safety
+provider,
+ensuring
+the safety
+of the VANET
+andkeys
+generating
+public
+and private
+of the VANET
+network
+and generating
+publicnetwork
+and private
+for OBUs
+and RSUs
+[4].
+keys
+for
+OBUs
+and
+RSUs
+[4].
+In
+VANETs,
+each
+vehicle
+communicates
+through
+an
+OBU
+In VANETs, each vehicle communicates through an OBU and broadcasts traffic-relatedand
+broadcasts
+information
+such as
+positions,
+speed,
+time,
+informationtraﬃc-related
+such as positions,
+speed, current
+time,
+traffic and
+road current
+conditions
+to atraﬃc
+nearbyand
+road
+conditions
+to
+a
+nearby
+vehicle
+and
+an
+RSU
+[5].
+vehicle and an RSU [5].
+
+Figure1.1.The
+Thegeneral
+general architecture
+Figure
+architectureof
+ofaaVANET.
+VANET.
+
+Despite all
+all the
+the attractive
+attractive features
+there
+areare
+significant
+challenges
+Despite
+featuresoffered
+oﬀeredby
+byaaVANET,
+VANET,
+there
+significant
+challenges
+regarding its security and privacy when information is shared among vehicles through an
+regarding its security and privacy when information is shared among vehicles through an
+open wireless channel. In a VANET system, an attacker can send bogus messages to the
+open wireless channel. In a VANET system, an attacker can send bogus messages to the
+RSUs or other OBUs, which might cause disturbance on the roads, so it is necessary to verify
+RSUs or other OBUs, which might cause disturbance on the roads, so it is necessary to
+the authenticity and integrity of the message [6]. Digital signature-based authentication
+verify
+the for
+authenticity
+andbeen
+integrity
+the cryptographic
+message [6]. frameworks,
+Digital signature-based
+techniques
+VANETs have
+built in of
+various
+including
+authentication
+techniques
+for
+VANETs
+have
+been
+built
+in
+various
+cryptographic
+public-key infrastructure (PKI), identity-based (ID), and certificateless
+cryptography.
+frameworks,
+including
+public-keyof public-key
+infrastructure
+(PKI),
+identity-based
+(ID),keyand
+In the standard
+implementation
+cryptography
+(PKC),
+each public
+certificateless
+cryptography.
+is required to produce a corresponding digital certificate [7]. Nevertheless, it not only
+In thecertificate
+standardmanagement
+implementation
+public-key
+cryptography
+(PKC),
+public key
+involves
+but of
+also
+contributes
+to an increase
+in theeach
+verification
+iscost.
+required
+to
+produce
+a of
+corresponding
+certificate
+[7].
+Nevertheless,
+only
+To
+address the
+issues
+certificate digital
+management,
+Shamir
+[8] came
+up withita not
+novel
+technique in
+1984 called
+ID-based
+public-key
+cryptography
+(ID-PKC).
+The
+public key
+involves
+certificate
+management
+but also
+contributes
+to an increase
+in the
+verification
+cost.
+consists
+of the
+such as management,
+phone number,Shamir
+e-mail address,
+To
+address
+theuser’s
+issuesidentity,
+of certificate
+[8] cameetc.,
+up eliminating
+with a novel
+the
+need
+for
+a
+certificate.
+However,
+the
+private
+key
+is
+generated
+by
+the
+Key
+Generation
+technique in 1984 called ID-based public-key cryptography (ID-PKC). The
+public key
+Center (KGC),
+whichidentity,
+might lead
+to aaskey
+escrow
+problem.
+To overcome
+the shortcomings
+consists
+of the user’s
+such
+phone
+number,
+e-mail
+address, etc.,
+eliminating the
+of key
+traditionalthe
+PKC
+and the
+escrow problem
+ID-PKC,
+Al-Riyami
+need
+formanagement
+a certificate.inHowever,
+private
+keykey
+is generated
+by theinKey
+Generation
+Center
+and Paterson [9] proposed Certificateless Public Key Cryptography (CL-PKC), which also
+(KGC), which might lead to a key escrow problem. To overcome the shortcomings of key
+requires the KGC to generate part of the user’s private key.
+management in traditional PKC and the key escrow problem in ID-PKC, Al-Riyami and
+In contrast, the other part is generated by the user locally. As a result, key escrow is
+Paterson [9] proposed Certificateless Public Key Cryptography (CL-PKC), which also
+overcome, and CL-PKC does not need to create certificates. Many researchers combine
+requires
+the KGC
+to generate
+part
+of the user’s
+private
+certificateless
+cryptography
+with
+aggregate
+signature
+(AS)key.
+to create certificateless aggregate
+In
+contrast,
+the
+other
+part
+is
+generated
+by
+the
+user locally. As
+a result,and
+keyaddress
+escrow is
+signature (CLAS) schemes, which minimize node authentication
+overhead
+overcome,
+and CL-PKCand
+does
+need
+to create
+certificates.
+Many researchers
+combine
+certificate management
+keynot
+escrow
+issues
+in classical
+cryptosystems.
+CLAS can prevent
+
+certificateless cryptography with aggregate signature (AS) to create certificateless
+aggregate signature (CLAS) schemes, which minimize node authentication overhead and
+
+Future Internet 2023, 15, x FOR PEER REVIEW
+
+net 2023, 15, x FOR PEER REVIEW
+Future Internet 2023, 15, 266
+
+3 of 17
+3 of 17
+3 of 16
+
+address certificate management and key escrow issues in classical cryptosystems. CLAS
+can
+prevent theand
+routing
+information
+being forged,
+altered, or
+impersonated, as well
+address certificate management
+key escrow
+issuesfrom
+in classical
+cryptosystems.
+CLAS
+as
+ensure
+its
+integrity
+and
+provide
+authentication
+and
+nonrepudiation
+for the sender.
+can prevent the routing
+information
+from from
+beingbeing
+forged,
+altered,
+or impersonated,
+as well
+the routing
+information
+forged,
+altered,
+or impersonated,
+as well as ensure its
+Some
+entities in
+VANETs, and
+suchand
+as RSUs
+and for
+OBUs,
+have
+limited computing and
+as ensure its integrity
+and
+provide
+authentication
+nonrepudiation
+the
+integrity
+and provide
+authentication
+nonrepudiation
+forsender.
+the sender.
+storage
+capacity;
+therefore,
+eﬃciency
+must
+be
+taken
+into
+account
+designing
+Some entities in
+VANETs,
+such
+as
+RSUs
+and
+OBUs,
+have
+limited
+computing
+andwhile
+Some entities in VANETs, such as RSUs and OBUs, have limited
+computing
+anda
+suitable
+authentication
+system
+for
+eﬃcient
+communication
+in
+VANETs.
+In
+2003,
+Boneh
+et
+storage capacity; storage
+therefore,
+eﬃciency
+must be
+takenmust
+intobeaccount
+while
+designing
+capacity;
+therefore,
+efficiency
+taken into
+account
+while a
+designing a suitable
+al.
+[10]
+proposed
+the
+idea
+of
+an
+aggregate
+signature,
+which
+combines
+the
+signatures
+of
+suitable authentication
+system forsystem
+eﬃcient
+communication in
+VANETs.
+2003, In
+Boneh
+et Boneh et al. [10]
+authentication
+for efficient
+communication
+in In
+VANETs.
+2003,
+messages
+sent
+by
+variouswhich
+vehicles
+into a the
+single,
+short
+using
+al. [10] proposed multiple
+the
+idea of
+anidea of
+aggregate
+signature,
+combines
+signatures
+of
+proposed
+the
+an aggregate
+signature,
+which
+combines
+the signature.
+signatures ofBy
+multiple
+aggregate
+signatures,
+we can
+reduce
+computational
+communicational
+costs and
+multiple messages
+sent
+by sent
+various
+vehicles
+into a
+single,
+short
+signature.
+By using
+messages
+by various
+vehicles
+into
+a single,
+shortand
+signature.
+By using aggregate
+increase
+storage
+capacity
+to
+enhance
+the
+eﬃciency
+of
+VANET
+system.
+aggregate signatures,
+we
+can
+reduce
+computational
+and
+communicational
+costs
+and
+signatures, we can reduce computational and communicational costs and increase storage
+In to
+this
+paper,the
+weeﬃciency
+propose of
+aofacertificateless
+aggregate signature scheme based on
+increase storage capacity
+capacity
+toenhance
+enhance
+the
+efficiency
+aVANET
+VANETsystem.
+system.
+hyperelliptic
+curve
+cryptography
+(HECC),
+which
+is
+the
+advanced
+version
+of Elliptic
+Curve
+In this paper, weIn this
+propose
+a we
+certificateless
+signature
+scheme
+based
+on
+paper,
+propose aaggregate
+certificateless
+aggregate
+signature
+scheme
+based on
+hyCryptography
+(ECC),
+using
+a
+key
+size
+of
+80
+bits,
+providing
+the
+same
+security
+benefits
+of
+hyperelliptic curveperelliptic
+cryptography
+which is the
+advanced
+version
+Ellipticversion
+Curve of Elliptic Curve
+curve(HECC),
+cryptography
+(HECC),
+which is
+the of
+advanced
+ECC,using
+but a key
+with
+lessof 80
+computational
+cost,
+communication
+overhead,
+andbenefits
+memory
+Cryptography
+(ECC),
+using
+a
+key size
+of
+80
+providing
+same
+security
+of
+Cryptography (ECC),
+size
+bits,
+providing
+thebits,
+same
+security the
+benefits
+of
+requirement.
+HECs are
+algebraiccost,
+curves with
+the
+genus ḡ
+≥
+the
+field of an
+HECC
+ECC,
+but with
+less
+computational
+communication
+overhead,
+and
+memory
+requirement.
+ECC, but with less
+computational
+cost,
+communication
+overhead,
+and1; since
+memory
+is are
+a quadratic
+extension
+of with
+the
+of rational
+functions,
+weof
+canofsay
+that
+it isisthe
+simplest
+HECs
+are
+algebraic
+curves
+the
+genus
+1;
+since
+field
+an
+HECC
+a quadratic
+requirement. HECs
+algebraic
+curves
+with
+thefield
+genus
+ḡ ≥ ḡ
+1; ≥
+since
+the the
+field
+HECC
+field
+of
+algebraic
+functions,
+except
+the
+field
+of
+rational
+functions
+[11].
+HECC
+consists
+of
+extension
+of the
+field
+rational
+functions,
+can
+say
+that
+thesimplest
+simplest field of algebraic
+is a quadratic extension
+of the
+field
+of of
+rational
+functions,
+wewe
+can
+say
+that
+it it
+isisthe
+divisor ₯,
+thethe
+finite
+formal
+sum of points
+on a
+hyperelliptic
+curve.
+divisor ₯,also
+field of algebraic the
+functions,
+field of
+ofrational
+rational
+functions
+[11].HECC
+HECCconsists
+consists
+except
+field
+functions
+[11].
+ofofThe
+the divisor
+the
+forms
+Abelian
+group
+known
+Jacobian
+group
+[12].
+Based₯
+onalso
+the above
+discussion,
+the divisor ₯, thefinite
+finite an
+formal
+sumof
+of
+points
+on aa as the
+hyperelliptic
+curve.
+The
+divisor
+formal
+sum
+points
+on
+hyperelliptic
+curve.
+The
+divisor
+also
+forms an
+Abelian
+research
+article
+contributes
+to [12].
+the
+security
+VANETs
+through
+the this
+following
+key
+forms an Abelian this
+group
+known
+the
+group
+Based
+onof
+the the
+above
+discussion,
+group
+knownas
+as
+theJacobian
+Jacobian
+group
+[12].
+Based
+on
+above
+discussion,
+research
+characteristics:
+this research article
+contributes
+to to
+thethe
+security
+ofofVANETs
+article
+contributes
+security
+VANETsthrough
+throughthe
+the following
+following key characteristics:
+In this
+thisarticle,
+article,we
+wepropose
+proposeananefficient
+eﬃcient
+certificateless
+aggregate
+signature
+scheme
+for
+•
+In
+certificateless
+aggregate
+signature
+scheme
+for the
+the
+security
+and
+privacy
+protection
+of
+VANETs
+using
+hyperelliptic
+curve
+andeﬃcient
+privacy protection
+of VANETs
+using
+hyperelliptic
+curve cryptography;
+
+In this article, we security
+propose an
+certificateless
+aggregate
+signature
+scheme for
+cryptography;
+proposed
+scheme of
+enables
+participating
+to share
+their identities with
+the security • andThe
+privacy
+protection
+VANETs
+using vehicles
+hyperelliptic
+curve
+The proposed
+scheme
+enables
+participating
+vehicles
+to share
+their identities
+with
+trusted
+authorities
+via an
+open channel
+without
+revealing
+their identities
+to unauthocryptography;
+trusted
+authoritiesas
+viaresult,
+anvehicles
+open
+channel
+without
+revealing
+theirensured;
+identities to
+rized
+participants;
+a
+sender to
+and
+recipient
+anonymity
+will be
+
+The proposed scheme
+enables
+participating
+share
+their
+identities
+with
+unauthorized
+participants;
+as
+a
+result,
+sender
+and
+recipient
+anonymity
+will
+be
+•
+In
+addition,
+this
+scheme
+will
+disclose
+the
+partial
+private
+key
+to
+participating
+devices
+trusted authorities via an open channel without revealing their identities to
+ensured;
+via
+an
+open
+channel
+while
+keeping
+it
+concealed
+from
+other
+third
+parties;
+unauthorized participants; as a result, sender and recipient anonymity will be
+In
+addition,
+scheme will
+disclose
+partialscheme
+privateiskey
+participating
+devices
+•
+Finally,
+the this
+noteworthy
+feature of
+the the
+proposed
+its to
+utilization
+of a hyperelensured;
+ancurve
+opento
+channel
+while
+keeping
+it
+concealed
+other
+third
+parties;
+liptic
+generate
+and
+verify
+signatures
+less
+computational
+and communica
+In addition, this via
+scheme
+will
+disclose
+the
+partial
+private
+key
+towithfrom
+participating
+devices
+tion
+costs.the
+Finally,
+noteworthy
+feature
+the third
+proposed
+via an open 
+channel
+while
+keeping it
+concealed
+fromof
+other
+parties;scheme is its utilization of a
+hyperelliptic
+curve
+to generate
+and are
+verify is
+signatures
+with
+less
+and
+
+Finally, the noteworthy
+feature
+of
+the
+proposed
+scheme
+its in the
+utilization
+of computational
+a manner: Section
+The
+subsequent
+sections
+of this
+article
+organized
+following
+2
+communication
+costs.
+discusses
+literature
+review. The
+proposed
+scheme is
+described
+in Section 4, while
+hyperelliptic curve
+to the
+generate
+and verify
+signatures
+with less
+computational
+and
+Section
+necessary
+preliminary
+Section
+deals with
+the security
+communication
+costs.
+The3 discusses
+subsequentthe
+sections
+of this article
+are steps.
+organized in
+the 5
+following
+manner:
+Section
+evaluation.
+An
+analysis
+of
+performance
+is
+covered
+in
+Section
+6.
+Concluding
+remark
+on
+the
+2
+discusses
+the
+literature
+review.
+The
+proposed
+scheme
+is
+described
+in
+Section
+4,
+while
+The subsequent sections of this article are organized in the following manner: Section
+proposed
+scheme
+is
+detailed
+in
+Section
+7.
+Section
+3
+discusses
+the
+necessary
+preliminary
+steps.
+Section
+5
+deals
+with
+the
+security
+2 discusses the literature review. The proposed scheme is described in Section 4, while
+evaluation.
+An analysis
+of performance
+is
+covered
+in with
+Sectionthe
+6. security
+Concluding remark on the
+Section 3 discusses the
+necessary
+preliminary
+steps.
+Section 5
+deals
+2.
+Literature
+Review
+proposed
+scheme
+is
+detailed
+in
+Section
+7.
+evaluation. An analysis of performance is covered in Section 6. Concluding remark on the
+A VANET
+is a communication
+technology that enables V2V and V2I communicaproposed scheme is detailed
+in Section
+7.
+tions via
+the Review
+Internet, which can be affected by several cyber-attacks. So, to avoid such
+2.
+Literature
+circumstances,
+solution is authentication,
+which V2V
+the participating
+nodes in the
+2. Literature Review
+A VANET the
+is a best
+communication
+technology thatinenables
+and V2I communications
+VANET
+environment
+can
+authenticate
+each
+other
+before
+transferring
+data
+or
+the Internet,technology
+which canthat
+be enables
+aﬀectedV2V
+by and
+several
+cyber-attacks. So, to information.
+avoid such
+A VANET is avia
+communication
+V2I communications
+To achieve authentication, the best approach is to use a digital signature, which allows a
+circumstances,
+the
+best
+solution
+is
+authentication,
+in
+which
+the
+participating
+nodes
+in the
+via the Internet, sender
+which to
+can
+bedata
+aﬀected
+by private
+several key
+cyber-attacks.
+such who can then
+sign
+with his
+and deliverSo,
+it tototheavoid
+recipient,
+use
+VANET
+environment
+can
+authenticate
+each
+before nodes
+transferringthe
+data or information.
+circumstances, thethe
+best
+solution
+is
+authentication,
+theother
+participating
+sender’s
+public
+key
+to verify in
+thewhich
+signature.
+To can
+achieve
+authentication,
+best
+approach
+is to use
+a digital
+signature, which allows a
+VANET environment
+each other
+before
+transferring
+data
+information.
+In aauthenticate
+typical PKC-based
+signature,
+each
+user needs
+toor
+produce
+a valid digital certificate
+sender
+to
+sign
+data
+with
+his
+private
+key
+and
+deliver
+it
+to
+the
+recipient,
+who can then use
+To achieve authentication,
+the best
+approach
+is tothe
+useidentity
+a digitalofsignature,
+which
+allows
+that contains
+information
+about
+the certificate
+owner
+anda the public key [7].
+the
+sender’s
+public
+key
+to
+verify
+the
+signature.
+sender to sign data
+with hisitprivate
+key
+and deliver
+it to management
+the recipient, but
+whoalso
+cancontributes
+then use to an increase in
+However,
+not only
+requires
+certificate
+In
+averify
+typicalthe
+PKC-based
+signature, each user needs to produce a valid digital certificate
+the sender’s publicthe
+key
+to
+signature.
+verification cost. To address certificate management issues, Shamir [8] proposed ID-PKC,
+that
+contains
+information
+about
+the to
+identity of the
+certificate
+owner
+and the public key [7].
+In a typical in
+PKC-based
+signature,
+each user
+needs
+a valid
+digital
+certificate
+which the
+user’s identity
+is his
+publicproduce
+key, bypassing
+the need
+for certificates. However,
+However,
+it
+not
+only
+requires
+certificate
+management
+but
+also
+contributes
+to an increase
+that contains information
+about
+theare
+identity
+of thevia the
+certificate
+owner
+the lead
+public
+key
+[7].escrow
+the private
+keys
+generated
+KGC,
+whichand
+might
+to a
+key
+problem.
+in
+the
+verification
+cost.
+To
+address
+certificate
+management
+issues,
+Shamir
+[8]
+proposed IDHowever, it not only requires
+certificate
+management
+but also
+contributes
+to an in
+increase
+Al-Riyami
+and Paterson
+[9] proposed
+the idea
+of CL-PKC,
+which the user’s private
+PKC,
+in
+which
+the
+identity
+public
+key, key.
+bypassing
+thechooses
+need for
+in the verification key
+cost.
+address
+certificate
+management
+issues,
+Shamir
+[8] proposed
+IDisTo
+made
+up of
+a user’s
+secret value
+andisahis
+partial
+private
+The user
+hiscertificates.
+secret key,
+PKC, in which the
+user’s
+is his public
+key, bypassing
+theSince
+needthe
+for KGC
+certificates.
+while
+theidentity
+KGC generates
+the partial
+private key.
+cannot access the user’s
+complete private key without the user’s secret key, the user’s public key can be calculated
+characteristics:
+
+Future Internet 2023, 15, 266
+
+4 of 16
+
+from the secret value. Thus, the potential security issues associated with key escrow are
+eliminated. Secondly, the user’s public key can be calculated from the secret value, so a
+certificate is no longer needed. In other words, the CLS technique has the potential to
+address issues in both the classic signature method and the ID-based method. CLAS has
+the benefits of CLS and AS. In 2003, Boneh et al. [10] proposed the concept of CLAS, which
+can combine the signatures of n (n > 1) different messages signed by n other users into a
+single signature. The receiver only needs to check the aggregated signature instead of all
+the signatures, thereby reducing the computational cost of signature verification and the
+communication overhead of signature transmission to some extent.
+The benefits of CLAS mentioned above have led to a lot of new research. Yum and
+Lee [12] proposed a CLAS scheme within the framework of the Random Oracle Model
+(ROM), but Hu et al. [13] discovered that Yum and Lee’s [12] scheme is vulnerable to
+public key replacement attacks. Deng et al. [14] designed and proved a secure practical
+CLAS scheme, although Kumar and Sharma [15] found that Deng et al. [14]’s scheme
+could guarantee unforgeability. A new certificateless signature system was presented by
+Horng et al. [16] for the use of V2I in a VANET’s communication. However, Ming and
+Shen [17] demonstrated that the scheme proposed by Horng et al. [16] was vulnerable
+to various attacks like replay attacks, modification attacks, impersonation attacks, and
+man-in-the-middle attacks and hence could not provide authentication and message integrity. Li et al. [18] addressed the limitation of Horng et al. [16]’s scheme and designed
+an improved CLAS scheme. However, the scheme has high computational and communicational costs since it uses bilinear pairing and point-to-point hash functions. Keitaro
+Hashimoto and Wakaha Ogata [19] came up with an open and small CLAS scheme in which
+the size of signatures stays the same, and any combination of signatures can be added
+together. However, the scheme is based on bilinear pairing, which necessitates higher
+computational and communicational costs. A highly effective AS scheme was developed
+by Malhi et al. [20] for privacy and authentication in VANETs. Cui et al. [21] developed an
+efficient CLAS scheme using ECC in vehicular sensor networks.
+On the other hand, Kamil et al. [22] claimed that Cui et al.’s [21] scheme is unsafe
+against signature forgery attack. Du et al. [23] proposed an effective CLAS scheme without
+pairings for healthcare wireless sensor networks. However, the scheme is based on ECC,
+which results in a significant increase in both computational and communicational costs. To
+avoid the unpleasant certificate management problem of PKI and the key escrow problem
+of an ID-based framework, Gowri et al. [24] developed a CLAS-based authentication
+scheme for VANETS. However, Yang et al. [25] proved that Gowri et al.’s [24] scheme failed
+to achieve the desired security goals. Ye et al. [26] designed an improved certificateless
+authentication and AS scheme that may effectively counter coalition attacks. In the same
+year, Vallent et al. [27] developed a safe and efficient certificateless aggregation technique
+(ECLAS) for VANETs that might be used in a smart grid scenario. However, the [26,27]
+schemes are based on ECC to provide conditional privacy preservation, which leads to
+heavy computational costs and communication overhead.
+A fully aggregated conditional privacy-preserving certificateless aggregate signature
+system (CPP-CLAS) was designed for VANETs by Yulei and Chen [28] in 2022. The
+proposed CPP-CLAS scheme uses ECC and general hash functions, which result in high
+computational costs and communication overhead. Another efficient pairing-free CLAS
+for secure VANET communication was introduced in the same year by Yibo et al. [29].
+However, the [28,29] scheme was based on ECC, which has more computational costs and
+communication overhead.
+In 2022, Cahyadi et al. [30] proposed a pairing-based CLAS authentication scheme
+to improve security, privacy, and efficiency in VANETs. However, it is found that the
+overall computation cost of the scheme is high due to massive pairing. To improve the
+security of VANET systems, we propose a CLAS-based authentication scheme based on
+HECC to reduce the computational cost and communication overhead due to the small
+parameter size.
+
+al. [10] proposed the idea of an aggregate signature, which combines the signatures of
+improve
+security,
+privacy,
+and
+eﬃciency
+in
+VANETs.
+However,
+it
+is found
+that
+the
+overall
+improve
+security,
+privacy,
+and
+eﬃciency
+in VANETs.
+However,
+itet
+isal.
+found
+that
+the overall
+In 2022,
+Cahyadi
+In
+2022,
+al.by
+[30]
+Cahyadi
+proposed
+et
+[30]
+pairing-based
+In
+2022,
+proposed
+Cahyadi
+a
+CLAS
+pairing-based
+et al.
+authentication
+[30]
+proposed
+CLAS
+scheme
+authentication
+a
+pairing-based
+to
+CLAS
+to
+authentic
+Inet
+2022,
+Cahyadi
+etal.
+al.a
+[30]
+proposed
+2022,
+pairing-based
+Cahyadi
+CLAS
+[30]
+authentication
+proposed
+a scheme
+pairing-based
+scheme
+to
+CLA
+multiple
+messages
+sent
+various
+vehicles
+into
+a In
+single,
+short
+signature.
+By
+using
+computation
+cost
+of
+the
+scheme
+is
+high
+due
+to
+massive
+pairing.
+To
+improve
+the
+security
+computation
+cost
+of
+the
+scheme
+is
+high
+due
+to
+massive
+pairing.
+To
+improve
+the
+security
+improve
+security,
+improve
+privacy,
+security,
+and
+eﬃciency
+privacy,
+improve
+in
+and
+VANETs.
+eﬃciency
+security,
+However,
+in
+privacy,
+VANETs.
+it
+is
+and
+found
+However,
+eﬃciency
+that
+the
+it
+in
+is
+overall
+VANETs.
+found
+that
+However,
+the
+overall
+it
+is
+found
+improve
+security,
+privacy,
+and
+ﬃciency
+improve
+in
+VANETs.
+security,
+privacy,
+However,
+and
+it
+is
+eﬃciency
+found
+that
+in
+VANETs.
+the
+overall
+However
+aggregate signatures, we can reduce computational and communicational costs and
+based
+onTo
+HECC
+to
+of VANET
+systems,
+we scheme
+propose
+a high
+CLAS-based
+authentication
+scheme
+of VANET
+systems,
+we
+propose
+a
+CLAS-based
+authentication
+scheme
+based
+on
+HECC
+to
+computation
+costcapacity
+computation
+of
+the
+of
+the
+computation
+scheme
+to is
+massive
+high
+pairing.
+of
+the
+to
+massive
+scheme
+To
+improve
+pairing.
+is
+high
+the
+due
+security
+improve
+massive
+the
+pairing.
+security
+To pairin
+impro
+computation
+costis
+of
+the
+scheme
+is
+computation
+high
+due
+to
+massive
+cost
+of
+the
+pairing.
+scheme
+To
+isto
+improve
+high
+due
+theto
+security
+massive
+increase storage
+to cost
+enhance
+thedue
+eﬃciency
+ofcost
+a due
+VANET
+system.
+reduce
+the
+computational
+cost
+and
+communication
+overhead
+due
+to
+the
+small
+parameter
+reduce
+the
+computational
+cost
+and
+communication
+overhead
+due
+toon
+the
+small to
+parameter
+based
+HECC
+based
+on
+HECC
+to
+bas
+of VANET
+systems,
+of
+VANET
+we
+propose
+systems,
+CLAS-based
+we
+propose
+of
+VANET
+authentication
+CLAS-based
+systems,
+we
+authentication
+scheme
+propose
+a
+CLAS-based
+scheme
+authentication
+scheme
+of
+VANET
+systems,
+we
+propose
+a
+CLAS-based
+of
+VANET
+systems,
+we
+propose
+a
+CLAS-based
+authentication
+scheme
+based
+on
+HECC
+authentication
+to
+In this paper, we propose a certificateless aggregate
+3 of 17 signature scheme based on
+size.
+size. reduce
+Future Internet 2023, 15,
+266 the
+5
+of
+16
+reduce
+computational
+the
+computational
+cost
+and
+communication
+reduce
+cost
+and
+the
+computational
+communication
+overhead
+due
+cost
+to
+verhead
+the
+and
+small
+communication
+due
+parameter
+to
+the
+small
+overhead
+parameter
+due
+to
+the
+reduce the
+computational
+andis the
+reduce
+communication
+the
+computational
+overhead
+due
+andthe
+to
+communication
+small
+parameter
+overheadsd
+hyperelliptic curve
+cryptography
+(HECC),cost
+which
+advanced
+version
+of cost
+Elliptic
+Curve
+W
+3
+of
+17
+3
+of
+17
+size.
+size.
+size.
+Cryptographysize.
+(ECC), using a key sizesize.
+of 80 bits, providing
+the same security benefits of
+3.
+Preliminaries
+3.
+Preliminaries
+ECC, but with less computational cost, communication overhead, and memory
+s certificate management
+and key
+escrow
+issues
+in classical
+cryptosystems.
+CLAS
+3.requirement.
+Preliminaries
+3.
+Preliminaries
+3.
+Preliminaries
+Koblitz
+introduced
+an
+algebraic
+curve
+called
+HEC
+[31].
+is
+considered
+advanced
+3.
+Preliminaries
+Preliminaries
+Koblitz
+introduced
+ancurves
+algebraic
+curve
+called
+[31]. the
+It
+isfield an
+considered
+an advanced
+3.
+Preliminaries
+HECs
+are
+algebraic
+with
+the 3.
+genus
+ḡ HEC
+≥ 1;Itsince
+of an
+HECC
+event
+the
+routing
+information
+from
+being
+forged,
+altered,
+or
+impersonated,
+as
+well
+version
+of
+elliptic
+curves.
+Points
+of
+an
+HEC
+cannot
+be
+obtained
+from
+the
+group
+[32].
+In
+version
+of
+elliptic
+curves.
+Points
+of
+an
+HEC
+cannot
+be
+obtained
+from
+the
+group
+[32].
+In It is
+ss
+ment
+certificate
+and key escrow
+management
+issues
+in
+key
+classical
+escrow
+cryptosystems.
+issues
+classical
+CLAS
+cryptosystems.
+CLAS
+Koblitz
+introduced
+Koblitz
+an
+algebraic
+introduced
+an
+algebraic
+called
+Koblitz
+HEC
+introduced
+curve
+[31].
+called
+It
+isanHEC
+considered
+HEC
+algebraic
+[31].
+It
+curve
+is
+advanced
+considered
+called
+HEC
+an
+advanced
+considere
+Koblitz
+introduced
+an
+algebraic
+curve
+Koblitz
+called
+introduced
+HEC
+[31].
+Itan
+algebraic
+is
+considered
+curve
+an[31].
+called
+advanced
+HEC [31].
+It
+is
+aand
+quadratic
+extension
+ofinthe
+field
+ofcurve
+rational
+functions,
+we
+can
+say
+that
+itan
+is
+the
+simplest
+Koblitz
+introduced
+an
+algebraic
+curve
+called
+[31].
+It
+is
+considered
+an
+advanced
+ure
+its
+integrity
+and
+provide
+authentication
+and
+nonrepudiation
+for
+the
+sender.
+EVIEW
+3
+of
+17
+HECC,
+the
+additive
+Abelian
+group
+is
+calculated
+from
+the
+divisor
+(₯).
+HECC
+may
+be
+a
+ormation
+event
+the from
+routing
+being
+information
+forged,
+altered,
+rom
+being
+or
+impersonated,
+forged,
+altered,
+as
+well
+or
+impersonated,
+as
+well
+version
+lliptic
+version
+curves.
+of
+elliptic
+Points
+of
+curves.
+an
+version
+HEC
+Points
+cannot
+of
+of
+elliptic
+an
+be
+HEC
+obtained
+curves.
+cannot
+from
+Points
+be
+obtained
+the
+of
+group
+an
+HEC
+from
+[32].
+cannot
+the
+In
+group
+be
+obtained
+[32].
+In
+from
+the
+HECC,
+the
+additive
+Abelian
+group
+is
+calculated
+from
+the
+divisor
+(₯).
+HECC
+may
+be
+a
+version
+of
+elliptic
+curves.
+Points
+of
+version
+an
+HEC
+of
+cannot
+elliptic
+be
+curves.
+obtained
+Points
+from
+of
+the
+an
+HEC
+group
+cannot
+[32].
+In
+be
+obtain
+field
+of of
+algebraic
+functions,
+except
+the
+field
+of
+rational
+functions
+[11].
+HECC
+consists
+of
+version of elliptic curves. Points of an HEC cannot be obtained from the group [32]. In
+ome
+entities
+in VANETs,
+suchsuitable
+as
+RSUs
+andfor
+OBUs,
+have
+limited
+andto
+provide
+ure
+its
+integrity
+authentication
+and provide
+and
+nonrepudiation
+authentication
+and
+the
+nonrepudiation
+sender.
+forcomputing
+the
+sender.
+3 of
+17HECC,
+3a
+of
+17due
+more
+option
+for
+low-resource
+environments
+its
+ability
+to
+provide
+the
+same
+more
+suitable
+option
+for
+low-resource
+nvironments
+due
+to
+its
+ability
+tomay
+provide
+same
+HECC,
+the
+additive
+HECC,
+the
+additive
+the
+additive
+Abelian
+group
+Abelian
+isof
+calculated
+group
+from
+is
+calculated
+the
+divisor
+Abelian
+from
+(₯).
+group
+the
+HECC
+divisor
+is
+calculated
+(₯).
+be
+HECC
+athe
+from
+the
+may
+divisor
+aa the
+(₯).
+H
+HECC,
+HECC,
+the
+additive
+Abelian
+group
+is
+calculated
+the
+additive
+from
+the
+Abelian
+divisor
+group
+(₯).
+HECC
+calculated
+may be
+from
+be
+div
+the
+divisor
+₯,
+the
+finite
+formal
+sum
+points
+on
+hyperelliptic
+curve.
+The
+divisor
+also
+HECC,
+the
+additive
+Abelian
+group
+is
+calculated
+from
+the
+divisor
+(₯
+).is
+HECC
+may
+be
+a
+eome
+capacity;
+therefore,
+eﬃciency
+must
+be
+taken
+into
+account
+while
+designing
+a
+ETs,
+entities
+such
+asin
+RSUs
+VANETs,
+and
+OBUs,
+such
+as
+have
+RSUs
+limited
+and
+OBUs,
+computing
+have
+and
+limited
+computing
+and
+level
+of
+security
+as
+ECC,
+bilinear
+pairing,
+and
+RSA
+while
+utilizing
+maller
+parameters
+and
+level
+of
+security
+as
+ECC,
+bilinear
+pairing,
+and
+RSA
+while
+utilizing
+smaller
+parameters
+and
+more
+suitable
+option
+more
+suitable
+for
+low-resource
+option
+for
+environments
+more
+low-resource
+suitable
+due
+option
+environments
+to
+its
+for
+ability
+low-resource
+due
+to
+provide
+to
+its
+environments
+ability
+the
+same
+to
+provide
+due
+the
+to
+its
+same
+ability
+to
+pr
+more
+suitable
+option
+for
+low-resource
+more
+environments
+suitable
+option
+due
+for
+to
+low-resource
+its
+ability
+to
+provide
+environments
+the
+same
+due
+to
+its
+forms
+an Abelian
+group known
+as the Jacobian
+group
+[12].
+on the above discussion,
+authentication
+system
+for
+eﬃcient
+communication
+in
+VANETs.
+In
+2003,
+Boneh
+etaBased
+e,
+ee capacity;
+eﬃciency
+therefore,
+must
+be
+taken
+eﬃciency
+into
+must
+account
+be
+while
+taken
+into
+designing
+account
+alevel
+while
+designing
+key
+sizes
+[33].
+Let
+𝐹
+the
+algebraic
+closure
+of
+𝐹
+,
+which
+is
+the
+finite
+field.
+Suppose
+the
+key
+sizes
+[33].
+Let
+𝐹
+algebraic
+closure
+ofas
+𝐹
+,
+which
+is
+the
+finite
+field.
+Suppose
+the
+ddress
+certificate
+management
+and
+key
+escrow
+issues
+in
+classical
+cryptosystems.
+CLAS
+∗ be
+#
+level
+of
+security
+level
+as
+ECC,
+of
+security
+bilinear
+as
+pairing,
+ECC,
+bilinear
+and
+ofRSA
+security
+pairing,
+while
+and
+utilizing
+ECC,
+RSA
+bilinear
+while
+smaller
+utilizing
+pairing,
+parameters
+and
+smaller
+RSA
+and
+parameters
+while
+utilizing
+smaller
+∗ be
+#
+level
+of
+security
+asthe
+ECC,
+bilinear
+pairing,
+level
+of
+and
+security
+RSA
+while
+as
+ECC,
+utilizing
+bilinear
+smaller
+pairing,
+parameters
+and
+RSAand
+and
+while
+utilizi
+this
+research
+article
+contributes
+to
+the
+security
+of
+VANETs
+through
+the
+following
+key
+proposed
+the idea
+of anfor
+aggregate
+signature,
+which
+combines
+the
+signatures
+of
+le
+m for
+authentication
+eﬃcient
+communication
+system
+eﬃcient
+in
+VANETs.
+communication
+In
+2003,
+in
+Boneh
+VANETs.
+et
+In
+2003,
+Boneh
+et
+genus
+of
+HECC
+over
+𝐹
+is
+(ḡ
+>1).
+Hyperelliptic
+curve
+(H
+(Up))
+is
+a
+generalized
+form
+of
+genus
+of
+HECC
+over
+𝐹
+is
+(ḡ
+>1).
+Hyperelliptic
+curve
+(H
+(Up))
+is
+generalized
+form
+of
+n
+prevent
+the
+routing
+information
+from
+being
+forged,
+altered,
+or
+impersonated,
+as
+well
+#
+key
+izes
+[33].
+Let
+key
+𝐹∗izes
+Let
+key
+sizes
+[33].
+Let
+𝐹∗isbe
+be
+the
+algebraic
+be
+closure
+the
+algebraic
+of
+𝐹#
+,
+which
+closure
+of
+theF
+the
+𝐹
+finite𝐹
+algebraic
+which
+field.
+is
+the
+Suppose
+closure
+finite
+ofthe
+ield.
+𝐹
+which
+the
+finite isfiet
+#
+key
+sizes
+[33].
+Let
+key
+sizes
+[33].
+Let
+the
+algebraic
+𝐹###,
+,
+which
+be
+is
+the
+the
+algebraic
+finite
+field.
+closure
+Suppose
+ofis𝐹# ,
+the
+which
+[33].
+F𝐹𝐹∗∗∗
+be
+the
+algebraic
+closure
+of
+which
+is
+the
+finite
+ield.
+Suppose
+the
+tificate
+ment
+and
+management
+key
+escrow
+and
+issues
+key
+in
+escrow
+classical
+issues
+cryptosystems.
+in
+classical
+cryptosystems.
+CLAS
+CLAS
+characteristics:
+#,
+∗
+messages
+sent
+byof
+various
+vehicles
+intothe
+aand
+single,
+shortH
+signature.
+By
+using
+]le
+of an
+proposed
+aggregate
+the
+idea
+signature,
+an
+aggregate
+which
+combines
+ignature,
+the
+which
+signatures
+combines
+of
+signatures
+of
+elliptic
+curves
+and
+state
+H
+(Up)
+over
+a(the
+finite
+field
+is
+defined
+using
+Equation
+(1):
+elliptic
+curves
+the
+state
+(Up)
+over
+athe
+finite
+field
+is
+defined
+using
+Equation
+(1):
+nsure
+its
+integrity
+and
+provide
+authentication
+and
+nonrepudiation
+for
+sender.
+genus
+of
+HECC
+genus
+over
+𝐹
+genus
+of
+HECC
+over
+𝐹#
+is
+(ḡ
+>1).
+Hyperelliptic
+is
+(ḡ
+>1).
+Hyperelliptic
+(H
+(Up))
+curve
+is
+is
+(ḡ
+aover
+generalized
+>1).
+(H
+Hyperelliptic
+(Up))
+is
+form for
+generalized
+of
+curve
+(Hform
+(Up))
+is a
+of
+HECC
+over
+F𝐹𝐹#
+ḡ
+>1).
+Hyperelliptic
+curve
+(H
+(Up))
+of
+genus
+of#
+HECC
+over
+genus
+of
+HECC
+𝐹
+is
+(ḡ
+>1).
+Hyperelliptic
+(Up))
+(ḡ
+is
+>1).
+a
+generalized
+Hyperelliptic
+form
+curve
+of
+(Hgene
+(Up
+ormation
+the
+routing
+from
+information
+being
+forged,
+from
+altered,
+being
+forged,
+or
+impersonated,
+altered,
+or
+as
+impersonated,
+well
+ascurve
+well
+#
+#is
+# is
+
+In
+this
+article,
+we
+propose
+an
+eﬃcient
+certificateless
+signature
+scheme
+ate
+signatures,
+we
+can
+reduce
+computational
+and
+communicational
+costs
+andaggregate
+plevarious
+y
+messages
+vehicles
+sent
+by
+into
+various
+a
+single,
+vehicles
+short
+into
+signature.
+single,
+short
+signature.
+By
+using
+By
+using
+Some and
+entities
+in
+VANETs,
+such
+asand
+RSUs
+and
+OBUs,
+have
+limited
+computing
+and
+elliptic
+curves
+the
+state
+H
+(Up)
+over
+elliptic
+a
+finite
+curves
+field
+is
+and
+defined
+the
+state
+using
+H
+(Up)
+Equation
+over
+(1):
+a
+finite
+field
+is
+defined
+using
+Equa
+elliptic
+curves
+and
+the
+state
+H
+(Up)
+over
+a
+finite
+field
+is
+defined
+using
+Equation
+(1):
+elliptic
+curves
+and
+the
+state
+H
+(Up)
+elliptic
+over
+a
+finite
+curves
+field
+and
+is
+the
+defined
+state
+H
+using
+(Up)
+Equation
+over
+a
+finite
+(1):
+field
+is
+defined
+sprovide
+integrity
+authentication
+provide
+and
+authentication
+nonrepudiation
+and
+nonrepudiation
+for
+the
+ender.
+for
+the
+sender.
+(1)
+ℎ
+ℓ𝑎𝑚𝑜𝑑𝑞
+𝐻:system.
+𝑎
+the
+and
+privacy
+protection
+VANETs
+using hyperelliptic curve
+(1)
+𝑡 ℓ 𝑚𝑜𝑑𝑞
+𝐻: ℓ𝑎 𝑎 ℎof𝑡 ℓcosts
+e
+storage
+capacity
+enhance
+the security
+eﬃciency
+of and
+VANET
+gate
+can
+signatures,
+reduce
+computational
+weto
+can
+reduce
+and
+computational
+communicational
+costs
+communicational
+and
+orage
+capacity;
+therefore,
+eﬃciency
+must
+be taken
+intoand
+account
+whileand
+designing
+a
+NETs,
+entities
+uch
+in
+VANETs,
+as
+RSUs
+and
+such
+OBUs,
+as
+RSUs
+have
+and
+limited
+OBUs,
+computing
+have
+limited
+and
+computing
+cryptography;
+paper,
+we
+propose
+certificateless
+aggregate
+signature
+scheme
+based
+on𝑎𝑎a
+2
+ℎ ℓ and
+𝑎
+𝑡𝑎
+𝑚𝑜𝑑𝑞
+ℎℎBoneh
+ℓℓ
+𝑡𝑡tto
+ℓ(`)
+ℎ ℓ 𝐻:
+𝑎ḡdegree
+𝑡(1)ℓaℎḡ ℓ
+𝑚𝑜𝑑𝑞
+𝐻:
+𝑎
+𝐻:
+𝐻:
+(1)
+ℓ 𝑚𝑜𝑑𝑞
+𝑚𝑜𝑑𝑞
+𝑎 a 𝑡 ℓ (1)
+𝑚𝑜𝑑𝑞
+𝐻:
+𝑎a
+𝑎and
+sethis
+enhance
+storage
+the
+capacity
+eﬃciency
+to
+enhance
+of
+aa VANET
+the
+eﬃciency
+system.
+ofto
+a
+VANET
+where
+(ℓ,
+𝑎)
+belongs
+[𝐹
+𝐹
+,system.
+and
+polynomial
+f(ℓ)
+belongs
+(ℓ)
+with
+degree
+where
+(ℓ,
+𝑎)while
+belongs
+polynomial
+f(ℓ)
+belongs
+to𝑎 (ℓ)
+with
+and
+H
+:ℓ
+=et
+modq
+(1)
+uitable
+authentication
+system
+for
+ﬃcient
+communication
+in
+VANETs.
+In
+2003,
+# to
+#[𝐹
+#
+e,acity;
+eﬃciency
+therefore,
+must be
+eﬃciency
+taken
+must
+into
+be
+account
+taken
+into
+account
+designing
+while
+a𝐹# ,
+designing
+a+ h(`)
+
+The
+proposed
+scheme
+enables
+participating
+vehicles
+to
+share
+their
+identities
+with
+lliptic
+curve
+cryptography
+(HECC),
+which
+is
+the
+advanced
+version
+of
+Elliptic
+Curve
+n.
+opose
+this apaper,
+certificateless
+wethe
+propose
+aggregate
+a
+certificateless
+signature
+aggregate
+scheme
+based
+signature
+on
+scheme
+based
+monic
+as
+f(ℓ)
+𝐹
+(ℓ)
+with
+degree
+2
++1.
+there
+no
+(ℓ,to
+,and
+𝑎
+belonging
+monic
+one =asto
+f(ℓ)
+= 𝐹
+(ℓ)a
+with
+degree
+2If
+ḡ
++1.on
+Ifisto
+there
+is𝐹no
+pair
+(ℓ
+, #𝑎
+)and
+belonging
+toḡ
+[10]
+proposed
+idea
+of
+an(ℓ,one
+aggregate
+signature,
+which
+combines
+the
+signatures
+#
+where
+𝑎)
+belongs
+where
+(ℓ,
+[𝐹
+𝑎)
+belongs
+to
+where
+(ℓ,
+𝑎)
+belongs
+[𝐹
+and
+polynomial
+𝐹𝐹ḡ
+and
+f(ℓ)
+polynomial
+belongs
+to#pair
+(ℓ)
+f(ℓ)
+with
+belongs
+degree
+polynomial
+to
+(ℓ)
+ḡ
+with
+ato
+degree
+f(ℓ)
+belongs
+toaa (ℓ)
+with
+#
+where
+(ℓ,
+𝑎)
+belongs
+to
+[𝐹#achannel
+where
+(ℓ,
+𝑎)of
+belongs
+[𝐹)#
+,
+and
+polynomial
+f(ℓ)
+belongs
+to𝐹
+(ℓ),
+and
+with
+polynomial
+degree
+ḡ and
+and
+f(ℓ)
+belongs
+tem
+hentication
+for
+eﬃcient
+system
+communication
+for
+communication
+in
+VANETs.
+In
+in
+2003,
+VANETs.
+Boneh
+In
+et[𝐹
+2003,
+Boneh
+et
+#
+#
+##
+#
+#
+trusted
+authorities
+via
+an,
+open
+without
+their
+identities
+to
+graphy
+(ECC),
+using
+aiseﬃcient
+key
+size
+of
+80
+bits,
+providing
+the
+same
+security
+benefits
+of revealing
+where
+(
+`
+,
+a)
+belongs
+to
+[F
+×
+F
+]
+,
+and
+polynomial
+f(
+`
+)
+belongs
+to
+(
+`
+)
+with
+degree
+ḡisand
+apair (ℓ , 𝑎
+elliptic
+raphy
+(HECC),
+curve
+cryptography
+which
+the
+(HECC),
+advanced
+which
+version
+is
+the
+of
+Elliptic
+advanced
+Curve
+version
+of
+Elliptic
+Curve
+[𝐹
+𝐹
+,
+such
+a
+curve
+is
+called
+non-singular.
+#
+#
+[𝐹
+𝐹
+,
+such
+a
+curve
+is
+called
+non-singular.
+ultiple
+messages
+sent
+by
+various
+vehicles
+into
+a
+single,
+short
+signature.
+By
+using
+# which
+#
+monic
+one
+f(ℓ)
+monic
+=
+𝐹
+one
+as
+f(ℓ)
+=
+𝐹
+monic
+one
+as
+(ℓ)
+=
+𝐹
+(ℓ)
+with
+a
+degree
+(ℓ)
+with
+2
+ḡ
++1.
+degree
+If
+there
+2
+is
+ḡ
+no
++1.
+(ℓ)
+pair
+If
+with
+there
+(ℓ
+a
+,
+𝑎
+degree
+is
+)
+no
+belonging
+pair
+2
+ḡ
+(ℓ
++1.
+,
+to
+𝑎
+If
+)
+belonging
+there
+no
+to
+# as
+#
+monic
+one
+as
+f(ℓ)
+=
+𝐹
+monic
+one
+as
+f(ℓ)
+=
+𝐹
+(ℓ)
+with
+a
+degree
+2
+ḡ
++1.
+If
+there
+(ℓ)
+is
+no
+with
+pair
+a
+degree
+(ℓ
+,
+𝑎
+)
+belonging
+2
+ḡ
++1.
+If
+to
+there
+is n
+posed
+of
+an the
+aggregate
+idea of an
+signature,
+aggregate
+signature,
+combines
+which
+the
+signatures
+combines
+the
+of
+signatures
+of
+#
+#
+#
+#
+unauthorized
+participants;
+as(
+a#
+result,
+sender
+recipient
+anonymity
+be to [F × F ],
+but
+with
+less
+computational
+cost,
+communication
+overhead,
+memory
+monic
+one
+as f(`a)
+=
+F
+`of
+)is[𝐹
+with
+a𝐹and
+degree
+2a
+ḡand
++1.
+there
+is no
+pair
+(`, a) will
+belonging
+ography
+g
+a
+key
+size
+(ECC),
+of 80using
+bits,we
+a[𝐹
+providing
+key
+size
+of
+the
+80same
+bits,
+security
+providing
+benefits
+the
+same
+security
+benefits
+of, If
+#
+#
+#
+ggregate
+ignatures,
+can
+reduce
+computational
+nd
+communicational
+costs
+and
+[𝐹
+𝐹
+,
+uch
+a
+curve
+𝐹
+is
+,
+such
+called
+non-singular.
+curve
+called
+non-singular.
+,
+such
+curve
+is
+called
+non-singular.
+[𝐹
+[𝐹
+𝐹
+,
+such
+a
+curve
+is
+called
+non-singular.
+𝐹
+such
+a
+curve
+is
+called
+non-singular.
+essages
+y
+various
+sent
+vehicles
+by
+various
+into
+a
+vehicles
+single,
+into
+short
+a
+signature.
+single,
+short
+signature.
+By
+using
+By
+using
+#
+#
+##
+##
+#
+#
+#HECC
+#
+ensured;
+ement.
+HECsless
+are
+algebraic
+curves
+with
+the
+genus
+ḡ
+≥
+1;
+since
+the
+field
+of an
+such
+curve
+is VANET
+called
+non-singular.
+mputational
+but
+with
+cost,
+computational
+communication
+cost,
+overhead,
+communication
+and
+memory
+overhead,
+and
+memory
+3.1.
+Hyperelliptic
+Curve
+Discrete
+Logarithm
+Problem
+(HECDLP)
+Assumptions
+3.1.
+Hyperelliptic
+Curve
+Discrete
+Logarithm
+Problem
+(HECDLP)
+Assumptions
+crease
+storage
+capacity
+to
+enhance
+the
+eﬃciency
+of
+a
+system.
+ignatures,
+can
+reduce
+we
+computational
+can
+reduce
+computational
+and
+communicational
+and
+communicational
+costs
+and
+costs
+and
+
+In
+addition,
+this
+scheme
+will
+disclose
+the
+partial
+private
+key to participating devices
+adratic
+extension
+ofthe
+the
+field of
+rational
+functions,
+we
+cansince
+say the
+that it
+is of
+thean
+simplest
+ement.
+ebraic
+curves
+HECs
+with
+are
+algebraic
+genus
+curves
+ḡ
+≥
+1;
+with
+since
+the
+the
+genus
+field
+of
+ḡ
+≥
+an
+1;
+HECC
+field
+HECC
+In
+this
+paper,
+we
+propose
+a
+certificateless
+aggregate
+signature
+scheme
+based
+on
+3.1.
+Hyperelliptic
+3.1.
+Curve
+Hyperelliptic
+Discrete
+Logarithm
+Curve
+Discrete
+3.1.
+Problem
+Hyperelliptic
+Logarithm
+(HECDLP)
+Curve
+Problem
+Assumptions
+Discrete
+(HECDLP)
+Logarithm
+Assumptions
+Problem
+(HECDLP)
+AssumptionsAs
+3.1.
+Hyperelliptic
+Curve
+Discrete
+Logarithm
+3.1.
+Hyperelliptic
+Problem
+(HECDLP)
+Curve
+Discrete
+Assumptions
+Logarithm
+Problem (HECDLP)
+Suppose
+£of
+∈
+n−1}
+and
+₯
+the
+divisor
+from
+HECC.
+orage
+enhance
+capacity
+the to
+eﬃciency
+enhanceofthe
+a VANET
+eﬃciency
+system.
+a{1,2,3…,
+VANET
+system.
+Suppose
+£
+∈ while
+{1,2,3…,
+n−1}
+and
+₯ is
+the from
+divisor
+from
+HECC.
+open
+channel
+keeping
+itHECC
+concealed
+other
+third
+parties;
+3.1.
+Hyperelliptic
+Curve
+Discrete
+Problem
+(HECDLP)
+Assumptions
+fhe
+algebraic
+functions,
+except
+the
+field
+of
+rational
+[11].
+consists
+of
+adratic
+field of
+extension
+fieldvia
+of
+rationalof the
+functions,
+wean
+rational
+can
+say
+functions,
+that
+it is
+isfunctions
+the
+we can
+simplest
+say
+that
+it isLogarithm
+the
+simplest
+yperelliptic
+curve
+cryptography
+(HECC),
+which
+the
+advanced
+version
+of
+Elliptic
+Curve
+opose
+paper,a we
+certificateless
+propose a aggregate
+certificateless
+signature
+aggregate
+scheme
+signature
+based
+scheme
+on
+based
+on
+Suppose
+∈[11].
+{1,2,3…,
+Suppose
+n−1}
+£
+∈
+and
+{1,2,3…,
+₯
+isof
+the
+n−1}
+Suppose
+divisor
+and
+₯
+from
+£is
+∈
+the
+{1,2,3…,
+HECC.
+divisor
+n−1}
+from
+and
+HECC.
+₯
+is
+the
+divisor
+from
+HECC.from HEC
+sum Let
+Finally,
+the
+noteworthy
+feature
+the
+proposed
+scheme
+is is
+its
+utilization
+of
+⍵
+=£
+£.
+₯,
+and
+calculating
+₯
+from
+this
+equation
+is
+called
+the
+HECC
+discrete
+Suppose
+£
+∈
+{1,2,3…,
+n−1}
+and
+₯
+is
+Suppose
+the
+divisor
+£∈
+{1,2,3…,
+from
+HECC.
+n−1}
+and
+₯ais the
+divisor
+Let
+⍵
+=
+£.
+₯,
+and
+calculating
+₯
+from
+this
+equation
+called
+the
+HECC
+discrete
+₯,
+the
+formal
+of
+points
+on
+a
+hyperelliptic
+curve.
+The
+divisor
+₯
+also
+,ryptography
+fisor
+except
+algebraic
+thefinite
+functions,
+field
+of
+rational
+except
+functions
+the
+field
+rational
+HECC
+functions
+consists
+[11].
+of
+HECC
+consists
+of
+Suppose
+£
+∈
+{1,2,3.
+.,
+−
+1}
+and
+is
+the
+divisor
+from
+HECC.
+(ECC),
+using
+a key
+size
+ofof
+80
+bits,
+providing
+the
+same
+security
+benefits
+of
+craphy
+curve(HECC),
+cryptography
+which is
+(HECC),
+the
+advanced
+which
+is
+version
+the
+advanced
+of
+Elliptic
+version
+Curve
+of
+Elliptic
+Curve
+hyperelliptic
+curve
+to
+generate
+and
+verify
+signatures
+with
+less
+computational
+and
+logarithm
+problem
+(HECDP).
+logarithm
+problem
+(HECDP).
+Let
+⍵
+=
+£.cost,
+₯,
+Let
+and
+⍵
+calculating
+=
+₯,
+and
+₯
+calculating
+Let
+his
+⍵ and
+=₯
+equation
+₯
+£.
+₯,
+from
+and
+is=
+this
+called
+calculating
+equation
+the
+HECC
+₯
+called
+from
+discrete
+the
+this
+HECC
+equation
+discrete
+is
+called
+theis
+Let
+⍵
+= £.
+£.
+₯,
+and
+calculating
+₯
+Let
+from
+⍵
+this
+£.
+equation
+₯,
+and is
+calculating
+is
+called
+the
+₯HECC
+HECC
+from
+this
+discrete
+equation
+an
+group
+known
+as
+the
+Jacobian
+group
+[12].
+Based
+on
+thefrom
+above
+discussion,
+visor
+mal
+sum
+₯,
+the
+of
+points
+finite
+formal
+on
+a size
+hyperelliptic
+sum
+of
+points
+curve.
+on
+a
+The
+hyperelliptic
+divisor
+₯,also
+curve.
+The
+divisor
+also
+CC,
+butsize
+with
+less
+computational
+communication
+overhead,
+memory
+Let
+ω
+=
+£.
+and
+calculating
+from
+this
+equation
+is
+called
+the
+discrete
+ghy
+aAbelian
+(ECC),
+key
+using
+of
+80a
+bits,
+key
+providing
+of
+80
+bits,
+the
+same
+providing
+security
+the
+benefits
+same
+security
+of
+benefits
+of
+communication
+costs.
+logarithm
+problem
+logarithm
+(HECDP).
+problem
+(HECDP).
+logarithm
+problem
+(HECDP).
+search
+article
+contributes
+to
+the
+security
+of
+VANETs
+through
+thethe
+following
+key
+logarithm
+problem
+(HECDP).
+logarithm
+problem (HECDP).
+quirement.
+HECs
+are
+algebraic
+curves
+with
+the
+genus
+ḡ
+≥ 1;
+since
+field
+of
+an
+HECC
+own
+an
+Abelian
+as
+the
+Jacobian
+group
+known
+the
+Jacobian
+groupas
+[12].
+Based
+on
+group
+the
+above
+[12].
+discussion,
+Based
+on
+the
+above
+discussion,
+logarithm
+problem
+(HECDP).
+mputational
+with
+less
+computational
+cost,
+communication
+communication
+overhead,
+and
+overhead,
+memory
+and
+memory
+3.2. cost,
+Hyperelliptic
+Curve
+Computational
+Defi‐Helman
+Problemin the
+(HECCDHP)
+Assumptions
+3.2.
+Hyperelliptic
+Curve
+Computational
+Problem
+(HECCDHP)
+Assumptions
+The
+subsequent
+sections
+ofwe
+this
+article
+areDefi‐Helman
+organized
+following
+manner:
+Section
+teristics:
+a
+quadratic
+extension
+the
+field
+of
+rational
+functions,
+can
+say
+that
+it
+is
+the
+simplest
+butes
+search
+to
+article
+the
+security
+contributes
+of
+VANETs
+to
+the
+security
+through
+of
+he
+VANETs
+following
+through
+key
+the
+following
+key
+t.
+ebraic
+HECs are
+curves with
+algebraic
+thecurves
+genus ḡ
+with
+≥ 1;the
+since
+genus
+the ḡ ≥
+field
+1; of
+since
+an the
+HECC
+field of an HECC
+2
+discusses
+the
+literature
+review.
+The
+proposed
+scheme
+is
+described
+in
+Section
+4,
+while
+3.2.
+Hyperelliptic
+Curve
+Hyperelliptic
+Computational
+Curve
+Defi‐Helman
+Computational
+3.2.
+Hyperelliptic
+Problem
+Defi‐Helman
+Curve
+(HECCDHP)
+Computational
+Assumptions
+Defi‐Helman
+Problem
+(HECCDHP)
+Ass
+3.2.
+Hyperelliptic
+Curve
+Computational
+3.2.
+Defi‐Helman
+Hyperelliptic
+Problem
+Curve
+Computational
+(HECCDHP)
+Assumptions
+Defi‐Helman
+Problem (HEC
+3.2.
+Defi-Helman
+Problem
+(HECCDHP)
+Assumptions
+Suppose,
+⦳,
+Ώ
+{1,2,3…,
+n−1}
+₯
+the
+divisor
+HEC.
+Suppose,
+⦳,
+Ώ
+∈say
+{1,2,3…,
+and
+₯
+is
+the
+divisor
+from
+HEC.
+eld
+of
+algebraic
+functions,
+except
+the say
+field
+of∈we
+rational
+functions
+[11].
+HECC
+consists
+of
+teristics:
+this
+article,
+we
+propose
+eﬃcient
+certificateless
+aggregate
+signature
+scheme
+forfrom
+the
+ic
+extension
+field
+of of
+the
+field
+ofanrational
+rational
+functions,
+we
+can
+functions,
+that
+it
+iscan
+the
+simplest
+thatand
+it n−1}
+is
+theis
+simplest
+Section 3 discusses the necessary preliminary steps. Section 5 deals with the security
+e,braic
+security
+and
+privacy
+protection
+of
+VANETs
+using
+hyperelliptic
+curve
+Suppose,
+⦳,
+Ώ
+Suppose,
+∈
+{1,2,3…,
+⦳,
+n−1}
+and
+{1,2,3…,
+₯
+Suppose,
+n−1}
+divisor
+and
+₯
+,
+Ώ
+from
+∈
+the
+{1,2,3…,
+HEC.
+divisor
+n−1}
+from
+and
+HEC.
+₯
+is
+the
+ivisor
+fromdivisor
+HEC. from
+divisor
+₯,
+the
+finite
+formal
+sum
+points
+on
+hyperelliptic
+curve.
+The
+divisor
+₯is
+also
+Let
+⍵
+⦳.
+₯,
+¥
+Ώ
+. ¥⦳.
+₯,.∈
+and
+calculating
+⦳
+and
+from
+and
+¥△is
+called
+the
+Suppose,
+⦳,
+Ώ
+∈
+{1,2,3…,
+n−1}
+and
+Suppose,
+₯
+isΏ
+the
+⦳,
+divisor
+{1,2,3…,
+from
+HEC.
+n−1}
+and
+₯ is
+the
+except
+functions,
+the
+fieldpropose
+except
+of
+rational
+the
+functions
+ofof=Let
+rational
+[11].
+functions
+HECC
+consists
+[11].
+HECC
+of
+consists
+of
+⍵
+=Suppose,
+⦳.a=
+₯,scheme
+=
+Ώ
+⦳.
+,is
+and
+calculating
+⦳
+and
+Ώ△∈
+from
+and
+¥ is
+called
+the
+n
+pose
+this
+an
+article,
+eﬃcient
+we
+certificateless
+anfield
+eﬃcient
+aggregate
+certificateless
+signature
+aggregate
+for
+signature
+scheme
+for
+,
+∈
+{1,2,3.
+.,the
+1}
+ivisor
+from
+HEC.
+evaluation. An analysis
+of performance
+is covered
+inand
+Sectionis6.the
+Concluding
+remark
+on the
+yptography;
+rms
+an
+Abelian
+group
+known
+as⍵
+the
+Jacobian
+group
+[12].
+Based
+on..
+the
+above
+discussion,
+he
+rivacy
+security
+protection
+and
+privacy
+of
+VANETs
+protection
+using
+of ¥
+hyperelliptic
+VANETs
+using
+curve
+hyperelliptic
+curve
+HEC
+computational
+Defi–Helman
+problem
+(HCDH).
+₯,
+mal
+the
+sum
+finite
+of
+points
+formal
+on
+sum
+a
+hyperelliptic
+of
+points
+on
+curve.
+a
+hyperelliptic
+The
+divisor
+curve.
+₯
+The
+also
+divisor
+₯
+HEC
+computational
+Defi–Helman
+problem
+(HCDH).
+Let
+=
+⦳.
+₯,
+=⍵
+Ώ
+==.
+⦳.
+¥
+and
+==
+Ώ
+calculating
+Let
+⍵,
+and
+⦳
+and
+₯,
+calculating
+¥Ώ
+=Ώ
+from
+△ ¥
+and
+₯,
+and
+from
+called
+calculating
+△
+and
+the
+is
+Ώ the
+fromand
+△ Ώ
+and
+Let
+⍵
+⦳.
+,
+Ώ
+⦳.
+₯,
+and. Let
+calculating
+⍵
+⦳.. ⦳
+₯,.
+⦳
+= ¥
+Ώ
+Ώ
+.is
+from
+⦳.
+₯,
+△
+and ¥¥⦳
+calculating
+isand
+called
+the
+⦳
+ω
+,
+¥
+,=also
+and
+4
+called
+proposed
+scheme
+isLet
+detailed
+in₯,
+Section
+7. ⦳.
+he
+proposed
+scheme
+enables
+participating
+vehicles
+to
+share
+their
+identities
+with
+is
+research
+article
+contributes
+to
+the
+security
+of
+VANETs
+through
+the
+following
+key
+yptography;
+belianas
+own
+group
+the Jacobian
+known as
+the
+Jacobian
+group
+[12].
+Based
+group
+on
+the
+[12].
+above
+Based
+iscussion,
+on
+the
+above
+discussion,
+HEC
+computational
+Defi–Helman
+problem
+(HCDH).
+HEC
+computational
+Defi–Helman
+problem
+HEC
+(HCDH).
+computational
+(HCDH).
+Defi–Helman
+problem (HCDH).
+HEC
+computational
+Defi–Helman
+problem
+HEC
+computational
+(HCDH).
+Defi–Helman
+problem (HCDH).
+usted
+authorities
+viatoan
+open
+channel
+without
+revealing
+theiridentities
+identities
+to
+3.3.
+Network
+Model
+haracteristics:
+he
+proposed
+nables
+participating
+scheme
+enables
+vehicles
+participating
+to
+share
+their
+vehicles
+identities
+to
+share
+with
+3.3.
+Network
+Model
+h
+butes
+article
+to
+contributes
+the
+security
+f2.
+the
+VANETs
+ecurity
+through
+of
+VANETs
+the
+following
+through
+key
+the their
+following
+key with
+Literature
+Review
+nauthorized
+participants;
+asopen
+a Figure
+result,
+sender
+andModel
+recipient
+anonymity
+will scheme
+be
+3.3.
+Network
+Model
+ia
+usted
+an
+authorities
+open
+channel
+without
+an
+revealing
+channel
+their
+without
+identities
+revealing
+to of
+their
+identities
+to for is
+Network
+Model
+3.3.
+Network
+3.3.
+Network
+Model
+In
+2,
+network
+model
+the
+proposed
+shown,
+which which
+includesincludes
+ics:
+In
+this
+article,
+wevia 3.3.
+propose
+an
+eﬃcient
+certificateless
+aggregate
+signature
+scheme
+3.3.
+Network
+Model
+3.3.
+Network
+Model
+In
+Figure
+2,
+the
+network
+model
+of
+the
+proposed
+scheme
+shown,
+A
+VANET
+is
+athe
+communication
+technology
+that
+enables
+V2V
+and
+V2Iiscommunications
+sured;
+pants;
+nauthorized
+as a
+result,
+participants;
+sender
+as
+anda
+recipient
+result,
+sender
+anonymity
+and 2,
+recipient
+will
+be
+anonymity
+will
+be
+In
+Figure
+the
+network
+model
+of
+the
+proposed
+scheme
+is
+shown,
+which
+includes
+three
+three
+entities:
+onboard
+unit
+(OBU),
+roadside
+unit
+(RSU),
+and
+department
+of
+transportation
+the
+security
+and
+privacy
+protection
+of
+VANETs
+using
+hyperelliptic
+curve
+three
+entities:
+onboard
+unit
+(OBU),
+roadside
+unit
+(RSU),
+and
+department
+of
+transportation
+In
+2, theIn
+network
+Figure
+model
+the
+network
+of
+theIn
+proposed
+model
+Figure
+of
+2,In
+scheme
+the
+the
+proposed
+network
+is
+shown,
+model
+scheme
+which
+ofis
+he
+shown,
+includes
+proposed
+which
+includes
+is shown,
+pose
+article,
+an we
+eﬃcient
+propose
+certificateless
+an
+eﬃcient
+aggregate
+certificateless
+signature
+aggregate
+scheme
+signature
+for
+scheme
+for
+In
+Figure
+2,
+theto
+network
+model
+of
+he
+Figure
+proposed
+2,
+theSo,
+scheme
+network
+is
+model
+shown,
+of
+which
+thescheme
+proposed
+includes
+scheme
+via
+theFigure
+Internet,
+which
+can 2,
+be
+aﬀected
+by
+several
+cyber-attacks.
+to
+avoid
+such
+addition,
+this
+scheme
+will
+disclose
+theentities:
+partial
+private
+key
+participating
+devices
+nsured;
+onboard
+unit
+(OBU),
+roadside
+unit
+(RSU),
+and
+department
+of
+transportation
+(DoT).
+(DoT).
+The
+following
+are
+the
+explanatory
+steps:
+cryptography;
+(DoT).
+The
+following
+are
+the
+explanatory
+steps:
+entities:
+onboard
+three
+entities:
+unit
+(OBU),
+onboard
+roadside
+unit
+three
+(OBU),
+unit
+entities:
+(RSU),
+roadside
+onboard
+and
+unit
+epartment
+unit
+(RSU),
+(OBU),
+and
+of
+roadside
+transportation
+department
+unit
+of
+(RSU),
+transportation
+and
+department
+o
+rivacy
+curity and
+protection
+privacyof three
+protection
+VANETs
+using
+of
+VANETs
+hyperelliptic
+using
+curve
+hyperelliptic
+curve
+three
+entities:
+onboard
+unit
+(OBU),
+three
+roadside
+entities:
+unit
+(RSU),
+onboard
+and
+unit
+department
+(OBU),
+roadside
+of
+transportation
+unit
+(RSU),
+and de
+circumstances,
+the bestfrom
+solution
+isthird
+authentication,
+in which the participating nodes in he
+a an
+open
+channel
+while
+keeping
+itkey
+concealed
+other
+parties;
+me
+n
+addition,
+will
+disclose
+this the
+scheme
+partial
+will
+private
+disclose
+the
+to
+partial
+participating
+private
+devices
+key
+to
+participating
+deviceswith
+The
+following
+are
+the
+explanatory
+steps:
+The
+proposed
+scheme
+enables
+participating
+vehicles
+to
+share
+their
+identities
+(DoT).
+The
+following
+(DoT).
+are
+The
+the
+following
+explanatory
+are
+(DoT).
+the
+steps:
+explanatory
+The
+following
+steps:
+are
+the
+explanatory
+steps:
+that
+can
+
+OBU:
+It
+is
+a
+5G-enabled
+communication
+device
+fixed
+on
+a
+vehicle
+graphy;
+(DoT).
+The
+following
+are
+the
+explanatory
+(DoT).
+steps:
+The
+following
+are
+the
+explanatory
+steps:
+environment
+OBU:
+It is
+5G-enabled
+communication
+fixed
+vehicle that can
+VANET
+can authenticate
+other
+before
+transferring
+dataon
+or a
+information.
+nally,
+the
+noteworthy
+feature
+of
+proposed
+scheme
+is each
+its
+utilization
+of adevice
+hile
+a
+an
+open
+channel
+whilevia
+keepingauthorities
+it
+concealed
+keeping
+from
+other
+it the
+concealed
+third
+parties;
+from
+other
+third
+parties;
+trusted
+an
+open
+without
+revealing
+their
+identities
+to
+•channel
+OBU:
+is
+ais
+5G-enabled
+communication
+device
+fixed
+on
+a vehicle
+canwith
+communieoposed
+enables
+cheme
+participating
+enablesTo
+vehicles
+participating
+to
+share
+vehicles
+their
+identities
+toIt
+share
+their
+with
+identities
+with
+communicate
+with
+RSU
+and
+other
+OBUs.
+It
+is
+responsible
+for
+registering
+itself
+with
+communicate
+with
+RSU
+and
+other
+OBUs.
+It
+is
+responsible
+for
+registering
+itself
+achieve
+authentication,
+he
+best
+approach
+is
+to
+use
+a
+digital
+signature,
+which
+allows
+a
+thata
+can
+that
+can
+OBU:
+It
+is
+
+a
+OBU:
+5G-enabled
+It
+is
+a
+communication
+5G-enabled
+
+OBU:
+communication
+device
+It
+is
+a
+fixed
+5G-enabled
+on
+device
+a
+vehicle
+communication
+fixed
+on
+vehicle
+device
+fixed
+on afixe
+ve
+OBU:
+It
+a
+5G-enabled
+communication
+
+OBU:
+It
+is
+device
+a
+5G-enabled
+fixed
+communication
+evice
+on
+athat
+vehicle
+at
+can
+yperelliptic
+curve
+toproposed
+generate
+and
+verify
+signatures
+withof
+less
+computational
+anda
+hy
+nally,
+feature
+the of
+noteworthy
+the
+feature
+scheme
+of
+the
+is its
+proposed
+utilization
+scheme
+isa other
+its
+utilization
+of
+unauthorized
+participants;
+as
+a
+result,
+sender
+and
+recipient
+anonymity
+will
+be
+cate
+with
+RSU
+and
+OBUs.
+It
+is
+responsible
+for
+registering
+itself
+with
+the with
+DoT
+theto
+DoT
+by
+sending
+its
+identity
+in
+an
+encrypted
+form.
+The
+DoT
+first
+decrypts
+e
+ia an
+authorities
+open via
+channel
+an open
+without
+channel
+revealing
+without
+their
+revealing
+identities
+their
+to
+identities
+to
+the
+DoT
+by
+sending
+its
+identity
+in
+an
+encrypted
+m.
+The
+DoT
+first
+decrypts
+the
+sender
+sign
+data
+with
+his
+private
+key
+and
+deliver
+it
+to
+the
+recipient,
+who
+can
+then
+use
+communicate
+with
+communicate
+RSU
+and
+other
+with
+RSU
+OBUs.
+communicate
+and
+It
+other
+is
+responsible
+OBUs.
+with
+It
+RSU
+for
+is
+responsible
+registering
+and
+other
+for
+itself
+OBUs.
+registering
+with
+It
+is
+responsible
+itself
+for
+registe
+communicate
+with
+and other OBUs.
+communicate
+It is with
+responsible
+RSU for
+and other
+registering
+OBUs.
+itself
+It is
+with
+responsibl
+mmunication
+costs.
+yperelliptic
+generate
+and
+curve
+verify
+to generate
+signaturesand
+with
+verify
+less signatures
+computational
+with
+and
+less RSU
+computational
+and form.
+ensured;
+by
+sending
+its
+identity
+in
+encrypted
+The
+DoTfor
+first
+decrypts
+theand
+received
+received
+encrypted
+identity,
+generates
+an
+partial
+private
+key
+forform.
+this
+identity,
+and
+pants;
+orized
+as a
+participants;
+result, as
+sender
+a and
+result,
+recipient
+ender
+anonymity
+and
+recipient
+will
+anonymity
+will
+be
+received
+encrypted
+identity,
+generates
+a
+partial
+private
+key
+this
+identity,
+the
+sender’s
+public
+key
+to
+verify
+the be
+signature.
+the
+DoT
+by
+sending
+the
+DoT
+its
+by
+identity
+sending
+in
+an
+its
+the
+encrypted
+identity
+DoT
+by
+in
+form.
+an
+sending
+encrypted
+The
+its
+DoT
+identity
+first
+decrypts
+The
+in
+an
+DoT
+encrypted
+the
+first
+decrypts
+form.
+The
+the
+DoT
+the
+DoT
+by
+sending
+its
+identity
+in
+the
+an
+DoT
+encrypted
+by
+sending
+form.
+its
+The
+identity
+DoT
+first
+in
+an
+ecrypts
+encrypted
+the
+form.firT
+ommunication
+costs.
+he
+subsequent
+sections
+of thiswill
+article
+are
+organized
+in the
+following
+manner:
+Section
+addition, this
+scheme
+disclose
+the
+partial
+private
+key
+toencrypted
+participating
+devices
+ncrypted
+identity,
+generates
+a partial
+private
+key
+for
+this
+identity,
+and
+returns
+it
+to for thi
+returns
+it
+to
+the
+OBU
+an
+ncrypted
+format
+an
+insecure
+channel.
+Then,
+the
+using
+d; In
+returns
+it to
+thein
+OBU
+in
+an
+format
+an
+insecure
+channel.
+Then,
+the
+In
+a
+typical
+PKC-based
+signature,
+each
+user
+needs
+to
+produce
+a
+valid
+igital
+certificate
+received
+encrypted
+received
+identity,
+encrypted
+generates
+identity,
+received
+a
+partial
+generates
+encrypted
+private
+ausing
+partial
+key
+identity,
+for
+private
+this
+generates
+key
+for
+a
+and
+partial
+this
+identity,
+private
+and
+key
+received
+encrypted
+identity,
+generates
+received
+a
+partial
+ncrypted
+private
+identity,
+key
+for
+generates
+this
+identity,
+a
+partial
+and
+private
+usses
+the
+literature
+review.
+The
+proposed
+scheme
+isin
+described
+in public
+Section
+4,using
+while
+via
+an
+open
+channel
+while
+keeping
+it
+concealed
+from
+other
+third
+parties;
+ns
+he
+of
+subsequent
+this
+article
+sections
+are
+organized
+of
+this
+article
+in
+thekey
+following
+are
+organized
+manner:
+in
+Section
+following
+manner:
+Section
+the
+OBU
+an
+encrypted
+format
+an
+insecure
+channel.
+Then,
+the
+OBU
+generates
+OBU
+generates
+a
+private
+key
+and
+generates
+ao
+signature
+on
+data,
+and
+me
+tion,
+will
+this
+disclose
+scheme
+the
+will
+partial
+disclose
+private
+the
+partial
+to
+participating
+private
+key
+to
+devices
+participating
+devices
+OBU
+generates
+athe
+private
+keyin
+and
+a key,
+public
+key,
+generates
+a
+signature
+on
+data,
+and
+that
+contains
+information
+about
+the
+identity
+of
+the
+certificate
+owner
+and
+the
+public
+key
+[7].
+returns
+it
+to
+the
+returns
+OBU
+in
+itit
+an
+to
+encrypted
+OBU
+returns
+format
+an
+encrypted
+it
+to
+the
+format
+OBU
+in
+an
+encrypted
+format
+an
+insecure
+channel.
+an
+insecure
+Then,
+channel.
+the
+Then,
+an the
+insecure
+cha
+using
+using
+using
+returns
+to
+the
+returns
+it
+the
+OBU
+an
+encrypted
+format
+using
+OBU
+an
+insecure
+in
+an
+ncrypted
+channel.
+format
+Then,
+the
+using an
+in
+n
+3
+discusses
+the
+necessary
+preliminary
+steps.
+Section
+5
+deals
+with
+the
+security
+Finally,
+the
+noteworthy
+feature
+of
+the
+proposed
+scheme
+is
+its
+utilization
+of
+a
+usses
+the
+eview.
+The
+literature
+proposed
+review.
+scheme
+The
+is
+proposed
+described
+scheme
+in
+Section
+is
+4,
+escribed
+while
+in
+Section
+4,
+while
+a
+private
+key
+and
+public
+key,
+generates
+a
+signature
+on
+data,
+and
+sends
+it
+to
+the RSU
+sends
+itnot
+to
+the
+RSU
+viaRSU
+an
+open
+etwork.
+while
+openkeeping
+channel itwhile
+concealed
+keeping
+from
+it
+concealed
+other
+third
+from
+parties;
+other
+third
+parties;
+sends
+ita
+to
+the
+via
+an
+open
+network.
+However,
+it
+only
+requires
+certificate
+management
+also a
+contributes
+to
+increase
+OBU
+generates
+OBU
+private
+generates
+key
+aa
+nd
+private
+a
+public
+OBU
+key
+key,
+generates
+and
+generates
+abut
+public
+a
+private
+key,
+signature
+generates
+key
+and
+onaan
+data,
+public
+signature
+and
+key,
+on
+generates
+data,
+and
+agenerate
+signatu
+OBU
+generates
+private
+key
+and
+OBU
+public
+generates
+key,
+generates
+a
+private
+a
+key
+signature
+and
+a
+on
+public
+data,
+key,
+and
+An
+analysis
+of
+performance
+is
+covered
+in
+Section
+6.is
+Concluding
+remark
+on
+the managing
+hyperelliptic
+curve
+to
+generate
+and
+verify
+signatures
+with
+less
+computational
+andforShamir
+via
+an
+open
+network.
+ntion.
+cessary
+discusses
+preliminary
+necessary
+steps.
+Section
+preliminary
+deals
+steps.
+with
+Section
+the
+security
+5
+deals
+with
+the
+security
+
+RSU:
+It5
+a
+5G-enabled
+base
+tation
+responsible
+for
+and
+conducting
+V-I
+,hy3
+thefeature
+noteworthy
+ofthe
+the
+feature
+proposed
+of
+the
+scheme
+proposed
+is
+its
+scheme
+utilization
+its
+a
+utilization
+of
+a the
+
+RSU:
+It
+is
+a
+5G-enabled
+base
+station
+responsible
+managing
+conducting
+V-I
+in
+the
+verification
+cost.
+To
+address
+certificate
+management
+issues,
+[8]
+proposed
+IDsends
+it
+tois
+the
+RSU
+sends
+via
+it
+an
+open
+RSU
+network.
+via
+sends
+open
+it
+network.
+to
+RSU
+an
+open
+network.
+sends
+it to
+to the
+the of
+RSU
+via an
+an
+open
+network.
+sends
+it via
+to the
+RSU
+viaand
+an open
+network.
+ed
+scheme
+is
+detailed
+in
+Section
+7.
+•
+RSU:
+It
+is
+a
+5G-enabled
+base
+station
+responsible
+for
+managing
+andits
+conducting
+V-I
+communication
+costs.
+performance
+tion.
+An
+analysis
+is
+covered
+of
+performance
+in
+Section
+is
+6.
+covered
+Concluding
+in
+Section
+remark
+6.
+on
+Concluding
+the
+remark
+on
+the
+communication.
+It
+is
+responsible
+itself
+with
+the
+DoT
+by
+sending
+for
+registering
+lliptic
+generate
+curve
+andtoverify
+generate
+signatures
+and
+verify
+with
+signatures
+less
+computational
+with
+less
+computational
+and
+and
+communication.
+It
+is
+responsible
+for
+registering
+itself
+with
+the
+DoT
+by
+sending
+itsmanaging
+PKC,
+in
+which
+the
+user’s
+identity
+is
+his
+public
+key,
+bypassing
+the
+need
+for
+certificates.
+
+RSU: It is a RSU:
+5G-enabled
+ItIt is
+base
+5G-enabled
+station
+
+responsible
+RSU:
+base
+It is
+station
+afor
+5G-enabled
+responsible
+managing
+and
+for
+managing
+station
+conducting
+responsible
+V-I
+conducting
+for
+V-I
+RSU:
+is aa
+5G-enabled
+base
+station
+RSU: It
+responsible
+is a base
+5G-enabled
+for
+managing
+baseand
+and
+station
+conducting
+responsible
+V-I for and
+man
+communication.
+It
+is
+responsible
+for
+registering
+itself
+with
+the
+DoT
+by
+sending
+its
+sed
+d
+in
+scheme
+Section
+is
+7.detailed
+in of
+Section
+7.article
+identity
+in
+an
+encrypted
+form.
+DoT
+generates
+a
+partial
+private
+key
+forDoT
+this
+unication
+costs.
+The
+subsequent
+sections
+this
+are Itin
+organized
+in
+theItIt The
+following
+manner:
+Section
+identity
+an
+encrypted
+form.
+The
+DoT
+generates
+a DoT
+partial
+private
+key
+for
+this with
+communication.
+communication.
+is
+responsible
+is
+responsible
+communication.
+It
+is
+responsible
+itself
+with
+the
+itself
+by
+with
+sending
+the
+its
+by
+sending
+itself
+its
+the
+DoT
+for
+registering
+for
+registering
+for
+registering
+communication.
+communication.
+It
+is
+responsible
+for
+registering
+itself
+is
+with
+responsible
+the
+DoT
+for
+by
+registering
+sending
+its
+itself
+wi
+ature Review
+identity
+in
+an
+form.
+The
+DoT
+generates
+aan
+partial
+private
+key for
+this identity
+identity
+and
+it
+to
+the
+RSU
+in RSU
+an
+encrypted
+format
+using
+insecure
+channel.
+discusses
+the literature
+review.
+The
+proposed
+scheme
+isencrypted
+described
+in
+Section
+4,
+while
+identity
+and
+returns
+it
+toThe
+the
+in
+an
+encrypted
+format
+using
+an
+insecure
+channel.
+identity
+anreturns
+identity
+encrypted
+in
+form.
+an
+encrypted
+DoT
+identity
+form.
+generates
+in
+The
+an
+DoT
+a
+encrypted
+partial
+generates
+private
+form.
+aa
+partial
+key
+The
+for
+DoT
+private
+this
+generates
+key
+a
+partial
+priva
+bsequent
+ns
+of
+this article
+sections
+are
+of this
+organized
+article
+in
+are
+the in
+organized
+following
+in
+manner:
+the
+following
+Section
+manner:
+Section
+identity
+in
+an
+encrypted
+form.
+The
+identity
+DoT
+generates
+in
+an
+encrypted
+partial
+form.
+private
+The
+key
+DoTfor
+for this
+generates a
+this
+p
+returns
+it to
+the
+RSU
+in
+an
+encrypted
+format
+using
+an
+insecure
+channel.
+Then, the
+rature
+Review
+VANET
+is
+a communication
+technology
+thatand
+enables
+V2V
+and
+communications
+Then, the
+RSU
+can
+produce
+a
+complete
+private
+key
+and
+public
+key.
+When
+the
+RSU
+ction
+discusses
+the The
+necessary
+preliminary
+teps.
+Section
+5V2I
+deals
+with
+the
+security
+Then,
+the
+RSU
+can
+produce
+a
+complete
+private
+key
+and
+public
+key.
+When
+the
+identity
+and
+returns
+identity
+to
+and
+the
+returns
+RSU
+in
+itit
+an
+to
+identity
+encrypted
+RSU
+and
+in
+format
+an
+returns
+encrypted
+using
+it
+to
+an
+the
+format
+insecure
+RSU
+using
+in
+an
+channel.
+encrypted
+an
+insecure
+format
+channel.
+using an
+in
+the
+eview.3
+literature
+The
+proposed
+review.
+scheme
+proposed
+is
+described
+scheme
+in
+is
+Section
+described
+4,
+while
+in
+Section
+4,
+while
+identity
+and
+returns
+to the
+the
+RSU
+in
+identity
+an
+ncrypted
+and
+returns
+format
+it
+to
+using
+the
+RSU
+an
+insecure
+in
+anRSU
+encrypted
+channel.
+format
+RSU
+can
+produce
+aOBU,
+complete
+private
+keyon
+and
+public
+key.
+When
+the RSU
+receives
+signed
+enication
+Internet,
+which
+can
+be
+aﬀected
+by
+several
+cyber-attacks.
+So,
+to
+avoid
+such
+VANET
+is
+technology
+a
+communication
+that
+enables
+technology
+V2V
+and
+that
+V2I
+enables
+communications
+V2V
+and
+V2I
+communications
+receives
+signed
+data
+from
+the
+itThen,
+verifies
+the
+signature
+and
+either
+accepts
+the
+valuation.
+An
+analysis
+of
+performance
+covered
+in
+Section
+6.
+Concluding
+remark
+the
+receives
+signed
+data
+from
+the
+OBU,
+verifies
+signature
+and
+either
+accepts
+the
+Then,
+the5 is
+RSU
+Then,
+can
+produce
+the
+RSU
+a
+can
+complete
+produce
+private
+a
+the
+complete
+key
+RSU
+and
+can
+private
+public
+produce
+key
+key.
+aand
+nd
+complete
+public
+private
+key
+andRSU
+public
+key.
+When
+When
+the
+RSU
+the
+iscusses
+cessary
+preliminary
+the
+necessary
+steps.
+preliminary
+Section
+steps.
+deals
+Section
+with
+the
+5
+deals
+security
+with
+the
+security
+Then,
+the
+RSU
+can
+produce
+a it
+complete
+Then,
+private
+the
+RSU
+key
+can
+produce
+akey.
+complete
+private
+key and
+public
+key.
+When
+the
+RSU
+data
+from
+OBU,
+it
+verifies
+the
+signature
+and
+either
+accepts
+the
+message
+or
+generates
+stances,
+the
+best
+solution
+is
+authentication,
+in
+which
+the
+participating
+nodes
+in
+the
+an
+e
+Internet,
+be
+aﬀected
+which
+by
+can
+several
+be
+aﬀected
+cyber-attacks.
+by
+several
+So,
+to
+cyber-attacks.
+avoid
+such
+So,
+to
+avoid
+such
+message
+or
+generates
+an
+error
+message
+depending
+on
+the
+results.
+RSU
+also
+works
+as
+oposed
+scheme
+is
+detailed
+in
+Section
+7.
+message
+or
+generates
+an
+error
+message
+depending
+on
+the
+results.
+RSU
+also
+works
+as
+receives
+signed
+receives
+data
+signed
+the
+OBU,
+data
+from
+it
+receives
+verifies
+the
+OBU,
+the
+signed
+signature
+itit
+verifies
+data
+from
+and
+the
+either
+signature
+OBU,
+accepts
+itand
+verifies
+the
+either
+the
+signature
+the
+eit
+performance
+An
+analysis of
+is covered
+performance
+in is
+Section
+covered
+6. in
+Concluding
+Section
+remark
+6.from
+Concluding
+on the
+remark
+on the
+receives
+signed
+data
+from
+the
+OBU,
+receives
+verifies
+signed
+the
+signature
+from
+and
+OBU,
+either
+itaccepts
+accepts
+verifies
+the
+theand
+signat
+error
+message
+depending
+on
+the
+RSU
+alsodata
+works
+as athe
+signature
+aggregator.
+T environment
+can
+authenticate
+other an
+before
+transferring
+data
+or nodes
+information.
+mstances,
+ution
+authentication,
+the 7.
+best
+solution
+in is
+which
+authentication,
+the
+participating
+in
+which
+nodes
+the
+in message
+participating
+the
+inresults.
+thethe
+a each
+signature
+aggregator.
+a
+aggregator.
+message
+orsignature
+generates
+message
+anor
+error
+generates
+an
+message
+depending
+error
+message
+or
+generates
+on
+depending
+results.
+an error
+RSUthe
+on
+message
+also
+results.
+worksRSU
+depending
+as
+also
+on
+works
+the
+results.
+as
+RSU
+d
+heme
+in isis
+Section
+detailed
+in
+Section
+7.
+message
+or
+generates
+an
+error
+message
+message
+depending
+or
+generates
+on
+the
+an
+results.
+error
+message
+RSU
+also
+depending
+works
+as
+on
+the
+•is
+DoT:
+DoTsignature,
+is a reliable
+third
+partya (TA) with significant processing power and
+ieve
+authentication,
+the
+best approach
+todata
+use
+aThe
+digital
+which
+allows
+Literature
+Review
+uthenticate
+T
+environment
+each
+can
+other
+authenticate
+before
+transferring
+each
+other
+before
+or
+information.
+transferring
+dataaor
+information.
+a signature
+aggregator.
+a
+signature
+aggregator.
+signature
+signature
+aggregator.
+aaggregator.
+signature
+aggregator.
+storage
+capability.
+When
+the
+DoT
+is
+provided
+with the identities of OBU and RSU,
+sign
+data
+with is
+histo
+private
+and is
+deliver
+it to
+the
+recipient,
+who
+can then
+use
+the
+ieve
+best
+authentication,
+approach
+theuse
+besta key
+approach
+digital
+signature,
+to use
+which
+digital
+allows
+signature,
+which
+allows
+a
+eto
+Review
+A
+VANET
+is a communication
+technology
+thata
+enables
+V2Va
+and V2I
+communications
+it
+produces
+a
+partial
+private
+key
+pair
+and
+sends
+it back to the OBU and RSU in two
+public
+tohis
+verify
+the
+signature.
+sader’s
+tothe
+private
+sign
+data
+keykey
+with
+and
+deliver
+private
+it to
+the
+recipient,
+and
+eliver
+who
+it
+tocan
+thethen
+recipient,
+use who
+can
+then
+usesuch
+Internet,
+which
+can
+bekey
+aﬀected
+by
+several
+cyber-attacks.
+So,
+to
+avoid
+ET
+is
+nication
+a
+communication
+technology
+that
+technology
+enables
+V2V
+that
+and
+enables
+V2I
+communications
+V2V
+and
+V2I
+communications
+packages
+an a valid
+encrypted
+form using
+an insecure channel. Then, both OBU and RSU
+a typical
+PKC-based
+signature,
+each user needs
+to in
+produce
+digital
+certificate
+nder’s
+erify
+the
+public
+signature.
+key
+to verify
+the signature.
+rcumstances,
+the
+best
+solution
+authentication,
+in
+which
+the
+participating
+nodes
+in the
+ernet,
+an
+be
+which
+aﬀected
+can
+by
+beseveral
+aﬀected isby
+cyber-attacks.
+several
+So, to
+cyber-attacks.
+avoid
+such to
+So,
+avoid such
+create
+their
+remaining
+private
+and
+public
+ntains
+information
+about
+the
+the
+certificate
+owner
+and
+public
+key
+[7]. keys for themselves.
+nANET
+signature,
+a
+typical
+PKC-based
+each
+user
+needs
+signature,
+toidentity
+produce
+each of
+user
+a
+needs
+to produce
+valid
+digital
+certificate
+validthe
+digital
+certificate
+environment
+can
+authenticate
+ach
+other
+before
+transferring
+data
+or the
+information.
+ution
+es,
+the
+is
+best
+authentication,
+solution
+is
+authentication,
+in
+which
+the
+participating
+in
+which
+the
+nodes
+participating
+in
+the
+nodes
+in
+ver,
+itthe
+not only
+requires
+certificate
+management
+but
+alsokey
+contributes
+an key
+increase
+ntains
+information
+identity
+of
+the
+about the
+certificate
+the
+identity
+owner
+of
+the
+andisthe
+certificate
+public
+[7].
+and the to
+public
+[7]. a
+obout
+achieve
+authentication,
+best
+approach
+use
+a owner
+digital
+which allows
+uthenticate
+ironment
+can
+each other
+authenticate
+before
+each
+transferring
+other
+before
+datatoor
+transferring
+information.
+datasignature,
+or information.
+verification
+cost.
+To
+address
+certificate
+management
+issues,
+Shamir
+[8]
+proposed
+IDver,
+res
+certificate
+itto
+not
+only
+management
+requires
+certificate
+but alsokey and
+management
+contributes
+to
+butit
+anto
+alsothe
+increase
+contributes to
+an can
+increase
+nder
+sign
+data
+who
+authentication,
+the
+best
+approach
+thewith
+is
+best
+to his
+useprivate
+approach
+a
+digital
+ispublic
+to use
+signature,
+adeliver
+digital
+which
+signature,
+allowsrecipient,
+aneed
+whichfor
+allows
+a then use
+n
+which
+thecost.
+user’s
+identity
+is
+his
+key,
+bypassing
+certificates.
+verification
+ddress
+certificate
+To
+management
+address
+certificate
+issues,
+Shamir
+management
+[8]
+proposed
+issues,the
+Shamir
+ID[8] proposed
+IDe
+sender’s
+public
+key
+to
+verify
+the
+signature.
+gn data
+s
+privatewith
+key his
+andprivate
+deliverkey
+it toand
+thedeliver
+recipient,
+it towho
+the can
+recipient,
+then use
+who can then use
+n
+dentity
+which
+is
+the
+his
+user’s
+public
+identity
+key,
+bypassing
+is
+his
+public
+the
+need
+key,
+for
+bypassing
+certificates.
+the
+need
+for
+certificates.
+In
+athe
+typical
+PKC-based
+signature, each user needs to produce a valid digital certificate
+verify
+public
+key
+signature.
+to
+verify
+the signature.
+contains
+information
+about
+identity
+of
+certificate
+owner
+and the
+public key [7].
+dat
+pical
+signature,
+PKC-based
+each
+signature,
+user
+needs
+eachthe
+to
+produce
+user
+needs
+a valid
+tothe
+produce
+a
+digital
+certificate
+valid
+digital
+certificate
+owever,
+it
+not
+only
+requires
+certificate
+management
+but
+also
+contributes
+an increase
+sbout the
+information
+identity
+about
+of the
+the identity
+certificateof the
+owner and
+certificate
+the public
+owner key
+and[7].
+the public keyto
+[7].
+the
+verification
+cost.
+To
+address
+certificate
+management
+issues,
+Shamir
+[8]
+proposed
+IDres
+not only
+certificate
+requires
+management
+certificatebut also
+management
+contributes
+but also
+to an
+contributes
+increase to an increase
+KC,
+in
+which
+the
+user’s
+identity
+is
+his
+public
+key,
+bypassing
+the
+need
+for
+certificates.
+cation
+ddresscost.
+certificate
+To address
+management
+certificateissues,
+management
+Shamir [8]
+issues,
+proposed
+Shamir
+ID[8] proposed ID-
+
+•
+
+DoT: The DoT is a reliable third party (TA) with significant processing power and
+storage capability. When the DoT is provided with the identities of OBU and RSU, it
+produces a partial private key pair and sends it back to the OBU and RSU in two
+6 of 16
+packages in an encrypted form using an insecure channel. Then, both OBU and RSU
+create their remaining private and public keys for themselves.
+
+Future Internet 2023, 15, 266
+
+Figure 2. Network model of the proposed CLAS scheme.
+Figure 2. Network model of the proposed CLAS scheme.
+
+3.4. Syntax of the Proposed CLAS Scheme
+
+The of
+syntax
+of our CLAS
+3.4. Syntax
+the Proposed
+CLAS contains
+Scheme the following sub-steps:
+Setup:
+The
+DoT
+can
+play
+the role
+a TA, andsub-steps:
+it will be able to run this phase upon
+The syntax of our CLAS contains
+theofollowing
+receiving
+the security
+in which
+it can
+choose
+the hyperelliptic
+curve.
+Then,
+Setup: The
+DoT canparameter,
+play the role
+of a TA,
+andfirst
+it will
+be able
+to run this phase
+upon
+the DoT can set the private and public keys. Further, it generates public param and
+receiving the security parameter, in which it can first choose the hyperelliptic curve. Then,
+publishes it to the network.
+the DoT can set the private and public keys. Further, it generates public param and
+Partial Private Key Generation (PRPKG): Any participating user who needs a partial
+publishes it to the network.
+private key can first encrypt their real identity using the common secret key between
+Partial Private Key Generation (PRPKG): Any participating user who needs a partial
+the DoT and that particular user. After doing this, the user sends an encrypted identity
+private key can first encrypt their real identity using the common secret key between the
+to the DoT using an insecure network. Then, the DoT decrypts the encrypted identity
+DoT and that particular user. After doing this, the user sends an encrypted identity to the
+and recovers the real identity. Further, the DoT generates the partial private key for that
+DoT using an insecure network. Then, the DoT decrypts the encrypted identity and
+particular identity, encrypts it, and delivers it to the user using an insecure network.
+recovers the real identity. Further, the DoT generates the partial private key for that
+Private Key Generation (PRKG): In this section, the user generates his public and private
+particular identity, encrypts it, and delivers it to the user using an insecure network.
+key pairs.
+Private Key Generation (PRKG): In this section, the user generates his public and
+Signature Generation (SIGG): This section will be run by the OBU to generate and send
+private
+key pairs.
+the signature
+tuple (SOBU , WOBU ) to the RSU.
+Signature
+Generation
+(SIGG):
+ThisThis
+section
+willwill
+be run
+and
+send
+Signature
+Verifications
+(SIGV):
+section
+runby
+bythe
+theOBU
+RSUto
+togenerate
+verify the
+signature
+thetuple
+signature
+tuple
+(𝑆
+,
+𝑊
+)
+to
+the
+RSU.
+(SOBU , WOBU ).
+Signature Verifications (SIGV): This section will run by the RSU to verify the signature
+tuple
+, 𝑊 ).
+4. (𝑆
+Proposed
+Scheme’s Construction
+The proposed scheme consists of the steps listed below, and Table 1 outlines the
+4. fundamental
+Proposed Scheme’s
+symbolsConstruction
+utilized in its construction. The construction of the proposed scheme
+
+The illustrated
+proposed in
+scheme
+consists of the steps listed below, and Table 1 outlines the
+is also
+Figure 3.
+fundamental symbols utilized in its construction. The construction of the proposed
+scheme
+is also
+illustrated
+3.
+Table 1.
+Symbols
+used for in
+theFigure
+construction
+of the proposed scheme.
+No1. Symbols
+Notation
+Descriptions
+Table
+used for the construction
+of the proposed scheme.
+1
+(Hyper )
+The hyperelliptic curve of genus 2
+
+No
+1 2
+2 3
+
+Notation
+Descriptions
+ield
+A finite field of the hyperelliptic curve with order p
+F
+p
+)
+(H
+The hyperelliptic
+curve of genus 2
+private
+DoT
+F Dotp A finiteThe
+field of
+thekey of
+hyperelliptic
+curve with order p
+
+4
+
+Dotpb
+
+5
+
+D
+
+6
+
+H01 , H02 , H03
+
+The public key of DoT
+Divisor on hyperelliptic curve
+Hash Function with irreversibility
+
+Future Internet 2023, 15, 266
+
+7 of 16
+
+Table 1. Cont.
+No
+
+Notation
+
+Descriptions
+
+7
+
+PBfrm
+
+Public parameter (param)
+
+8
+
+Usr
+
+Represents the participating user
+
+9
+
+Gusr
+
+DoT, the random value selected by user
+
+10
+
+Kusr
+
+A secret shared key between user and DoT
+
+11
+
+EIDusr
+
+Encrypted identity of user
+
+12
+
+(Fusr , Lusr )
+
+Public key pair of users
+
+13
+
+(Gusr , Pusr )
+
+Private key pair of users
+
+14
+
+SOBU
+
+Future Internet 2023, 15, x FOR PEER REVIEW
+
+8 of 17
+
+Represent signature generated by OBU
+
+𝐼𝐷
+.P(𝐸𝐼𝐷
+), compute
+= 𝐻 (𝐸𝐼𝐷 , 𝐹 , 𝐷𝑜𝑡 ),
+15 = 𝐷
+Partial 𝐻
+Private =
+key𝐻of (𝐾
+users ), 𝐻
+usr
+select 𝐽
+from 𝐹
+, compute 𝑃
+=𝐽
++ 𝐷𝑜𝑡 . 𝐻
+, calculate 𝐿
+= 𝐽 .𝐷,
+16
+EKusr
+Represents an encryption procedure
+=𝐸
+. (𝑃 , 𝐿 ) , and send 𝑃𝑃𝐾𝐺
+to new devices through an
+encrypt 𝑃𝑃𝐾𝐺
+17
+DKusrA new Represents
+the decryption
+procedure
+open
+channel.
+device then
+recovers
+(𝑃 , 𝐿 ) as (𝑃 , 𝐿 ) =
+) as of
+hisuser
+public key, sets (𝐺 , 𝑃 ) as his private key, and
+𝐷18 (𝑃𝑃𝐾𝐺 ID),usrsets (𝐹 , 𝐿Identity
+he can start communications with other devices if he wants.
+OBU
+
+DoT
+
+RSU
+
+•
+•
+•
+
+Setup:
+•
+Choose the hyperelliptic curve (𝐻
+)
+•
+Defines the field 𝐹
+for 𝐻
+•
+Chooses 𝐷𝑜𝑡 as a private key
+•
+Compute 𝐷𝑜𝑡 = 𝐷𝑜𝑡 . 𝐷 as a
+public key
+•
+Choose three hash functions ( 𝐻 ,
+𝐻 ,𝐻 )
+•
+Generate
+the
+param
+𝑃𝐵
+=
+{𝐻
+, 𝐷, 𝐻 , 𝐻 , 𝐻 , 𝐹
+, 𝐷𝑜𝑡 }
+PRKG:
+•
+𝐾 = 𝐹 . 𝐷𝑜𝑡
+•
+𝐼𝐷 = 𝐷 . (𝐸𝐼𝐷 )
+•
+𝐻
+= 𝐻 (𝐾 ), 𝐻
+•
+𝐻 𝐸𝐼𝐷 , 𝐹 , 𝐷𝑜𝑡
+•
+Select 𝐽
+•
+𝑃 = 𝐽 + 𝐷𝑜𝑡 . 𝐻
+•
+𝐿 = 𝐽 .𝐷
+•
+𝑃𝑃𝐾𝐺 = 𝐸 . (𝑃 , 𝐿 )
+
+•
+•
+
+Select 𝐺
+Compute 𝐾
+=𝐺
+=
+Compute 𝐸𝐼𝐷
+𝐸
+. (𝐼𝐷 )
+=𝐺
+Compute 𝐹
+
+•
+
+. 𝐷𝑜𝑡
+
+.𝐷
+
+𝑬𝑰𝑫𝑶𝑩𝑼 , 𝑭𝑶𝑩𝑼
+
+PRKG:
+
+
+
+
+
+(𝑃
+
+,𝐿
+
+)=
+
+𝐷
+
+(𝑃𝑃𝐾𝐺
+
+Set (𝐹 , 𝐿
+public key
+Set (𝐺 , 𝑃
+private key
+
+•
+
+•
+
+𝑷𝑷𝑲𝑮𝑶𝑩𝑼
+
+Compute 𝐹
+
+=𝐺
+
+.𝐷
+
+PRKG:
+
+𝑬𝑰𝑫𝑹𝑺𝑼 , 𝑭𝑹𝑺𝑼
+
+)
+
+Select 𝐺
+Compute 𝐾
+=
+𝐺 . 𝐷𝑜𝑡
+=
+Compute 𝐸𝐼𝐷
+𝐸
+. (𝐼𝐷 )
+
+ (𝑃
+
+𝑷𝑷𝑲𝑮𝑹𝑺𝑼
+
+𝐷
+
+,𝐿
+
+)=
+
+(𝑃𝑃𝐾𝐺
+
+)
+
+) as his
+
+ Set (𝐹 , 𝐿 ) as
+his public key
+ Set (𝐺 , 𝑃 ) as
+his private key
+
+) as his
+
+SIGG:
+SIGV:
+
+•
+
+Selects 𝑇
+
+•
+
+𝑊
+
+=𝑇
+
+•
+
+𝐻
+
+= 𝐻 (𝐸𝐼𝐷
+
+•
+
+𝑆
+
+= (𝑇
+
+.𝐷
+
++𝐻
+
+,𝐹
+(𝐺
+
+,𝐿
+
+)
+
+,𝑊
++𝑃
+
+))
+
+(𝑺𝑶𝑩𝑼 , 𝑾𝑶𝑩𝑼 )
+
+•
+
+𝐻
+
+= 𝐻 (𝐸𝐼𝐷
+
+,𝐹
+
+,𝐿
+
+•
+
+𝐻
+
+= 𝐻 (𝐸𝐼𝐷
+
+,𝐹
+
+, 𝐷𝑜𝑡 )
+
+•
+
+Verify if 𝑆
+𝐻
+
+(𝐹
+
+.𝐷 − 𝑊
++𝐿
+
+,𝑊
+
+)
+
+=
+
++𝐻
+
+𝐷𝑜𝑡 )
+
+.𝐷 + 𝐻
+
+(𝐺
+
+Figure 3. Construction of the proposed CLAS scheme.
+
+Figure 3. Construction of the proposed CLAS scheme.
+
+Correctness
+RSU will verify the signature if the following steps are satisfied.
+
+𝑆
+
+.𝐷 − 𝑊
+
+𝑆
+
+.𝐷 − 𝑊
+
+= 𝑇
+
++𝐻
+
+=𝐻
+(𝐺
+
+(𝐹
++𝑃
+
++𝐿
+
++𝐻
+
+) .𝐷 − 𝑊
+
+𝐷𝑜𝑡 )
+== (𝑇
+
++
+
+Future Internet 2023, 15, 266
+
+8 of 16
+
+Setup: The DoT can play the role of a TA, and it will be able to run this phase upon
+receiving the security parameter k, in which it can first choose the hyperelliptic curve
+(Hyper ) that defines field Field p , a devisor of 80 bis, and then it chooses Dot p as a private
+key from Field p and computes Dot pb = Dot p .D as a public key. Further, it can choose
+
+three hash functions, H01 , H02 , and H03 and the public param PB f rm = Hyper , D, H01 ,
+o
+H02 , H03 , Field p , Dot pb .
+Partial Private Key Generation (PRPKG): Any participating user Usr who needs a partial
+private key can first select Gusr from Field p , compute Kusr = Gusr .Dot pb , calculate EIDusr =
+EKusr .( IDusr ), compute Fusr = Gusr .D, and send (EIDusr , Fusr ) to DoT through the internet.
+Upon receiving (EIDusr , Fusr ), DoT can compute Kusr = Fusr .Dot p , recover
+user identity
+
+
+as IDusr = DKusr .( EIDusr ), compute H1usr = H01 (Kusr ), H2usr = H02 EIDusr , Fusr , Dot pb ,
+
+select Jusr from Field p , compute Pusr = Jusr + Dot p .H2usr , calculate Lusr = Jusr .D, encrypt
+PPKGusr = EKusr .( Pusr , Lusr ), and send PPKGusr to users through an open channel.
+Private Key Generation (PRKG): Upon receiving PPKGusr , any participating user Usr
+can recover ( Pusr , Lusr ) as ( Pusr , Lusr ) = DKusr ( PPKGusr ) and set (Fusr , Lusr ) as his public
+key and (Gusr , Pusr ) as his private key.
+Signature Generation (SIGG): This section will be run by the OBU using the following steps:
+
+•
+
+It selects TOBU from Field p and computes WOBU = TOBU .D;
+
+•
+
+It computes H3usr = H03 ( EIDusr , Fusr , Lusr , WOBU );
+
+•
+
+It computes SOBU = ( TOBU + H3usr ( Gusr + Pusr )) and sends (SOBU , WOBU ) to the RSU.
+
+Signature Verifications (SIGV): This section will be run by the RSU using the following steps:
+
+
+• Computes H3usr = H03 ( EIDusr , Fusr , Lusr , WOBU ) and H2usr = H02 EIDusr , Fusr , Dot pb ;
+
+
+•
+Verifies if SOBU .D − WOBU = H3usr Fusr + Lusr + H2usr Dot pb , if it is satisfied.
+Aggregate Signature Generation and Verifications: This part is the same as performed
+in [29].
+Adding New Device: If a new device wants to add itself to the network in our proposed
+scheme, it will first perform the following procedures: it can first select Gnew from Field p ,
+compute Knew = Gnew .Dot pb , calculate EIDnew = EKnew .( IDnew ), compute Fnew = Gnew .D,
+and send (EIDnew , Fnew ) to DoT through the internet. Upon receiving (EIDnew , Fnew ), DoT
+can compute Knew = Fnew .Dot p , recover new
+ device identity as ID
+ new = DKnew .( EIDnew ),
+compute H1new = H01 (Knew ), H2new = H02 EIDnew , Fnew , Dot pb , select Jnew from Field p ,
+compute Pnew = Jnew + Dot p .H2new , calculate Lnew = Jnew .D, encrypt PPKG new =
+EKnew ( Pnew , Lnew ), and send PPKG new to new devices through an open channel. A new
+device then recovers ( Pnew , Lnew ) as ( Pnew , Lnew ) = DKnew ( PPKGnew ), sets (Fnew , Lnew ) as
+his public key, sets (Gnew , Pnew ) as his private key, and he can start communications with
+other devices if he wants.
+Correctness
+RSU will verify the signature if the following steps are satisfied.
+
+
+SOBU .D − WOBU = H3usr Fusr + Lusr + H2usr Dot pb
+SOBU .D − WOBU = ( TOBU + H3usr ( Gusr + Pusr )).D − WOBU = ( TOBU .D + H3usr ( Gusr
++ Pusr ).D ) − WOBU = (WOBU + H3usr ( Gusr + Pusr ).D ) − WOBU = ( H
+3usr ( Gusr + Pusr ).D )
+= ( H3usr ( Gusr .D + Pusr .D
+)) = ( H3usr Gusr .D + Jusr + Dot p .H2usr .D =
+ ( H3usr ( Gusr .D
++ Jusr .D + Dot p .H2usr
+.D
+=
+H
+G
+.D
++
+J
+.D
++
+Dot
+.D.H
+(
+(
+usr
+usr
+p
+3usr
+2usr )) = H3usr ( Fusr
+
+
++ Lusr + H2usr Dot pb , hence proved.
+
+Future Internet 2023, 15, 266
+
+9 of 16
+
+5. Security Analysis
+In this phase, with the help of Theorems 1 and 2, we are going to prove that the
+proposed aggregate signature scheme is unforgeable against Type 1 (FGR1 ) and Type 2
+(FGR2 ) forgers.
+Theorem 1. Utilizing a non-negligible probability nOnpb , if Type 1 (FGR1 ) forger wants to forge the
+proposed certificateless aggregate signature within a polynomial time successfully, then there will be a
+challenger (FCR) who can serve his services
+facilitator for
+ as a 
+solving the hyperelliptic curvediscrete
+logarithm problem with the probability 1 − X1
+
+nOnpb
+XQ Husri
+
+1− Q
+
+1
+
+PRPKG + QSIGG + QSIGV +1
+
+, where
+
+Q PRPKG , QSIGG , QSIGV , X, nOnpb and Q Husri represent Partial Private Key Generation Query,
+Signature Generation Query, Signature Verifications Query, Natural Logarithm, Non-negligible
+Probability, and Hash Queries, respectively.
+Proof. A facilitator called FCR will solve the hyperelliptic curve discrete logarithm problem
+if he receives D, HDLP = x.D and his task will be to extract x from HDLP. 
+Setup: FCR calls the Setup algorithm in which it sends the param PBfrm to FGR1 and keeps
+private Dotp .
+Query Phase: FGR1 selects the identity IDusri and FCR has no access to IDusri . Then, FCR
+selects the identity IDusri ∗ and performs the following queries with FGR1 :
+H01 Query: FCR initializes an empty list (LH1usr ). When FGR1 generates this query, FCR
+checks the tuple (Kusr , H1usr ) in L H1usr . If the value H1usr exists, then it sends H1usr to FGR1 ;
+otherwise, it randomly picks H1usr from Field p , sends H1usr to FGR1 and updates L H1usr
+with the value H1usr .
+H02 Query: FCR initializes an empty list (L
+H2usr ). When FGR1 generates this query, FCR
+
+checks the tuple EIDusr , Fusr , Dot pb , H2usr in L H2usr . If the value H2usr exists, then it sends
+H2usr to FGR1 ; otherwise, it randomly picks H2usr from Field p , sends H2usr to FGR1 and
+updates L H2usr with the value H2usr .
+H03 Query: FCR initializes an empty list (LH3usr ). When FGR1 generates this query, FCR
+checks the tuple ( EIDusr , Fusr , Lusr , WOBU , H3usr ) in L H3usr . If the value H3usr exists, then it
+sends H3usr to FGR1 ; otherwise, it randomly picks H3usr from Field p , sends H3usr to FGR1
+and updates L H3usr with the value H3usr .
+Secret Value Generation (SVG) Query: FCR initializes an empty list (LSVG ). When FGR1
+generates this query, FCR checks the value ( Gusr ) in LSVG . If the value Gusr exists, then it
+sends Gusr to FGR1 ; otherwise, it randomly picks Gusr from Field p , sends Gusr to FGR1 and
+updates LSVG with the value Gusr .
+
+PRPKG Query: FCR initializes an empty list (LPRPKG ). When FGR1 generates this query,
+FCR checks the value ( Pusr ) in L PRPKG . If the value Pusr exists, then it sends Pusr to FGR1 ;
+otherwise, it randomly picks Pusr from Field p , sends Pusr to FGR1 and updates L PRPKG with
+the value Pusr .
+Public Key Generation (PBKG) Query: FCR initializes an empty list (LPBKG ). When FGR1
+generates this query, FCR checks the value ( Fusr , Lusr ) in L PBKG . If the tuple ( Fusr , Lusr )
+exists, then it sends ( Fusr , Lusr ) to FGR1 ; otherwise, it performs the following steps:
+If IDusri ! = IDusri ∗ , it chooses Gusr , Pusr , H2usr from Field p , computes Fusr = Gusr .D,
+and calculates Lusr = Pusr .D − H2usr .Dot pb . Then, it sends ( Fusr , Lusr ) to FGR1 and updates
+L PBKG with the value ( Fusr , Lusr );
+If IDusri = IDusri ∗ , it chooses Gusr , Jusr from Field p , computes Fusr = Gusr .D, and
+calculates Lusr = Jusr .D. Then, it sends ( Fusr , Lusr ) to FGR1 and updates L PBKG with the
+value ( Fusr , Lusr ).
+
+Future Internet 2023, 15, 266
+
+10 of 16
+
+Public Key Replaced (PKR) Query: FGR1 chooses the new public key tuple (Fusr ∗ , Lusr ∗ )
+and sends it to the FCR; then, FCR includes (Fusr ∗ , Lusr ∗ ) into LPBKG as a replacement of
+the public key.
+SIGG Query: FCR initializes an empty list (LSIGG ). When FGR1 generates this query, FCR
+checks the value ( IDusri , m, Gusr , Pusr ) in LSIGG . If the value Pusr exists, then it selects from
+Field p , computes WOBU = TOBU .D, computes H3usr = H03 ( EIDusr , Fusr , Lusr , WOBU ), computes SOBU = ( TOBU + H3usr ( Gusr + Pusr )) and sends (SOBU , WOBU ) to FGR1 . Otherwise,
+it selects SOBU from Field p and sends it to the FGR1 .
+Forgery: When the above queries are completed successfully, FGR1 can return a forged
+certificateless signature tuple (SOBU ∗ , WOBU ∗ ). By using the concept of the forking lemma,
+FGR1 can return another forged certificateless signature tuple (SOBU ∗1 , WOBU ∗1 ). So these
+two tuples will be only true if FCR gets the valid value of x.
+
+ n
+
+To satisfy this theorem, the results generated via FCR must meet the following conditions:
+FCRC1 : FCR does not stop the querying process and its probability (1 − X1 ).
+FCRC1 : FCR does not stop the forging process for signature and its probability
+
+Onpb
+
+XQ Husri
+
+.
+
+
+
+1
+FCRC1 : (SOBU ∗ , WOBU ∗ ) is a valid tuple, and its probability 1 − QPRPKG +QSIGG
+1 .
+SIGV +
++Q
+n
+Onpb
+So,
+the probability of (FCRC1 .FCRC2 .FCRC2 ) as ((1 − X1 ) XQ H
+usri
+
+
+1
+1 − QPRPKG +QSIGG +QSIGV +1 .
+Theorem 2. Utilizing a non-negligible probability nOnpb , if Type 2 (FGR2 ) forger wants to
+forge our certificateless aggregate signature within a polynomial time successfully, then there
+will be a challenger (FCR) who can serve his services as a facilitator
+for 
+solving the hyperelliptic
+
+
+curve discrete logarithm problem with the probability 1 − X1
+
+nOnpb
+XQ Husri
+
+1− Q
+
+1
+
+SIGG + QSIGV +1
+
+,
+
+where QSIGG , QSIGV , X, nOnpb and Q Husri represent Signature Generation Query, Signature Verifications Query, Natural Logarithm, Non-negligible Probability, and Hash Queries, respectively.
+Proof. A facilitator called FCR will solve the hyperelliptic curve discrete logarithm problem
+if he receives D, HDLP = x.D and his task will be to extract x from HDLP. 
+Setup: FCR calls the Setup algorithm in which he sends the param PBfrm and Dotp to FGR2
+Query Phase: FGR2 selects the identity IDusri and FCR has no access to IDusri . Then, FCR
+selects the identity IDusri ∗ and performs the following queries with FGR2 :
+H01 Query: FCR sets a list (LH1usr ), which is empty. When FGR2 generates this query, FCR
+checks the tuple in LH1usr . If the value H1usr exists, then it sends H1usr to FGR1 ; otherwise,
+it randomly picks H1usr from Field p , sends H1usr to FGR2 and updates LH1usr with the
+value H1usr .
+H02 Query:
+ FCR sets an empty list (L
+ H2usr ). When FGR2 generates this query, FCR checks
+the tuple EIDusr , Fusr , Dot pb , H2usr in L H2usr . If the value H2usr exists, then it sends H2usr
+
+to FGR2 ; otherwise, it randomly picks H2usr from Field p , sends H2usr to FGR2 and updates
+L H2usr with the value H2usr .
+H03 Query: FCR sets an empty list (LH3usr ). When FGR2 generates this query, FCR checks
+the tuple ( EIDusr , Fusr , Lusr , WOBU , H3usr ) in L H3usr . If the value H3usr exists, then it sends
+H3usr to FGR2 ; otherwise, it randomly picks H3usr from Field p , sends H3usr to FGR2 and
+updates L H3usr with the value H3usr .
+Secret Value Generation (SVG) Query: FCR sets an empty list (LSVG ). When FGR2
+generates this query, FCR checks the value ( Gusr ) in LSVG . If the value exists, then it
+
+Future Internet 2023, 15, 266
+
+11 of 16
+
+sends Gusr to FGR2 ; otherwise, it randomly picks Gusr from Field p , sends Gusr to FGR2 and
+updates LSVG with the value Gusr .
+Public key Generation (PBKG)Query: FCR sets an empty list (LPBKG ). When FGR2 generates this query, FCR checks the value ( Fusr , Lusr ) in L PBKG . If the tuple ( Fusr , Lusr ) exists,
+then it sends ( Fusr , Lusr ) to FGR2 ; otherwise, it performs the following steps:
+If IDusri ! = IDusri ∗ , it chooses Gusr , Pusr , H2usr from Field p , computes Fusr = Gusr .D,
+and calculates Lusr = Pusr .D − H2usr .Dot pb . Then, it sends ( Fusr , Lusr ) to FGR2 and updates
+L PBKG with the value ( Fusr , Lusr );
+If IDusri = IDusri ∗ , it chooses Gusr , Jusr from Field p , computes Fusr = Gusr .D, and
+calculates Lusr = Jusr .D. Then, it sends ( Fusr , Lusr ) to FGR2 and updates L PBKG with the
+value ( Fusr , Lusr ).
+SIGG Query: FCR sets an empty list (LSIGG ). When FGR2 generates this query, FCR
+checks the value ( IDusri , m, Gusr , Pusr ) in LSIGG . If the value Pusr exists, then it selects TOBU
+from Field p and computes WOBU = TOBU .D, computes H3usr = H03 ( EIDusr , Fusr , Lusr , WOBU ),
+computes SOBU = ( TOBU + H3usr ( Gusr + Pusr )) and sends (SOBU , WOBU ) to FGR1 . Otherwise, it selects SOBU from Field p and sends it to FGR2 .
+Forgery: When the above queries are completed successfully, FGR1 can return a forged
+certificateless signature tuple (SOBU ∗ , WOBU ∗ ). By using the concept of the forking lemma,
+FGR1 can return another forged certificateless signature tuple (SOBU ∗1 , WOBU ∗1 ). So these
+two tuples will be only true if FCR gets the valid value of x.
+To satisfy this theorem, the results generated via FCR must meet the following conditions:
+FCRC1 : does not stop the querying process and its probability (1 − X1 ).
+FCRC1 : FCR does not stop the forging process for signature and its probability
+
+nOnpb
+XQ Husri
+
+.
+
+
+
+FCRC1 : (SOBU ∗ , WOBU ∗ ) is a valid tuple and its probability 1 − QSIGG +1QSIGV +1 .
+ n
+
+
+1
+1
+−
+So, the probability of (FCRC1 .FCRC2 .FCRC2 ) as ((1 − X1 ) XQOnpb
+QSIGG + QSIGV +1 ).
+H
+usri
+
+6. Performance Comparison
+This section compares the proposed scheme with relevant schemes in terms of security
+requirements, computational cost, and communication overhead.
+6.1. Security Requirements Comparisons
+In this section, we have compared our proposed scheme with the existing scheme
+based on security requirements that are unforgeability against FGR1 (UF1), unforgeability
+against FGR2 (UF2), sender anonymity (SA) at the time of request generation for the partial
+private key, receiver anonymity (RA) at the time of request generation for the partial private
+key, and removal of the concept of the secure channel during distribution of the partial
+private key (PPK). Therefore, we used YES if the scheme satisfies the security requirement
+and NO if otherwise. Based on Table 2, we can conclude that the proposed scheme satisfies
+all of the above security claims. In contrast, existing schemes such as Cahyadi et al. [30],
+Keitaro and Ogata [19], Yulei and Chen [28], and Yibo et al. [29] do not meet the SA, RA,
+and PPK requirements.
+Table 2. Security attributes comparison.
+Scheme
+
+UF1
+
+UF2
+
+SA
+
+RA
+
+PPK
+
+Eko Cahyadi et al. [30]
+
+YES
+
+YES
+
+NO
+
+NO
+
+NO
+
+Yulei and Chen [28]
+
+YES
+
+YES
+
+NO
+
+NO
+
+NO
+
+Yibo et al. [29]
+
+YES
+
+YES
+
+NO
+
+NO
+
+NO
+
+Keitaro and Ogata [19]
+
+YES
+
+YES
+
+NO
+
+NO
+
+NO
+
+Proposed
+
+YES
+
+YES
+
+YES
+
+YES
+
+YES
+
+tialtheprivate
+key
+(PPK).
+partial
+key
+we
+(PPK).
+used
+partial
+YES
+Therefore,
+private
+if
+key
+we
+(PPK).
+used
+Therefore,
+YES
+if the
+used YES
+if the
+the
+scheme
+the we
+security
+scheme
+satisfies
+the scheme
+securitysatisfies the security
+Yulei
+and
+Chen
+Yulei
+and
+Yulei
+Chen
+and
+Chen
+[28]
+et
+SA, RA,
+and
+PPK
+meet Therefore,
+requirements.
+theprivate
+SA,
+RA,
+and
+meet
+PPK
+the
+requirements.
+SA,
+RA,
+and
+PPKsatisfies
+requirements.
+YES
+YES
+NO
+NO
+NO
+YES
+YES
+YES on
+YES
+NO
+NO
+NO
+NO
+NOproposed
+NO
+uirement and NO if
+requirement
+otherwise. and
+Based
+NO
+on[28]
+requirement
+ifTable
+otherwise.
+2,
+we
+and
+can
+Based
+NO
+conclude
+on
+if
+otherwise.
+Table
+that
+2,
+we
+the
+Based
+can
+proposed
+conclude
+Table
+that
+2,
+we
+the
+can
+proposed
+conclude
+that
+the
+[28]
+[28]
+Yibo et al. [29]
+eme
+satisfiesattributes
+all ofTable
+scheme
+the
+above
+satisfies
+security
+allYibo
+of
+scheme
+claims.
+the
+above
+In
+satisfies
+contrast,
+all
+of
+existing
+claims.
+the
+above
+schemes
+In
+contrast,
+security
+such as
+existing
+claims.
+In
+schemes
+contrast,
+such
+existing
+as NO
+schemes
+such
+as Ogata
+le 2. Security
+comparison.
+2.
+Security
+attributes
+Table
+comparison.
+Security
+attributes
+comparison.
+Yibo
+et
+al.
+[29]
+YES
+YES
+NO
+NONO
+et2.al.
+Yibo
+[29]
+t security
+al. [29]
+YES
+YES
+YES
+YES NO
+NO
+NO
+NO
+NO
+Keitaro
+and
+hyadi et al. [30], Keitaro
+Cahyadi
+and et
+Ogata
+al. [30],
+[19],
+Keitaro
+Cahyadi
+Yulei
+and
+and
+et al.
+Chen
+Ogata
+[30],
+[28],
+[19],
+Keitaro
+and
+Yulei
+Yibo
+and
+and
+Ogata
+Chen
+[19],
+[28],
+YuleiYibo
+and
+and et
+Chen
+[28],doand
+et al.
+[29]
+do not
+al. [29]
+notYibo et al. [29] do not
+Keitaro
+andUF1
+Ogata
+Keitaro
+Keitaro
+and
+Ogata
+and
+[19]
+Scheme
+UF1
+Scheme
+UF2
+Scheme
+SAOgata
+UF2
+UF1
+RA
+SA
+PPKUF2YESRA
+PPK
+YES
+NONO SANO
+NONO RANO
+NONOPPKNO
+YES
+YES YES
+YES
+et the
+SA, RA, and PPK
+meet
+requirements.
+the
+SA,
+RA, and
+meet
+PPK
+the
+requirements.
+SA,
+RA,
+and
+PPK
+requirements.
+[19][19]
+[19]
+Future Internet 2023, 15, 266
+12 of
+16
+Proposed
+o Cahyadi et al.
+Eko Cahyadi et al. Eko Cahyadi et al.
+YES
+YES
+YES
+NO
+YES
+YES
+NO
+NO
+NO
+YES
+NO
+NO
+NO
+NO
+NO
+Proposed
+YES
+YES
+YES
+YES
+YES
+Proposed
+Proposed YES
+YES
+YES
+YES YES
+YES YES
+YES YES
+YES
+[30]
+[30]
+le 2. [30]
+Security attributes
+Table 2.
+comparison.
+Security attributes
+Table 2.
+comparison.
+Security attributes comparison.
+6.2. Computational C
+ulei and Chen
+Yulei and Chen
+Yulei and Chen
+Scheme
+UF1
+UF1
+Scheme
+SA
+UF1
+RA
+SA
+PPKUF2
+RA
+SA
+PPK
+RA
+PPK
+YEScheme6.2.6.2.UF2
+YES
+YES
+NO
+YES
+YES
+NO
+NO
+YES NO
+NONO
+NO
+NO
+Computational
+Cost
+Computational
+6.2.
+Computational
+Cost
+CostNO
+6.2.
+Computational
+CostUF2
+The computati
+[28]
+[28]
+[28]
+o Cahyadi et al.
+Eko Cahyadi et al.TheThe
+Eko
+Cahyadi
+et
+al.
+computational
+cost
+reveals
+how
+much
+processing
+is
+required
+on
+both
+e
+sender
+and
+eceiver
+ends
+computational
+The
+computational
+cost
+reveals
+cost
+reveals
+how
+much
+how
+processing
+much
+processing
+is
+required
+is
+required
+on
+both
+on
+the
+both
+sender
+the
+sender
+The
+computational
+cost
+reveals how
+processingNO
+is NO
+requiredNO
+on both theNO
+sender
+Yibo et al. [29]
+Yibo et al. [29] YES Yibo
+YES
+YESet al. [29]
+NO YES
+YES
+NO
+NO
+NOmuch
+YES NO
+[30]
+[30] andand
+[30]
+receiver
+ends
+of
+the
+communication.
+Major
+procedures
+like
+modular
+exponential,
+bilinear
+pairing
+op
+receiver
+and
+receiver
+ends
+of
+ends
+the
+communication.
+of
+the
+communication.
+Major
+procedures
+Major
+procedures
+like
+modular
+like
+modular
+exponential,
+exponential,
+receiver
+of the communication. Major procedures like modular exponential,
+itaro and Ogata
+Keitaro and Ogata and
+Keitaro
+andends
+Ogata
+ulei and Chen
+Yulei
+Yulei
+and
+Chen
+YES and Chen
+YES
+YES
+NO
+YES
+YES
+NO
+NO
+NO
+YES
+NO
+NO
+NO
+NO
+NO
+bilinear
+pairing
+operations,
+elliptic
+curve
+point
+multiplication,
+and
+hyperelliptic
+curve
+divisor
+scalar
+multi
+bilinear
+bilinear
+pairing
+pairing
+operations,
+operations,
+elliptic
+elliptic
+curve
+point
+curve
+multiplication,
+point
+multiplication,
+and
+hyperelliptic
+and
+hyperelliptic
+curve
+curve
+bilinear
+pairing
+operations,
+elliptic curve
+point NO
+multiplication,
+hyperellipticNO
+curve
+YES [19]
+YES
+YES
+YES NO
+YES
+NO
+NOYES
+NONO and NO
+[19]
+[19] NO
+[28]
+[28] divisor
+[28]scalar
+scalar
+multiplication
+are
+used
+to
+calculate
+thethe
+computational
+cost.
+In
+thisIn
+section,
+we
+have
+compared
+divisor
+divisor
+scalar
+multiplication
+multiplication
+are
+used
+are
+to to
+used
+calculate
+to
+calculate
+computational
+the
+computational
+cost.
+In
+cost.
+this
+section,
+In
+this
+section,
+divisor
+scalar
+multiplication
+are
+used
+calculate
+the
+computational
+cost.
+this
+section,
+Proposed
+YES
+Proposed
+YES YES
+Proposed
+YES YES YES
+YES
+YESYES YES
+YESYES
+YES
+YES
+wewe
+have
+compared
+our
+proposed
+CLAS
+scheme
+in
+terms
+of
+computational
+cost
+with
+relevant
+schemes
+we
+have
+compared
+have
+compared
+our
+proposed
+our
+proposed
+CLAS
+scheme
+CLAS
+scheme
+in
+terms
+inof of
+terms
+computational
+of
+computational
+cost
+withe
+cost
+with
+the of
+Yibo et al. [29]
+Yibo et al. [29]
+YES
+YES
+Yibo
+YES
+et
+al.
+[29]
+NO
+YES
+YES
+NO
+NO
+NO
+YES
+NO
+NO
+NO
+NO
+NOethe
+we
+have
+compared
+our
+proposed
+CLAS
+scheme
+in
+terms
+computational
+cost
+with
+relevant
+schemes
+of of
+Cahyadi
+al.
+[30],
+Keitaro
+andand
+Ogata
+[19],
+Yulei
+and
+Chen
+[28],
+and
+Yibo
+et
+relevant
+relevant
+schemes
+schemes
+Cahyadi
+ofet
+Cahyadi
+et
+al.
+[30],
+et[30],
+al.
+Keitaro
+[30],
+Keitaro
+Ogata
+and
+[19],
+Ogata
+Yulei
+[19],
+and
+Yulei
+Chen
+and
+[28],
+Chen
+andal.
+[28],[29],
+andas d
+relevant
+schemes
+of
+Cahyadi
+et
+al.
+Keitaro
+and
+Ogata
+[19],
+Yulei
+and
+Chen
+[28],
+and
+itaro and Ogata
+Keitaro and Ogata
+Keitaro
+and
+Ogata
+Computational Cost6.2.YES
+Computational Cost
+6.2. YES
+Computational
+Cost
+YES
+YES
+YES
+NO
+NO
+NO
+YES
+NO
+NO
+NO
+NO
+NO
+et
+al.
+[29],
+as
+depicted
+in in
+Table
+3.
+For3.
+this
+purpose,
+wewe
+then
+show
+that
+ℬ
+Ꝕ
+ℬꝔ,
+ℰꝔ ,ℰℳ,
+𝓒,
+𝓗
+ℰ C ,ℬꝔ,
+𝓒 ℰdeno
+Yibo
+et et
+Yibo
+al.
+[29],
+et
+al.
+asNO
+[29],
+depicted
+as
+depicted
+Table
+in3.
+Table
+For
+this
+3.
+For
+purpose,
+this
+purpose,
+then
+we
+show
+then
+that
+show
+ℬBℳ,
+Ꝕ
+that
+ℳ,
+Yibo
+al.
+[29],
+as
+depicted
+in
+Table
+For
+this
+purpose,
+we
+then
+show
+that
+M
+,ℬBꝔ,
+[19]
+[19] Yibo
+[19]
+The computational cost
+The
+reveals𝓒,
+computational
+how
+much
+cost
+The
+processing
+reveals
+computational
+how
+is
+required
+much
+cost
+processing
+on
+reveals
+both
+the
+how
+is
+sender
+required
+much
+processing
+on
+both
+the
+is
+required
+sender
+on
+both
+the
+sender
+𝓗
+ℰ
+𝓒
+denote
+bilinear
+point
+multiplication,
+bilinear
+pairing,
+elliptic
+urve
+multiplication,
+and
+𝓒,
+𝓗
+𝓒,
+ℰ
+𝓗
+𝓒
+denote
+ℰ
+𝓒
+denote
+bilinear
+bilinear
+point
+multiplication,
+point
+multiplication,
+bilinear
+bilinear
+pairing,
+pairing,
+elliptic
+elliptic
+curve
+curve
+H
+denote
+bilinear YES
+pointYES
+multiplication,
+bilinear
+elliptic curve
+Proposed
+YES
+Proposed
+YESC YES
+Proposed
+YES
+YES
+YESYES
+YESpairing,
+YESYES
+YES multiplication,
+YES
+d receiver ends of the
+and receiver
+communication.
+ends
+of
+and
+Major
+the
+receiver
+communication.
+procedures
+ends
+of
+like
+the
+Major
+modular
+communication.
+procedures
+exponential,
+like
+Major
+modular
+procedures
+exponential,
+like
+modular
+exponential,
+multiplication,
+and
+hyperelliptic
+curve
+multiplication,
+respectively.
+The execution
+multiplication,
+multiplication,
+and curve
+hyperelliptic
+and
+hyperelliptic
+curve curve
+multiplication,
+multiplication,
+respectively.
+respectively.
+and
+hyperelliptic
+multiplication,
+respectively.
+near pairing operations,
+bilinearelliptic
+pairing
+curve
+operations,
+bilinear
+point
+multiplication,
+elliptic
+pairing
+curve
+operations,
+and
+point
+hyperelliptic
+multiplication,
+elliptic
+curve
+curve
+point
+and
+hyperelliptic
+multiplication,
+curve
+andoperations
+hyperelliptic
+curve inisTabl
+The
+xecution
+time
+for
+several
+time-consuming
+cryptographic
+is
+summarized
+The
+execution
+The
+execution
+time
+for
+time
+several
+for
+several
+time-consuming
+time-consuming
+cryptographic
+cryptographic
+operations
+operations
+is
+Computational Cost6.2. Computational Cost
+6.2. Computational Cost
+isor scalar multiplication
+divisorare
+scalar
+used
+multiplication
+to
+calculate
+divisor
+the
+scalar
+are
+computational
+used
+multiplication
+to
+calculate
+cost.
+are
+the
+In
+used
+computational
+this
+to
+section,
+calculate
+cost.
+the
+In
+computational
+this
+section,
+cost.
+In
+this
+section,
+Table
+3. in
+Comparison
+of[33].
+computational
+costisforis
+relevant
+schemes.
+summarized
+Table
+4 in
+[33].
+The 4
+experiment
+conducted
+through
+Intel
+Core
+i5-6300
+CPU,
+2.40
+GHz CPU,
+processor
+summarized
+summarized
+in
+Table
+4
+Table
+The
+[33].
+xperiment
+The
+experiment
+conducted
+isCLAS
+conducted
+through
+through
+Intel
+Core
+Intel
+i5-6300
+Core
+CPU,
+i5-6300
+The compared
+computational
+The
+reveals
+computational
+how much
+cost
+The
+processing
+reveals
+computational
+how
+is
+required
+much
+cost
+processing
+on
+reveals
+both
+the
+how
+issender
+required
+much
+processing
+on
+both
+the
+iswith
+required
+sender
+on both
+thewith
+sender
+wecost
+we
+have
+our
+proposed
+have
+compared
+CLAS
+scheme
+our
+proposed
+have
+in
+terms
+compared
+CLAS
+of
+computational
+our
+scheme
+proposed
+in
+cost
+CLAS
+of
+with
+computational
+cheme
+the
+in
+terms
+cost
+of
+computational
+cost
+theRationa
+2.40
+GHz
+processor,8
+GB
+of
+RAM,
+Windows
+10 10
+Ultimate
+edition,
+andthe
+Multiprecision
+Integer
+and
+2.40
+GHz
+2.40
+processor,8
+GHz
+processor,8
+GB
+of
+RAM,
+GB
+ofterms
+Windows
+RAM,
+Windows
+Ultimate
+10
+Ultimate
+edition,
+edition,
+and
+Multiprecision
+and
+Multiprecision
+d
+receiver
+endsofofCahyadi
+and receiver
+the
+communication.
+endsof
+ofCahyadi
+and
+Major
+the
+receiver
+communication.
+procedures
+ends
+of
+like
+the
+Major
+modular
+communication.
+procedures
+exponential,
+like
+Major
+modular
+procedures
+exponential,
+like
+modular
+exponential,
+Scheme
+Signing
+Cost
+Verification
+Cost
+Total
+evant
+schemes
+relevant
+et al.
+schemes
+[30],
+Keitaro
+relevant
+and
+schemes
+et al.
+Ogata
+[19],
+of
+Keitaro
+Cahyadi
+Yulei
+Chen
+Ogata
+al.
+[30],
+[19],
+Keitaro
+and
+Yulei
+and
+and
+Ogata
+Chen
+[19],
+[28],
+Yulei
+and
+Chen
+[28],
+and
+Integer
+and
+Rational
+Arithmetic
+Cand
+Library
+(MIRACL).
+Then,
+thethe
+following
+formulas
+are
+used
+to
+compute
+Integer
+Integer
+and
+Rational
+and[30],
+Rational
+Arithmetic
+Arithmetic
+Cet
+Library
+C[28],
+Library
+(MIRACL).
+(MIRACL).
+Then,
+Then,
+following
+the and
+following
+formulas
+formulas
+are
+are th
+near
+pairing
+operations,
+bilinear
+elliptic
+pairing
+curve
+operations,
+bilinear
+point
+multiplication,
+elliptic
+pairing
+curve
+operations,
+and
+point
+hyperelliptic
+multiplication,
+elliptic
+curve
+curve
+point
+and
+hyperelliptic
+multiplication,
+curve
+and
+hyperelliptic
+curve
+o et al. [29], as depicted
+Yibo et
+in al.
+Table
+[29],
+3.
+as
+For
+depicted
+this
+Yibo
+purpose,
+et
+in
+al.
+Table
+[29],
+we
+3.
+as
+then
+For
+depicted
+this
+show
+purpose,
+in
+that
+Table
+ℬ
+Ꝕ
+we
+3.
+ℳ,
+For
+then
+ℬꝔ,
+this
+show
+ℰ
+purpose,
+that
+ℬ
+we
+Ꝕ
+then
+ℳ,
+ℬꝔ,
+show
+ℰ
+that
+ℬ
+Ꝕ
+ℳ,
+ℬꝔ,
+ℰ
+Eko
+Cahyadi
+et
+al.
+[30]
+5
+B
+M
+3
+B
+8
+B
+used
+to to
+compute
+computational
+cost
+of of
+thethe
+proposed
+scheme
+in in
+milliseconds
+(ms) with
+the releva
+used
+used
+compute
+tothethe
+compute
+computational
+the
+computational
+cost
+cost of
+proposed
+the CLAS
+proposed
+CLAS
+scheme
+CLAS
+scheme
+milliseconds
+in
+milliseconds
+isor
+are
+scalar
+multiplication
+to
+calculate
+divisor
+the
+scalar
+computational
+used
+multiplication
+to
+calculate
+cost.
+are
+theIn
+used
+computational
+this
+to
+section,
+calculate
+cost.
+the In
+computational
+this
+section,
+cost. In
+this section,
+𝓗 scalar
+ℰ 𝓒 multiplication
+denotedivisor
+𝓒, 𝓗
+bilinear
+ℰ used
+point
+𝓒
+denote
+multiplication,
+𝓒,
+bilinear
+𝓗
+ℰare
+𝓒
+point
+bilinear
+multiplication,
+pairing,
+bilinear
+elliptic
+point
+multiplication,
+curve
+pairing,
+elliptic
+bilinear
+curve
+pairing,
+elliptic
+curve
+(ms)
+with
+e
+relevant
+schemes
+of of
+Cahyadi
+[30],
+Keitaro
+and
+Ogata
+[19],
+Yulei
+andand
+Chen
+[28],
+and
+(ms)
+with
+(ms)
+the
+with
+elevant
+theenote
+relevant
+schemes
+schemes
+Cahyadi
+ofCet al.
+Cahyadi
+et
+al.
+[30],
+et al.
+Keitaro
+[30],
+Keitaro
+Ogata
+and
+[19],
+Ogata
+Yulei
+[19],
+Yulei
+andYibo
+Yulei
+and
+Chen
+[28]
+2
+Ebilinear
+3
+E
+Cand
+5E
+C
+we
+we
+have
+compared
+proposed
+have
+compared
+CLAS
+scheme
+our
+proposed
+have
+in
+terms
+compared
+CLAS
+of
+computational
+our
+scheme
+proposed
+in terms
+cost
+CLAS
+of
+with
+computational
+scheme
+the
+in terms
+cost
+of
+with the
+computational cost with the
+ltiplication,
+and our
+hyperelliptic
+multiplication,
+curve
+and
+multiplication,
+hyperelliptic
+multiplication,
+respectively.
+curve
+and
+multiplication,
+hyperelliptic
+curve
+respectively.
+multiplication,
+respectively.
+Chen
+[28],
+and
+Yibo
+et
+al.
+[29],
+as
+presented
+in
+Table
+5:
+Chen
+[28],
+Chen
+and
+[28],
+Yibo
+and
+et
+al.
+Yibo
+[29],
+et
+al.
+as
+presented
+[29],
+as
+presented
+in
+Table
+in
+5:
+Table
+5:
+For and
+bilinear
+Yibo
+etal.
+al.[30],
+[29]
+2[30],
+E C[28],
+2 E C [19],
+4 E C [28],
+evant
+of Cahyadi
+relevant
+et al.
+schemes
+[30], of
+Keitaro
+Cahyadi
+relevant
+and
+schemes
+etexecution
+Ogata
+[19],
+ofKeitaro
+Cahyadi
+Yulei
+and
+et al.
+Chen
+Ogata
+[19],
+Keitaro
+and
+Yulei
+and
+andOgata
+Chen
+[28], and
+Yulei
+The schemes
+execution
+time
+The
+for
+execution
+several
+time-consuming
+time
+The
+for
+several
+cryptographic
+time-consuming
+time
+for
+operations
+several
+cryptographic
+time-consuming
+is
+operations
+cryptographic
+is and Chen
+operations
+is
+
+For
+bilinear
+pairing-based
+scheme,
+we
+used
+the
+following
+formulas
+for
+computational
+
+For
+
+bilinear
+For
+bilinear
+pairing-based
+pairing-based
+scheme,
+scheme,
+we
+used
+we
+the
+used
+following
+the
+following
+formulas
+formulas
+for
+o et al. [29],
+depicted
+et
+in
+al.
+Table
+[29],
+3.as
+For this
+depicted
+Yibo
+purpose,
+etin
+al.and
+Table
+[29],
+we
+3.
+as
+then
+For
+depicted
+show
+purpose,
+that
+Table
+ℬi5-6300
+we
+ℳ,
+For
+then
+ℬꝔ,
+this
+show
+purpose,
+that
+we
+Ꝕ ℳ,
+then
+ℬꝔ,
+show
+ℰ that
+ℰ for
+Ogata
+[19]
+3
+B Ꝕ3.
+M
+B
+B Ꝕ ℳ, ℬꝔ,
+mmarized
+in as
+Table
+4Yibo
+summarized
+[33].
+The
+experiment
+in
+Table
+summarized
+4isKeitaro
+[33].
+conducted
+The
+experiment
+in
+through
+Table
+4this
+[33].
+Intel The
+is
+conducted
+Core
+experiment
+through
+CPU,
+isℰ
+Intel
+conducted
+Core4ℬi5-6300
+through
+CPU,
+Intel
+Core7ℬi5-6300
+CPU,
+computational
+cost:
+computational
+computational
+cost:
+cost:
+𝓒 denoteGB
+𝓒,
+bilinear
+ℰ processor,8
+point
+𝓒
+denote
+multiplication,
+𝓒,
+bilinear
+𝓒
+point
+bilinear
+denote
+multiplication,
+pairing,
+bilinear
+elliptic
+point
+bilinear
+multiplication,
+curve
+pairing,
+elliptic
+bilinear
+curve
+pairing,
+curve Signin
+0𝓗
+GHzℰ processor,8
+2.40𝓗
+of
+GHz
+RAM,
+Windows
+2.40
+GB𝓗
+GHzℰRAM,
+10of
+Ultimate
+processor,8
+Windows
+edition,
+GB
+of
+andRAM,
+10
+Ultimate
+Multiprecision
+Windows
+edition,
+10and 2
+Ultimate
+Multiprecision
+edition,
+and 4elliptic
+Multiprecision
+Proposed
+2
+HE
+C
+HE
+C
+HE C
+Signing
+Cost
+=
+Number
+of
+Bilinear
+Pairing
+Operations
+∗
+Time
+required
+Signing
+Signing
+Cost
+=
+Number
+Cost
+=
+Number
+of
+Bilinear
+of
+Bilinear
+Pairing
+Pairing
+Operations
+Operations
+∗
+Time
+required
+∗
+Time
+required
+ltiplication,
+and
+hyperelliptic
+multiplication,
+curve
+and
+multiplication,
+hyperelliptic
+multiplication,
+respectively.
+curve
+and
+multiplication,
+hyperelliptic
+curve
+respectively.
+multiplication,
+respectively.
+eger and Rational Integer
+Arithmetic
+andCRational
+LibraryInteger
+Arithmetic
+(MIRACL).
+and C
+Rational
+Then,
+Library
+theArithmetic
+following
+(MIRACL).C Then,
+formulas
+Library
+the
+are
+(MIRACL).
+following Then,
+formulas
+the are
+following formulas are
+for
+Single
+Bilinear
+Paring
+Operation
+VerificationisCost = N
+for
+Single
+for
+Bilinear
+Single
+Bilinear
+Paring
+Operation
+Paring
+Operation
+Thecompute
+execution
+The
+forcompute
+execution
+several
+time-consuming
+time
+The
+for
+execution
+several
+cryptographic
+time-consuming
+time
+for in
+operations
+several
+cryptographic
+time-consuming
+is
+operations
+cryptographic
+is
+d to
+the time
+computational
+used to
+costthe
+ofused
+computational
+the
+to
+proposed
+compute
+CLAS
+cost
+the
+of
+computational
+scheme
+the
+proposed
+milliseconds
+cost
+CLAS
+of
+the
+scheme
+proposed
+in
+milliseconds
+CLAS
+scheme
+inoperations
+milliseconds
+The
+execution
+time
+for
+several
+time-consuming
+cryptographic
+operations
+isSingle
+sumVerification
+Cost
+=
+Number
+of
+Bilinear
+Pairing
+Operations
+∗
+Time
+required
+for
+Single
+Verification
+Verification
+Costthe
+=inrelevant
+Number
+Cost
+=and
+Number
+Bilinear
+ofof
+Bilinear
+Pairing
+Pairing
+Operations
+Operations
+∗
+∗
+Time
+required
+Time
+required
+for
+Single
+for
+mmarized
+Table 4(ms)
+summarized
+[33].
+The of
+experiment
+in
+Table(ms)
+summarized
+4
+is
+conducted
+The
+experiment
+through
+Table
+4 of
+[33].
+Intel
+is
+conducted
+The
+Core
+experiment
+i5-6300
+through
+CPU,
+is
+conducted
+Core
+i5-6300
+through
+CPU,
+Intel
+Core
+i5-6300
+CPU,
+s) with theinrelevant
+schemes
+with
+theCahyadi
+relevant
+et[33].
+schemes
+al.
+with
+[30],
+of
+Keitaro
+Cahyadi
+schemes
+et
+Ogata
+al.
+[30],
+[19],
+Keitaro
+Cahyadi
+Yulei
+and
+etIntel
+al.
+Ogata
+[30],
+[19],
+Keitaro
+Yulei
+and
+and
+Ogata
+[19],
+Yulei
+and
+marized
+in
+Table
+4
+[33].
+The
+experiment
+is
+conducted
+through
+Intel
+Core
+i5-6300
+CPU,
+Bilinear
+Paring
+Operation
+Bilinear
+Bilinear
+Paring
+Operation
+Paring
+Operation
+0enGHz
+processor,8
+GB
+2.40
+of
+GHz
+RAM,
+processor,8
+Windows
+2.40
+GB
+GHz
+10
+of
+Ultimate
+RAM,
+processor,8
+Windows
+edition,
+GB
+of
+and
+10
+RAM,
+Ultimate
+Multiprecision
+Windows
+edition,
+10
+and
+Ultimate
+Multiprecision
+edition,
+and
+Multiprecision
+
+For elliptic cur
+[28], and Yibo et al.
+Chen
+[29],
+[28],
+as and
+presented
+Yibo2.40
+etin
+Chen
+al.
+Table
+[29],
+[28],
+5:
+as
+and
+presented
+Yibo
+et
+al.
+in
+Table
+[29],
+as
+5:
+presented
+in
+Table
+5:
+GHz processor,8 GB of RAM, Windows 10 Ultimate edition, and Multiprecision Integer
+eger and Rational Integer
+Arithmetic
+andCRational
+Library
+Integer
+Arithmetic
+(MIRACL).
+and
+Rational
+C
+Then,
+Library
+the
+Arithmetic
+following
+(MIRACL).
+Cwe
+formulas
+Then,
+Library
+the
+are
+(MIRACL).
+following
+Then,
+formulas
+thefor
+are
+following
+formulas
+are
+scheme,
+elliptic
+curve-based
+scheme,
+we
+used
+the
+following
+computational
+cost:
+ For
+For
+
+elliptic
+For
+curve-based
+elliptic
+curve-based
+scheme,
+scheme,
+used
+we
+the
+used
+following
+the formulas
+following
+formulas
+formulas
+for
+computational
+for
+computational
+For bilinear
+pairing-based
+
+For bilinear
+pairing-based
+
+For
+used
+bilinear
+the
+scheme,
+pairing-based
+following
+we
+used
+formulas
+scheme,
+the
+following
+for
+we
+formulas
+the
+following
+formulas
+for
+and we
+Rational
+Arithmetic
+C
+Library
+(MIRACL).
+Then,used
+the
+followingfor
+formulas are
+used to
+d to compute the used to
+computational
+compute
+costthe
+of
+used
+computational
+the
+to
+proposed
+compute
+CLAS
+cost
+the
+of
+computational
+scheme
+the
+proposed
+in
+milliseconds
+cost
+CLAS
+of
+the
+scheme
+proposed
+in
+milliseconds
+CLAS
+scheme
+in
+milliseconds
+cost:computational
+cost:computational
+computational cost: computationalcost:
+cost:
+cost: cost of the proposed CLAS scheme in milliseconds (ms) withSigning C
+compute the
+s) with the relevant(ms)
+schemes
+with of
+theCahyadi
+relevant
+(ms)
+et al.
+schemes
+with
+[30],the
+of
+Keitaro
+relevant
+Cahyadi
+andet al.
+schemes
+Ogata
+[30],
+[19],
+of
+Keitaro
+Cahyadi
+Yulei
+and
+et al.
+Ogata
+[30],[19],
+Keitaro
+Yuleiand
+andOgata [19], Yulei and
+theCost
+relevant
+schemes
+of Cahyadi
+et al.of
+[30],
+Keitaro
+and ∗
+Ogata
+[19],∗
+Yulei
+and
+Chenfor
+[28],
+Signing
+Cost
+=
+Number
+Elliptic
+Curve
+Operations
+Time
+required
+for
+Signing
+=
+Number
+of
+Elliptic
+Elliptic
+Curve
+Operations
+Curve
+Operations
+∗
+Time
+required
+Time
+required
+for
+= Number
+Signing
+of
+Bilinear
+Pairing
+=
+Number
+Operations
+Signing
+of
+Bilinear
+=of
+Time
+Pairing
+Number
+required
+Operations
+Bilinear
+∗
+Pairing
+Time
+Operations
+∗
+Time
+required
+en [28], andSigning
+Yibo etCost
+Chen
+al.
+[29],
+[28],
+as and
+presented
+Yibo
+etin
+Chen
+al.Table
+[29],
+[28],
+5:
+as
+andCost
+presented
+Yibo
+etCost
+al.
+in∗[29],
+Table
+as
+5:
+presented
+in Table
+5: required
+and Yibo
+et al.
+[29],
+as
+presented
+Table
+5:
+Single
+Elliptic
+Curve
+Operation
+Single
+Elliptic
+Single
+Elliptic
+Curve
+Operation
+Curve
+Operation
+for Single Bilinear
+Paring
+for
+Single
+Operation
+Bilinear
+Paring
+for in
+Single
+Operation
+Bilinear
+Paring
+Operation
+For bilinear
+pairing-based
+
+For bilinear
+scheme,
+pairing-based
+ we
+For used
+bilinear
+the
+scheme,
+pairing-based
+following
+we
+used
+formulas
+scheme,for
+the
+following
+we used
+formulas
+the
+following formulas for
+for
+•
+For
+bilinear
+pairing-based
+scheme,
+we used
+the for ∗
+following
+formulas for
+forSingle
+computaification Cost = Number
+Verification
+of Bilinear
+Cost =
+Pairing
+Number
+Verification
+Operations
+of
+Bilinear
+Cost∗ =Time
+Pairing
+Number
+Operations
+of
+Bilinear
+∗
+Pairing
+Operations
+required
+for
+Single
+Time
+required
+Single
+Time required
+computational cost: computational cost: computational cost:
+cost:
+Bilinear Paring tional
+Operation
+Bilinear Paring Operation
+Bilinear Paring Operation
+Signing Cost = Number of
+Signing
+Bilinear
+Cost =
+Pairing
+Number
+Operations
+Signing
+of
+Bilinear
+Cost∗ =Time
+Pairing
+Number
+required
+Operations
+of
+Bilinear∗ Time
+Pairingrequired
+Operations ∗ Time required
+Cost
+Number
+Bilinear
+Pairing
+Operations
+∗
+Time for
+required
+For elliptic curve-based
+
+Forscheme,
+elliptic we 
+curve-based
+used
+the
+ForSigning
+following
+scheme,
+elliptic
+curve-based
+we =
+formulas
+used
+the
+for of
+scheme,
+following
+computational
+we used
+formulas
+the for
+following
+computational
+formulas
+computational
+for Single Bilinear Paring
+for Single
+Operation
+Bilinear Paring
+for Single
+Operation
+Bilinear Paring Operation
+cost:
+cost:
+cost:
+ification Cost = Number
+Verification
+of Bilinear
+Cost =
+Pairing
+Number
+Verification
+Operations
+of
+Bilinear
+Cost∗ =Time
+Pairing
+Number
+Operations
+Bilinear∗
+Pairing
+Operations
+∗
+required
+for
+Single
+Time
+required
+for
+Single
+Time required for Single
+forof
+Single
+Bilinear
+Paring
+Operation
+Signing Cost = Number
+Signing
+of
+Elliptic
+Cost
+Curve
+=
+Number
+Operations
+Signing
+of
+Elliptic
+Cost
+∗
+Time
+=
+Curve
+Number
+required
+Operations
+of
+Elliptic
+for
+∗
+Time
+Curve
+required
+Operations
+for
+∗ Time required for
+Bilinear Paring Operation
+Bilinear Paring Operation
+Bilinear Paring Operation
+Verification
+Cost
+=
+Number
+of
+Bilinear
+Pairing
+Operations
+∗
+Time
+required
+for Single
+Single
+Curve
+Operation
+Single
+Elliptic
+Curve
+Single
+Operation
+Elliptic
+Curve
+Operation
+For elliptic curve-based
+
+Forscheme,
+ellipticElliptic
+we 
+curve-based
+used
+the
+For elliptic
+following
+scheme,
+curve-based
+we
+formulas
+used
+the
+for
+scheme,
+following
+computational
+we used
+formulas
+the for
+following
+computational
+formulas
+for computational
+cost:
+
+cost:
+
+cost:
+
+Bilinear Paring Operation
+Signing Cost = Number of
+Signing
+Elliptic
+Cost =
+Curve
+Number
+Operations
+Signing
+of Elliptic
+Cost =
+∗
+Time
+Curve
+Number
+required
+Operations
+of
+Elliptic
+for
+∗ Time
+Curverequired
+Operations
+for ∗ Time required for
+Table
+4.
+Execution
+time
+of
+different
+cryptographic
+operations.
+Single Elliptic Curve Single
+Operation
+Elliptic CurveSingle
+Operation
+Elliptic Curve Operation
+Operation
+
+Bilinear Point
+Multiplication
+
+Bilinear Pair
+
+Elliptic Curve
+
+Hyper Elliptic
+Curve
+
+Time in ms
+
+4.31ms
+
+14.90ms
+
+0.97ms
+
+0.48ms
+
+Table 5. Comparison of computational cost based on major operations in ms.
+Scheme
+
+Signing Cost
+
+Verifying Cost
+
+Total
+
+Eko Cahyadi et al. [30]
+
+21.55
+
+44.7
+
+66.25
+
+Yulei and Chen [28]
+
+1.94
+
+2.91
+
+4.85
+
+Yibo et al. [29]
+
+1.94
+
+1.94
+
+3.88
+
+Keitaro and Ogata [19]
+
+12.93
+
+59.6
+
+72.53
+
+Proposed
+
+0.96
+
+0.96
+
+1.92
+
+Future Internet 2023, 15, 266
+
+13 of 16
+
+•
+
+For elliptic curve-based scheme, we used the following formulas for computational cost:
+Signing Cost = Number of Elliptic Curve Operations ∗ Time
+required for Single Elliptic Curve Operation
+Verification Cost = Number of Elliptic Curve Operations ∗ Time required for
+Single Elliptic Curve Operation
+
+•
+
+For hyperelliptic curve-based scheme, we used the following formulas for computational cost:
+Signing Cost = Number of Hyper Elliptic Curve Operations ∗ Time
+required for Single Hyper Elliptic Curve Operation
+Verification Cost = Number of Hyper Elliptic Curve Operations ∗ Time required for
+Single Hyper Elliptic Curve Operation
+Therefore, Table 5 shows that the new method uses less computing power by using
+
+Future Internet 2023, 15, x FOR PEER REVIEW
+17
+hyperelliptic curve cryptography with a key size of only 80 bits and provides 14
+theofsame
+
+level of security as RSA and elliptic curve cryptography. Figure 4 depicts that our scheme
+outperforms [19,28–30].
+
+80
+72.53
+
+Computation Cost (in ms)
+
+70
+
+66.25
+59.6
+
+60
+50
+44.7
+
+40
+30
+20
+
+21.55
+
+12.93
+
+10
+1.94 2.91
+
+0
+[30]
+
+Cahyadi, E.F., 2022
+
+Signing cost
+Verifying cost
+Total
+
+[28]
+
+4.85
+
+Chen, Y., 2021
+
+1.94 1.94
+
+3.88
+
+[29]
+
+Han, Y., 2021
+
+0.96 0.96 1.92
+
+[19]
+
+Hashimoto, K., 2021
+
+Proposed
+
+Schemes
+
+Figure
+4. Computation
+cost
+(in(in
+ms)ms)
+[19,28–30].
+Figure
+4. Computation
+cost
+[19,28–30].
+
+Communication
+Cost
+6.3.6.3.
+Communication
+Cost
+The
+term
+“communication
+cost”
+refers
+to the
+added
+message.
+The
+term
+“communication
+cost”
+refers
+to the
+extraextra
+bits bits
+added to
+theto the
+message.
+In this In
+this
+section,
+we
+compare
+our
+proposed
+scheme
+with
+relevant
+schemes
+offered
+by Eko
+section, we compare our proposed scheme with relevant schemes oﬀered by Eko Cahyadi
+
+et al. [30], Keitaro and Ogata [19], Yulei and Chen [28], and Yibo et al. [29], as depicted in
+Table 3, in terms of communicational overhead. For this purpose, we picked the values
+from [33] that are plaintext (|m|) and has a size of 1000 bits, while the size of the bilinear
+pairing (|G|) is 1024 bits, the size of the elliptic curve (|q|), is 160 bits, and the size of the
+hyperelliptic curve (|n|) is 80 bits, respectively. As demonstrated in Table 6 and Figure 5,
+
+Future Internet 2023, 15, 266
+
+14 of 16
+
+Cahyadi et al. [30], Keitaro and Ogata [19], Yulei and Chen [28], and Yibo et al. [29], as
+depicted in Table 3, in terms of communicational overhead. For this purpose, we picked
+the values from [33] that are plaintext (|m|) and has a size of 1000 bits, while the size of
+the bilinear pairing (|G|) is 1024 bits, the size of the elliptic curve (|q|), is 160 bits, and
+the size of the hyperelliptic curve (|n|) is 80 bits, respectively. As demonstrated in Table 6
+and Figure 5, our proposed technique provides more significant improvements over the
+schemes used in [19,28–30]. Note that we have used the following formulas to compute the
+communication cost based on transmitted bits:
+
+•
+•
+•
+
+Communicational cost formula for bilinear pairing-based schemes:|Message| + |Total
+number of Transmitted parameters | ∗ 1024.
+Communicational cost formula for elliptic curve schemes:|Message| + |Total number
+of Transmitted parameters| ∗ 160.
+Communicational cost formula for hyperelliptic curve-based schemes:|Message| +
+|Total number of Transmitted parameters | ∗ 80.
+
+Table 6. Communication cost of different CLAS schemes.
+Future Internet 2023, 15, x FOR PEER REVIEW
+
+372 of 375
+
+Scheme
+
+Communication Cost
+
+Communication Cost with Bits
+
+|m| + 5|G|
+
+1000 + 5 × 1024 = 6120
+
+Eko Cahyadi et al. [30]
+Scheme
+
+Yulei and Chen [28]
+
+Eko Cahyadi et al. [30]
+Yibo et al. [29]
+Yulei and Chen [28]
+Yibo
+et
+al. and
+[29] Ogata [19]
+Keitaro
+Keitaro and Ogata [19]
+Proposed
+Proposed
+
+Cahyadi, E.F. et al. 2022
+
+Communication Cost with
+|m| + 5|q| Bits
+1000 + 5 × 160 = 1800
+1000 + 5 × 1024 = 6120
+m| + 5|q|
+1000 + 5 × 160 = 1800
+1000 + 5 × 160 = 1800
+1000
++
+5
+×
+160
+=
+1800
+|m| + 2|G|
+1000 + 2 × 1024 = 3048
+1000 + 2 × 1024 = 3048
+|m| + 2|n|
+1000 + 2 × 80 = 1160
+1000 + 2 × 80 = 1160
+
+Communication Cost
+
+Chen, Y. et al. 2021
+
+|m| + 5|G|
+|m| + 5|q|
+m| + 5|q|
+|m| + 2|G|
+|m| + 2|n|
+
+Han, Y. et al. 2021
+
+Hashimoto, K. et al. 2019
+
+Figure
+5. 5.
+Communication
+cost (in bits).cost (in bits) [19,28–30].
+Figure
+Communication
+
+7. Conclusions
+
+7. Conclusions
+
+This paper presented a certificateless aggregate signature (CLAS) scheme based on
+Thiscurve
+paper
+presented
+a that
+certificateless
+aggregate
+signature (CLAS) scheme based on
+hyperelliptic
+cryptography
+(HECC)
+guarantees sender and
+receiver anonymity.
+Typically,
+anonymity
+is ensured
+by requiring participants
+transmit
+their identities
+in
+hyperelliptic
+curve
+cryptography
+(HECC)tothat
+guarantees
+sender
+and receiver anonymity.
+an encrypted format when requesting a partial private key from the DoT/TA. To address
+Typically,
+anonymity
+is
+ensured
+by
+requiring
+participants
+to
+transmit
+their identities in
+the issue of a secure channel for certificateless cryptography, the DoT/TA can transmit the
+partial
+key to format
+participating
+users over an
+unencrypted,
+open channel.
+Through
+an private
+encrypted
+when
+requesting
+a partial
+private
+key the
+from the DoT/TA. To address
+provable security analysis, we demonstrated that our scheme is resistant to Type 1 (<!-the issue of a secure channel for
+certificateless
+cryptography,
+the DoT/TA can transmit the
+MathType@Translator@5@5@MathML2
+(no
+namespace).tdl@MathML
+2.0
+(no
+partial
+private key to participating users over an unencrypted, open channel. Through the
+namespace)@ -->
+<math> security analysis, we demonstrated that our scheme is resistant to Type 1 (FGR )
+provable
+1
+<semantics>
+and<mrow>
+Type 2 (FGR2 ) forgery. During the random oracle model (ROM) provable security
+analysis, the
+proposed scheme relied on the hyperelliptic curve discrete logarithm problem.
+<mi>F</mi><mi>G</mi><msub>
+<mi>R</mi> scheme outperforms the existing scheme in terms of computation and
+The proposed
+<mn>1</mn>
+communication
+cost based on a comparison with the existing schemes that was performed
+</msub>
+</mrow>
+to evaluate our scheme’s efficiency. In future work, we plan to design a multi-sender and
+<annotation encoding=ʹMathType-MTEFʹ>MathType@MTEF@5@5@+=
+multi-receiver
+certificateless aggregate signature for VANETs. Further, the new scheme
+feaagKart1ev2aqatCvAUfeBSjuyZL2yd9gzLbvyNv2CaerbuLwBLn
+hiov2DGi1BTfMBaeXatLxBI9gBaerbd9wDYLwzYbItLDharqqtubsr
+4rNCHbWexLMBbXgBd9gzLbvyNv2CaeHbl7mZLdGeaGqiVCI8FfYJH8
+YrFfeuY=Hhbbf9v8qqaqFr0xc9pk0xbba9q8WqFfeaY=biLkVcLq=J
+
+Future Internet 2023, 15, 266
+
+15 of 16
+
+will be based on the genus 3 hyperelliptic curve, which can be more efficient in terms of
+communication and computational costs.
+Author Contributions: Conceptualization, A.I., M.A.K., A.V.S., I.U. and G.U.-R.; Methodology,
+M.A.K., A.I. and A.V.S.; Software, I.U., M.A.K. and M.Z.; Validation, M.A.K., M.Z. and I.U.; Formal
+analysis, I.U., F.N. and M.A.K.; Investigation, A.I., A.V.S., I.U. and G.U.-R.; Resources, M.A.K., M.Z.
+and A.V.S.; Data curation, M.Z., A.V.S., F.N., G.U.-R. and A.I; Writing—original draft preparation,
+M.A.K., I.U., A.I., F.N., A.V.S. and M.Z.; Writing—review and editing, M.A.K., A.I., M.Z., F.N. and
+A.V.S.; Visualization, M.A.K., M.Z., G.U.-R., F.N. and I.U.; Supervision, M.Z. All authors have read
+and agreed to the published version of the manuscript.
+Funding: This research received no external funding.
+Data Availability Statement: Not applicable.
+Conflicts of Interest: The authors declare no conflict of interest.
+
+References
+1.
+2.
+
+3.
+4.
+
+5.
+6.
+7.
+8.
+9.
+10.
+
+11.
+12.
+13.
+14.
+15.
+
+16.
+17.
+18.
+
+19.
+
+Weber, J.S.; Neves, M.; Ferreto, T. VANET simulators: An updated review. J. Braz. Comput. Soc. 2021, 27, 8. [CrossRef]
+Raut, C.M.; Devane, S.R. Intelligent transportation system for smartcity using VANET. In Proceedings of the 2017 International
+Conference on Communication and Signal Processing (ICCSP), Chennai, India, 6–8 April 2017; IEEE: Piscateville, NJ, USA; pp.
+1602–1605.
+Ullah, I.; Khan, M.A.; Alsharif, M.H.; Nordin, R. An anonymous certificateless signcryption scheme for secure and efficient
+deployment of Internet of vehicles. Sustainability 2021, 13, 10891. [CrossRef]
+Umar, M.; Islam, S.H.; Mahmood, K.; Ahmed, S.; Ghaffar, Z.; Saleem, M.A. Provable secure identity-based anonymous and
+privacy-preserving inter-vehicular authentication protocol for VANETS using PUF. IEEE Trans. Veh. Technol. 2021, 70, 12158–12167.
+[CrossRef]
+Ullah, I.; Khan, M.A.; Khan, F.; Jan, M.A.; Srinivasan, R.; Mastorakis, S.; Hussain, S.; Khattak, H. An Efficient and Secure
+Multi-message and Multi-receiver Signcryption Scheme for Edge Enabled Internet of Vehicles. IEEE Internet Things J. 2021.
+Qu, F.; Wu, Z.; Wang, F.Y.; Cho, W. A security and privacy review of VANETs. IEEE Trans. Intell. Transp. Syst. 2015, 16, 2985–2996.
+[CrossRef]
+Khan, M.A.; Shah, H.; Rehman, S.U.; Kumar, N.; Ghazali, R.; Shehzad, D.; Ullah, I. Securing internet of drones with identity-based
+proxy signcryption. IEEE Access 2021, 9, 89133–89142. [CrossRef]
+Shamir, A. Identity-based cryptosystems and signature schemes. In Advances in Cryptology: Proceedings of CRYPTO 84 4; Springer:
+Berlin/Heidelberg, Germany, 1985; pp. 47–53.
+Al-Riyami, S.S.; Paterson, K.G. Certificateless public key cryptography. In Asiacrypt; Springer: Berlin/Heidelberg, Germany, 2003;
+Volume 2894, pp. 452–473.
+Boneh, D.; Gentry, C.; Lynn, B.; Shacham, H. Aggregate and verifiably encrypted signatures from bilinear maps. In Advances in
+Cryptology—EUROCRYPT 2003, Proceedings of the International Conference on the Theory and Applications of Cryptographic Techniques,
+Warsaw, Poland, 4–8 May 2003; Springer: Berlin/Heidelberg, Germany, 2003; pp. 416–432.
+Ullah, I.; Amin, N.U.; Khan, J.; Rehan, M.; Naeem, M.; Khattak, H.; Khattak, S.J.; Ali, H. A Novel Provable Secured Signcryption
+Scheme P SSS : A Hyper-Elliptic Curve-Based Approach. Mathematics 2019, 7, 686. [CrossRef]
+Yum, D.H.; Lee, P.J. Generic construction of certificateless signature. In Proceedings of the Information Security and Privacy: 9th
+Australasian Conference, ACISP 2004, Sydney, Australia, 13–15 July 2004; Springer: Berlin/Heidelberg, Germany; pp. 200–211.
+Hu, B.C.; Wong, D.S.; Zhang, Z.; Deng, X. Key replacement attack against a generic construction of certificateless signature. In
+ACISP; Springer: Berlin/Heidelberg, Germany, 2006; Volume 6, pp. 235–246.
+Deng, J.; Xu, C.; Wu, H.; Dong, L. A new certificateless signature with enhanced security and aggregation version. Concurr.
+Comput. Pract. Exp. 2016, 28, 1124–1133. [CrossRef]
+Kumar, P.; Sharma, V. A comment on efficient certificateless aggregate signature scheme. In Proceedings of the 2017 International
+Conference on Computing, Communication and Automation (ICCCA), Greater Noida, India, 5–6 May 2017; IEEE: Piscateville,
+NJ, USA; pp. 515–519.
+Horng, S.J.; Tzeng, S.F.; Huang, P.H.; Wang, X.; Li, T.; Khan, M.K. An efficient certificateless aggregate signature with conditional
+privacy-preserving for vehicular sensor networks. Inf. Sci. 2015, 317, 48–66. [CrossRef]
+Ming, Y.; Shen, X. PCPA: A practical certificateless conditional privacy preserving authentication scheme for vehicular ad hoc
+networks. Sensors 2018, 18, 1573. [CrossRef] [PubMed]
+Li, J.; Yuan, H.; Zhang, Y. Cryptanalysis and improvement of certificateless aggregate signature with conditional privacypreserving for vehicular sensor networks. Cryptol. Eprint Arch. 2016. Available online: https://eprint.iacr.org/2016/692.pdf
+(accessed on 1 July 2023).
+Hashimoto, K.; Ogata, W. Unrestricted and compact certificateless aggregate signature scheme. Inf. Sci. 2019, 487, 97–114.
+[CrossRef]
+
+Future Internet 2023, 15, 266
+
+20.
+21.
+22.
+23.
+24.
+
+25.
+26.
+27.
+28.
+29.
+30.
+31.
+32.
+
+33.
+
+16 of 16
+
+Malhi, A.K.; Batra, S.; Pannu, H.S. An efficient privacy preserving authentication scheme for vehicular communications. Wirel.
+Pers. Commun. 2019, 106, 487–503. [CrossRef]
+Cui, J.; Zhang, J.; Zhong, H.; Shi, R.; Xu, Y. An efficient certificateless aggregate signature without pairings for vehicular ad hoc
+networks. Inf. Sci. 2018, 451, 1–15. [CrossRef]
+Kamil, I.A.; Ogundoyin, S.O. An improved certificateless aggregate signature scheme without bilinear pairings for vehicular ad
+hoc networks. J. Inf. Secur. Appl. 2019, 44, 184–200. [CrossRef]
+Du, H.; Wen, Q.; Zhang, S. An efficient certificateless aggregate signature scheme without pairings for healthcare wireless sensor
+network. IEEE Access 2019, 7, 42683–42693. [CrossRef]
+Thumbur, G.; Rao, G.S.; Reddy, P.V.; Gayathri, N.B.; Reddy, D.K.; Padmavathamma, M. Efficient and secure certificateless
+aggregate signature-based authentication scheme for vehicular ad hoc networks. IEEE Internet Things J. 2020, 8, 1908–1920.
+[CrossRef]
+Yang, X.; Chen, A.; Wang, Z.; Du, X.; Wang, C. Cryptanalysis of an Efficient and Secure Certificateless Aggregate Signature-Based
+Authentication Scheme for Vehicular Ad Hoc Networks. Secur. Commun. Netw. 2022, 2022, 4472945. [CrossRef]
+Ye, X.; Xu, G.; Cheng, X.; Li, Y.; Qin, Z. Certificateless-based anonymous authentication and aggregate signature scheme for
+vehicular ad hoc networks. Wirel. Commun. Mob. Comput. 2021, 2021, 6677137. [CrossRef]
+Vallent, T.F.; Hanyurwimfura, D.; Mikeka, C. Efficient certificate-less aggregate signature scheme with conditional privacypreservation for vehicular ad hoc networks enhanced smart grid system. Sensors 2021, 21, 2900. [CrossRef]
+Chen, Y.; Chen, J. Cpp-clas: Efficient and conditional privacy-preserving certificateless aggregate signature scheme for vanets.
+IEEE Internet Things J. 2021, 9, 10354–10365. [CrossRef]
+Han, Y.; Song, W.; Zhou, Z.; Wang, H.; Yuan, B. eCLAS: An efficient pairing-free certificateless aggregate signature for secure
+VANET communication. IEEE Syst. J. 2021, 16, 1637–1648. [CrossRef]
+Cahyadi, E.F.; Su, T.W.; Yang, C.C.; Hwang, M.S. A certificateless aggregate signature scheme for security and privacy protection
+in VANET. Int. J. Distrib. Sens. Netw. 2022, 18, 15501329221080658. [CrossRef]
+Wollinger, T.; Pelzl, J.; Paar, C. Cantor versus Harley: Optimization and analysis of explicit formulae for hyperelliptic curve
+cryptosystems. IEEE Trans. Comput. 2005, 54, 861–872. [CrossRef]
+Ullah, I.; Zeadally, S.; Amin, N.U.; Asghar Khan, M.; Khattak, H. Lightweight and provable secure cross-domain access control
+scheme for internet of things (IoT) based wireless body area networks (WBAN). Microprocess. Microsyst. 2021, 81, 103477.
+[CrossRef]
+Iqbal, A.; Ullah, I.; AlSanad, A.A.; Haq MI, U.; Khan, M.A.; Khan, W.U.; Rabie, K. A cost-effective identity-based signature
+scheme for vehicular ad hoc network using hyperelliptic curve cryptography. Wirel. Commun. Mob. Comput. 2022, 2022, 5012770.
+[CrossRef]
+
+Disclaimer/Publisher’s Note: The statements, opinions and data contained in all publications are solely those of the individual
+author(s) and contributor(s) and not of MDPI and/or the editor(s). MDPI and/or the editor(s) disclaim responsibility for any injury to
+people or property resulting from any ideas, methods, instructions or products referred to in the content.
+
+
