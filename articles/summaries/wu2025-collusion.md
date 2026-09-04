@@ -11,9 +11,7 @@ tags: [CLAS, VANET, collusion-resistance, Type-III, ECC, pairing-free, NS3, SUMO
 
 ## Overview
 
-This paper proposes a security-enhanced CLAS scheme resistant to Type-III adversary attacks (insider collusion between KGC and vehicles). Existing schemes typically focus on Type I and II but fail against Type III. The scheme is based on ECC without bilinear pairing, and is proven EUF-CMA under ROM against Type I, II, and III adversaries.
-
-Uniquely, the authors use MIRACL cryptography library for experiments and conduct joint NS3 (v3.27) + SUMO traffic generator simulations, providing realistic VANET performance data.
+This paper proposes a security-enhanced CLAS scheme resistant to Type-III adversary attacks (insider collusion between KGC and vehicles). Existing schemes typically focus on Type I and II but fail against Type III. The scheme is based on ECC without bilinear pairing, and is proven EUF-CMA under ROM against Type I, II, and III adversaries. Uniquely, the authors use MIRACL cryptography library for experiments and conduct joint NS3 (v3.27) + SUMO traffic generator simulations, providing realistic VANET performance data.
 
 ## Relevance to Our Work
 
@@ -28,16 +26,64 @@ This is the most comprehensive security evaluation — resisting all three adver
 
 ## Mathematical Notation
 
-**ECC-based CLAS (collusion-resistant):**
-- KGC: $s$, $P_{pub} = sP$
-- User: $D_i = sH(ID_i)$, $x_i$, $PK_i = x_iP$
-- Sign: Modified algorithm preventing collusion
-- Aggregate: $\sigma = \sum \sigma_i$
-- Verification: Pairing-free equation
+### Setup
 
-**Type III resistance mechanism:**
-- Additional binding between KGC-issued key and user's secret value
-- Prevents KGC from colluding with user to forge signatures
+$$
+\begin{aligned}
+&s \in \mathbb{Z}_q^*,\quad P_{pub} = sP
+\end{aligned}
+$$
+
+### Partial Private Key Extract
+
+$$
+\begin{aligned}
+&D_i = sH(ID_i)
+\end{aligned}
+$$
+
+### Set Secret Value
+
+$$
+\begin{aligned}
+&x_i \in \mathbb{Z}_q^* \\
+&PK_i = x_iP
+\end{aligned}
+$$
+
+### Set Private/Public Key
+
+$$
+\begin{aligned}
+&SK_i = (D_i, x_i) \\
+&PK_i = x_iP
+\end{aligned}
+$$
+
+### Signature
+
+$$
+\begin{aligned}
+&\text{Modified algorithm preventing collusion} \\
+&\sigma_i = r_i + h_i(x_i + D_i) \pmod q
+\end{aligned}
+$$
+
+### Aggregate (CLAS)
+
+$$
+\begin{aligned}
+&\sigma = \sum_{i=1}^n \sigma_i
+\end{aligned}
+$$
+
+### Verification
+
+$$
+\begin{aligned}
+&\text{Pairing-free equation}
+\end{aligned}
+$$
 
 ## Protocol / Scheme
 

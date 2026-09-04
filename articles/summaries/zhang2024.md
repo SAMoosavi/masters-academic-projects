@@ -11,9 +11,7 @@ tags: [CLSC, IoMT, pairing-free, ECC, zero-knowledge, confidentiality, unforgeab
 
 ## Overview
 
-This paper proposes an efficient pairing-free certificateless signcryption (CLSC) scheme for secure data transmission in the Internet of Medical Things (IoMT). Based on zero-knowledge proof principles, the scheme provides confidentiality and unforgeability under Type I and Type II attacks while achieving lower computational and communication overhead with public verifiability.
-
-While focused on IoMT rather than VANETs, the certificateless signcryption techniques are transferable to VANET contexts where both encryption and authentication are needed.
+This paper proposes an efficient pairing-free certificateless signcryption (CLSC) scheme for secure data transmission in the Internet of Medical Things (IoMT). Based on zero-knowledge proof principles, the scheme provides confidentiality and unforgeability under Type I and Type II attacks while achieving lower computational and communication overhead with public verifiability. While focused on IoMT rather than VANETs, the certificateless signcryption techniques are transferable to VANET contexts where both encryption and authentication are needed.
 
 ## Relevance to Our Work
 
@@ -28,11 +26,56 @@ Demonstrates CLSC techniques applicable to resource-constrained environments. Th
 
 ## Mathematical Notation
 
-**Zero-knowledge CLSC:**
-- Signcrypt: $\sigma = (c, S)$ where $c$ is ciphertext and $S$ is signature
-- Uses ECC scalar multiplication only
-- No bilinear pairings
-- Public verification of signature component
+### Setup
+
+$$
+\begin{aligned}
+&s \in \mathbb{Z}_q^*,\quad P_{pub} = sP
+\end{aligned}
+$$
+
+### Partial Private Key Extract
+
+$$
+\begin{aligned}
+&D_i = sH(ID_i)
+\end{aligned}
+$$
+
+### Set Secret Value
+
+$$
+\begin{aligned}
+&x_i \in \mathbb{Z}_q^* \\
+&PK_i = x_iP
+\end{aligned}
+$$
+
+### Set Private/Public Key
+
+$$
+\begin{aligned}
+&SK_i = (D_i, x_i) \\
+&PK_i = x_iP
+\end{aligned}
+$$
+
+### Signature
+
+$$
+\begin{aligned}
+&\sigma = (c, S) \text{ where } c \text{ is ciphertext and } S \text{ is signature} \\
+&\text{Uses ECC scalar multiplication only, no bilinear pairings}
+\end{aligned}
+$$
+
+### Verification
+
+$$
+\begin{aligned}
+&\text{Public verification of signature component}
+\end{aligned}
+$$
 
 ## Protocol / Scheme
 

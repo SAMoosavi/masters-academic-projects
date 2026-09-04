@@ -11,9 +11,7 @@ tags: [CLAS, VANET, certificateless-signature, pairing-free, ECC, CDH, Type-I, T
 
 ## Overview
 
-This paper proposes a certificateless aggregate signature (CLAS) scheme tailored for VANET environments, addressing the challenge of authenticating large volumes of vehicle messages while minimizing verification overhead. The scheme prevents onboard unit (OBU) devices from leaking sensitive information during message transmission by applying CLAS methods to compress multiple signatures into a single aggregate.
-
-The security of the proposed scheme is formally proven in the random oracle model (ROM) under the computational Diffie–Hellman (CDH) problem assumption, demonstrating resistance against both Type-I (external adversary) and Type-II (malicious KGC) adversaries. Performance evaluation confirms the scheme's suitability for resource-constrained VANET deployments where bandwidth, storage, and computation are limited.
+This paper proposes a certificateless aggregate signature (CLAS) scheme tailored for VANET environments, addressing the challenge of authenticating large volumes of vehicle messages while minimizing verification overhead. The scheme prevents onboard unit (OBU) devices from leaking sensitive information during message transmission by applying CLAS methods to compress multiple signatures into a single aggregate. The security of the proposed scheme is formally proven in the random oracle model (ROM) under the computational Diffie–Hellman (CDH) problem assumption, demonstrating resistance against both Type-I (external adversary) and Type-II (malicious KGC) adversaries. Performance evaluation confirms the scheme's suitability for resource-constrained VANET deployments where bandwidth, storage, and computation are limited.
 
 ## Relevance to Our Work
 
@@ -27,30 +25,73 @@ This is a foundational CLAS-for-VANET scheme that establishes baseline security 
 
 ## Mathematical Notation
 
-Key generation:
-- KGC generates master key $s \in \mathbb{Z}_q^*$ and master public key $P_{pub} = sP$
-- Partial private key: $D_i = s \cdot H_1(ID_i)$ where $H_1: \{0,1\}^* \to G_1$
-- Secret value: $x_i \in \mathbb{Z}_q^*$, public key: $PK_i = x_iP$
-- Full private key: $SK_i = (D_i, x_i)$
+### Setup
 
-Signature generation (on message $m_j$):
-- Choose random $r_j \in \mathbb{Z}_q^*$
-- Compute $R_j = r_jP$
-- $h_j = H_2(m_j, ID_i, PK_i, R_j)$
-- $S_j = r_j + h_j \cdot x_i \mod q$ (using secret value)
+$$
+\begin{aligned}
+&s \in \mathbb{Z}_q^*,\quad P_{pub} = sP \\
+&H_1:\{0,1\}^*\rightarrow G_1,\quad H_2:\{0,1\}^*\rightarrow\mathbb{Z}_q^*
+\end{aligned}
+$$
 
-Aggregation:
-$$\sigma = \sum_{j=1}^{n} S_j, \quad R = \sum_{j=1}^{n} R_j, \quad H = \prod_{j=1}^{n} h_j$$
+### Partial Private Key Extract
 
-Verification:
-$$e(\sigma P, P) \stackrel{?}{=} e(R, P) \cdot e(H \cdot PK_i, P_{pub})$$
+$$
+\begin{aligned}
+&D_i = s \cdot H_1(ID_i)
+\end{aligned}
+$$
+
+### Set Secret Value
+
+$$
+\begin{aligned}
+&x_i \in \mathbb{Z}_q^* \\
+&PK_i = x_iP
+\end{aligned}
+$$
+
+### Set Private/Public Key
+
+$$
+\begin{aligned}
+&SK_i = (D_i, x_i) \\
+&PK_i = x_iP
+\end{aligned}
+$$
+
+### Signature
+
+$$
+\begin{aligned}
+&r_j \in \mathbb{Z}_q^*,\quad R_j = r_jP \\
+&h_j = H_2(m_j, ID_i, PK_i, R_j) \\
+&S_j = r_j + h_j \cdot x_i \pmod q
+\end{aligned}
+$$
+
+### Aggregate (CLAS)
+
+$$
+\begin{aligned}
+&\sigma = \sum_{j=1}^{n} S_j,\quad R = \sum_{j=1}^{n} R_j,\quad H = \prod_{j=1}^{n} h_j
+\end{aligned}
+$$
+
+### Verification
+
+$$
+\begin{aligned}
+e(\sigma P, P) \stackrel{?}{=} e(R, P) \cdot e(H \cdot PK_i, P_{pub})
+\end{aligned}
+$$
 
 ## Protocol / Scheme
 
 1. **Setup**: KGC selects system parameters $(q, G_1, G_2, e, P, s, P_{pub})$ and hash functions
 2. **Extract**: KGC computes partial private key $D_i = sH_1(ID_i)$ for user $i$
 3. **SetKey**: User selects secret value $x_i$, computes public key $PK_i = x_iP$
-4. **Sign**: For message $m_j$, signer picks $r_j$, computes $R_j = r_jP$, $h_j = H_2(m_j, ID, PK, R_j)$, $S_j = r_j + h_j x_i \mod q$
+4. **Sign**: For message $m_j$, signer picks $r_j$, computes $R_j = r_jP$, $h_j = H_2(m_j, ID, PK, R_j)$, $S_j = r_j + h_j x_i \pmod q$
 5. **Aggregate**: Aggregator computes $\sigma = \sum S_j$, $R = \sum R_j$
 6. **Verify**: RSU checks pairing equation
 

@@ -64,8 +64,6 @@ $$
 
 $$
 \begin{aligned}
-sP\stackrel{?}{=}\sum_{i=1}^n W_i+\sum_{i=1}^n X_i\cdot h_{3i}
+sP\stackrel{?}{=}\sum_{i=1}^n h_{2i}\cdot K_{pub}+\sum_{i=1}^n X_i\cdot h_{3i}
 \end{aligned}
 $$
-
-where $W_i=h_{2i}\cdot K_{pub}$.

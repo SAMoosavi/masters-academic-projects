@@ -11,9 +11,7 @@ tags: [CLAS, VANET, hyperelliptic-curve, HECC, pairing-free, security]
 
 ## Overview
 
-This paper proposes a CLAS scheme based on hyperelliptic curve cryptography (HECC) for secure vehicle-to-RSU communication in VANETs. The key innovation is using HECC instead of standard ECC, which provides smaller key sizes while maintaining equivalent security levels. The scheme enables vehicles to share identities via open wireless channels without revealing them to unauthorized participants.
-
-Security analysis through ROM proves unforgeability against Type-1 (FGR1) and Type-2 (FGR2) forgers under the hyperelliptic curve discrete logarithm problem (HCDLP). The scheme outperforms relevant existing schemes in both computational cost and communication overhead while maintaining high security.
+This paper proposes a CLAS scheme based on hyperelliptic curve cryptography (HECC) for secure vehicle-to-RSU communication in VANETs. The key innovation is using HECC instead of standard ECC, which provides smaller key sizes while maintaining equivalent security levels. The scheme enables vehicles to share identities via open wireless channels without revealing them to unauthorized participants. Security analysis through ROM proves unforgeability against Type-1 (FGR1) and Type-2 (FGR2) forgers under the hyperelliptic curve discrete logarithm problem (HCDLP). The scheme outperforms relevant existing schemes in both computational cost and communication overhead while maintaining high security.
 
 ## Relevance to Our Work
 
@@ -28,24 +26,67 @@ This paper introduces an alternative cryptographic foundation (HECC) for CLAS. W
 
 ## Mathematical Notation
 
-**HECC-based construction:**
-- Curve: genus-$g$ hyperelliptic curve over $\mathbb{F}_q$
-- Jacobian group $J_C(\mathbb{F}_q)$ of order $n$
-- Generator $P$ of prime order $n$
+### Setup
 
-**Key generation:**
-- KGC: $s \in \mathbb{Z}_n^*$, $P_{pub} = [s]P$
-- Partial key: $D_i = [s]H(ID_i)$
-- Secret value $x_i$, public key $PK_i = [x_i]P$
+$$
+\begin{aligned}
+&\text{genus-}g \text{ hyperelliptic curve over } \mathbb{F}_q \\
+&J_C(\mathbb{F}_q) \text{ of order } n \\
+&s \in \mathbb{Z}_n^*,\quad P_{pub} = [s]P
+\end{aligned}
+$$
 
-**Signing:**
-- Random $r_i \in \mathbb{Z}_n^*$
-- $R_i = [r_i]P$
-- $h_i = H(m_i \| ID_i \| R_i)$
-- $\sigma_i = r_i + h_i(x_i + D_i) \mod n$
+### Partial Private Key Extract
 
-**Aggregation:**
-$$\sigma = \sum_{i=1}^n \sigma_i \mod n$$
+$$
+\begin{aligned}
+&D_i = [s]H(ID_i)
+\end{aligned}
+$$
+
+### Set Secret Value
+
+$$
+\begin{aligned}
+&x_i \in \mathbb{Z}_n^* \\
+&PK_i = [x_i]P
+\end{aligned}
+$$
+
+### Set Private/Public Key
+
+$$
+\begin{aligned}
+&SK_i = (D_i, x_i) \\
+&PK_i = [x_i]P
+\end{aligned}
+$$
+
+### Signature
+
+$$
+\begin{aligned}
+&r_i \in \mathbb{Z}_n^*,\quad R_i = [r_i]P \\
+&h_i = H(m_i \| ID_i \| R_i) \\
+&\sigma_i = r_i + h_i(x_i + D_i) \pmod n
+\end{aligned}
+$$
+
+### Aggregate (CLAS)
+
+$$
+\begin{aligned}
+&\sigma = \sum_{i=1}^n \sigma_i \pmod n
+\end{aligned}
+$$
+
+### Verification
+
+$$
+\begin{aligned}
+e(\sigma P, P) \stackrel{?}{=} e\left(\sum R_i, P\right) \cdot e\left(\sum h_i(PK_i) + H_1(ID_i), P_{pub}\right)
+\end{aligned}
+$$
 
 ## Protocol / Scheme
 

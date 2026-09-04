@@ -11,9 +11,7 @@ tags: [CLAS, signcryption, VANET, key-replacement-attack, ECC, confidentiality, 
 
 ## Overview
 
-This paper conducts a security analysis of Dai et al.'s pairing-free CLASC scheme, revealing its vulnerability to public key replacement attacks. The authors then propose a security-enhanced certificateless aggregate signcryption (CLASC) scheme that provides both confidentiality and unforgeability against adaptive chosen ciphertext/message attacks in ROM.
-
-The enhanced scheme satisfies all security attributes required for VANETs while demonstrating superior computational and communication efficiency compared to related signcryption schemes.
+This paper conducts a security analysis of Dai et al.'s pairing-free CLASC scheme, revealing its vulnerability to public key replacement attacks. The authors then propose a security-enhanced certificateless aggregate signcryption (CLASC) scheme that provides both confidentiality and unforgeability against adaptive chosen ciphertext/message attacks in ROM. The enhanced scheme satisfies all security attributes required for VANETs while demonstrating superior computational and communication efficiency compared to related signcryption schemes.
 
 ## Relevance to Our Work
 
@@ -28,14 +26,38 @@ This paper fixes a vulnerability in Dai et al. (2022) — showing that even publ
 
 ## Mathematical Notation
 
-**Attack on Dai et al.:**
-- Adversary replaces public key: $PK_i' = PK_i + \Delta$
-- Algebraic manipulation allows signature forgery during unsigncrypt
+### Setup
 
-**Enhanced CLASC:**
-- Signcrypt: Encrypt and sign simultaneously using ECC
-- Aggregate signcrypt: $\sigma_{agg} = \sum \sigma_i$
-- Unsigncrypt + verify: Combined decryption and verification
+$$
+\begin{aligned}
+&\text{Adversary replaces public key: } PK_i' = PK_i + \Delta \\
+&\text{Algebraic manipulation allows signature forgery during unsigncrypt}
+\end{aligned}
+$$
+
+### Signature
+
+$$
+\begin{aligned}
+&\text{Signcrypt: Encrypt and sign simultaneously using ECC}
+\end{aligned}
+$$
+
+### Aggregate (CLAS)
+
+$$
+\begin{aligned}
+&\sigma_{agg} = \sum_{i=1}^n \sigma_i
+\end{aligned}
+$$
+
+### Verification
+
+$$
+\begin{aligned}
+&\text{Unsigncrypt + verify: Combined decryption and verification}
+\end{aligned}
+$$
 
 ## Protocol / Scheme
 

@@ -43,8 +43,7 @@ $$
 \begin{aligned}
 &r_i\in\mathbb{Z}_q^*,\quad R_i=r_i P_1 \\
 &h_i=H_2(m_i,ID_i,P_i,R_i) \\
-&\sigma_i=D_i+(x_i+h_i) r_i^{-1}\pmod q \\
-&\text{or } \sigma_i=(R_i, S_i) \text{ depending on variant}
+&\sigma_i=D_i+(x_i+h_i) r_i^{-1}\pmod q
 \end{aligned}
 $$
 
@@ -64,7 +63,3 @@ $$
 e(\sigma,P_1)\stackrel{?}{=}\prod_{i=1}^n e(H_1(ID_i),P_{pub})\cdot e(P_i,R_i)
 \end{aligned}
 $$
-
-## Note
-
-Primary contribution is attack taxonomy (honest-but-curious KGC, malicious-but-passive KGC, inside signer collusion, insider + malicious KGC collusion) and validity equivalence property, not scheme efficiency.

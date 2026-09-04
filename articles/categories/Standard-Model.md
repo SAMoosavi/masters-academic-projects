@@ -8,27 +8,22 @@ tags: [category, standard-model, security-proof]
 
 > Security proofs that do **not** rely on the Random Oracle Model (ROM). Stronger guarantees — ROM proofs may not translate to real implementations.
 
-## ROM vs Standard Model
+## Properties
 
-| Model | Assumption | Realism | Overhead |
-|-------|------------|---------|----------|
-| **ROM** | Hash functions = random oracles | Idealized | Lower |
-| **Standard** | Concrete hash properties | Realistic | Higher |
+- ROM: hash functions = random oracles, idealized, lower overhead
+- Standard model: concrete hash properties, realistic, higher overhead
+- Only 2 of 15 CLAS papers use standard model ($13\%$)
+- Higher computation for stronger guarantees
+- Standard model proofs are closer to real-world security
 
-## Papers with Standard Model Proofs
+## Papers in This Category
 
-| Paper | Year | Scheme | Security Assumption |
-|-------|------|--------|---------------------|
-| [[wang2022]] | 2022 | CLAS | CDHP |
-| [[yuan2023]] | 2023 | CLAS | CDHP |
-
-## Why This Matters
-
-- ROM is a **mathematical abstraction** — real hash functions aren't random oracles
-- Standard model proofs are **closer to real-world security**
-- Only 2 of 15 CLAS papers use standard model (13%)
-- Trade-off: higher computation for stronger guarantees
+| Paper | Year | Focus | Pairing-Free | Type III |
+|-------|------|-------|:---:|:---:|
+| [[wang2022]] | 2022 | CLAS, CDHP assumption | ✓ | ✗ |
+| [[yuan2023]] | 2023 | CLAS, CDHP assumption | ✓ | ✗ |
 
 ## Related Categories
+
 - [[CLAS]] — all aggregate schemes
 - [[Type-III]] — strongest adversary model

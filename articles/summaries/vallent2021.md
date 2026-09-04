@@ -1,21 +1,10 @@
 ---
 title: "Efficient Certificate-Less Aggregate Signature Scheme with Conditional Privacy-Preservation for VANETs Enhanced Smart Grid System"
-authors:
-  - Thokozani Felix Vallent
-  - Damien Hanyurwimfura
-  - Chomora Mikeka
+authors: "Thokozani Felix Vallent, Damien Hanyurwimfura, Chomora Mikeka"
 year: 2021
-doi: "https://doi.org/10.3390/s21092900"
 journal: "Sensors"
-tags:
-  - certificateless-signature
-  - aggregate-signature
-  - ECC
-  - IoT
-  - smart-grid
-relevance:
-  - focus: "Scheme"
-    note: "ECC-based CLAS for VANET+smart grid with time-validated pseudonyms; relevant comparison for IoT-optimized design"
+doi: "10.3390/s21092900"
+tags: [certificateless-signature, aggregate-signature, ECC, IoT, smart-grid]
 ---
 
 # Efficient Certificate-Less Aggregate Signature Scheme with Conditional Privacy-Preservation for VANETs Enhanced Smart Grid System
@@ -24,7 +13,7 @@ relevance:
 
 This paper proposes an efficient certificateless aggregate signature (ECLAS) scheme for VANET and smart grid applications. The scheme uses Elliptic Curve Cryptography (ECC) for efficiency and incorporates time-validated pseudonyms to enhance privacy and security. It addresses the KGC escrow problem and provides formal security proofs.
 
-## Relevance
+## Relevance to Our Work
 
 Relevant to the article as it demonstrates CLAS application in both VANET and smart grid contexts. The time-validated pseudonym approach offers an alternative privacy mechanism that the article may consider for comparison.
 
@@ -37,38 +26,97 @@ Relevant to the article as it demonstrates CLAS application in both VANET and sm
 
 ## Mathematical Notation
 
-- G: Additive cyclic group on elliptic curve E over F_p
-- P: Base point of G with order q
-- s: KGC master secret, P_pub = sP
-- User key: x_i (secret), P_i = x_iP (public), d_i = sH(ID_i) (partial private key)
-- Pseudonym: PID_i = H(ID_i, T_start, T_end) with verification value V_i = x_i H(PID_i)
-- Sign: S_i = d_i H(PID_i) + x_i h_i + r_i where h_i = H(M_i, PID_i, R_i)
+### Setup
+
+$$
+\begin{aligned}
+&G: \text{Additive cyclic group on elliptic curve } E \text{ over } \mathbb{F}_p \\
+&P: \text{Base point of } G \text{ with order } q \\
+&s: \text{KGC master secret},\quad P_{pub} = sP
+\end{aligned}
+$$
+
+### Partial Private Key Extract
+
+$$
+\begin{aligned}
+&d_i = sH(ID_i)
+\end{aligned}
+$$
+
+### Set Secret Value
+
+$$
+\begin{aligned}
+&x_i \in \mathbb{Z}_q^* \\
+&P_i = x_iP
+\end{aligned}
+$$
+
+### Set Private/Public Key
+
+$$
+\begin{aligned}
+&SK_i = (d_i, x_i) \\
+&P_i = x_iP
+\end{aligned}
+$$
+
+### Signature
+
+$$
+\begin{aligned}
+&PID_i = H(ID_i, T_{start}, T_{end}) \\
+&V_i = x_i H(PID_i) \\
+&S_i = d_i H(PID_i) + x_i h_i + r_i \\
+&h_i = H(M_i, PID_i, R_i)
+\end{aligned}
+$$
+
+### Aggregate (CLAS)
+
+$$
+\begin{aligned}
+&\sigma = \sum_{i=1}^n S_i
+\end{aligned}
+$$
+
+### Verification
+
+$$
+\begin{aligned}
+e(\sigma P, P) \stackrel{?}{=} e\left(\sum R_i, P\right) \cdot e\left(\sum h_i(PK_i) + H_1(ID_i), P_{pub}\right)
+\end{aligned}
+$$
 
 ## Protocol / Scheme
 
-ECLAS extends standard CLAS with pseudonym management. Each vehicle generates pseudonyms valid for specific time intervals, enhancing privacy by unlinking transactions. The time validation prevents long-term tracking while maintaining accountability through the KGC ability to map pseudonyms to real identities.
+1. **Setup**: System parameters and master key generation
+2. **KeyGen**: KGC issues partial private key, user generates secret value
+3. **PseudonymGen**: Generate time-validated pseudonyms for vehicles
+4. **Sign**: Vehicle signs message with pseudonym-based key
+5. **Aggregate**: Combine multiple signatures
+6. **Verify**: Aggregate verification
 
 ## Security Analysis
 
-Proven secure under ECDHP assumption. Resists Type I attacks (public key replacement), Type II attacks (malicious KGC), replay attacks (through timestamp validation), and tracking attacks (through pseudonym rotation).
+- Proven secure under ECDHP assumption
+- Resists Type I attacks (public key replacement)
+- Resists Type II attacks (malicious KGC)
+- Resists replay attacks (through timestamp validation)
+- Resists tracking attacks (through pseudonym rotation)
 
 ## Performance
 
-Claims efficiency through ECC-based operations (smaller key sizes than RSA), minimal pairing operations, efficient pseudonym generation and validation, and suitability for resource-constrained IoT devices.
+- ECC-based operations (smaller key sizes than RSA)
+- Minimal pairing operations
+- Efficient pseudonym generation and validation
+- Suitable for resource-constrained IoT devices
 
 ## Strengths & Limitations
 
-### Strengths
-- Dual applicability to VANET and smart grid scenarios
-- Privacy enhancement through time-validated pseudonyms
-- ECC-based efficiency suitable for IoT deployment
-- Formal security proofs under standard assumptions
-
-### Limitations
-- Pseudonym management adds complexity
-- Time synchronization requirement may be challenging
-- Comparison with other schemes may not be comprehensive
-- Smart grid integration details may need further elaboration
+- Strengths: Dual applicability to VANET and smart grid scenarios, privacy enhancement through time-validated pseudonyms, ECC-based efficiency suitable for IoT deployment, formal security proofs under standard assumptions
+- Limitations: Pseudonym management adds complexity, time synchronization requirement may be challenging, comparison with other schemes may not be comprehensive, smart grid integration details may need further elaboration
 
 ## Related Work
 

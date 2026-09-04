@@ -11,9 +11,7 @@ tags: [CLAS, VANET, survey, certificateless-signature, taxonomy]
 
 ## Overview
 
-This comprehensive survey reviews the state of certificateless aggregate signature (CLAS) schemes specifically designed for vehicular ad-hoc networks. The paper provides a systematic taxonomy of existing CLAS approaches, categorizing them by security model, cryptographic foundation, and VANET integration strategy.
-
-The survey identifies critical security challenges in VANETs including authentication, privacy preservation, and bandwidth constraints. It evaluates how different CLAS schemes address these challenges, comparing bilinear pairing-based and pairing-free approaches. The authors highlight open research problems including post-quantum resilience, scalability for 5G/6G environments, and practical deployment considerations.
+This comprehensive survey reviews the state of certificateless aggregate signature (CLAS) schemes specifically designed for vehicular ad-hoc networks. The paper provides a systematic taxonomy of existing CLAS approaches, categorizing them by security model, cryptographic foundation, and VANET integration strategy. The survey identifies critical security challenges in VANETs including authentication, privacy preservation, and bandwidth constraints. It evaluates how different CLAS schemes address these challenges, comparing bilinear pairing-based and pairing-free approaches. The authors highlight open research problems including post-quantum resilience, scalability for 5G/6G environments, and practical deployment considerations.
 
 ## Relevance to Our Work
 
@@ -28,25 +26,41 @@ This survey serves as the primary literature review reference for our article. I
 
 ## Mathematical Notation
 
-The survey catalogs the following generic CLAS framework:
+### Setup
 
-**Certificateless Signature (CLS) foundation:**
-- Public key: $PK = xP$ where $x$ is user's secret value
-- Private key: $(D_{user}, x)$ where $D_{user} = sH_1(ID)$ from KGC
+$$
+\begin{aligned}
+&PK = xP,\quad x \text{ is user's secret value} \\
+&D_{user} = sH_1(ID) \text{ from KGC} \\
+&SK = (D_{user}, x)
+\end{aligned}
+$$
 
-**Aggregate signature construction:**
-- Individual signatures $(S_i, R_i)$ for messages $m_i$
-- Aggregate: $\sigma_{agg} = \sum_{i=1}^n S_i$
-- Verification: $e(\sigma_{agg}P, P) = \prod e(R_i, P) \cdot e(\sum h_i PK_i, P_{pub})$
+### Signature
 
-**Security assumptions cataloged:**
-- Computational Diffie-Hellman (CDH)
-- Elliptic Curve Discrete Logarithm (ECDL)
-- Bilinear Diffie-Hellman (BDH)
+$$
+\begin{aligned}
+&(S_i, R_i) \text{ for messages } m_i
+\end{aligned}
+$$
+
+### Aggregate (CLAS)
+
+$$
+\begin{aligned}
+&\sigma_{agg} = \sum_{i=1}^n S_i
+\end{aligned}
+$$
+
+### Verification
+
+$$
+\begin{aligned}
+e(\sigma_{agg}P, P) \stackrel{?}{=} \prod e(R_i, P) \cdot e\left(\sum h_i PK_i, P_{pub}\right)
+\end{aligned}
+$$
 
 ## Protocol / Scheme
-
-The survey describes the generic CLAS protocol flow for VANETs:
 
 1. **System Setup**: KGC initializes with master secret/public key pair
 2. **Vehicle Registration**: TA registers vehicles, KGC issues partial private keys
@@ -57,17 +71,14 @@ The survey describes the generic CLAS protocol flow for VANETs:
 
 ## Security Analysis
 
-The survey categorizes attacks into:
 - **Type-I**: External adversary replacing public keys
 - **Type-II**: Malicious KGC using master key
 - **Type-III**: Insider collusion (KGC + vehicle)
 - **Replay, impersonation, modification attacks**
-
-Key finding: Most surveyed schemes resist only Type-I and Type-II; Type-III resistance is rare.
+- Key finding: Most surveyed schemes resist only Type-I and Type-II; Type-III resistance is rare
 
 ## Performance
 
-The survey compares computation and communication overhead across schemes, noting:
 - Pairing-based schemes: higher security but higher computation
 - Pairing-free ECC schemes: lower cost, suitable for VANETs
 - Hyperelliptic curve schemes: smaller keys but less studied

@@ -8,41 +8,27 @@ tags: [category, cryptanalysis, attacks, security]
 
 > Papers that break existing schemes rather than propose new ones. Critical for establishing security requirements.
 
-## Attack Taxonomy
+## Properties
 
-| Attack | Target | Paper |
-|--------|--------|-------|
-| **KGC attack** (malicious-but-passive) | Wang et al. CLAS | [[shim2023]] |
-| **Forgery + key recovery** | Xiong et al. CLS | [[shim2023]] |
-| **Public key replacement** (Type I) | Zhu-Guan, Chen-Guan | [[shim2026]] |
-| **Coalition attack** | Xiong et al. CLAS | [[zhang2014]] |
-| **Honest-but-curious KGC** | Xiong et al. CLAS | [[zhang2014]] |
-| **Insider + malicious KGC** | Xiong et al. CLAS | [[zhang2014]] |
-| **Forged signature (Type I)** | PF-CLS class | [[wei2025]] |
-| **Forged signature** | LICLAS | [[gong2023]] |
-| **Rogue key attack** | Zheng et al. CLAS | [[yue2025]] |
-| **Public key replacement** | Dai et al. CLASC | [[wu2025-signcryption]] |
+- Always check KGC attacks — master key enables universal forgery
+- Public key binding is critical — hash must include $PK$ and $P_{pub}$
+- Coalition attacks are practical — insider + KGC = most destructive
+- Rogue key attacks are subtle — ephemeral keys can bypass verification
 
-## Papers
+## Papers in This Category
 
-| Paper | Year | Target | Result |
-|-------|------|--------|--------|
-| [[zhang2014]] | 2014 | Xiong et al. | 4 concrete attacks |
-| [[shim2023]] | 2023 | Wang et al., Xiong et al. | KGC + forgery attacks |
-| [[shim2026]] | 2026 | Zhu-Guan, Chen-Guan | Type I forgery |
-| [[wei2025]] | 2025 | PF-CLS class | Novel attack method |
-| [[gong2023]] | 2023 | LICLAS | Forgery attack + improved scheme |
-| [[yue2025]] | 2025 | Zheng et al. | Rogue key attack |
-| [[wu2025-signcryption]] | 2025 | Dai et al. | Public key replacement |
-
-## Lessons Learned
-
-1. **Always check KGC attacks** — master key enables universal forgery
-2. **Public key binding is critical** — hash must include $PK$ and $P_{pub}$
-3. **Coalition attacks are practical** — insider + KGC = most destructive
-4. **Rogue key attacks are subtle** — ephemeral keys can bypass verification
+| Paper | Year | Focus | Pairing-Free | Type III |
+|-------|------|-------|:---:|:---:|
+| [[zhang2014]] | 2014 | 4 attacks on Xiong et al. CLAS (coalition, honest-but-curious KGC, insider) | ✗ | ✗ |
+| [[shim2023]] | 2023 | KGC + forgery attacks on Wang et al. CLAS and Xiong et al. CLS | ✗ | ✗ |
+| [[shim2026]] | 2026 | Type I forgery on Zhu-Guan, Chen-Guan | ✗ | ✗ |
+| [[wei2025]] | 2025 | Novel forged signature attack (Type I) on PF-CLS class | ✓ | ✗ |
+| [[gong2023]] | 2023 | Forgery attack + improved scheme on LICLAS | ✓ | ✗ |
+| [[yue2025]] | 2025 | Rogue key attack on Zheng et al. CLAS | ✓ | ✓ |
+| [[wu2025-signcryption]] | 2025 | Public key replacement on Dai et al. CLASC | ✓ | ✗ |
 
 ## Related Categories
+
 - [[CLAS]] — target schemes
 - [[Type-III]] — strongest adversary model
 - [[Detect-Invalid]] — finding forged signatures

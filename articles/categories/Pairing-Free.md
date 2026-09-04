@@ -8,62 +8,38 @@ tags: [category, pairing-free, ECC, efficiency]
 
 > Schemes eliminating expensive bilinear pairing operations $e: G_1 \times G_1 \to G_2$. Use only ECC scalar multiplication — critical for VANET resource constraints.
 
-## Why Pairing-Free Matters
+## Properties
 
-| Operation | Cost (relative) |
-|-----------|----------------|
-| Scalar multiplication | 1× |
-| Bilinear pairing | 10–20× |
-| Map-to-point hash | 5–10× |
+- Scalar multiplication: $1\times$ cost (baseline)
+- Bilinear pairing: $10\text{--}20\times$ cost
+- Map-to-point hash: $5\text{--}10\times$ cost
+- Pairing-free schemes achieve $10\text{--}20\times$ faster verification than pairing-based schemes
 
-Pairing-free schemes achieve **10–20× faster verification** than pairing-based schemes.
+## Papers in This Category
 
-## Papers (13 of 24 are pairing-free)
-
-### CLAS — Pairing-Free
-| Paper | Year | ECC | Type III | Notable |
-|-------|------|:---:|:---:|---------|
-| [[cahyadi2022-clas-scheme]] | 2022 | ✓ | ✗ | Foundational |
-| [[gong2023]] | 2023 | ✓ | ✗ | 25% reduction |
-| [[han2022]] | 2022 | ✓ | ✗ | eCLAS, V2I |
-| [[tao2026]] | 2026 | ✓ | ✗ | **SOTA efficiency** |
-| [[vallent2021]] | 2021 | ✓ | ✗ | Smart grid |
-| [[wang2022]] | 2022 | ✓ | ✗ | Standard model |
-| [[wang2025-ecae]] | 2025 | ✓ | ✗ | 46% reduction |
-| [[wang2025-detectable]] | 2025 | ✓ | ✗ | Invalid detection |
-| [[wu2025-pseudonyms]] | 2025 | ✓ | ✓ | Type III, MIRACL |
-| [[wu2025-collusion]] | 2025 | ✓ | ✓ | Type III, NS3+SUMO |
-| [[xu2023]] | 2023 | ✓ | ✗ | Security-enhanced |
-| [[yuan2023]] | 2023 | ✓ | ✗ | Standard model |
-| [[yue2025]] | 2025 | ✓ | ✓ | Rogue key fix |
-| [[zheng2023]] | 2023 | ✓ | ✗ | Rogue key vulnerable |
-
-### CLS — Pairing-Free
-| Paper | Year | Focus |
-|-------|------|-------|
-| [[wei2025]] | 2025 | IoT, novel attack class |
-
-### Signcryption — Pairing-Free
-| Paper | Year | Focus |
-|-------|------|-------|
-| [[dai2022]] | 2022 | CLASC for vehicular sensors |
-| [[wu2025-signcryption]] | 2025 | Security-enhanced CLASC |
-| [[zhang2024]] | 2024 | CLSC for IoMT |
-
-### NOT Pairing-Free
-| Paper | Year | Why |
-|-------|------|-----|
-| [[iqbal2023]] | 2023 | HECC (different curve, not pairing-free) |
-| [[zhang2014]] | 2014 | Uses bilinear maps |
-
-## Efficiency Comparison
-
-| Scheme | Year | Computation Reduction | Pairing-Free |
-|--------|------|----------------------|:---:|
-| [[tao2026]] | 2026 | ≥24.3% | ✓ |
-| [[wang2025-ecae]] | 2025 | 46.18% | ✓ |
-| [[gong2023]] | 2023 | 16.56–25.34% | ✓ |
+| Paper | Year | Focus | Pairing-Free | Type III |
+|-------|------|-------|:---:|:---:|
+| [[cahyadi2022-clas-scheme]] | 2022 | Foundational VANET CLAS | ✓ | ✗ |
+| [[gong2023]] | 2023 | PCAS, 25% overhead reduction | ✓ | ✗ |
+| [[han2022]] | 2022 | eCLAS, V2I optimized | ✓ | ✗ |
+| [[tao2026]] | 2026 | ES-CLAS, $\geq 24.3\%$ reduction, SOTA efficiency | ✓ | ✗ |
+| [[vallent2021]] | 2021 | VANET + smart grid | ✓ | ✗ |
+| [[wang2022]] | 2022 | Standard model CLAS | ✓ | ✗ |
+| [[wang2025-ecae]] | 2025 | NDN-IoT, 46% computation reduction | ✓ | ✗ |
+| [[wang2025-detectable]] | 2025 | Invalid signature detection | ✓ | ✗ |
+| [[wu2025-pseudonyms]] | 2025 | Type I+II+III, MIRACL validated | ✓ | ✓ |
+| [[wu2025-collusion]] | 2025 | Type I+II+III, NS3+SUMO | ✓ | ✓ |
+| [[xu2023]] | 2023 | Security-enhanced CLAS | ✓ | ✗ |
+| [[yuan2023]] | 2023 | Standard model CLAS | ✓ | ✗ |
+| [[yue2025]] | 2025 | Rogue key fix, aggregator sig | ✓ | ✓ |
+| [[zheng2023]] | 2023 | Rogue key vulnerable | ✓ | ✗ |
+| [[wei2025]] | 2025 | IoT CLS, novel attack class | ✓ | ✗ |
+| [[dai2022]] | 2022 | CLASC for vehicular sensors | ✓ | ✗ |
+| [[wu2025-signcryption]] | 2025 | Security-enhanced CLASC | ✓ | ✗ |
+| [[zhang2024]] | 2024 | CLSC for IoMT | ✓ | ✗ |
 
 ## Related Categories
+
 - [[CLAS]] — all aggregate schemes
 - [[CLS]] — non-aggregate schemes
+- [[Signcryption]] — combined encryption + signature

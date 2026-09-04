@@ -11,9 +11,7 @@ tags: [CLAS, cryptanalysis, KGC-attack, coalition-attack, bilinear-map, foundati
 
 ## Overview
 
-This foundational paper presents four concrete attacks on Xiong et al.'s CLAS scheme: honest-but-curious KGC, malicious-but-passive KGC, inside signer collusion, and insider signer with malicious KGC collusion. The coalition attacks (especially insider + malicious KGC) are shown to be practical and destructive.
-
-The paper also proposes a new secure CLAS scheme where the aggregate signature is valid if and only if every individual signature is valid. This is one of the earliest and most cited CLAS security analyses.
+This foundational paper presents four concrete attacks on Xiong et al.'s CLAS scheme: honest-but-curious KGC, malicious-but-passive KGC, inside signer collusion, and insider signer with malicious KGC collusion. The coalition attacks (especially insider + malicious KGC) are shown to be practical and destructive. The paper also proposes a new secure CLAS scheme where the aggregate signature is valid if and only if every individual signature is valid. This is one of the earliest and most cited CLAS security analyses.
 
 ## Relevance to Our Work
 
@@ -28,20 +26,45 @@ This is the foundational cryptanalysis paper that established the security requi
 
 ## Mathematical Notation
 
-**Attacks on Xiong et al.:**
+### Setup
 
-1. **Honest-but-curious KGC attack**: KGC observes partial keys and can deduce information
-2. **Malicious-but-passive KGC attack**: KGC uses master key $s$ to compute $D_i = sH(ID_i)$ for any user and forge signatures
-3. **Inside signer collusion**: Multiple signers combine their partial information
-4. **Insider + malicious KGC**: Most destructive — KGC collaborates with one signer to forge for all
+$$
+\begin{aligned}
+&s \in \mathbb{Z}_q^*,\quad P_{pub} = sP \\
+&\text{Bilinear map } e: G_1 \times G_1 \to G_2
+\end{aligned}
+$$
 
-**New secure scheme:**
-- Aggregate signature $\sigma_{agg}$ is valid $\iff$ every $\sigma_i$ is individually valid
-- Bilinear map construction
+### Partial Private Key Extract
+
+$$
+\begin{aligned}
+&D_i = sH(ID_i) \\
+&\text{Malicious KGC: uses master key } s \text{ to compute } D_i \text{ for any user}
+\end{aligned}
+$$
+
+### Signature
+
+$$
+\begin{aligned}
+&\text{Attack 1: Honest-but-curious KGC observes partial keys and deduces information} \\
+&\text{Attack 2: Malicious-but-passive KGC forges using master key} \\
+&\text{Attack 3: Inside signers collude} \\
+&\text{Attack 4: KGC + insider collude (most destructive)}
+\end{aligned}
+$$
+
+### Verification
+
+$$
+\begin{aligned}
+&\text{New scheme: } \sigma_{agg} \text{ is valid } \iff \text{ every } \sigma_i \text{ is individually valid}
+\end{aligned}
+$$
 
 ## Protocol / Scheme
 
-The paper analyzes attacks and proposes:
 1. **Attack 1**: KGC observes and deduces
 2. **Attack 2**: KGC forges using master key
 3. **Attack 3**: Signers collude

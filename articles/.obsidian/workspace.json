@@ -4,24 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "0e43c6733284346e",
+        "id": "85830daa69d13e32",
         "type": "tabs",
         "children": [
           {
-            "id": "fe3627d2782dd0e6",
+            "id": "b676956d0be16e80",
             "type": "leaf",
             "state": {
-              "type": "canvas",
+              "type": "markdown",
               "state": {
-                "file": "Signature Schemes.canvas",
-                "viewState": {
-                  "x": 786.8210255961123,
-                  "y": 4705.856433977092,
-                  "zoom": -0.381347856738386
-                }
+                "file": "summaries/iqbal2023.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-layout-dashboard",
-              "title": "Signature Schemes"
+              "icon": "lucide-file",
+              "title": "iqbal2023"
             }
           }
         ]
@@ -188,39 +185,41 @@
       "bases:Create new base": false
     }
   },
-  "active": "fe3627d2782dd0e6",
+  "active": "b676956d0be16e80",
   "lastOpenFiles": [
+    "schemes/iqbal2023.md",
+    "categories/CLAS.md",
+    "categories/CLS.md",
+    "schemes/wei2025.md",
+    "summaries/cahyadi2022-survey.md",
+    "summaries/cahyadi2022-clas-scheme.md",
+    "templates/summary-template.md",
+    "templates/scheme-template.md",
+    "templates/category-template.md",
+    "analysis-report.md",
+    "math-notation.md",
+    "protocols.md",
+    "Signature Schemes.canvas",
+    "summaries/zheng2023.md",
+    "summaries/zhang2024.md",
+    "summaries/vallent2021.md",
+    "summaries/shim2026.md",
+    "summaries/shim2023.md",
+    "summaries/dai2022.md",
+    "schemes/wang2025-ecae.md",
+    "schemes/vallent2021.md",
+    "schemes/cahyadi2022.md",
+    "comparison-charts/categories.png",
+    "comparison-charts/attack-resistance.png",
+    "2026-09-03.md",
+    "templates",
     "schemes/zheng2023.md",
     "schemes/zhang2014.md",
     "schemes/xu2023.md",
     "schemes/wu2025-collusion.md",
-    "schemes/iqbal2023.md",
-    "schemes/gong2023.md",
-    "comparison-charts/attack-resistance.png",
-    "categories/CLS.md",
-    "categories/Signcryption.md",
-    "Signature Schemes.canvas",
-    "schemes/wang2025-detectable.md",
-    "schemes/yue2025.md",
-    "schemes/vallent2021.md",
-    "schemes/wu2025-pseudonyms.md",
-    "schemes/wang2025-ecae.md",
-    "schemes/han2022.md",
-    "schemes/tao2026.md",
-    "schemes/wang2022.md",
-    "schemes/cahyadi2022.md",
-    "schemes/wei2025.md",
     "schemes",
-    "categories/Standard-Model.md",
-    "categories/Type-III.md",
-    "categories/CLAS.md",
-    "categories/Detect-Invalid.md",
-    "categories/Pairing-Free.md",
-    "categories/Cryptanalysis.md",
-    "summaries/gong2023.md",
     "categories",
     "comparison-charts/timeline.png",
-    "comparison-charts/security-comparison.png",
-    "comparison-charts/categories.png"
+    "comparison-charts/security-comparison.png"
   ]
 }

@@ -11,9 +11,7 @@ tags: [CLAS, VANET, pairing-free, ECC, security-enhanced, provable-security]
 
 ## Overview
 
-This paper proposes an efficient, privacy-preserving, and pairing-free CLAS scheme with enhanced security for VANETs. The scheme addresses the main challenge of protecting data authenticity while enhancing computational efficiency in resource-constrained VANET environments. Security is proven in ROM against adaptive chosen message attacks.
-
-The performance evaluation demonstrates the scheme's appropriateness for VANET scenarios, with improved security over existing pairing-free constructions.
+This paper proposes an efficient, privacy-preserving, and pairing-free CLAS scheme with enhanced security for VANETs. The scheme addresses the main challenge of protecting data authenticity while enhancing computational efficiency in resource-constrained VANET environments. Security is proven in ROM against adaptive chosen message attacks. The performance evaluation demonstrates the scheme's appropriateness for VANET scenarios, with improved security over existing pairing-free constructions.
 
 ## Relevance to Our Work
 
@@ -28,13 +26,67 @@ This is the scheme that Yue et al. (2025) found vulnerable to rogue key attacks.
 
 ## Mathematical Notation
 
-**Pairing-free ECC CLAS:**
-- KGC: $s$, $P_{pub} = sP$
-- User: $D_i = sH(ID_i)$, $x_i$, $PK_i = x_iP$
-- Sign: Pick $r_i \in \mathbb{Z}_q^*$, $U_i = r_i P$, $h_{2i} = H_2(PID_i, X_i)$, $h_{3i} = H_3(M_i, PID_i, X_i, U_i, T_i)$, $s_i = r_i + h_{2i} \cdot x_i + h_{3i} \cdot d_i \mod q$
-- Signature: $\sigma_i = (U_i, s_i)$
-- Aggregate: $s = \sum_{i=1}^n s_i$
-- **Verify (pairing-free):** $sP = \sum_{i=1}^n W_i + \sum_{i=1}^n X_i h_{3i}$ where $W_i = h_{2i} K_{pub}$
+### Setup
+
+$$
+\begin{aligned}
+&s \in \mathbb{Z}_q^*,\quad P_{pub} = sP
+\end{aligned}
+$$
+
+### Partial Private Key Extract
+
+$$
+\begin{aligned}
+&D_i = sH(ID_i)
+\end{aligned}
+$$
+
+### Set Secret Value
+
+$$
+\begin{aligned}
+&x_i \in \mathbb{Z}_q^* \\
+&PK_i = x_iP
+\end{aligned}
+$$
+
+### Set Private/Public Key
+
+$$
+\begin{aligned}
+&SK_i = (D_i, x_i) \\
+&PK_i = x_iP
+\end{aligned}
+$$
+
+### Signature
+
+$$
+\begin{aligned}
+&r_i \in \mathbb{Z}_q^*,\quad U_i = r_i P \\
+&h_{2i} = H_2(PID_i, X_i) \\
+&h_{3i} = H_3(M_i, PID_i, X_i, U_i, T_i) \\
+&s_i = r_i + h_{2i} \cdot x_i + h_{3i} \cdot d_i \pmod q \\
+&\sigma_i = (U_i, s_i)
+\end{aligned}
+$$
+
+### Aggregate (CLAS)
+
+$$
+\begin{aligned}
+&s = \sum_{i=1}^n s_i
+\end{aligned}
+$$
+
+### Verification
+
+$$
+\begin{aligned}
+sP \stackrel{?}{=} \sum_{i=1}^n W_i + \sum_{i=1}^n X_i h_{3i} \quad \text{where } W_i = h_{2i} K_{pub}
+\end{aligned}
+$$
 
 ## Protocol / Scheme
 

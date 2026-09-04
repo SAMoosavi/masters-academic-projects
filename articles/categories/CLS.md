@@ -9,6 +9,7 @@ tags: [category, CLS, signature]
 > Digital signature combining certificates (PKC) and identity-based (IBC) approaches. Individual signature per user — no aggregation.
 
 ## Properties
+
 - Single user signs a single message
 - No certificate management (certificateless)
 - No key escrow (unlike IBC)
@@ -20,15 +21,7 @@ tags: [category, CLS, signature]
 |-------|------|-------|:---:|:---:|
 | [[wei2025]] | 2025 | IoT CLS, novel attack class | ✓ | ✗ |
 
-## Key Distinction: CLS vs CLAS
-
-| Feature | CLAS | CLS |
-|---------|------|-----|
-| Signature | Aggregates $n$ into 1 | Individual per user |
-| Verification | Constant-time for $n$ messages | One verification per signature |
-| Use case | VANET batch auth | Single message auth |
-| Overhead | Low (aggregate) | Higher (per-message) |
-
 ## Related Categories
+
 - [[CLAS]] — aggregate variant
 - [[Pairing-Free]] — computational optimization

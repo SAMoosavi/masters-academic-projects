@@ -1,4 +1,4 @@
-[[wei2025]]
+[[paper_id]]
 
 ## Setup
 
@@ -50,10 +50,19 @@ $$
 \end{aligned}
 $$
 
+## Aggregate
+
+$$
+\begin{aligned}
+&T'=\sum T,\quad \tau'=\sum\tau \\
+&\sigma_{agg}=(T',\tau')
+\end{aligned}
+$$
+
 ## Verification
 
 $$
 \begin{aligned}
-\tau P \stackrel{?}{=} T + h_2(X_{ID}+R_{ID}+h_1 P_{pub})
+\tau P = T + h_2(X_{ID}+R_{ID}+h_1 P_{pub})
 \end{aligned}
 $$

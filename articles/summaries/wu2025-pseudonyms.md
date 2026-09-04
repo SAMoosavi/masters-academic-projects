@@ -11,9 +11,7 @@ tags: [CLAS, VANET, pseudonyms, pairing-free, ECC, Type-III, forking-lemma, MIRA
 
 ## Overview
 
-This paper proposes a secure and efficient CLAS scheme with pseudonyms for VANETs, based on ECC construction without bilinear pairing. The key innovation is introducing the generalized forking lemma to enhance the transparency of the security proof process. The scheme withstands attacks from Type-I, Type-II, and Type-III adversaries — a significant security advancement over most existing schemes.
-
-Performance analysis demonstrates lower computational and communication overhead compared to the latest pairing-free CLAS schemes. MIRACL cryptography library simulations confirm practical efficiency in real VANET environments.
+This paper proposes a secure and efficient CLAS scheme with pseudonyms for VANETs, based on ECC construction without bilinear pairing. The key innovation is introducing the generalized forking lemma to enhance the transparency of the security proof process. The scheme withstands attacks from Type-I, Type-II, and Type-III adversaries — a significant security advancement over most existing schemes. Performance analysis demonstrates lower computational and communication overhead compared to the latest pairing-free CLAS schemes. MIRACL cryptography library simulations confirm practical efficiency in real VANET environments.
 
 ## Relevance to Our Work
 
@@ -28,18 +26,64 @@ This is a direct competitor and benchmark — Type-III resistance with lower ove
 
 ## Mathematical Notation
 
-**ECC-based CLAS with pseudonyms:**
-- KGC: $s$, $P_{pub} = sP$
-- Pseudonym: $PID_i = H(ID_i \| r_i)$ for temporary identity
-- Partial key: $D_i = sH(PID_i)$
-- Secret value $x_i$, $PK_i = x_iP$
-- Sign: $\sigma_i = r_i + h_i(x_i + D_i) \mod q$
-- Aggregate: $\sigma = \sum \sigma_i$
+### Setup
 
-**Forking lemma application:**
-- Security proof uses generalized forking lemma
-- Reduces forgery to solving ECDLP
-- Transparent proof process
+$$
+\begin{aligned}
+&s \in \mathbb{Z}_q^*,\quad P_{pub} = sP
+\end{aligned}
+$$
+
+### Partial Private Key Extract
+
+$$
+\begin{aligned}
+&D_i = sH(PID_i)
+\end{aligned}
+$$
+
+### Set Secret Value
+
+$$
+\begin{aligned}
+&x_i \in \mathbb{Z}_q^* \\
+&PK_i = x_iP
+\end{aligned}
+$$
+
+### Set Private/Public Key
+
+$$
+\begin{aligned}
+&SK_i = (D_i, x_i) \\
+&PK_i = x_iP
+\end{aligned}
+$$
+
+### Signature
+
+$$
+\begin{aligned}
+&PID_i = H(ID_i \| r_i) \\
+&\sigma_i = r_i + h_i(x_i + D_i) \pmod q
+\end{aligned}
+$$
+
+### Aggregate (CLAS)
+
+$$
+\begin{aligned}
+&\sigma = \sum_{i=1}^n \sigma_i
+\end{aligned}
+$$
+
+### Verification
+
+$$
+\begin{aligned}
+&\text{Pairing-free equation}
+\end{aligned}
+$$
 
 ## Protocol / Scheme
 
