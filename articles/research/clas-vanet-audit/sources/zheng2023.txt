@@ -1,0 +1,858 @@
+3822                                                                                                    IEEE SYSTEMS JOURNAL, VOL. 17, NO. 3, SEPTEMBER 2023
+
+
+
+
+  A Security-Enhanced Pairing-Free Certificateless
+ Aggregate Signature for Vehicular Ad-Hoc Networks
+                            Hangcheng Zheng, Min Luo , Yunru Zhang , Cong Peng , and Qi Feng
+
+
+    Abstract—As self-organizing, highly heterogeneous and multi-
+interactive networks, vehicular ad-hoc networks (VANETs) are
+rapidly improving the efficiency of modern traffic. This promising
+technology is significant for supporting current intelligent trans-
+portation by cooperative data sharing and processing. Consid-
+ering requirements for secure interactions and the limitation of
+resources in VANETs, protecting data authenticity while enhancing
+computational efficiency has become the main challenge. A cer-
+tificateless aggregate signature (CLAS) can not only ensure data
+security, but also reduce communication costs, which is suitable
+for a resource-constrained environment. However, most existing
+CLAS schemes either own serious security vulnerabilities or re-
+sult in tremendous computational overhead. In this article, we
+propose an efficient, privacy-preserving, and pairing-free CLAS
+scheme with enhanced security. We prove that it is existentially
+unforgeable against adaptive chosen message attacks in the random
+oracle model. Performance evaluation illustrates that our proposed
+scheme is more appropriate to the VANETs scenario.
+   Index Terms—Certificateless aggregate signature (CLAS),
+digital signature scheme, provably security, vehicular ad-hoc
+networks.
+
+
+                             I. INTRODUCTION
+       EHICULAR ad-hoc networks have extensively grabbed
+V      the eyes of both industry and academia. As self-organizing
+wireless networks, they possess advantages in intelligent traffic
+                                                                                    Fig. 1.   VANETs system model.
+
+
+management, road safety guarantee, and real-time communica-
+tions. Vehicular ad-hoc networks (VANETs) can provide prac-                         video streams, and radio reception. Besides, by monitoring
+tical assistance for vehicles in traveling, such as navigation,                     real-time vehicle traffic streams and recording road conditions,
+                                                                                    they can help drivers handle road emergencies as fast as pos-
+                                                                                    sible. Equipped with advanced onboard embedded sensors and
+   Manuscript received 25 May 2022; revised 5 September 2022 and 16 October
+2022; accepted 6 November 2022. Date of publication 18 November 2022;               integrating mobile communication technology, VANETs make
+date of current version 30 August 2023. The work was supported in part by           a huge difference in the way of transportation. It can realize
+the National Natural Science Foundation of China under Grant 62172307, in           the information exchange and data sharing between vehicles
+part by the Special Project on Science and Technology Program of Hubei
+Provience under Grant 2021BAA025, Grant 2020AEA013, in part by and the              and vehicles, vehicles and roads, vehicles and remote servers,
+Shandong Provincial Key Research and Development Program under Grant                bring huge convenience to public transport and help to build
+2021CXGC010107, Grant 2020CXGC010107. (Corresponding authors: Min                   an intelligent transportation modern model. As a result, all the
+Luo; Yunru Zhang.)
+   Hangcheng Zheng is with the Key Laboratory of Aerospace Information              above benefits make VANETs a booming technology and attract
+Security and Trusted Computing Ministry of Education, School of Cyber Science       enormous attention from intelligent transportation.
+and Engineering, Wuhan University, Wuhan 430072, China, and also with                  As Fig. 1, a typical VANETs system is consist of five com-
+the Shanghai Technology Innovation Centre of Distributed Privacy-Preserving
+Artificial Intelligence, Matrix Elements Technologies, Shanghai 201204, China       ponents: key generation center (KGC), trusted authority (TA),
+(e-mail: whuzhc@whu.edn.cn).                                                        application backend (AB), road-side unit (RSU), and on-board
+   Min Luo is with the School of Cyber Science and Engineering, Wuhan               unit (OBU). There are generally two kinds of communication in
+University, Wuhan 430072, China, and also with the Shandong Provincial Key
+Laboratory of Computer Networks, Qilu University of Technology (Shandong            VANETs: vehicle to vehicle (V2V) and vehicle to infrastructure
+Academy of Sciences), Jinan 250014, China (e-mail: mluo@whu.edu.cn).                (V2I) [1]. The latter implies the message interaction between
+   Yunru Zhang, Cong Peng, and Qi Feng are with the School of Cyber                 vehicles and base station nodes like RSU. Meanwhile the former
+Science and Engineering, Wuhan University, Wuhan 430072, China (e-mail:
+yunruzhang@qq.com; cpeng@whu.edu.cn; fengqi.whu@whu.edu.cn).                        indicates the data sharing among vehicles. The real-time traffic
+   Digital Object Identifier 10.1109/JSYST.2022.3220869                             information exchange between vehicles and RSUs is mainly
+                          1937-9234 © 2022 IEEE. Personal use is permitted, but republication/redistribution requires IEEE permission.
+                                        See https://www.ieee.org/publications/rights/index.html for more information.
+
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 16,2026 at 14:18:35 UTC from IEEE Xplore. Restrictions apply.
+ZHENG et al.: SECURITY-ENHANCED PAIRING-FREE CERTIFICATELESS AGGREGATE SIGNATURE FOR VEHICULAR AD-HOC NETWORKS                                                 3823
+
+
+
+based on dedicated short range communications (DSRC), and                          their scheme is secure enough against two kinds of malicious
+the network communication between vehicles and remote cloud                        adversaries. In this article, we will show that there are some
+application servers is based on secure socket layer (SSL) proto-                   defects in their scheme and therefore, we propose our condi-
+col. Apparently, a tremendous amount of data (such as driving                      tional privacy-preserving CLAS scheme with high-efficiency
+data and application-related data) flows and transfers in VANETs                   and enhanced-security for VANETs.
+with the purpose of data sharing and safe driving. However, data
+transmission over insecure network communication channels                          A. Motivations and Contributions
+poses a great threat to VANETS. The attacker can compromise
+                                                                                      There are still numerous problems with respect to security
+the confidentiality and integrity of the messages by means of
+                                                                                   and efficiency in CLAS schemes. Some of the schemes use
+information interception, tampering, and forgery, so as to di-
+                                                                                   time-consuming math operations like map-to-point hash func-
+rectly affect the normal operation of vehicles and even serious
+                                                                                   tion and bilinear pairing, which greatly increases the computa-
+to control them. So, during data sharing process in VANETs,
+                                                                                   tional cost of signature generation and signature verification. In
+it is undisputed that data integrity and authenticity should be
+                                                                                   addition, some schemes are unable to defend against multiple
+safeguarded.
+                                                                                   attacks performed by malicious attackers (public-key replace-
+   Based on such concerns, one of the fundamental crypto-
+                                                                                   ment, signature forgery, etc) and lack a theoretical protocol
+graphic primitives—digital signature, has been widely applied
+                                                                                   security analysis. Besides, certificate management from PKI
+to protect data authenticity and integrity. However, the trans-
+                                                                                   and key escrow problem from IBC are also issues need to be
+mission of abundant signature messages would bring about con-
+                                                                                   addressed. To overcome the aforementioned disadvantages, we
+siderable computation and communication costs in VANETs,
+                                                                                   give an efficient, security-enhanced, and pairing-free CLAS for
+which could be a huge burden to a resource-limited environment.
+                                                                                   VANETs along with its detailed security proof.
+Therefore, it is not practical to use the original digital signa-
+                                                                                      In general, the main contributions of this article can be sum-
+ture technology directly in VANETs. Besides, cryptographic
+                                                                                   marized as follows.
+schemes based on traditional public-key infrastructure (PKI)
+                                                                                      1) We review the scheme proposed by Han et al. [5], and
+hold the disadvantage of certificate management. Although
+                                                                                          give a concrete construction of the attacking instance to
+utilizing an identity-based cryptosystem (IBC) can solve this
+                                                                                          display its security flaws. We show that a malicious node
+defect, it also leads to the key escrow problem. As a result, both
+                                                                                          can recover the master private key of KGC through the
+of them are inadaptable to apply in VANETs.
+                                                                                          interaction with it.
+   In 2003, Al-Riyami et al. [2] put forward certificateless cryp-
+                                                                                      2) We propose an improved and security-enhanced CLAS
+tography (CLC). Through generating private keys from two
+                                                                                          scheme that fixes the defects of the aforementioned
+separated parts, CLC resolves immanent problems of PKI-based
+                                                                                          scheme and can protect the data integrity and authenticity
+and IBC-based cryptosystems. Additionally, Boneh et al. [3]
+                                                                                          in VANETs more effectively.
+raised the definition of aggregate signature in 2003. It is an
+                                                                                      3) Through a rigorous security reduction, we illustrate that
+effective technique that maps multiple signatures into one short
+                                                                                          our scheme is existentially unforgeable against both types
+signature, which could reduces the communication overhead
+                                                                                          of adversary in the random oracle model. Our scheme
+significantly. Taking the aforementioned methodology into con-
+                                                                                          can also satisfy the different security requirements in
+sideration, Castro et al. [4] first combined CLC with aggregate
+                                                                                          VANETs, such as conditional anonymity, message in-
+signature and then proposed certificateless aggregate signature
+                                                                                          tegrity, and mutual authentication, so could it be resistant
+(CLAS). Due to its high efficiency and security, CLAS is well
+                                                                                          to different attacks (replay attack, man-in-the-middle at-
+suited to the VANETs environment.
+                                                                                          tack, signature forgery attack, etc).
+   In addition, we also need to protect the privacy of vehicles
+                                                                                      4) We demonstrate that our scheme is better suited for
+in VANETs. Vehicle private information in VANETs includes
+                                                                                          VANETs scenarios by comparing the computation cost
+traffic track, location, direction, etc. Through the analysis and
+                                                                                          and security characteristic with original scheme (see [5])
+derivation of these private information, malicious attackers can
+                                                                                          and other existing schemes (see [6], [7], [8], [9]).
+infer the vehicle’s basic information, including the real indentity.
+So, instead of the real indentity, the vehicle can use a short-term
+pseudonym anonymous identity to protect the communication                          B. Organization
+privacy in a certain period of time. Except for the trusted third                     The remaining part of this article is arranged as below. At
+party, no one could extract the real identity of the vehicle through               first, we will briefly enumerate the literature on CLAS schemes
+the pseudonym identity. In short, such a conditional privacy                       in Section II, and recommend background knowledge in Sec-
+perserving mechanism is necessary for VANETs.                                      tion III. Next, we introduce the security model of CLAS scheme
+   Although lots of privacy perserving CLAS schemes were                           and the system model of VANETs in Section IV. Brief intro-
+constructed for sake of applying in VANETs. Yet, some of                           duction of Han et al.’s scheme [5] and detailed vulnerability are
+these schemes had fatal security problems and could not resist                     presented in Section V. Our improved scheme and correspond-
+various threats from different adversaries. Neither could they                     ing detailed security proof process are given in Section VI. After
+meet the performance requirements of VANETs. Most recently,                        that, in Section VII, we implement our proposed scheme and
+Han et al. [5] designed a CLAS scheme in VANETs to safeguard                       make a performance evaluation and a comparison. Section VIII
+the integrity and authenticity of data. They introduced that                       concludes this article.
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 16,2026 at 14:18:35 UTC from IEEE Xplore. Restrictions apply.
+3824                                                                                                    IEEE SYSTEMS JOURNAL, VOL. 17, NO. 3, SEPTEMBER 2023
+
+
+
+                            II. RELATED WORK                                                                          TABLE I
+                                                                                                           DESCRIPTIONS OF SOME NOTATION
+   The basic conception of aggregate signature was first pro-
+posed in [3] by Boneh et al. in 2003. After the notion was
+introduced, numerous state-of-the-art cryptographic schemes
+were raised. Generally speaking, traditional PKI-based schemes
+(see [10], [11], [12], [13], [14]) bind the public key with a user’s
+identity through a certificate issued by the certificate authority
+(CA). This may bring about vast overhead caused by the man-
+agement of certificates when the amount of users increases. To
+solve this problem, scholars and academicians began to consider
+schemes based on identity. Gentry et al. [15] put forward the
+first identity-based aggregate signature scheme. After this work,
+abundant identity-based schemes (see [16], [17], [18], [19]) were
+proposed. However, the private key is completely generated by
+KGC in an identity-based cryptosystem, which may lead to
+serious key escrow problems.
+   Considering the above problems of schemes based on PKI
+and IBC cryptosystem, the notion of certificateless public-key
+cryptography [2] (CL-PKC) was raised. In CL-PKC, the private
+key is made up of two components: a secret value chosen by the
+user as well as a partial private key produced by KGC. It is able
+to eliminate the certificate distribution and key escrow problem
+in PKC and IBC cryptosystem to a certain extent.
+   After the first CLAS scheme [4] was presented in 2007,
+a series of CLAS schemes were proposed. Xiong et al. [20]
+designed a certificateless signature and raised a CLAS scheme.
+Unfortunately, He et al. [21] claimed that their construction is                    efficient pairing-free CLAS scheme, aiming at further improving
+not provably secure toward the Type II adversary by a con-                          security and reducing communication costs in VANETs. How-
+crete analysis. Chen et al. [22] analyzed the security flaws                        ever, this scheme had serious security vulnerability, which we
+of Xiong et al. [20] and Liu et al. [23]. Next, they proposed                       will explain subsequently.
+a CLAS scheme alleged to resist both types of adversaries.
+However, Zhang et al. [24] showed that the scheme in [22]                                                       III. PRELIMINARIES
+is also not secure—KGC with malicious purpose was able to
+forge a valid signature. Considering the scenario of healthcare                       We start by reviewing some related preliminaries in cryptog-
+wireless medical sensor network (HWMSN), Kumar et al. [6]                           raphy. Some notation is given in Table I.
+designed a so-called effective CLAS scheme based on com-
+putationally hard Diffie-Hellman assumption. Nevertheless, it
+                                                                                    A. Cryptography of Elliptic Curve
+was still demonstrated to be insecure to signature forgery attack
+by Wu et al. [7]. Last but not least, all of these proposed                            Elliptic curve cryptography (ECC) is a public key cryptosys-
+schemes were constructed through expensive bilinear pairing                         tem constructed from elliptic curves over a finite field. With
+computation over elliptic curves. Given that calculating bilinear                   a shorter key length, it can achieve a similar security level
+pairing may result in tremendous overhead, we believe it is not                     of RSA cryptography system. We denote O as the infinity
+suitable for a resource-limited scenario like Internet of Things                    point and the elliptic curve cyclic group G can be defined as
+(IoT) and VANETs.                                                                   G = {(x, y) : y 2 = x3 + ax + ba} ∪ {O}. Set n be the order
+   Due to this reason, the efficiency of scheme has to be further                   of G, then we can define P as one generator of G if and only if
+polished to adapt to resource-constrained environments. He                          nP = O and tP = O for any t|n.
+et al. [25] proposed the first pairing-free CLS scheme. By merely                      There are two basic operations in elliptic curve cyclic group
+using operations on an elliptic curve, their scheme immensely                       G as follows.
+reduced the calculation cost and improved efficiency. Gayathri                         1) Point addition: Assume two random points Q1 and Q2 of
+et al. [8] raised a CLAS scheme in HWMSN without bilinear                                  elliptic curve cyclic group, L is the line connecting point
+pairing. Unfortunately, it was found by Liu et al. [9] that Gayathri                       Q1 and Q2 (tangent line of elliptic curve E if Q1 = Q2 ).
+et al.’s scheme is vulnerable to two types of adversary. Besides,                          It can be defined that Q1 + Q2 = Q3 , where −Q3 is the
+although Liu et al. [9] put forward an improved scheme that was                            intersection point of line L and elliptic curve E.
+secure in the random oracle model, Zhan et al. [26] discovered                         2) Scalar multiplication: Scalar multiplication in elliptic
+their scheme still existed a security flaw that may be exploited                           curve cyclic group G is given as tP = P + P + P +
+by a malicious KGC. Recently in 2021, Han et al. [5] raised an                             · · · + P (t times), t ∈ Zn∗ .
+
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 16,2026 at 14:18:35 UTC from IEEE Xplore. Restrictions apply.
+ZHENG et al.: SECURITY-ENHANCED PAIRING-FREE CERTIFICATELESS AGGREGATE SIGNATURE FOR VEHICULAR AD-HOC NETWORKS                                                 3825
+
+
+
+   Definition 1: Elliptic Curve Discrete Logarithm Problem                            Game 1: Game 1 is executed between a super-level Type I
+(ECDLP): On elliptic curve E/Fp , given that G is an addi-                         adversary AI and a challenger C. This game is carried out in
+tive cyclic group with order n. P is the generator of G and                        three phases:
+Q ∈ G. The probability of calculating x, x ∈ Zn∗ , which satisfies                    r P hase1 (Setup): On inputting security parameter λ, C
+Q = xP in polynomial time is negligible.                                                 performs Set U p algorithm, generates the master private
+                                                                                         key a and params. Next, C sets params public to AI
+                                                                                         meanwhile keeps a secretly.
+                IV. SECURITY AND SYSTEM MODEL                                         r P hase2 (Query): AI adaptively issues some queries to
+                                                                                         UserCreate, PartialPrivateKeyExtract, PublicKeyReplace,
+A. Security Model                                                                        SecretValueExtract and Sign in polynomial time.
+   In general, the security of a CLAS scheme can be evaluated                         r P hase3 (F orge): After all the above queries in P hase2
+by two adversary models as follows.                                                      are completed, AI outputs an aggregate signature σ ∗ to-
+   1) Type I: An external user that can replace the public key of                        gether with user identity set {IDi }ni=1 , corresponding
+       any entity, but cannot access the master private key.                             public key set {Xi }ni=1 and signed message set {Mi }ni=1 .
+   2) Type II: A malicious KGC that possesses the secret master                       We believe that if and only if the following are achieved can
+       private key, however, it cannot replace the legal public key                AI win the above game.
+       of a certain entity.                                                           1) Signature σ ∗ is valid, which means T rue ←
+   As the security model raised by Huang et al. [27], the levels                          AggregateV erif y({IDi }ni=1 , {Xi }ni=1 , {Mi }ni=1 , σ ∗ ).
+of adversary can be sorted into normal, strong, and super. In                         2) Without loss of generality, there is at least one user with
+their definition, the detailed difference is as follows:                                  identity ID who has not ever invoked a query to Partial-
+   1) N ormal: It can only fetch a signature from a legal user,                           PrivateKeyExtract or accessed Sign with {ID , M  }.
+       otherwise it must know the corresponding partial private                       Game 2: Game 2 is executed between a super-level Type II
+       key and secret value.                                                       adversary AII and a challenger C. This game is carried out in
+   2) Strong: It can access the signature. Meanwhile, it’s able                    three following phases.
+       to replace the public key with a random number, if and                         r P hase1 (Setup): On inputting security parameter λ, C
+       only if he owns and keeps the corresponding secret value.                         performs Set U p algorithm to generate params and a
+   3) Super: It can not only get a signature, but also replace the                       master private key a. Next, C sets params and a public
+       public key with a random value even though it does not                            to AII .
+       possess the corresponding secret value.                                        r P hase2 (Query): AII adaptively issues some queries to
+   In this article, we concentrate on the security robustness of the                     UserCreate, SecretValueExtract and Sign in polynomial
+two types of adversary models with the super level. A super                              time.
+level adversary A can initiate some oracle queries to challenger                      r P hase3 (F orge): After all the above queries in P hase2
+C as follows.                                                                            are completed, AII outputs an aggregate signature σ ∗
+   1) UserCreate(IDi ): This oracle generates all parameters of                          together with user identity set {IDi }ni=1 , the corresponding
+       a certain user identity and records them in the list L. On                        public key set {Xi }ni=1 and signed message set {Mi }ni=1 .
+       inputting an identity IDi , C generates secret value xi ,                      We believe that if and only if the following are achieved can
+       partial private key di , and public key Xi respectively, by                 AII win the above game:
+       executing corresponding algorithms. After that it stores                       1) Signature σ ∗ is valid, which means T rue ←
+       {IDi , xi , di , Xi } into list L as an entry.                                     AggregateV erif y({IDi }ni=1 , {Xi }ni=1 , {Mi }ni=1 , σ ∗ ).
+   2) PartialPrivateKeyExtract(IDi ): This oracle returns a cer-                      2) Without loss of generality, there is at least one user with
+       tain user’s partial private key for the adversary A’s query.                       identity ID hasn’t ever issued a query to SecretValueEx-
+   3) PublicKeyReplace(IDi , xi , Xi ): This oracle responds to                         tract, and nor did it access the Sign with {ID , M  }.
+       adversary A’s query request for replacing a certain                            Definition 2: A CLAS scheme is existentially unforgeable
+       user’s public key. C updates the corresponding entry                        under adaptive chosen message attack (EUF-CMA) on the con-
+       {IDi , xi , di , Xi } to {IDi , xi , di , Xi }. Note that xi can         dition that, for any polynomially bounded AI or AII , success
+       be set to ⊥ in list L.                                                      probability of the above two games is negligible.
+   4) SecretValueExtract(IDi ): This oracle returns a certain
+       user’s secret value for the adversary A’s query request.
+   5) Sign(IDi , Mi ): This oracle reacts to adversary A’s query                   B. Security and Privacy Requirements
+       request for a valid signature σ. After inputting a message                    Due to the insecure communication channels in VANETs, a
+       Mi , an indentity IDi , chanllenger C generates a valid sig-                CLAS scheme should meet the following security and privacy
+       nature σ based on the information recorded in correspond-                   requirements.
+       ing list such that T rue ← V erif y(IDi , Xi , Mi , σ).                       1) Mutual authentication: In the communication process,
+   Security model of our scheme can be formalized by two                                 proposed scheme should ensure that the vehicle and the
+interactive games executed by challenger C and adversary AI /                            RSU can achieve mutual identity authentication with each
+AII :                                                                                    other during the digital signature phase.
+
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 16,2026 at 14:18:35 UTC from IEEE Xplore. Restrictions apply.
+3826                                                                                                    IEEE SYSTEMS JOURNAL, VOL. 17, NO. 3, SEPTEMBER 2023
+
+
+
+   2) Conditional anonymity: The real identity information of a                             or weather, etc. Concretely, it seizes data from RSUs or
+       vehicle should be hidden during communication, and can                               other sources through communication channel, conducts
+       only be recovered by a specific entity when necessary.                               data analysis and returns the data processing result to
+   3) Message integrity: During the interaction, RSU is able to                             vehicles.
+       verify the messages to ensure that the data sent by vehicles
+       is not modified by other entities.
+   4) Unlinkability: No one can associate two signatures signed                         V. SECURITY ANALYSIS OF HAN ET AL.’S CLAS SCHEME
+       by the same user.                                                               We review the aggregate signature scheme raised by Han
+   In addition, considering the real scenario of VANETs, a secure                   et al. [5] in summary, then analyze the security shortcomings
+CLAS scheme should ensure to resist against the following                           of their scheme and present an attack method in detail.
+attacks.
+   1) Man-in-the-middle attack: A malicious attacker estab-
+       lishes communication with both participants and controls                       A. Review of Han et al.’s CLAS Scheme
+       the entire session.                                                              1) System Initialization
+   2) Replay attack: A malicious attacker intercepts a message                             a) Sets a group G with order q and a generator P ∈ G on
+       sent during the past period of time in the communication                                curve E.
+       channel and repeats it to achieve illegal purposes.                                 b) KGC selects a ∈ Zq∗ randomly and calculates Kpub =
+   3) Denial of service attack: An attacker boardcasts a large                                 aP .
+       number of malicious messages among VANETs in a short                                c) TA selects b ∈ Zq∗ randomly and calculates Tpub = bP .
+       time to affect the normal service of other vehicles.                                d) Chooses three collision-resistant hash functions
+   4) Impersonation attack: A malicious adversary disguises                                    h1,2,3 : {0, 1}∗ → Zq . then params can be published
+       itself as a legitimate user by modifying authentication data.                           as {P, q, E, G, h1 , h2 , h3 , Kpub , Tpub }.
+       And then threatens the security of VANETs by spreading                           2) Pseudonym Identity Generation the algorithm takes the
+       false road news and so on.                                                          real identity information of vehicle node Vi as input,
+   5) Signature forgery attack: A malicious attacker can forge                             outputs Vi ’s pseudonym identity:
+       a legitimate signature without valid private key to bypass                          a) Vi selects yi ∈ Zq∗ randomly and calculates PIDi,1 =
+       the verification phase.                                                                 yi P, Yi = yi Tpub ⊕ RIDi , sends {PIDi,1 , Yi } to TA.
+                                                                                           b) TA receives {PIDi,1 , Yi } and calculates RIDi = Yi ⊕
+                                                                                               bPIDi,1 , PIDi,2 = RIDi ⊕ h1 (bPIDi,1 ΔTi ). Note
+C. System Model
+                                                                                               ΔTi is pseudonym identity’s validity period.
+   The architecture of the VANETs system is primarily com-                                 c) Finally, TA sets PIDi = {PIDi,1 , PIDi,2 , ΔTi } and
+prised of five parties as described in Fig. 1. Each vehicle owns                               sends it toward KGC as pseudonym identity.
+the real identity, a number of pseudonym anonymous indentities,                         3) Vehicle Key Generation Vi randomly selects xi ∈ Zq∗ and
+and corresponding public/private key pairs. And it is necessary                            computes Xi = xi P .
+for them to sign before sending messages into the network.                              4) Partial Private Key Extract KGC executes this algorithm.
+Among all the five parts of VANETs, the detailed demonstration                             By performing following process it outputs partial private
+is given as follows.                                                                       key of Vi :
+   1) TA is an authentic third party for managing the temporary                            a) KGC first calculates h2i = h2 (PIDi Xi ) and Wi =
+       identity and providing registration service. Besides, it is                             h2i Kpub .
+       the only entity that can trace the true identity of a vehicle                       b) Then sets di = ah2i as the partial private key.
+       using the master private key. It is assumed that the TA will                        c) KGC sends {PIDi , di } to Vi , and Vi regards {xi , di }
+       never be corrupted.                                                                     as its private key.
+   2) KGC is mainly responsible for generating system param-                            5) Sign this algorithm is performed by vehicle Vi , which
+       eters in VANETs and participating in the process of key                             takes {PIDi , Ti , Mi , xi , di } as input and outputs σi as
+       generation. It is in charge of producing the partial private                        signature. The detailed process is as follows.
+       key and transmitting it to each vehicle.                                            a) Vi selects ri ∈ Zq∗ at random and sets Ui = ri P .
+   3) OBU is a resource-constrained device with wireless com-                              b) Vi calculates h3i = h3 (Mi PIDi Xi Ui Ti ) and
+       munication capabilities. It can interact with other vehicle                             si = di + xi h3i .
+       nodes and roadside nodes intelligently.                                             c) Sets σi = (Ui , si ).
+   4) RSU is a fixed base station for communication beside                                 d) Vi transmits {PIDi , Xi , Mi , Ti , σi } to the receiver.
+       the road that has more computation or storage resources.                         6) Verify this algorithm takes {PIDi , Xi , Mi , Ti , σi } as input,
+       RSU can act as an active node to receive traffic data from                          outputs verification result:
+       vehicles within its range, verifies these messages to ensure                        a) Verifier first checks if time Ti is in valid interval.
+       their integrity and aggregates the individual signatures to                         b) Verifier computes h2i = h2 (PIDi Xi ) and h3i =
+       minimize the number of signed messages.                                                 h3 (Mi PIDi Xi Ui Ti ).
+   5) AB mainly supplies vehicles with various kinds of data ser-                          c) Checks whether si P = h2i Kpub + Xi h3i is estab-
+       vices about navigation, entertainment, traffic information                              lished.
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 16,2026 at 14:18:35 UTC from IEEE Xplore. Restrictions apply.
+ZHENG et al.: SECURITY-ENHANCED PAIRING-FREE CERTIFICATELESS AGGREGATE SIGNATURE FOR VEHICULAR AD-HOC NETWORKS                                                 3827
+
+
+
+  7)   Aggregate this algorithm is run by an aggrega-                                    c) Finally, TA generates the pseudonym identity PIDi =
+     tor RSU, taking {PIDi , Xi , Mi , Ti , σi }, i ∈ (1, 2, . . . , n)                      {PIDi,1 , PIDi,2 , ΔTi }.
+     as input. And it calculates s = Σni=1 si , outputs σ =                           3) Partial Private Key Extract  KGC performs the algorithm,
+     (U1 , U2 , U3 , . . . , Un , s).                                                    detailed process can be given as following:
+  8) Aggregate Verify this algorithm inputs the aggregate sig-                           a) KGC first selects ri ∈ Zq∗ and computes Ri = ri P .
+     nature σ, and outputs the signature verification result:                            b) Calculates h1i = h1 (PIDi Ri Kpub ).
+     a) Verifier calculates h2i = h2 (PIDi Xi ), h3i =                                   c) Computes di = ri + ah1i as partial private key.
+         h3 (Mi PIDi Xi Ui Ti ), i ∈ (1, 2, . . . , n),        Wi =                      d) Transmits {PIDi , di , Ri } to Vi through secure channel.
+         h2i Kpub .                                                                   4) Vehicle Key Generation  the algorithm is executed by Vi ,
+     b) Verifier finally checks whether sP = Σni=1 Wi +                                 detailed process is given as follows.
+            n
+            i=1 Xi h3i is established or not.                                            a) Vi receives the message in step 3, selects xi ∈ Zq∗
+                                                                                             randomly and calculates Xi = xi P .
+ B. Analysis of Han et al.’s Scheme                                                      b) Sets SKi = {xi , di } as its private key and the public
+                                                                                             key can be presented as P Ki = {Xi , Ri }.
+   For a malicious node Vm with public key Xm and pseudonym                           5) Sign detailed process of the algorithm can be introduced
+identity PIDm , it can recover master private key a. Through the                         as follows.
+partial private key obtained during step 4, Vm performs as the                           a) Selects ui ∈ Zq∗ randomly and sets Ui = ui P .
+following steps:                                                                         b) Vi calculates h2i = h2 (PIDi Xi Kpub Ri Ti ), h3i =
+   1) Vm receives partial private key dm from KGC: dm =                                      h3 (PIDi Mi P Ki Ui Ti ).
+       ah2 m .                                                                           c) Vi calculates si = ui + di h2i + xi h3i , and then sets
+   2) Vm then calculate h2 m = h2 (PIDm , Xm ) ∈ Zq∗ , Tm =                                  σi = (Ui , si ) as the signature.
+       h−1
+        2 m mod q.                                                                           At last, Vi sends {PIDi , P Ki , Mi , Ti , σi } to receiver.
+   3) Vm finally gets a by computing a = Tm ∗ dm mod q.                               6) Verify  the algorithm is run by receivers of message. The
+   In conclusion, for the above attacks carried by the malicious                         detailed process can be given as follows.
+node Vm in VANETs, Han et al.’s scheme cannot ensure the                                 a) When receiving a tuple {PIDi , P Ki , Mi , Ti , σi }, the
+privacy of the master private key. It will lead to the explosion                             verifier first checks if time Ti is in valid interval.
+of a. As a result, it is impossible to maintain their illustrated                        b) Verifier then calculates h1i = h1 (PIDi Ri Kpub ),
+security level.                                                                              h2i = h2 (PIDi Xi Kpub Ri Ti ), h3i = h3 (PIDi
+                                                                                              Mi P Ki Ui Ti ).
+    VI. OUR PROPOSED PROVABLY-SECURE CLAS SCHEME                                         c) Finally       checks         whether    si P = Ui + (Ri +
+   In this part, for sake of solving the security concerns of the                            h1i Kpub )h2i + Xi h3i is established or not.
+previous scheme, we first propose an improved provably secure                         7) Aggregate  the algorithm is executed by RSU . The
+CLAS scheme. We then introduce rigorous proof that reduces                               detailed process is as follows:
+the security of our raised scheme to the ECDLP hard assumption.                          1) Aggregator RSU calculates s = Σni=1 si and outputs
+                                                                                             σ = (U1 , U2 , U3 , . . . , Un , s).
+                                                                                      8) Aggregate Verify  the algorithm inputs the aggregate sig-
+ A. Our improved CLAS scheme                                                             nature σ, outputs signature verification result. The detailed
+  1) System Initialization the algorithm is carried by KGC and                          process is as follows, where i ∈ (1, 2, . . . , n):
+     TA, specificially as:                                                               a) Verifier calculates the following, respectively:
+     a) Selects a group G with order q and a generator P ∈ G                                                        n
+                                                                                                                    
+         on curve E.                                                                                         U=            Ui
+     b) KGC selects a ∈ Zq∗ at random as the master private                                                          i=1
+         key, then master public key can be regarded as Kpub =
+         aP .                                                                                               h1i = h1 (PIDi Ri Kpub )
+     c) TA selects a number b ∈ Zq∗ randomly as master private                                              h2i = h2 (PIDi Xi Kpub Ri Ti )
+         key, corresponding public key can be calculated as
+         Tpub = bP .                                                                                     h3i = h3 (PIDi Mi P Ki Ui Ti )
+     d) Chooses three collision-resistant hash functions:                                                                             n
+         h1,2,3 : {0, 1}∗ → Zq and publishes params =                                                           n whether sP = U + i=1 (Ri +
+                                                                                           b) Verifier finally checks
+                                                                                              h1i Kpub )h2i + i=1 Xi h3i is established or not.
+         {P, q, E, G, h1 , h2 , h3 , Kpub , Tpub }.
+  2) PID Generation  detailed process of the algorithm is as
+                                                                                     B. Proof of Correctness
+     follows:
+     a) Vi sets a number yi ∈ Zq∗ at random, computes                                 1) The correctness of Verify algorithm can be deduced as
+         PIDi,1 = yi P, Yi = yi Tpub ⊕ RIDi .                                            follows.
+     b) TA receives above data and calculates real
+                                                                                                    si P = (ui + di h2i + xi h3i ) P
+         identity     RIDi       = Yi ⊕ bPIDi,1 ,    PIDi,2  =
+         RIDi ⊕ h1 (bPIDi,1 ΔTi ).                                                                        = Ui + di h2i P + h3i xi P
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 16,2026 at 14:18:35 UTC from IEEE Xplore. Restrictions apply.
+3828                                                                                                    IEEE SYSTEMS JOURNAL, VOL. 17, NO. 3, SEPTEMBER 2023
+
+
+
+
+                        = Ui + (ri + ah1i )h2i P + h3i Xi                               2) HashQureyH2 : List Lh2 is particularly maintained as:
+                                                                                           (PIDi , Xi , Kpub , Ri , Ti , h2i ). When AI makes a query to
+                        = Ui + (ri P + h1i aP )h2i + h3i Xi                                H2 , CI checks at first whether it is stored in Lh2 . If it
+                        = Ui + (Ri + h1i Kpub )h2i + h3i Xi .                              is true, then the corresponding h2i is returned to AI .
+                                                                                           Otherwise, CI randomly chooses a value h2i ∈ Zq∗ and
+    2) Let s = Σni=1 si , U = Σni=1 Ui , the correctness of Aggre-                         sets h2 (P IDi , Xi , Kpub , Ri , Ti ) = h2i . CI returns h2i to
+       gate Verify algorithm can be given as follows.                                     AI and finally inserts a new entry to Lh2 .
+                    n                                                                 3) HashQureyH3 : List Lh3 is particularly maintained as:
+                                                                                          (PIDi , Mi , P Ki , Ui , Ti , h3i ). When AI makes a query
+           sP =           (ui + di h2i + xi h3i ) P
+                                                                                           to H3 , CI checks at first whether it is stored in Lh3 . If
+                         i=1
+                                                                                           it is true, then the corresponding h3i is returned to AI .
+                       n
+                                     n
+                                                        n
+                                                                                          Otherwise, CI randomly selects a value h3i ∈ Zq∗ and let
+                   =         ui P +         di h2i P +         h3i xi P
+                                                                                           h3 (PIDi , Mi , P Ki , Ui , Ti ) = h3i . CI returns h3i to AI
+                       i=1            i=1                i=1
+                                                                                           and finally inserts a new entry to Lh3 .
+                       n
+                                   n
+                                                      n
+                                                                                       4) U serCreate: Lists Lpk , Lsv , and Lppk are maintained as:
+                   =         Ui +         di h2i P +         h3i Xi
+                                                                                           (PIDi , Ri , Xi ), (PIDi , xi ), (PIDi , di ) respectively. When
+                       i=1          i=1                i=1
+                                                                                           AI issues a query to U serCreate on input PIDi , CI
+                             n
+                                                            n
+                                                                                          checks at first whether it is stored in Lpk . If it is true,
+                   =U+             (ri + ah1i )h2i P +             h3i Xi
+                                                                                           then the corresponding public key (Ri , Xi ) is returned to
+                             i=1                             i=1
+                                                                                           AI . Otherwise, CI handles the query in the following two
+                             n
+                                                              n
+                                                                                          situations:
+                   =U+             (Ri + h1i Kpub )h2i +              h3i Xi .
+                                                                                           a) PIDi = PID∗i : CI selects ai , bi , ci ∈ Zq∗ randomly and
+                             i=1                               i=1
+                                                                                                sets di = ai , h1i = bi , xi = ci . Next, CI calculates
+                                                                                                Ri = ai P − bi Kpub , Xi = ci P .
+  C. Formal Security Analysis                                                              b) PIDi = PID∗i : CI selects ri , bi , ci ∈ Zq∗ randomly and
+   According to our demonstrated security model, we propose                                     sets di =⊥, h1i = bi , xi = ci . Next, CI calculates
+formal security proof in this section. Based on the complexity                                  Ri = ri P , Xi = ci P .
+of ECDLP, we aim to indicate that our scheme is existentially                              After that, CI searches Lh1 to check if an entry
+unforgeable against both super types of adversary.                                         (PIDi , Ri , Kpub , h1i ) already exists and h1i = bi . If it
+   Lemma 1: Under the random oracle model, on the condition                                is true, then aborts the game. Otherwise CI adds new
+that a Type I PPT adversary AI can forge a valid aggregate                                 entries to Lh1 , Lpk , Lsv , and Lppk separately then returns
+signature successfully with a non-negligible probability through                           P KPIDi = (Ri , Xi ) as response.
+the interaction with challenger CI , then we believe that CI can                        5) P ublicKeyReplace: When AI issues a query to
+use the adversary AI ’s capability to solve an ECDLP instance                              P ublicKeyReplace on input (PIDi , xi , Ri , Xi ), CI
+with a non-negligible probability.                                                         then looks up Lpk and Lsv , updates the entry with
+   Proof: Considering AI and CI interact with each other as                                (PIDi , Ri , Xi ) and (PIDi , xi ) respectively. Note that it is
+Game 1 described previously. Assume that CI maintains an                                   possible for xi to be “⊥”.
+ECDLP instance: given P ∈ G, Q = aP , the purpose of CI is                              6) P artialP rivateKeyExtract: When AI makes a query
+calculating a as an answer of ECDLP by taking advantage of AI .                            to P artialP rivateKeyExtract on input PIDi , CI
+For this purpose, CI selects an anonymous challenge identity                               checks at first whether it is stored in Lppk . If it is true,
+PID∗i and carries out as indicated below:                                                  then the corresponding di is returned to AI . Otherwise,
+   Setup: CI initializes params = {P, q, E, G, h1 , h2 , h3 ,                              CI issues a query to CreateU ser with PIDi , returns to
+Kpub } and sets Kpub = Q = aP . Next, CI sends params to                                   AI with di obtained from the oracle and finally inserts a
+AI and keeps a secretly.                                                                   new entry (PIDi , di ) to Lppk . Note that CI may abort the
+   Query: CI simulates H1 , H2 , and H3 as hash oracles. Besides,                          simulation and return “⊥” if PIDi = PID∗i .
+lists Lh1 , Lh2 , Lh3 are maintained to record the queries of hash                      7) SecretV alueExtract: When AI makes a query to
+oracles. In addition, AI ’s queries to secret value, user public                           SecretV alueExtract on input PIDi , CI checks at first
+key and partial private key are kept in list Lsv , Lpk , Lppk ,                            whether it is stored in Lsv . If it is true, then the correspond-
+respectively. All lists are empty at first. As the game proceeds,                          ing xi is returned to AI . Otherwise, CI issues a query to
+AI interacts with CI as follows:                                                           CreateU ser with PIDi , returns to AI with xi obtained
+   1) HashQureyH1 : List Lh1 is maintained as:                                             from the oracle and finally inserts a new entry (PIDi , xi )
+       (PIDi , Ri , Kpub , h1i ). When AI makes a query to                                 to Lsv . If AI has queried P ublicKeyReplace with P IDi
+       H1 , CI checks at first whether it is stored in Lh1 . If it                         but does not offer a correct secret value xi , we assume that
+       is true, then the corresponding h1i is returned to AI .                             SecretV alueExtract is not able to be queried using the
+       Otherwise, CI issues a query to CreateU ser with PIDi ,                             same PIDi .
+       returns to AI with h1i obtained from the oracle and finally                      8) Sign: When AI sends a query to Sign on input
+       inserts a new entry (PIDi , Ri , Kpub , h1i ) to Lh1 .                              (PIDi , Mi ), CI first checks whether it exists in Lpk . If
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 16,2026 at 14:18:35 UTC from IEEE Xplore. Restrictions apply.
+ZHENG et al.: SECURITY-ENHANCED PAIRING-FREE CERTIFICATELESS AGGREGATE SIGNATURE FOR VEHICULAR AD-HOC NETWORKS                                                 3829
+
+
+
+      not, CI queries CreateU ser with PIDi and updates the                           Lemma 2: Under the random oracle model, on the condition
+      corresponding entries in all lists. CI recovers parame-                      that a Type II PPT adversary AII can forge a valid aggregate
+      ters necessary for generating signature from Lh1 , Lpk ,                     signature successfully with a non-negligible probability through
+      Lppk , Lsv , respectively. Next, depending on queries to                     the interaction with challenger CII , then we believe that using
+      P ublicKeyReplace are issued or not, CI will handle AI ’s                    the adversary AII ’s capability, CII can solve an ECDLP instance
+      query in the following two cases:                                            with a non-negligible probability.
+       a) If PIDi = PID∗i and the public key hasn’t been re-                         Proof: Considering AII and CII interact with each other as
+          placed, CI executes Sign algorithm and adds h2i , h3i to                Game 2 described previously. Assume that CII maintains an
+          Lh2 , Lh3 . Finally returns (Ui , si ) to Ai as the response.            ECDLP instance: given P , Q = xP , CII ’s purpose is to calculate
+      b) Otherwise, CI randomly selects three various numbers                      x as an answer of ECDLP by taking advantage of AII . For this
+          si , h2i , h3i ∈ Zq∗ and computes Ui = si P − h2i (Ri +                  purpose, CII selects an anonymous challenge identity PID∗i and
+          h1i Ppub ) − h3i Xi . Finally, CI returns (Ui , si ) to Ai as            carries out as below:
+          the response and adds h2i , h3i to Lh2 , Lh3 separately.                    Setup: CII initializes params = {P, q, E, G, h1 , h2 , h3 ,
+   F orge: As we demonstrated in our security model, it is                         Kpub } and set Kpub = aP . Next, CII sends master private key a
+not obligatory that all the signatures for aggregating are                         and params to AII .
+forged. Nevertheless, the target identity PID∗i ’s signature must                     Query: CII simulates H1 , H2 , and H3 as hash oracles.
+be forged. In other words, AI must give a forged but                               Besides, lists Lh1 , Lh2 , Lh3 are maintained to record the queries
+valid signature (Ui∗ , s∗i ) for (PID∗i , Mi∗ ), without querying                  of hash oracles. In addition, AII ’s queries to secret value, user
+P artialP rivateKeyExtract and Sign by P IDi∗ .                                    public key and partial private key are also kept in lists Lsv ,
+   Based on forking lemma [28], CI has the capability to replay                    Lpk , Lppk , respectively. All lists are empty at first. As the game
+multiple times of the game with identical random type but                          proceeds, AII interacts with CII as follows:
+                          ∗(j)      ∗(j)
+different hash values h2i and h3i , Thus, AI is able to produce                       1) HashQureyH1 : List Lh1 is maintained as:
+                               ∗(j)
+four valid signatures (Ui∗ , si ), j ∈ (1, 2, 3, 4). Without loss of                      (PIDi , Ri , Kpub , h1i ). When AII makes a query to
+generality the following equation is true:                                                H1 , CII checks at first whether it is stored in Lh1 . If it
+                                                                                          is true, then the corresponding h1i is returned to AII .
+               ∗(j)                            ∗(j)         ∗(j)
+             si       = u∗i + (ri + ah1i )h2i + xi h3i .                                  Otherwise, CII issues a query to CreateU ser with PIDi ,
+                                                                                          responds to AII with h1i obtained from the oracle and
+   Note that j ∈ (1, 2, 3, 4) and a, u∗i , ri , and xi are unknown                        finally inserts a new entry to Lh1 .
+variables. Further, according to the above linear and independent                     2) HashQureyH2 : List Lh2 is particularly maintained as:
+formulas, CI can figure a out. Also, as the answer to an ECDLP                            (PIDi , Xi , Kpub , Ri , Ti , h2i ). When AII makes a query
+instance. The probability SuccCI of this can be further analyzed                          to H2 , CII checks at first whether it is stored in Lh2 . If
+as follows.                                                                               it is true, then the corresponding h2i is returned to AII .
+   We define three events:                                                                Otherwise, CII randomly chooses a value h2i ∈ Zq∗ and
+e1 . CI doesn’t abort the game during all queries to                                      sets h2 (PIDi , Xi , Kpub , Ri , Ti ) = h2i . CII returns h2i to
+   P artialP rivateKeyExtract.                                                            AII and finally inserts a new entry to Lh2 .
+e2 . AI successfully forges a valid tuple (PIDi , Mi , Ui , si ).                     3) HashQureyH3 : List Lh3 is particularly maintained as:
+e3 . The tuple satisfies PIDi = PID∗i .                                                   (PIDi , Mi , P Ki , Ui , Ti , h3i ). When AII makes a query
+                                                                                          to H3 on input (PIDi , Mi , P Ki , Ui , Ti ), CII checks
+   CI succeeds when all the above three events happen.                                    at first whether it is stored in Lh3 . If it is true,
+Assuming that the times of accessing HashQureyH1 and                                      then the corresponding h3i is returned to AII . Oth-
+P artialP rivateKeyExtract are QH and Qppk , respectively.                                erwise, CII randomly chooses a value h3i ∈ Zq∗ , sets
+If AI can forge a signature with a non-negligible possibility                             h3 (PIDi , Mi , P Ki , Ui , Ti ) = h3i . CII returns h3i to AII
+SuccAI , SuccCI can be computed as follows.                                               and finally inserts a new entry to Lh3 .
+                                                                                      4) U serCreate: Lists Lpk , Lsv , Lppk are maintained as:
+    SuccCI = P r[Ee1 ∧ Ee2 ∧ Ee3 ]
+                                                                                          (PIDi , Ri , Xi ), (PIDi , xi ), (PIDi , di ), respectively. When
+               = P r[Ee1 ]P r[Ee2 | Ee1 ]P r[Ee3 | Ee1 ∧ Ee2 ]                            AII issues a query to U serCreate on input PIDi , CII
+                                                                                          checks at first whether it is stored in Lpk . If it is true,
+                          1 Qppk         1
+               ≥ (1 −       )    SuccAI    .                                              then the corresponding public key (Ri , Xi ) is returned to
+                         QH             QH
+                                                                                          AII . Otherwise, CII handles the query in the following
+   We can deduce from the above that CI can crack an ECDLP                                two situations:
+instance with a non-negligible possibility. However, depending                        r PIDi = PID∗i : CII selects ri , bi , ci ∈ Zq∗ randomly and sets
+on the hardness of ECDLP, this conclusion is contradictory. In                           h1i = bi , di = ri + ah1i , xi = ci . Next, CII calculates
+this way, we can prove Theorem 1 is correct.                                             Ri = ri P , Xi = ci P .
+   Theorem 1: Under the random oracle model, for a Type I                             r PIDi = PID∗i : CII selects ri , bi ∈ Zq∗ randomly and sets
+PPT (probabilistic polynomial time) adversary AI , our raised                            xi =⊥, h1i = bi , di = ri + ah1i . Next, CII calculates
+CLAS scheme is EUF-CMA on the premise that the ECDLP is                                  Ri = ri P , Xi = Q. After that, CII searches Lh1 to check if
+intricate.                                                                               an entry (PIDi , Ri , Kpub , h1i ) already exists and h1i = bi .
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 16,2026 at 14:18:35 UTC from IEEE Xplore. Restrictions apply.
+3830                                                                                                    IEEE SYSTEMS JOURNAL, VOL. 17, NO. 3, SEPTEMBER 2023
+
+
+
+      If it is true, then aborts the game. Otherwise CII adds new                      CII succeeds when all the above three events happen.
+      entries to Lh1 , Lpk , Lsv , and Lppk separately then returns                 Assuming that the times of accessing HashQureyH1 and
+      P KPIDi = (Ri , Xi ) as response.                                             SecretV alueExtract are QH and Qsv , respectively. Consid-
+   5) P ublicKeyReplace: Cause AII is a Type II adversary, it                       ering AII can forge a valid signature with a non-negligible
+       doesn’t own the capability to replace a certain public key.                  possibility SuccAII , SuccCII can be computed as
+   6) P artialP rivateKeyExtract: When AII makes a query
+       to P artialP rivateKeyExtract on input PIDi , CII                                 SuccCII = P r[Ee1 ∧ Ee2 ∧ Ee3 ]
+       checks at first whether it is stored in Lppk . If it is true,
+                                                                                                     = P r[Ee1 ]P r[Ee2 | Ee1 ]P r[Ee3 | Ee1 ∧ Ee2 ]
+       then the corresponding di is returned to AII . Otherwise,
+                                                                                                                  Qsv
+       CII issues a query to CreateU ser with PIDi , returns to                                                 1                  1
+       AII with di obtained from the oracle and finally inserts a                                    ≥ 1−               SuccAII      .
+                                                                                                             QH                   QH
+       new entry (PIDi , di ) to Lppk .
+   7) SecretV alueExtract: When AII makes a query to                                   We can deduce from above that CII can crack an ECDLP
+       SecretV alueExtract on input PIDi , CII checks at first                      instance with a non-negligible possibility. However, depending
+       whether it is stored in Lsv . If it is true, then the corre-                 on the hardness of ECDLP, this conclusion is contradictory. In
+       sponding xi is returned to AII . Otherwise, CII issues a                     this way, we can prove Theorem 2 is correct.
+       query to CreateU ser with PIDi , returns to AII with xi                         Theorem 2: Under the random oracle model, for a Type II
+       obtained from the response and finally inserts a new entry                   PPT adversary AII , our CLAS scheme is EUF-CMA on the
+       (PIDi , xi ) to Lsv . It is essential that CII may abort the                 premise that the ECDLP is intricate.
+       simulation and return “⊥” if PIDi = PID∗i .
+   8) Sign: When AII makes a query to Sign on input
+       (PIDi , Mi ), CII first checks whether it exists in Lpk . If                   D. Privacy and Informal Security Analysis
+       not, CII queries CreateU ser with PIDi and updates the                         In Section IV-D, we briefly introduce the security and privacy
+       corresponding entries in all lists. CII recovers parameters                  requirements in VANETs. In this section, We will further analyze
+       necessary for generating signature from Lh1 , Lpk , Lppk ,                   our proposed scheme to demonstrate that it meets the specific
+       and Lsv respectively. Next, CII will handle AII ’s query                     requirements mentioned above.
+       in the following two cases:                                                    1) Mutual authentication: According to formal security proof
+   a) PIDi = PID∗i , CII executes as Sign algorithm and adds                            and correctness proof mentioned in the previous sec-
+       h2i , h3i to Lh2 , Lh3 . Finally returns (Ui , si ) to AII as the                  tion, an adversary cannot forge a signature without le-
+       response.                                                                          gitimate private key. Besides, verifier node in VANETs
+   b) Otherwise, CII randomly selects three various numbers                               can ensure
+                                                                                                    the authentication by checking
+                                                                                                                                         whether sP
+       si , h2i , h3i ∈ Zq∗ and computes Ui = si P − h2i (Ri +                            = U + ni=1 (Ri + h1i Kpub )h2i + ni=1 Xi h3i is estab-
+       h1i Kpub ) − h3i Xi . Finally, CII returns (Ui , si ) to AII as                    lished or not in the signature verification phase. Therefore,
+       the response and adds h2i , h3i to Lh2 , Lh3 separately.                           our scheme provides message mutual authentication.
+   F orge: First, CII will abort the simulation if PIDi = PID∗i .                    2) Conditional anonymity: In VANETs, a vehicle node Vi
+Similar to what we have demonstrated in the proof of Theo-                                takes the pseudonym anonymous identity PIDi to partici-
+rem 1, AII must submit a forged but valid signature (Ui∗ , s∗i ) for                      pate in network communication. Except T A can recover
+(PID∗i , Mi∗ ), without querying SecretV alueExtract and Sign                             the real identity RIDi through the master private key b,
+by PID∗i .                                                                                it is impossible for other nodes to trace the real identity
+   In the same way, CII replays the game multiple times with                              corresponding to the pseudoanonymous identity.
+                                                          ∗(j)      ∗(j)
+identical random type but different hash values h2i and h3i                           3) Message integrity: In our proposed scheme, based on
+                                                   ∗(j)                                   collision-resistant hash function, we calculate and com-
+and produces three valid signatures (Ui∗ , si ), j ∈ (1, 2, 3)
+hold that                                                                                 pare the hash values to check whether the data has been
+                                                                                          tampered or not in the communication channel. By this
+                ∗(j)                            ∗(j)         ∗(j)                         way, we ensure the integrity of message.
+               si      = u∗i + (ri + ah1i )h2i + xi h3i .
+                                                                                      4) Unlinkability: In the communication process, vehicles
+                                                                                          take different pseudonym indentities to communicate with
+   Note that j ∈ (1, 2, 3) and u∗i , ri , and xi are unknown vari-                        each other and each pseudonym identity is updated over
+ables. Likewise, CII can figure out secret value x, also as the                           time. Thus, there is no relationship between the new
+answer to ECDLP instance. The probability SuccCII can be                                  pseudonym identity and the old pseudonym identity. The
+further analyzed as follows.                                                              attacker cannot judge the connection between them, so
+   We first define three events:                                                          proposed scheme can provide unlinkability.
+                                                                                      5) Man-in-the-middle attack: In this scheme, vehicles and
+e1 . CII does not abort the game during all queries to                                    RSUs will authenticate each other mutually. An attacker
+   SecretV alueExtract.                                                                   cannot pretend itself to be a legitimate entity, neither can
+e2 . AII successfully forges a valid tuple (PIDi , Mi , Ui , si ).                        it to send a valid message. Thus, a malicious node cannot
+e3 . The tuple satisfies PIDi = PID∗i .                                                   launch a man-in-the-middle attack.
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 16,2026 at 14:18:35 UTC from IEEE Xplore. Restrictions apply.
+ZHENG et al.: SECURITY-ENHANCED PAIRING-FREE CERTIFICATELESS AGGREGATE SIGNATURE FOR VEHICULAR AD-HOC NETWORKS                                                 3831
+
+
+
+                                                                   TABLE II
+                            COMPARSION IN ASPECT OF TIME CONSUMPTION WITH RELEVANT SCHEMES (100 USERS AGGREGATED)
+
+
+
+
+  6) Replay attack: In our proposed scheme, a times-                                                            TABLE III
+                                                                                              TIME CONSUMPTION OF OPERATIONS (IN MILLISECONDS)
+     tamp Ti is involved in authentication message
+     {P IDi , Xi , Mi , Ti , σi } to provide freshness. Through
+     Ti verifiers can determine whether the message has been
+     replayed or not.
+  7) Denial of service attack: In our proposed scheme, an
+     invalid vehicle node does not own a private key and
+     thus cannot generate a valid message transmitting in
+     VANETs. Besides, suppose a legitimate user generates a
+     large number of signature messages in a short term and
+     broadcasts them in the network, TA will trace its real
+     identity and prohibit it from sending messages again for a                    virtual machine (Lenovo with Intel(R) Core(TM) 3.40 GHz i7-
+     certain period of time. So, proposed scheme can resist DoS                    6700 processor, 8 GB memory, Ubuntu18.04 operating system).
+     attack.                                                                       According to the results of our implementation, we record the
+  8) Impersonation attack and signature forgery attack: Ac-                        execution time of relevant cryptographic operations in Table III.
+     cording to the formal security proof we presented in the                         We evaluate and analyze the calculation overhead of a sin-
+     previous section, based on Theorems 1 and 2, We can                           gle Sign &Verify algorithm and Aggregate &Aggregate Verify
+     draw a conclusion that as long as the ECDLP problem is                        algorithm in different schemes. In our proposed scheme, we
+     difficult, no PPT adversary can forge a valid signature.                      calculate two times of general hash to Zq∗ and one time of
+     Thus, our scheme can resist impersonation attack and                          point multiplication for individual signature phase. As for an
+     signature forgery attack.                                                     individual verification phase, there are three times of general
+                                                                                   hash operation, three times of point addition and four times of
+                                                                                   point multiplication. For an aggregate signature phase, assuming
+        VII. PERFORMANCE ANALYSIS AND EVALUATION
+                                                                                   n is the total user amount, we need 2n − 2 times of point
+   We analyze and evaluate the performance of our scheme in this                   addition. Last, 3n times of general hash to Zq∗ , 3n + 1 times
+section by estimating the computation time cost. The experiment                    of point addition as well as 3n times of point multiplication
+results show that our raised proposal can meet the security                        are necessary for an aggregate verification phase. Based on the
+requirements in a resource-constrained situation with relatively                   running time of a single cryptographic operation recorded in
+lower computation overhead in comparison with Han et al.’s                         Table III, we give the detailed comparison results of various
+primary proposal [5] and other CLAS schemes (see [6], [7], [8],                    schemes at different phases in Table II.
+[9]). Hence, our scheme has strong adaptability for VANETs.                           As indicated in Figs. 2 and 3, compared with schemes pre-
+   To maintain an appropriate security level equivalent to 1024-b                  sented in [5]–[9], our scheme is much more time-saving than Ku-
+RSA algorithm, we construct a cyclic group G based on elliptic                     mar et al. [6] and Wu et al. [7] in single signature generation (by
+curve E : y 2 = x3 + ax + b mod p on a finite field Zq∗ . The                      a percentage of (5.458 − 0.979)/5.458 × 100 ≈ 82.1% in [6]
+length of q and elements in G is indicated as 40 B and 80 B                        and (8.989 − 0.979)/8.989 × 100 ≈ 89.1% in [7]) and verifi-
+correspondingly. Furthermore, as for pairing-based calculation,                    cation (by a percentage of (11.884 − 3.903)/11.884 × 100 ≈
+we use the double-Tate-Pairing e : G1 × G1 → G2 defined on                         67.2% in [6] and (12.855 − 3.903)/12.855 × 100 ≈ 69.7% in
+the singular curve E : y 2 = x3 + x mod p1 based on a finite                       [7]), cause we give up expensive bilinear pairing calculation.
+field Zq∗1 , on which p1 and q1 represents a 160 and 512 b prime                   Compared with Gayathri et al. [8] and Liu et al. [9], our scheme
+number separately.                                                                 is superior in the aspect of security and signature generation
+   Our experiment evaluation was performed on basis of the                         time. The improvement in performance efficiency of our pro-
+MIRACL [29] multiprecision cryptographic library on a Linux                        posed scheme about single sign computation cost over both [8]
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 16,2026 at 14:18:35 UTC from IEEE Xplore. Restrictions apply.
+3832                                                                                                    IEEE SYSTEMS JOURNAL, VOL. 17, NO. 3, SEPTEMBER 2023
+
+
+
+                                                                                    calculation costs and communication bandwidth compared with
+                                                                                    other existing relevant schemes. In summary, our scheme is more
+                                                                                    suitable and robust in the practice of VANETs.
+
+
+                                                                                                                ACKNOWLEDGMENT
+                                                                                      The authors would like to thank the invaluable suggestions
+                                                                                    provided by the anonymous reviewers and the associate editor.
+
+
+                                                                                                                       REFERENCES
+                                                                                     [1] M. S. Sheikh and J. Liang, “A comprehensive survey on vanet security ser-
+                                                                                         vices in traffic management system,” Wireless Commun. Mobile Comput.,
+                                                                                         vol. 2019, pp. 2423915:1–2423915:23, 2019.
+Fig. 2.   Execution time of Single sign and verify (in milliseconds).                [2] S. S. Al-Riyami and K. G. Paterson, “Certificateless public key cryp-
+                                                                                         tography,” in Proc. Int. Conf. Theory Appl. Cryptol. Inf. Secur., 2003,
+                                                                                         pp. 452–473.
+                                                                                     [3] D. Boneh, C. Gentry, B. Lynn, and H. Shacham, “Aggregate and verifiably
+                                                                                         encrypted signatures from bilinear maps,” in Proc. Int. Conf. Theory Appl.
+                                                                                         Cryptographic Techn., 2003, pp. 416–432.
+                                                                                     [4] R. Castro and R. Dahab, “Efficient certificateless signatures suitable for
+                                                                                         aggregation,” IACR Cryptol. ePrint Arch., vol. 2007, 2007, Art. no. 454.
+                                                                                     [5] Y. Han, W. Song, Z. Zhou, H. Wang, and B. Yuan, “eclas: An efficient
+                                                                                         pairing-free certificateless aggregate signature for secure vanet communi-
+                                                                                         cation,” IEEE Syst. J., vol. 16, no. 1, pp. 1637–1648, Mar. 2022.
+                                                                                     [6] P. Kumar, S. Kumari, V. Sharma, A. K. Sangaiah, J. Wei, and X. Li, “A
+                                                                                         certificateless aggregate signature scheme for healthcare wireless sensor
+                                                                                         network,” Sustain. Comput., Inform. Syst., vol. 18, pp. 80–89, 2018.
+                                                                                     [7] L. Wu, Z. Xu, D. He, and X. Wang, “New certificateless aggregate signature
+                                                                                         scheme for healthcare multimedia social network on cloud environment,”
+                                                                                         Secur. Commun. Netw., vol. 2018, pp. 2595273:1–2595273:13, 2018.
+                                                                                     [8] N. Gayathri et al., “Efficient and secure pairing-free certificateless aggre-
+                                                                                         gate signature scheme for healthcare wireless medical sensor networks,”
+                                                                                         IEEE Internet Things J., vol. 6, no. 5, pp. 9064–9075, Oct. 2019.
+                                                                                     [9] J. Liu, L. Wang, and Y. Yu, “Improved security of a pairing-free certificate-
+                                                                                         less aggregate signature in healthcare wireless medical sensor networks,”
+Fig. 3. 100 users Aggregate Signing&Verifying time of different scheme (in               IEEE Internet Things J., vol. 7, no. 6, pp. 5256–5266, Jun. 2020.
+milliseconds).                                                                      [10] L. Shen, J. Ma, X. Liu, and M. Miao, “A provably secure aggregate
+                                                                                         signature scheme for healthcare wireless sensor networks,” J. Med. Syst.,
+                                                                                         vol. 40, no. 11, pp. 1–10, 2016.
+                                                                                    [11] J. Tang, A. Liu, M. Zhao, and T. Wang, “An aggregate signature based trust
+and [9] is about (1.95 − 0.979)/1.95 × 100 ≈ 49.8%. And the                              routing for data gathering in sensor networks,” Secur. Commun. Netw.,
+enhanced percentage of signature verification time is (4.866 −                           vol. 2018, pp. 6328504:1–6328504:30, 2018.
+                                                                                    [12] S. Chatterjee, D. Hankerson, E. Knapp, and A. Menezes, “Comparing two
+3.903)/4.866 × 100 ≈ 19.8% compared with [8]. Finally, al-                               pairing-based aggregate signature schemes,” Designs, Codes Cryptogr.,
+though our scheme is less efficient than the original Han et al. [5]                     vol. 55, no. 2, pp. 141–167, 2010.
+in single signature generation (by a percentage of (0.979 −                         [13] S. Lu, R. Ostrovsky, A. Sahai, H. Shacham, and B. Waters, “Sequential
+                                                                                         aggregate signatures and multisignatures without random oracles,” in Proc.
+0.971)/0.979 × 100 ≈ 0.8%) and single signature verification                             Annu. Int. Conf. Theory Appl. Cryptographic Techn., 2006, pp. 465–485.
+(by a percentage of (3.903 − 1.943)/3.903 × 100 ≈ 50.2%),                           [14] Y. Zhao, “Practical aggregate signature from general elliptic curves, and
+our solution fixes its defects and achieves an enhanced-security                         applications to blockchain,” in Proc. ACM Asia Conf. Comput. Commun.
+                                                                                         Secur., 2019, pp. 529–538.
+level. In summary, our proposal strikes a compromise between                        [15] C. Gentry and Z. Ramzan, “Identity-based aggregate signatures,” in Proc.
+security and efficiency. It is more suitable for scenario with                           Int. Workshop Public Key Cryptogr., 2006, pp. 257–273.
+limited resources like VANETs.                                                      [16] K.-A. Shim, “An id-based aggregate signature scheme with constant
+                                                                                         pairing computations,” J. Syst. Softw., vol. 83, no. 10, pp. 1873–1880,
+                                                                                         2010.
+                            VIII. CONCLUSION                                        [17] A. Bagherzandi and S. Jarecki, “Identity-based aggregate and multi-
+                                                                                         signature schemes based on rsa,” in Proc. Int. Workshop Public Key
+   In VANETs, applying a CLAS scheme can provide an efficient                            Cryptogr., 2010, pp. 480–498.
+                                                                                    [18] T. Asami et al., “Moderator-controlled information sharing by identity-
+and secure data authentication without numerous computation                              based aggregate signatures for information centric networking,” in Proc.
+and communication overhead. In this article, we have reviewed                            2nd ACM Conf. Inf.-Centric Netw., 2015, pp. 157–166.
+and evaluated the security of Han et al.’s pairing-free CLAS                        [19] L. Shen, J. Ma, X. Liu, F. Wei, and M. Miao, “A secure and efficient
+                                                                                         id-based aggregate signature scheme for wireless sensor networks,” IEEE
+scheme. By providing a concrete attacking example, we show                               Internet Things J., vol. 4, no. 2, pp. 546–554, Apr. 2017.
+that their scheme is not immune to a malicious network member.                      [20] H. Xiong, Z. Guan, Z. Chen, and F. Li, “An efficient certificateless
+To renovate the security flaws, we put forward a security-                               aggregate signature with constant pairing computations,” Inf. Sci., vol. 219,
+                                                                                         pp. 225–235, 2013.
+enhanced scheme, which is proved to be EUF-CMA in the                               [21] D. He, M. Tian, and J. Chen, “Insecurity of an efficient certificateless
+random oracle model. In addition, performance and evaluation of                          aggregate signature with constant pairing computations,” Inf. Sci., vol. 268,
+our implementation indicate our solution owns relatively lower                           pp. 458–462, 2014.
+
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 16,2026 at 14:18:35 UTC from IEEE Xplore. Restrictions apply.
+ZHENG et al.: SECURITY-ENHANCED PAIRING-FREE CERTIFICATELESS AGGREGATE SIGNATURE FOR VEHICULAR AD-HOC NETWORKS                                                  3833
+
+
+
+[22] Y.-C. Chen, R. Tso, M. Mambo, K. Huang, and G. Horng, “Certificateless                                   Yunru Zhang received the bachelor’s and master’s
+     aggregate signature with efficient verification,” Secur. Commun. Netw.,                                  degrees in computer science from Wuhan University,
+     vol. 8, no. 13, pp. 2232–2243, 2015.                                                                     Wuhan, China, in 2015 and 2018, respectively. She is
+[23] H. Liu, M. Liang, and H. Sun, “A secure and efficient certificateless aggre-                             currently working toward the Ph.D. degree in cyber
+     gate signature scheme,” IEICE Trans. Fundamentals Electron., Commun.                                     science and engineering with the School of Cyber
+     Comput. Sci., vol. 97, no. 4, pp. 991–995, 2014.                                                         Science and Engineering, Wuhan University, Wuhan,
+[24] J. Zhang, X. Zhao, and J. Mao, “Attack on chen et al.’s certificateless ag-                              China.
+     gregate signature scheme,” Secur. Commun. Netw., vol. 9, no. 1, pp. 54–59,                                  Her main research interests include cryptography
+     2016.                                                                                                    and information security, in particular, authentication
+[25] D. He, J. Chen, and R. Zhang, “An efficient and provably-secure certifi-                                 key agreement, cryptographic protocols, and zero-
+     cateless signature scheme without bilinear pairings,” Int. J. Commun. Syst.,                             knowledge proof.
+     vol. 25, no. 11, pp. 1432–1442, 2012.
+[26] Y. Zhan, B. Wang, and R. Lu, “Cryptanalysis and improvement of a
+     pairing-free certificateless aggregate signature in healthcare wireless medi-
+     cal sensor networks,” IEEE Internet Things J., vol. 8, no. 7, pp. 5973–5984,
+     Apr. 2021.
+[27] X. Huang, Y. Mu, W. Susilo, D. S. Wong, and W. Wu, “Certificateless
+     signature revisited,” in Proc. Australas. Conf. Inf. Secur. Privacy, 2007,
+     pp. 308–322.
+[28] D. Pointcheval and J. Stern, “Security arguments for digital signatures and
+     blind signatures,” J. Cryptol., vol. 13, no. 3, pp. 361–396, 2000.                                       Cong Peng received the M.S. degree in applied math-
+[29] Miracl Ltd., “Miracl Cryptographic SDK: Multiprecision integer and                                       ematics from Wuhan University, Wuhan, China, in
+     rational arithmetic cryptographic library,” 2018. Accessed: Dec. 7, 2021.                                2013. He is currently working toward the Ph.D. de-
+     [Online]. Available: https://github.com/miracl/MIRACL                                                    grees in applied mathematics from Wuhan University,
+                                                                                                              Wuhan, China.
+                                                                                                                His major research interests include elliptic curves,
+                                                                                                              cryptography, and information security.
+
+
+
+                           Hangcheng Zheng received the bachelor’s degree
+                           in information security from the School of Cyber
+                           Science and Engineering, Wuhan University, Wuhan,
+                           China, in 2020. He is currently working toward the
+                           master’s degree in cyber science and engineering with
+                           the Key Laboratory of Aerospace Information Secu-
+                           rity and Trusted Computing Ministry of Education,
+                           School of Cyber Science and Engineering, Wuhan
+                           University, Wuhan, China.
+                              His research interests include blockchain and cryp-                             Qi Feng received the master’s degree in computer
+                           tography.                                                                          science from the School of Computer Science, Wuhan
+                                                                                                              University, Wuhan, China, in 2018. She is currently
+                                                                                                              working toward the Ph.D. degree in cyber science and
+                                                                                                              engineering with the Key Laboratory of Aerospace
+                                                                                                              Information Security and Trusted Computing Min-
+                                                                                                              istry of Education, School of Cyber Science and
+                                                                                                              Engineering, Wuhan University, Wuhan, China.
+                                                                                                                 This work is done when visiting State Key Lab-
+                           Min Luo received the Ph.D.degree in computer sci-                                  oratory of Cryptology, Beijing, China. Her research
+                           ence from Wuhan University, Wuhan, China, in 2003.                                 interests include cryptographic protocols.
+                              He is currently an Associate Professor with the
+                           School of Cyber Science and Engineering, Wuhan
+                           University, Wuhan, China. His research interests
+                           mainly include applied cryptography and blockchain
+                           technology.
+
+
+
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 16,2026 at 14:18:35 UTC from IEEE Xplore. Restrictions apply.
+

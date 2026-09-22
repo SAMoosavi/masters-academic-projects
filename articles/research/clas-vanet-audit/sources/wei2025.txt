@@ -1,0 +1,758 @@
+Article
+
+A New Efficient and Provably Secure Certificateless Signature
+Scheme Without Bilinear Pairings for the Internet of Things
+Zhanzhen Wei, Xiaoting Liu *, Hong Zhao                     , Zhaobin Li and Bowen Liu
+
+
+                                         Department of Electronic and Communication Engineering, Beijing Electronic Science and Technology Institute,
+                                         Beijing 100070, China
+                                         * Correspondence: 20233803@mail.besti.edu.cn; Tel.: +86-187-7858-9796
+
+
+                                         Highlights
+
+                                         What are the main findings?
+                                         •     A new attack method, the Common Factor Substitution Attack, is introduced, showing
+                                               that a broad class of existing pairing-free certificateless signature (PF-CLS) schemes
+                                               share a common vulnerability and cannot resist Type I adversary forgeries—even after
+                                               certain prior improvements.
+                                         •     A new PF-CLS scheme is proposed that securely binds both parts of a user’s public
+                                               key to the system public key via a hash function, eliminating the Type II attack
+                                               vulnerability in Ma et al.’s scheme, and is proven secure against both Type I and Type
+                                               II adversaries under the Random Oracle Model while offering higher computational
+                                               efficiency than comparable schemes.
+                                         What is the implication of the main finding?
+                                         •     The results underscore that many PF-CLS schemes in current use for resource-
+                                               constrained environments like IoT remain insecure against forged signature attacks
+                                               unless both Type I and Type II threats are systematically addressed in their design.
+                                         •     The proposed scheme’s combined security and efficiency make it a strong candi-
+                                               date for real-world IoT deployments, improving trust in data integrity and identity
+Academic Editors: Himanshu
+                                               authentication without imposing heavy computational or communication costs.
+Agrawal and Neminath Hubballi
+
+Received: 9 July 2025                    Abstract
+Revised: 9 August 2025
+                                         Pairing-free certificateless signature (PF-CLS) schemes are ideal authentication solutions
+Accepted: 21 August 2025
+Published: 22 August 2025
+                                         for resource-constrained environments like the Internet of Things (IoT) due to their low
+                                         computational, storage, and communication resource requirements. However, it has come
+Citation: Wei, Z.; Liu, X.; Zhao, H.;
+Li, Z.; Liu, B. A New Efficient and
+                                         to light that many PF-CLS schemes are vulnerable to forged signature attacks. In this
+Provably Secure Certificateless          paper, we use a novel attack method to prove that a class of PF-CLS schemes with the same
+Signature Scheme Without Bilinear        security vulnerabilities cannot resist Type I adversary attacks, and we find that, even if
+Pairings for the Internet of Things.     some schemes are improved to invalidate existing attack methods, they still cannot defend
+Sensors 2025, 25, 5224. https://
+                                         against the new attack method proposed in this paper. Subsequently, we introduce an
+doi.org/10.3390/s25175224
+                                         enhanced scheme proven to be resilient against both types of adversary attacks under the
+Copyright: © 2025 by the authors.        random oracle model (ROM). Performance analysis shows that, compared with several
+Licensee MDPI, Basel, Switzerland.
+                                         existing PF-CLS schemes, our scheme offers higher computational efficiency.
+This article is an open access article
+distributed under the terms and
+                                         Keywords: certificateless signature; Internet of Things; forgery attack
+conditions of the Creative Commons
+Attribution (CC BY) license
+(https://creativecommons.org/
+licenses/by/4.0/).
+
+
+
+
+Sensors 2025, 25, 5224                                                                                            https://doi.org/10.3390/s25175224
+Sensors 2025, 25, 5224                                                                                             2 of 14
+
+
+
+                         1. Introduction
+                               The IoT is used broadly and, because of its openness, transmits most data over
+                         the public Internet, exposing it to eavesdropping, tampering, forgery, and other attacks.
+                         Consequently, data security is paramount for IoT. Digital signature technology, ensur-
+                         ing the authentication, unforgeability, and non-repudiation of messages, is ideal for
+                         IoT environments.
+                               In a traditional public key cryptosystem, an entity’s public key’s authenticity and
+                         validity require a digital certificate from a trusted third-party, the Certificate Authority
+                         (CA). Managing certificates in IoT environments is challenging because of the substantial
+                         overhead for storing, distributing, verifying, and revoking them. In Identity-Based Cryp-
+                         tography (IBC), a user’s public key is generated based on identifiable public information,
+                         like a phone number, email address, or IP address. A trusted third-party Private Key
+                         Generator (PKG) creates the user’s Private Key, eliminating the need for CAs and digital
+                         certificates and addressing the certificate management issue. However, since the PKG fully
+                         generates the user’s private key, this raises concerns over potential signature forgeries,
+                         undermining the unforgeability of the system. Certificateless Public Key Cryptography
+                         (CL-PKC) solves the key escrow issue in IBC by having a Key Generation Center (KGC)
+                         create a partial private key for the user. The user then combines this with their own data to
+                         generate a full private key.
+                               Consequently, CLS amalgamates the strengths of traditional public key cryptosystem
+                         and IBC, addressing their respective drawbacks and proving more effective for ensur-
+                         ing data integrity and identity authentication in IoT’s distributed, flexible, and resource-
+                         limited environments.
+
+                         1.1. Related Work
+                               In 2003, AI-Riyami and Paterson proposed the first certificateless signature scheme [1].
+                         This scheme, which does not require digital certificates, allows the user and the KGC to
+                         jointly generate both public and private keys. The KGC only holds a portion of the user’s
+                         private keys, effectively solving the key escrow problem inherent in IBC. In 2004, Yum et al.
+                         proposed a general construction for CLS schemes [2]. This led to the development of
+                         numerous CLS schemes [3,4]. However, these schemes all relied on bilinear pairings, which
+                         are known for their high computational complexity and low efficiency. In 2011, He et al.
+                         introduced the first CLS scheme that does not use bilinear pairings [5]. However, Tian and
+                         Tsai later pointed out that He’s scheme was vulnerable to Type II adversary attacks [6,7]. In
+                         2013, Gong et al. proposed a pairing-free CLS scheme [8], but Yeh et al. pointed out that it
+                         could not resist Type I adversary attacks and proposed an improved version [9]. In 2015,
+                         Wang et al. introduced a more efficient variant of Yeh et al.’s scheme [10]. In 2017, Yeh et al.
+                         discovered vulnerabilities in Wang’s improved scheme regarding forged signatures and
+                         subsequently developed a new scheme [11]. However, Jia et al. later revealed that Yeh’s
+                         new scheme was still vulnerable to Type II adversary attacks involving public key replace-
+                         ment [12]. In 2018, Karati et al. independently proposed a new scheme that does not use
+                         bilinear pairings and claimed that it can resist both Type I and Type II adversary attacks un-
+                         der the ROM [13]. Later, Pakniat et al. successfully demonstrated that Karati et al.’s scheme
+                         can be attacked by Type I adversaries, and they improved the scheme [14]. Shim et al.
+                         found that Karati et al.’s scheme allows for forging arbitrary message signatures without
+                         obtaining any secret information, and that Pakniat et al.’s scheme still cannot resist Type
+                         I adversary attacks [15]. In the same year, Du et al. pointed out that Jia et al.’s improved
+                         scheme cannot resist Type I adversary attacks and subsequently developed an enhanced
+                         version [16]. Thumbur et al. independently proposed a new pairing-free certificateless
+                         signature scheme [17], but it was later pointed out by Xu et al. [18] that it cannot resist Type
+Sensors 2025, 25, 5224                                                                                           3 of 14
+
+
+
+                         I adversary public key replacement attacks. By 2022, Xiang et al. successfully demonstrated
+                         a specific Type II adversary attack method targeting Jia et al.’s scheme and improved it
+                         based on identified vulnerabilities [19]. In 2023, Ma et al. pointed out that both Du et al.’s
+                         and Xiang et al.’s schemes are susceptible to Type I adversary attacks, and proposed new
+                         attack methods and improvements [20]. However, Feng et al. [21] found that Ma et al.’s
+                         scheme still could not resist Type II adversary attacks the following year.
+
+                         1.2. Our Contributions
+                              This paper’s primary contributions are as follows:
+                              1. We analyze a class of PF-CLS schemes with the same security vulnerabilities
+                         and use a new attack method to show that all schemes in this class cannot resist Type I
+                         adversary attacks.
+                              2. We introduce a new pairing-free certificateless signature scheme, which tightly
+                         binds the two parts of the user’s public key (X ID and R ID ) to the system’s public key
+                         (Ppub ) via a hash function, avoiding the vulnerability of Type II adversary attack due to
+                         independent generation of public keys in the scheme of Ma et al. [20]. Moreover, our
+                         scheme proves its security against both Type I and Type II adversary attacks under the
+                         Random Oracle Model (ROM).
+                              3. Performance evaluations demonstrate that our scheme has higher computa-
+                         tional efficiency compared to other people’s schemes, making it more suitable for
+                         IoT environments.
+
+                         2. Preliminaries
+                         2.1. Complexity Assumption
+                              Consider q as a large prime number, with G representing an additive group of order
+                         q over the elliptic curve E/Fq , where P is a generator of G. The Elliptic Curve Discrete
+                         Logarithm Problem (ECDLP) means that, for any instance Q = aP, a ∈ Z∗q , Q ∈ G, if P, Q
+                         are known, finding the solution yields a.
+                              The difficult hypothesis for the Elliptic Curve Discrete Logarithm Problem is that there
+                         is no probabilistic polynomial algorithm A that can solve ECDLP with a non-negligible
+                         probability in polynomial time.
+
+                         2.2. Security Model
+                               Certificateless signature schemes face two types of attacks from adversaries. An adver-
+                         sary of Type I (A I ) has the capability to substitute the user’s public key without requiring
+                         access to the system master key. On the other hand, an adversary of Type II (A I I ) holds
+                         possession of the system master key but does not possess authority to alter or replace the
+                         user’s public key. The security model is represented as a gaming scenario involving both
+                         challengers C1 (C2 ) and their respective adaptive adversaries A I ( A I I )
+                               Game 1: This game is played between an adaptive adversary A I and the challenger
+                         C1 . C1 maintains a list L1 that stores information about users. The game consists of the
+                         following phases:
+                               Initialization: Challenger C1 enters a security parameter k, generates system parame-
+                         ters params, and sends them to A I , while C1 saves the system master key s itself.
+                               Query phase: In this phase, the following queries can be submitted adaptively by A I .
+                         That is, the adversary will issue a new query based on the received response.
+                               1. CreateUser query: Enter user identity (ID); C1 queries list L1 . If the user has been
+                         created, C1 returns its corresponding user public key (PK ID ); otherwise, C1 performs three
+                         algorithms, ExtractPartialPrivateKey, ExtractSecretValue, and SetPublicKey, to create a
+Sensors 2025, 25, 5224                                                                                                    4 of 14
+
+
+
+                         user and returns the PK ID . It then adds the ID, partial private key (d ID ), secret value (x ID ),
+                         and PK ID to list L1 for maintenance.
+                                2. ReplacePublicKey query: Enter ( ID, PK ′ID ); C1 queries table L1 . If the user ex-
+                         ists, then C1 updates the corresponding public key PK ID in the record table L1 as PK ′ID ,
+                         and records the secret value x ID as ⊥; otherwise, C1 executes the CreateUser query first,
+                         and then performs the update.
+                                3. ExtractSecretValue query: Enter ID; C1 first queries table L1 . If the user does not
+                         exist, then C1 executes CreateUser query and returns the corresponding secret value x ID ;
+                         if the user exists and the public key PK ID is not replaced, C1 outputs the corresponding
+                         secret value x ID . Otherwise, output ⊥.
+                                4. ExtractPartialPrivateKey query: Enter ID; C1 queries table L1 . If the user is present,
+                         C1 returns the corresponding partial private key d ID . Otherwise, C1 first executes the
+                         CreateUser query and then returns d ID .
+                                5. SuperSign query: Input ( ID, m); C1 outputs a signature τ. The signature can be
+                         verified by the corresponding message plaintext m, system parameter params, and user
+                         public key PK ID . The PK ID is the last updated public key corresponding to the ID in list
+                         L1 , that is, the public key may not be original.
+                                Forgery: After successfully executing all queries, adversary A I generates a coun-
+                         terfeit signature ( ID ∗ , m∗ , τ ∗ ). The victory condition for A I is as follows: 1. A I
+                         has never queried the super signature for ( ID ∗ , m∗ ); 2. A I has never performed an
+                         ExtractPartialPrivateKey query for ID ∗ ; 3. τ ∗ for ( ID ∗ , m∗ , PK ∗ ) is a verifiable valid signa-
+                         ture, and the public key PK ∗ may not be original.
+                                Game 2: This game is played between an adaptive adversary A I I and the challenger
+                         C2 .C2 maintains a list L2 that stores information about users. The game consists of the
+                         following phases:
+                                Initialization: Challenger C2 enters a security parameter k, generates system parame-
+                         ters params, and sends them to A I I , while C2 sends the system master key s to A I I .
+                                Query phase: In this phase, the following queries can be submitted adaptively by A I I .
+                                1. CreateUser query: Enter user identity (ID); C2 queries list L2 . If the user has been
+                         created, C2 returns its corresponding user public key (PK ID ); otherwise, C2 performs three
+                         algorithms, ExtractPartialPrivateKey, ExtractSecretValue, and SetPublicKey, to create a
+                         user and returns the PK ID , and then adds the ID, partial private key (d ID ), secret value
+                         (x ID ), and PK ID to list L2 for maintenance.
+                                2. ExtractSecretValue query: Enter ID; C2 first queries table L2 . If the user does not
+                         exist, then C2 executes CreateUser query and returns the corresponding secret value x ID ;
+                         if the user exists and the public key PK ID is not replaced, C2 outputs the corresponding
+                         secret value x ID . Otherwise, output ⊥.
+                                3. ExtractPartialPrivateKey query: Enter ID; C2 queries table L2 . If the user is present,
+                         C2 returns the corresponding partial private key d ID . Otherwise, C2 first executes the
+                         CreateUser query and then returns d ID .
+                                4. SuperSign query: Input ( ID, m); C2 outputs a signature τ. The signature can be
+                         verified by the corresponding message plaintext m, system parameter params, and user
+                         public key PK ID . The PK ID is the last updated public key corresponding to the ID in list
+                         L2 , that is, the public key may not be original.
+                                Forgery: After successfully executing all queries, adversary A I I generates a counterfeit
+                         signature ( ID ∗ , m∗ , τ ∗ ). The victory condition for A I I is as follows: 1. A I I has never queried
+                         the super signature for ( ID ∗ , m∗ ); 2. A I I never performs an ExtractSecretValue query
+                         on ID ∗ ; 3. τ ∗ is a verifiable valid signature for ( ID ∗ , m∗ , PK ∗ ), and the public key PK ∗
+                         remains intact.
+Sensors 2025, 25, 5224                                                                                               5 of 14
+
+
+
+                              For a CLS scheme, if the super Type I or Type II adversary cannot win Game 1 or Game
+                         2 by a significant advantage in polynomial time, we say that the scheme is unfalsifiable
+                         against adaptive chosen plaintext attacks and identity attacks.
+
+                         3. Review of Four PF-CLS Schemes
+                              In this section, we review the four PF-CLS schemes [13,14,16,19]. The four PF-
+                         CLS schemes contain six basic process algorithms: Setup, Partial Private Key Extract,
+                         Set Secret Value, Set Public/Private Key, Signature, and Veri f ication.
+
+                         3.1. Xiang et al.’s Scheme
+                             Xiang et al.’s scheme [19] contains the following six algorithms:
+                             1.    Setup: The KGC generates an elliptic curve additive group G of order
+                         q and selects P ∈ G as the generator of group G. The KGC randomly chooses
+                           $
+                         s← − Z∗q as the system master key, computes Ppub = sP, and selects three Hash func-
+                         tions: Hi(i=1,2,3) : {0, 1}∗ → Z∗q . Subsequently, the KGC publishes the system parameters
+                         params = {q, G, P, Ppub , H1 , H2 , H3 } and keeps the master key s secret.
+                              2. Partial Private Key Extract: The KGC takes the system parameters params and
+                                                                                          $
+                         identity ID as input. Then, it randomly selects r ID ←        − Z∗q , computes R ID = r ID P,
+                         h1 = H1 ( ID, R ID , Ppub ), and d ID = r ID + h1 s mod q. KGC sends the partial private
+                         key D ID = ( R ID , d ID ) to the user over a secure channel.
+                                                                                      $
+                               3. Set Secret Value: The user randomly picks x ID ←− Z∗q as his/her secret value and
+                         calculates X ID = x ID P.
+                               4. Set Public/Private Key: The user sets PK ID = ( R ID , X ID ) as the public key and
+                         sk ID = (d ID , x ID ) as the private key.
+                               5. Signature: The signer takes the message m, params, ID, PK ID , and sk ID = (d ID , x ID )
+                         as input, then generates a signature σ on message m as follows:
+                                                               $
+                               (i) Randomly select a value t ←   − Z∗q , and compute T = tP;
+                               (ii) Compute h2 = H2 ( ID, T, PK ID ), h3 = H3 ( ID, m, T, PK ID , Ppub ), and τ = x −    1
+                                                                                                                        ID
+                         (h2 t + h3 d ID ) mod q;
+                               (iii) Output σ = ( T, τ ) as a signature.
+                               6. Veri f ication: The verifier takes the message–signature tuple (m, σ = ( T, τ )), params,
+                         ID, and PK ID = ( R ID , X ID ) as input, then verifies the signature σ as follows:
+                               (i) Compute h1 = H1 ( ID, R ID , Ppub ), h2 = H2 ( ID, T, PK ID ), h3 = H3
+                         ( ID, m, T, PK ID , Ppub );
+                               (ii) Output “Accept” if τX ID = h2 T + h3 ( R ID + h1 Ppub ) holds, and “Reject” otherwise.
+
+                         3.2. Du et al.’s Scheme
+                              The Setup, Partial Private Key Extract, Set Secret Value, and Set Public/Private Key
+                         algorithms in Du et al.’s scheme [16] are basically the same as those in Xiang et al.’s
+                         scheme [19], with the only difference being the value of h1 = H1 ( ID, R ID , P, Ppub ).
+                              Signature: Given the message m, params, ID, PK ID , and sk ID = (d ID , x ID ) as input,
+                         the signature generation process is as follows:
+                                                               $
+                                1. Randomly select a value t ←   − Z∗q , and compute T = tP.
+                                2. Compute h2 = H2 (m, T, ID, PK ID , Ppub ), h3 = H3 (m, T, ID, PK ID , h2 ), and τ = t−1
+                         (h2 x ID + h3 d ID ) mod q.
+                                3. Output σ = ( T, τ ) as the signature.
+                                Veri f ication: Given m, σ, params, ID, and PK ID as input, the verification process is as
+                         follows:
+                                1. Compute h1 = H1 ( ID, R ID , P, Ppub ), h2 = H2 (m, T, ID, PK ID , Ppub ), h3 = H3
+                         (m, T, ID, PK ID , h2 ).
+Sensors 2025, 25, 5224                                                                                                      6 of 14
+
+
+
+                              2. Output "Accept" if τT = h2 X ID + h3 ( R ID + h1 Ppub ) holds, and "Reject" otherwise.
+
+                         3.3. Karati et al.’s Scheme
+                              Karati et al.’s scheme [13] contains the following six algorithms:
+                              1. Setup: The KGC generates an elliptic curve additive group G of order q and
+                                                                                                                    $
+                         selects P ∈ G as the generator of group G. The KGC randomly chooses s ←        − Z∗q as the
+                         master key, computes Ppub = { Ppub1 , Ppub2 } = {sP, s−1 P}, and selects two Hash functions:
+                         Hi(i=1,2) : {0, 1}∗ → Z∗q . Subsequently, the KGC publishes the system parameters params =
+                         (q, G, P, Ppub , H1 , H2 ) and keeps the master key s secretly.
+                              2. Partial Private Key Extract: The KGC takes params and identity ID as input, ran-
+                                              $
+                         domly selects r ID ←     − Z∗q , computes R ID = r ID P, h1 = H1 ( ID, R ID , P), d ID = (s−1 + r − 1
+                                                                                                                           ID sh1 )
+                         mod q, and Q ID = r ID s−1 P. KGC sends the partial private key D ID = ( R ID , d ID , Q ID ) to
+                         the user over a secure channel.
+                                                                                             $
+                                3. Set Secret Value: The user randomly selects x ID ←       − Z∗q as his/her secret value.
+                                4. Set Public/Private Key: The user computes X ID = x ID R ID , then sets PK ID =
+                         ( R ID , Q ID , X ID ) as the public key and sk ID = (d ID , x ID ) as the private key.
+                                5. Signature: The signer inputs m, params, ID, PK ID , and sk ID , then generates signa-
+                         ture σ for m as follows:
+                                                                     $
+                                (i) Randomly select a value t ←     − Z∗q , and compute T = tR ID ;
+                                (ii) Compute h2 = H2 (m ⊕ ID, T, Q ID ), and τ = x ID (t + h2 x ID + d ID )−1 mod q;
+                                (iii) Output σ = ( T, τ ) as a signature.
+                                6. Veri f ication: The verifier inputs (m, σ = ( T, τ )), params, ID, and PK ID =
+                         ( R ID , Q ID , X ID ), then verifies the signature σ as follows:
+                                (i) Compute h1 = H1 ( ID, R ID , P), h2 = H2 (m ⊕ ID, T, Q ID ), and R′ = T + h2 X ID +
+                         Q ID + h1 Ppub1 ;
+                                (ii) Output “Accept” if X ID = τR′ holds, and “Reject” otherwise.
+
+                         3.4. Pakniat and Vanda’s Scheme
+                              The Setup, Partial Private Key Extract, Set Secret Value, and Set Public/Private Key al-
+                         gorithms in Pakniat and Vanda’s scheme [14] are basically the same as those in Karati et al.’s
+                         scheme [13], except that Pakniat and Vanda’s scheme additionally defines an extra Hash
+                         function H3 : {0, 1}∗ → Z∗q .
+                              Signature: Given m, params, ID, PK ID , and sk ID as input, the signature generation
+                         process is as follows:
+                                                                 $
+                               1. Randomly select a value t ←      − Z∗q and compute T = tR ID .
+                               2. Compute h2 = H2 ( H3 (m) ⊕ H3 ( ID ), T, Q ID , 0), h3 = H2 ( H3 (m) ⊕ H3
+                         ( ID ), T, Q ID , 1), and τ = x ID (h2 t + h3 x ID + d ID )−1 mod q.
+                               3. Output σ = ( T, τ ) as a signature.
+                               Veri f ication: Given m, σ, params, ID, and PK ID as input, the verification process is as
+                         follows:
+                               1. Compute h1 = H1 ( ID, R ID , P), h2 = H2 ( H3 (m) ⊕ H3 ( ID ), T, Q ID , 0), h3 = H2
+                         ( H3 (m) ⊕ H3 ( ID ), T, Q ID , 1), and R′ = h2 T + h3 X ID + Q ID + h1 Ppub1 .
+                               2. Output “Accept” if X ID = τR′ holds, and “Reject” otherwise.
+
+                         4. Novel Attacks on Four Schemes
+                             In this section, we use a novel attack method on the four schemes presented in Section 3
+                         and prove that all four schemes cannot resist Type I adversary attacks.
+Sensors 2025, 25, 5224                                                                                                           7 of 14
+
+
+
+                         4.1. Cryptanalysis of Xiang et al.’s and Du et al.’s Schemes
+                              Ma et al. [20] have pointed out that Xiang et al.’s scheme [19] cannot resist Type I adver-
+                         sary attacks, and the specific attack method will not be elaborated here. In this section, we
+                         use a new attack method different from Ma et al. to prove that Xiang et al.’s scheme cannot
+                         resist Type I adversary attacks. Suppose that there exists a Type I adversary A I attempt-
+                         ing to forge the signature of a user with identity ID and public key PK ID = ( R ID , X ID ).
+                         The process of forging the signature is as follows:
+                                                                                   $               $
+                               1. A I selects two random values x ∗ID ←
+                                                                      − Z∗q , r ∗ID ←
+                                                                                    − Z∗q , computes X ∗ID = x ∗ID Ppub ,
+                          ∗           ∗
+                         R ID = r ID Ppub , and replaces the original public key PK ID = ( R ID , X ID ) with
+                         PK ∗ID = ( R∗ID , X ∗ID ).
+                                                                                                                             $
+                                 2.   Assuming that the message is m∗ , A I randomly selects t∗ ←                              − Z∗q ,
+                         and computes T = t Ppub , h1 = H1 ( ID, R ID , Ppub ), h2 = H2 ( ID, T , PK ∗ID ),
+                                                  ∗      ∗         ∗                     ∗               ∗                   ∗
+
+                         h3∗ = H3 ( ID, m∗ , T ∗ , PK ∗ID , Ppub ), and τ ∗ = ( x ∗ID )−1 (h2∗ t∗ + h3∗ (r ∗ID + h1∗ )). Then, A I out-
+                         puts the forged signature σ∗ = ( T ∗ , τ ∗ ).
+                                 3. Upon receiving the message–signature tuple (m∗ , σ∗ = ( T ∗ , τ ∗ )), params,
+                         and PK ∗ID = ( R∗ID , X ∗ID ), the verifier first computes h1∗ = H1 ( ID, R∗ID , Ppub ),
+                         h2∗ = H2 ( ID, T ∗ , PK ∗ID ), h3∗ = H3 ( ID, m∗ , T ∗ , PK ∗ID , Ppub ), and then verifies the equation
+                         τ ∗ X ∗ID = h2∗ T ∗ + h3∗ ( R∗ID + h1∗ Ppub ).
+                                 We can observe that the forged signature can easily pass the verification equation:
+
+                                                   τ ∗ X ∗ID = ( x ∗ID )−1 (h2∗ t∗ + h3∗ (r ∗ID + h1∗ )) x ∗ID Ppub
+                                                            = h2∗ t∗ Ppub + h3∗ (r ∗ID + h1∗ ) Ppub
+                                                            = h2∗ T ∗ + h3∗ ( R∗ID + h1∗ Ppub )
+
+                             Through the above attack method, the attacker can forge a valid signature for any user
+                         on any message. Therefore, Xiang et al.’s scheme cannot resist Type I adversary attacks.
+                         Moreover, the attack on Du et al.’s scheme [16] is similar to the attack on Xiang et al.’s
+                         scheme, and will not be elaborated here.
+
+                         4.2. Cryptanalysis of Pakniat and Vanda’s and Karati et al.’s Schemes
+                               Shim [15] pointed out that Pakniat and Vanda’s scheme [14] cannot resist Type I
+                         adversary attacks, and the specific attack method will not be elaborated here. In this section,
+                         we first improve Pakniat and Vanda’s scheme to make Shim’s attack method ineffective.
+                         Then, we use the same attack method as in Section 4.1 to demonstrate that the improved
+                         Pakniat and Vanda’s scheme still cannot resist Type I adversary attacks.
+                               The method for improving Pakniat and Vanda’s scheme is relatively simple, re-
+                         quiring only a change in the calculation of h1 from h1 = H1 ( ID, R ID , P) to h1 = H1
+                         ( ID, R ID , P, Q ID , Ppub1 ). The improved scheme will not be described in detail here. Af-
+                         ter this improvement, if we still want to forge Q∗ID = −h1 Ppub1 , we need to provide the
+                         value of h1 to obtain Q∗ID , and, in order to obtain the value of h1 ,we need to first provide the
+                         value of Q∗ID . This is contradictory, so we cannot forge and Shim’s attack cannot succeed.
+                               Next, we prove that the improved Pakniat and Vanda’s scheme still cannot resist Type
+                         I adversary attacks. Suppose that a Type I adversary A1 attempts to forge the signature of
+                         a user with identity ID and public key PK ID = ( R ID , Q ID , X ID ). The detailed process is
+                         as follows:
+                                                                                  $             $            $
+                               1. A1 selects three random values x ∗ID ←          − Z∗q , r ∗ID ←
+                                                                                                − Z∗q , q∗ID ←
+                                                                                                             − Z∗q , computes
+                         X ∗ID = x ∗ID Ppub1 , R∗ID = r ∗ID Ppub1 , Q∗ID = q∗ID Ppub1 , and replaces the original public key
+                         PK ID = ( R ID , Q ID , X ID ) with PK ∗ID = ( R∗ID , Q∗ID , X ∗ID ).
+                                                                                                                      $
+                            2. Supposing that the message is m∗ , A1 randomly selects t∗ ←        − Z∗q , and computes
+                         T = t Ppub1 , h1 = H1 ( ID, R ID , P, Q ID , Ppub1 ), h2 = H2 ( H3 (m ) ⊕ H3 ( ID ), T ∗ , Q∗ID , 0),
+                          ∗    ∗        ∗             ∗         ∗               ∗             ∗
+Sensors 2025, 25, 5224                                                                                                          8 of 14
+
+
+
+                         h3∗ = H2 ( H3 (m∗ ) ⊕ H3 ( ID ), T ∗ , Q∗ID , 1), τ ∗ = x ∗ID (h2∗ t∗ + h3∗ x ∗ID + q∗ID + h1∗ )−1 mod q.
+                         Then, A1 outputs the forged signature σ∗ = ( T ∗ , τ ∗ ).
+                              3. After receiving the message–signature pair (m∗ , σ∗ = ( T ∗ , τ ∗ )), params,
+                         and PK ∗ID = ( R∗ID , Q∗ID , X ∗ID ), the verifier first computes h1∗ = H1 ( ID, R∗ID , P, Q∗ID , Ppub1 ),
+                         h2∗ = H2 ( H3 (m∗ ) ⊕ H3 ( ID ), T ∗ , Q∗ID , 0), h3∗ = H2 ( H3 (m∗ ) ⊕ H3 ( ID ), T ∗ , Q∗ID , 1), and then
+                         verifies the equation τ ∗ (h2∗ T ∗ + h3∗ X ∗ID + Q∗ID + h1∗ Ppub1 ) = X ∗ID .
+                              We can observe that the forged signature can easily pass the verification equation:
+
+                                       τ ∗ (h2∗ T ∗ + h3∗ X ∗ID + Q∗ID + h1∗ Ppub1 )
+                                        = x ∗ID (h2∗ t∗ + h3∗ x ∗ID + q∗ID + h1∗ )−1 (h2∗ t∗ + h3∗ x ∗ID + q∗ID + h1∗ ) Ppub1
+                                        = x ∗ID Ppub1
+                                        = X ∗ID
+
+                              Through the above attack method, the attacker can forge a valid signature for any
+                         user on any message. Therefore, Pakniat and Vanda’s scheme cannot resist Type I adver-
+                         sary attacks. Moreover, we can use the same attack method to prove that Karati et al.’s
+                         scheme [13] cannot resist Type I adversary attacks, and the detailed process can be referred
+                         to above, which will not be repeated here.
+
+                         Definition 1. In our attack, X ∗ID , R∗ID , T ∗ are generated by random values x ∗ID , r ∗ID , t∗ , which
+                         do not have a relationship with each other, and therefore the verifier cannot detect the forgery of
+                         the public key and signature. Compared with the attack method of Ma et al., our attack method is
+                         practical. We call this novel attack the Common Factor Substitution Attack.
+
+                         5. The Proposed CLS Scheme
+                               In this section, we introduce a novel CLS scheme that offers enhanced security and ef-
+                         ficiency (Figure 1).
+                               1. Setup: KGC takes the security parameter k as input and selects the elliptic curve
+                         addition group G, where q and P are the order and generator of the group G, respectively.
+                         KGC chooses two secure hash function H1 : {0, 1}∗ × G3 → Z∗q , H2 : {0, 1}∗ 2 × G3 → Z∗q .
+                                                                                                 $
+                         Then, KGC randomly selects the system master key s ←        − Z∗q , and calculates the system
+                         public key Ppub = sP. params = (G, q, P, Ppub , H1 , H2 ) will be outputted as the public sys-
+                         tem parameters.
+                                                                                                                                $
+                              2. SetSecretValue: User identified by ID randomly chooses the secret value x ID ←− Z∗q ,
+                         then computes X ID = x ID P and transmits it to KGC.
+                              3. PartialPrivateKeyExtract: After receiving ( ID, X ID ) submitted by the user, KGC
+                                                     $
+                         randomly selects r ID ← − Z∗q and calculates R ID = r ID P as part of the public key, then cal-
+                         culates h1 = H1 ( ID, X ID , R ID , Ppub ). Finally, KGC calculates d ID = r ID + h1 s as the partial
+                         private key and transmits (d ID , R ID ) to the user via a secure communication channel.
+                              4. SetPrivateKey: The user generates the complete private key SK ID = ( x ID , d ID ).
+                              5. SetPublicKey: The user generates the complete public key PK ID = ( X ID , R ID ).
+                                                                                                                                $
+                              6. Sign: The signer signs the message m. The signer randomly picks t ←                       − Z∗q
+                         and calculates T = tP. And then the signer calculates h2 = H2 (m, ID, X ID , R ID , T ),
+                         v = t + h2 ( x ID + d ID ) mod q to obtain signature τ = ( T, v)
+                              7. Veri f y: The verifier receives signature τ and message m for verification. First,
+                         the verifier calculates h1 = H1 ( ID, X ID , R ID , Ppub ), h2 = H2 (m, ID, X ID , R ID , T ), and then
+                         determines whether the verification equation vP = T + h2 ( X ID + R ID + h1 Ppub ) is valid. It
+                         accepts if true, and rejects the signature otherwise.
+Sensors 2025, 25, 5224                                                                                                9 of 14
+
+
+
+
+                         Figure 1. Our CLS scheme.
+
+                         6. Security Proof
+                              Forking Lemma: In cryptography, the forking lemma is a crucial tool for proving the
+                         security of digital signature schemes. Its core idea is as follows: if there exists an adversary
+                         capable of successfully forging a valid signature triple δ = (m, σ, h) (where m denotes the
+                         message, σ denotes the signature value, h denotes the hash value generated by the random
+                         oracle H, and it contains a publicly accessible value z), then, by replaying the interaction
+                         process between the adversary and the random oracle, the adversary can be forced to
+                         generate a different hash output (h∗ ) for the same input, thereby obtaining another valid
+                         signature δ∗ = (m, σ∗ , h∗ ).
+                              Specifically, by fixing the adversary’s random tape and resetting the random oracle,
+                         the adversary can be compelled to generate two distinct yet valid signatures during re-
+                         peated executions. These two signatures satisfy h ̸= h∗ , and their existence can be used to
+                         construct an algorithm to solve the underlying cryptographic hard problem (such as the
+                         discrete logarithm problem)
+                                                       with
+                                                          a non-negligible probability. The advantage probability
+                         of the forking lemma is 1 − 1e · qε , where ε denotes the original forgery probability of the
+                                                            h
+                         adversary, qh denotes the number of oracle queries, and e denotes the natural constant.
+
+                         Theorem 1. Suppose that the probability that a super Type I adversary A I , being able to produce a
+                         valid forged signature in polynomial time, is ε, the maximum number of times that an adversary
+                         A I can query CreateUser query is q H1 , and the maximum number of times that an adversary A I
+                         can query the ExtractPartialPrivateKey query is qeppk . The polynomial time algorithm C1 has
+                         the advantage of ε 1 ≥ (1 − q H1 )qeppk q H1 ε to solve difficult ECDLP problems.
+                                                       1        1
+
+
+                         Proof. Suppose that the super Type I adversary can win Game 1 by a non-negligible
+                         advantage in polynomial time. For a given ECDLP hard problem instance ( P, aP), we can
+                         construct the algorithm C1 to call A I as a subroutine and use the power of A I to solve it.
+                         H1 and H2 are two random oracle models. C1 maintains two lists, L1 and L2 , for recording
+                         A I ’s query of H1 and H2 , respectively. L1 , L2 are initially empty. The interaction between
+                         A I and C1 is as follows:
+Sensors 2025, 25, 5224                                                                                                          10 of 14
+
+
+
+                                  Initialization phase: C1 inputs security parameter k to generate system parameters
+                         and sets Ppub = aP (a is unknown to C1 ). Then, C1 selects the challenge user ID ∗ and sends
+                         the system parameters (G, q, P, Ppub , H1 , H2 ) to the adversary A I .
+                                  Query phase:
+                                  1.       CreateUser query:                A I enters IDi ; C1 first looks up list L1 .
+                         If ( IDi , xi , di , Xi , Ri , h1i ) ∈ L1 already exists, C1 returns PKi = ( Qi , Ri ); otherwise,
+                         carry out the following: (1) If the IDi ̸= ID ∗ , C1 randomly selects xi , di , h1i ∈ Z∗q , calculates
+                         Xi = xi P, Ri = di P − h1i Ppub , sets h1i = H1 ( IDi , Xi , Ri , Ppub ), and returns PKi = ( Xi , Ri ).
+                         C1 adds ( IDi , xi , di , Xi , Ri , h1i ) to table L1 . (2) If the IDi = ID ∗ , C1 randomly selects
+                         xi , ri , h1i ∈ Z∗q , calculates Xi = xi P, Ri = ri P, sets h1i = H1 ( IDi , Xi , Ri , Ppub ), and returns
+                         PKi = ( Xi , Ri ). C1 adds ( IDi , xi , ⊥, Xi , Ri , h1i ) to list L1 .
+                                  2.      H1 query:             A I inputs ( IDi , Xi , Ri , Ppub ).     C1 first queries list L1 .
+                         If ( IDi , xi , di , Xi , Ri , h1i ) ∈ L1 already exists, then C1 returns h1i to A I ; otherwise, C1 per-
+                         forms the CreateUser query and then returns h1i .
+                                  3.      H2 query:           A I inputs (mi , IDi , Xi , Ri , Ti ); C1 first inquires about L2 .
+                         If (mi , IDi , Xi , Ri , Ti , h2i ) ∈ L2 already exists, then C1 returns h2i ; otherwise, C1 ran-
+                         domly selects h2i ∈ Z∗q , (∗, ∗, ∗, ∗, ∗, h2i ) ∈     / L2 and returns h2i to A I . Then, C1 updates
+                         (mi , IDi , Xi , Ri , Ti , h2i ) to list L2 .
+                                  4. ExtractPartialPrivateKey query: A I inputs IDi . If IDi = ID ∗ , C1 aborts the program
+                         and outputs ⊥; otherwise, C1 checks list L1 and returns di . If IDi does not exist in table L1 ,
+                         the CreateUser query will be executed first and then di will be returned.
+                                  5. ExtractSecretValue query: A I enters IDi . C1 queries list L1 and returns xi . If IDi
+                         does not exist in list L1 , C1 executes CreateUser query and then returns xi . In addition, if the
+                         public key is not the original one, then C1 outputs ⊥.
+                                  6. ReplacePublicKey query: A I inputs ( IDi , PKi′ ). C1 looks up list L1 and updates in
+                         the table corresponding to the content as ( IDi , xi , di , Xi , Ri , h1i ) → ( IDi , ⊥, di , Xi′ , Ri′ , h1i ).
+                                  7. SuperSign query: A I inputs ( IDi , mi ). C1 checks whether ( IDi , Xi , Ri , Ppub , h1i ) is
+                         contained in list L1 . If not, C1 executes H1 query first and then performs the following:
+                         (1) if the IDi ̸= ID ∗ and xi ̸=⊥ (the public key has not been replaced), C1 randomly selects
+                         ti , h2i ∈ Z∗q , calculates Ti = ti P, vi = ti + h2i ( xi + di ), and outputs signature τi = ( Ti , vi );
+                         (2) if IDi = ID ∗ or xi =⊥ (the public key is replaced), C1 randomly selects ti , vi ∈ Z∗q ,
+                         calculates Ti = vi P − h2i ( Xi + Ri + h1i Ppub ), and outputs signature τi = ( Ti , vi ). Then, C1
+                         updates (mi , IDi , Xi , Ri , Ti , h2i ) to list L2 .
+                                  Forgery: Upon completing all queries, adversary A I outputs a forged signature
+                         τ ∗ = ( T ∗ , v∗ ) for ( ID ∗ , m∗ ). If IDi ̸= ID ∗ , C1 will abort and output ⊥. In line with the fork-
+                         ing lemma, when C1 replays h1 , A I produces another forged signature τ ∗ (2) = ( T ∗ , v∗ (2) ),
+                         resulting in two signatures sharing T ∗ = t∗ P. According to the signature calculation, there
+                         are two equations:                      
+                                                                 v∗(1) = t∗ + h∗ ( x ∗ + r ∗ + h∗(1) a)
+                                                                                2            1
+                                                         v∗(2) = t∗ + h∗ ( x ∗ + r ∗ + h∗(2) a)
+                                                                                2            1
+
+                              Considering the potential for public key replacement, x ∗ remains unknown to C1 .
+                         The equation involves three unknown variables: x ∗ , t∗ , a. The value of a can be determined
+                                                                         ∗(1)       ∗(2)
+                         using simultaneous equations as a = v∗(1) −v∗(2) . This approach enables C1 to successfully
+                                                                        h1      − h1
+                         employ A I as a subroutine to solve the ECDLP.
+                             Next, we calculate the probability that C1 will win Game 1. First, we define three
+                         events: ∆1 indicates that A I does not exit during the query phase; ∆2 indicates that A I
+                         does not exit during the forgery; ∆3 indicates that A I successfully forges a valid signature.
+                         Therefore, the following are true:
+Sensors 2025, 25, 5224                                                                                                     11 of 14
+
+
+
+                              1. The probability that A I does not perform the ExtractPartialPrivateKey query for
+                         ID ∗ during the query phase is Pr [∆1 ] = (1 − q H1 )qeppk ;
+                                                                                 1
+                             2. The probability that A I does not exit in the forgery stage is the probability that ai
+                         outputs the signature corresponding to ID ∗ in the forgery stage: Pr [∆2 |∆1 ] = q H1 ;
+                                                                                                                       1
+                              3. The probability of forging one valid signature is ε, and the probability of forging two
+                         valid signatures is Pr [∆3 |∆2 ∆1 ] = ε. Thus, Pr [∆1 ∆2 ∆3 ] ≥ (1 − q H1 )qeppk q H1 ε, and challenger
+                                                                                                    1        1
+                         C1 can solve an ECDLP hard problem with non-negligible probability. And because the
+                         difficult problem is actually unsolvable, the adversary A I cannot forge the signature.
+
+                         Theorem 2. If the ECDLP hardness assumption cannot be solved in polynomial time, then our
+                         proposed enhanced scheme can effectively resist Type II attackers A I I . Specifically, suppose that the
+                         probability that a super Type II adversary A I I , being able to produce a valid forged signature in poly-
+                         nomial time, is ε. The maximum number of times that an adversary A I I can query CreateUser query
+                         is q H1 , the maximum number that an adversary A I I can query ExtractSecretValue query is qesv ,
+                         and the maximum number that an adversary A I I can query ExtractPartialPrivateKey query is
+                         qrpk . The polynomial time algorithm C2 has the advantage of ε 2 ≥ (1 − q H1 )qesv +qrpk q H1 ε to solve
+                                                                                                         1             1
+                         difficult ECDLP problems.
+
+                             The proof steps of Theorems 2 and 1 are similar.        However, it is neces-
+                         sary to mention that, in the proof of Theorem 2, ExtractPartialPrivateKey query
+                         and ReplacePublicKey query will not be initiated by A I I .
+
+                         7. Performance Evaluation
+                              In the previous section, we established the complete security and unforgeability of
+                         our proposed new scheme. We now turn our attention to the performance analysis of
+                         this new solution. To match the security level of the 1024-bit RSA algorithm, we employ
+                         the elliptic curve y2 = x3 + βx + γ mod q, β, γ ∈ Z∗q , with G being the order-q additive
+                         cyclic group on E( Fp). Here, p is a 512-bit prime, q is a 160-bit prime, and P serves as
+                         the generator of G. The implementation utilizes the open-source cryptography library
+                         MIRACL, running on a device equipped with an Intel(R) Core(TM) i5-3470 CPU @ 3.20 GHz
+                         x4 processor, 4GB of memory, and the 64-bit Ubuntu 22.04.3 LTS operating system. Table 1
+                         presents the average running time of each basic cryptographic operation, measured over
+                         1000 repeated experiments.
+
+                         Table 1. Running time of cryptographic operations.
+
+                             Notation                                  Operation                                  Time (ms)
+                                Tsm             A scalar multiplication operation on elliptic curve                0.334273
+                                Tpa             A point addition operation on elliptic curve                       0.002042
+                                Tm              A modular multiplication operation                                 0.000864
+                                 Ta             A modular addition operation                                       0.000455
+                                Tinv            A modular inversion operation                                      0.002742
+                                 Th             A general hash operation                                           0.002440
+
+
+                               In the IoT environment, where device resources are limited and computing capacities
+                         are modest, there are stringent requirements for both computational efficiency and commu-
+                         nication efficiency. In CLS schemes, computational efficiency is primarily determined by
+                         the computational load during the signing and verification phases, whereas communication
+                         efficiency largely depends on the size of the signature.
+                               As illustrated in Table 2 and Figure 2, in terms of computational efficiency, dur-
+                         ing the signature phase, our scheme has a calculation time comparable to those of
+Sensors 2025, 25, 5224                                                                                             12 of 14
+
+
+
+                         Feng, Ma et al.’s scheme, and is slightly lower than those of Karati, Pakniat, Du, Xi-
+                         ang, and other schemes. However, in the verification phase, our scheme has a cal-
+                         culation time of 3Tsm + 3Tpa = 1.008945 ms, which is lower than Feng, Ma et al.’s cal-
+                         culation time of 4Tsm + 3Tpa = 1.343218 ms, and Du, Xiang et al.’s calculation time of
+                         4Tsm + 2Tpa = 1.341176 ms, and is comparable to Karati et al.’s scheme. The total calcula-
+                         tion time of our scheme is slightly lower than that of Karati et al.’s scheme, about 19.76%
+                         lower than Feng et al. and Ma et al.’s scheme, about 19.80% lower than Du et al. and
+                         Xiang et al.’s schemes, and about 20.05% lower than Pakniat et al.’s scheme, marking a
+                         significant improvement in computational efficiency.
+
+                         Table 2. Comparative analysis of performance.
+
+                                                                          Signature
+                            Scheme            Sign            Verify                         Against A I   Against A I I
+                                                                             Size
+                           Karati [13]      Tsm + Tinv     3Tsm + 3Tpa   | G | + | Z∗q |      Insecure       Normal
+                          Pakniat [14]      Tsm + Tinv     4Tsm + 3Tpa   2 | G | + | Z∗q |    Insecure       Normal
+                            Du [16]         Tsm + Tinv     4Tsm + 2Tpa   | G | + | Z∗q |      Insecure        Super
+                           Xiang [19]       Tsm + Tinv     4Tsm + 2Tpa   | G | + | Z∗q |      Insecure        Super
+                            Ma [20]            Tsm         4Tsm + 3Tpa   | G | + | Z∗q |       Super         Insecure
+                           Feng [21]           Tsm         4Tsm + 3Tpa   | G | + | Z∗q |       Super          Super
+                              Our              Tsm         3Tsm + 3Tpa   | G | + | Z∗q |       Super          Super
+
+
+
+
+                         Figure 2. Calculation time of each scheme.
+
+                               Regarding communication efficiency, our scheme’s output signature size,
+                         | G | + | Z∗q | (360 + 120 = 480 bits), is comparable to Feng, Ma, Karati, Du, and
+                         Xiang et al.         Compared to Pakniat et al.’s scheme’s output signature size,
+                         2 | G | + | Z∗q | (720 + 120 = 840 bits), our scheme is more efficient in communication effi-
+                         ciency.
+                               Our performance analysis shows that our scheme offers higher security and com-
+                         putational efficiency compared to Ma, Karati, Pakniat, Du, and Xiang et al.’s schemes.
+                         Compared with Feng et al.’s scheme, our scheme has improved computational efficiency
+                         while maintaining the original security level. Therefore, our scheme is a more suitable
+                         solution for the IoT environment.
+Sensors 2025, 25, 5224                                                                                                             13 of 14
+
+
+
+                                  8. Conclusions
+                                        The design of lightweight, secure, efficient, and reliable signature schemes for the
+                                  IoT has become a hot research topic. Certificateless signature schemes have become
+                                  an important solution for providing security services such as identity authentication,
+                                  data integrity protection, and non-repudiation for the IoT due to their advantages of
+                                  not requiring certificates and avoiding the key escrow problem. We review four PF-
+                                  CLS schemes and use a novel attack method to attack the existing ones on four PF-CLS
+                                  schemes with the same security vulnerabilities to prove that none of the four schemes can
+                                  protect against Type I adversary forgery attacks. Subsequently, we propose an improved
+                                  scheme, which is proven to be secure, reliable, and unforgeable under the ROM. Finally, the
+                                  performance analysis of the new scheme shows that our scheme offers higher computational
+                                  efficiency compared to the other PF-CLS schemes, making it more suitable for resource-
+                                  constrained IoT environments.
+                                        Future research will focus on the following directions: (1) Existing schemes may
+                                  expose user identities, and anonymous signatures can instead be realized by combining
+                                  zero-knowledge proof (ZKP) or ring signature technologies. (2) Deploy the new scheme in
+                                  practical resource-constrained IoT environment applications, and evaluate its feasibility
+                                  during actual deployment, as well as its resistance to side-channel attacks such as timing
+                                  attacks and power analysis.
+
+                                  Author Contributions: Writing—original draft, X.L. and B.L.; Supervision, Z.W., H.Z. and Z.L. All
+                                  authors have read and agreed to the published version of the manuscript.
+
+                                  Funding: This work was supported by Beijing Natural Science Foundation (No. L251067) and
+                                  Fundamental Research Funds for the Central Universities (No. 3282024052, No. 3282024058).
+
+                                  Institutional Review Board Statement: Not applicable.
+
+                                  Informed Consent Statement: Not applicable.
+
+                                  Data Availability Statement: The original contributions presented in this study are included in the
+                                  article. Further inquiries can be directed to the corresponding author(s).
+
+                                  Conflicts of Interest: The authors declare no conflicts of interest.
+
+References
+1.    Al-Riyami, S.S.; Paterson, K.G. Certificateless public key cryptography. In Proceedings of the International Conference on the Theory
+      and Application of Cryptology and Information Security; Springer: Berlin/Heidelberg, Germany, 2003; pp. 452–473.
+2.    Yum, D.H.; Lee, P.J. Generic construction of certificateless signature. In Proceedings of the Australasian Conference on Information
+      Security and Privacy; Springer: Berlin/Heidelberg, Germany, 2004; pp. 200–211.
+3.    Huang, X.; Susilo, W.; Mu, Y.; Zhang, F. On the security of certificateless signature schemes from Asiacrypt 2003. In Proceedings
+      of the Cryptology and Network Security: 4th International Conference, CANS 2005, Xiamen, China, 14–16 December 2005;
+      Proceedings 4; Springer: Berlin/Heidelberg, Germany, 2005; pp. 13–25.
+4.    Choi, K.Y.; Park, J.H.; Lee, D.H. A new provably secure certificateless short signature scheme. Comput. Math. Appl. 2011,
+      61, 1760–1768. [CrossRef]
+5.    He, D.; Chen, J.; Zhang, R. An efficient and provably-secure certificateless signature scheme without bilinear pairings. Int. J.
+      Commun. Syst. 2012, 25, 1432–1442. [CrossRef]
+6.    Tian, M.; Huang, L. Cryptanalysis of a certificateless signature scheme without pairings. Int. J. Commun. Syst. 2013, 26, 1375–1381.
+      [CrossRef]
+7.    Tsai, J.L.; Lo, N.W.; Wu, T.C. Weaknesses and improvements of an efficient certificateless signature scheme without using bilinear
+      pairings. Int. J. Commun. Syst. 2014, 27, 1083–1090. [CrossRef]
+8.    Gong, P.; Li, P. Further improvement of a certificateless signature scheme without pairing. Int. J. Commun. Syst. 2014,
+      27, 2083–2091. [CrossRef]
+9.    Yeh, K.H.; Tsai, K.Y.; Kuo, R.Z.; Wu, T.C. Robust certificateless signature scheme without bilinear pairings. In Proceedings of the
+      2013 International Conference on IT Convergence and Security (ICITCS), Macao, China, 16–18 December 2013; pp. 1–4.
+Sensors 2025, 25, 5224                                                                                                          14 of 14
+
+
+
+10.   Wang, L.; Chen, K.; Long, Y.; Mao, X.; Wang, H. A modified efficient certificateless signature scheme without bilinear pairings.
+      In Proceedings of the 2015 International Conference on Intelligent Networking and Collaborative Systems, Taipei, Taiwan, 2–4
+      September 2015; pp. 82–85.
+11.   Yeh, K.H.; Su, C.; Choo, K.K.R.; Chiu, W. A novel certificateless signature scheme for smart objects in the Internet-of-Things.
+      Sensors 2017, 17, 1001. [CrossRef] [PubMed]
+12.   Jia, X.; He, D.; Liu, Q.; Choo, K.K.R. An efficient provably-secure certificateless signature scheme for Internet-of-Things
+      deployment. Ad Hoc Netw. 2018, 71, 78–87. [CrossRef]
+13.   Karati, A.; Hafizul Islam, S.; Biswas, G. A pairing-free and provably secure certificateless signature scheme. Inf. Sci. 2018,
+      450, 378–391. [CrossRef]
+14.   Pakniat, N.; Vanda, B.A. Cryptanalysis and Improvement of a Pairing-Free Certificateless Signature Scheme. In Proceedings of
+      the 2018 15th International ISC (Iranian Society of Cryptology) Conference on Information Security and Cryptology (ISCISC),
+      Tehran, Iran, 28–29 August 2018; pp. 1–5.
+15.   Shim, K.A. Forgery attacks on two provably secure certificateless signature schemes. Inf. Sci. 2020, 521, 81–87. [CrossRef]
+16.   Du, H.; Wen, Q.; Zhang, S.; Gao, M. A new provably secure certificateless signature scheme for Internet of Things. Ad Hoc Netw.
+      2020, 100, 102074. [CrossRef]
+17.   Thumbur, G.; Rao, G.S.; Reddy, P.V.; Gayathri, N.B.; Reddy, D.V.R.K. Efficient Pairing-Free Certificateless Signature Scheme for
+      Secure Communication in Resource-Constrained Devices. IEEE Commun. Lett. 2020, 24, 1641–1645. [CrossRef]
+18.   Xu, Z.; Luo, M.; Khan, M.K.; Choo, K.K.R.; He, D. Analysis and Improvement of a Certificateless Signature Scheme for
+      Resource-Constrained Scenarios. IEEE Commun. Lett. 2021, 25, 1074–1078. [CrossRef]
+19.   Xiang, D.; Li, X.; Gao, J.; Zhang, X. A secure and efficient certificateless signature scheme for Internet of Things. Ad Hoc Netw.
+      2022, 124, 102702. [CrossRef]
+20.   Ma, K.; Zhou, Y.; Wang, Y.; Dong, C.; Xia, Z.; Yang, B.; Zhang, M. An Efficient Certificateless Signature Scheme with Provably
+      Security and Its Applications. IEEE Syst. J. 2023, 17, 5636–5647. [CrossRef]
+21.   Feng, T.; Wang, J.; Zheng, L. Blockchain-enhanced efficient and anonymous certificateless signature scheme and its application.
+      Pervasive Mob. Comput. 2024, 105, 101990. [CrossRef]
+
+Disclaimer/Publisher’s Note: The statements, opinions and data contained in all publications are solely those of the individual
+author(s) and contributor(s) and not of MDPI and/or the editor(s). MDPI and/or the editor(s) disclaim responsibility for any injury to
+people or property resulting from any ideas, methods, instructions or products referred to in the content.
+

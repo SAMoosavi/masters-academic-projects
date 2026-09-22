@@ -4,10 +4,13 @@
 
 $$
 \begin{aligned}
-&e:\mathbb{G}_1\times\mathbb{G}_2\rightarrow\mathbb{G}_T \text{ (bilinear pairing)} \\
-&P_1\in\mathbb{G}_1,\quad P_2\in\mathbb{G}_2,\quad s\in\mathbb{Z}_q^* \\
-&P_{pub}=sP_1 \\
-&H_1,H_2:\{0,1\}^*\rightarrow\mathbb{G}_1
+&e:\mathbb{G}_1\times\mathbb{G}_1\rightarrow\mathbb{G}_T \text{ (bilinear pairing)} \\
+&P\in\mathbb{G}_1,\quad P_0\in\mathbb{G}_1 \\
+&x\in\mathbb{Z}_q^*,\quad P_{pub}=xP \\
+&Y=yP \text{ (verifier's key)} \\
+&H_0:\{0,1\}^*\times\mathbb{G}_1\times\mathbb{G}_1\rightarrow\mathbb{Z}_q^* \\
+&H_1:\{0,1\}^*\times\mathbb{G}_1\times\mathbb{G}_1\times\mathbb{G}_1\times\{0,1\}^*\rightarrow\mathbb{G}_1 \\
+&H_2:\mathbb{G}_1\times\cdots\rightarrow\{0,1\}^*
 \end{aligned}
 $$
 
@@ -15,7 +18,7 @@ $$
 
 $$
 \begin{aligned}
-&D_i=s\cdot H_1(ID_i)
+&d_{ID}=x+s\cdot H_0(ID,pk_{ID,2},P_0)
 \end{aligned}
 $$
 
@@ -23,8 +26,8 @@ $$
 
 $$
 \begin{aligned}
-&x_i\in\mathbb{Z}_q^* \\
-&P_i=x_i P_1
+&x_{ID}\in\mathbb{Z}_q^* \\
+&X_{ID}=x_{ID}\cdot P
 \end{aligned}
 $$
 
@@ -32,8 +35,8 @@ $$
 
 $$
 \begin{aligned}
-&SK_i=(D_i,x_i) \\
-&PK_i=P_i
+&sk_{ID}=(x_{ID},d_{ID}) \\
+&pk_{ID}=(pk_{ID,1},pk_{ID,2})=(x_{ID}\cdot P,\ d_{ID}\cdot P)
 \end{aligned}
 $$
 
@@ -41,9 +44,11 @@ $$
 
 $$
 \begin{aligned}
-&r_i\in\mathbb{Z}_q^*,\quad R_i=r_i P_1 \\
-&h_i=H_2(m_i,ID_i,P_i,R_i) \\
-&\sigma_i=D_i+(x_i+h_i) r_i^{-1}\pmod q
+&r_{ID}\in\mathbb{Z}_q^* \\
+&T_1=r_{ID}\cdot P,\quad T_2=r_{ID}\cdot P_0 \\
+&h=H_1(ID,pk_{ID},T_1,T_2,m) \\
+&S=r_{ID}\cdot T_1+d_{ID}\cdot T_2 \\
+&\sigma=(T_1,T_2,S,h)
 \end{aligned}
 $$
 
@@ -51,8 +56,8 @@ $$
 
 $$
 \begin{aligned}
-&\sigma=\prod_{i=1}^n\sigma_i \\
-&\sigma_{agg}=\sigma
+&r_i=H_2(e(T_{1i},Y)) \\
+&r=H_2(r_1,\ldots,r_n) \text{ (collision-resistant hash)}
 \end{aligned}
 $$
 
@@ -60,6 +65,6 @@ $$
 
 $$
 \begin{aligned}
-e(\sigma,P_1)\stackrel{?}{=}\prod_{i=1}^n e(H_1(ID_i),P_{pub})\cdot e(P_i,R_i)
+&e(S,P)\stackrel{?}{=}e(pk_{ID,1},T_1)\cdot e(pk_{ID,2}+h\cdot P_0,T_2)
 \end{aligned}
 $$

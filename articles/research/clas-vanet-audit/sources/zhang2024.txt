@@ -1,0 +1,992 @@
+ 4348                                                                                  IEEE INTERNET OF THINGS JOURNAL, VOL. 11, NO. 3, 1 FEBRUARY 2024
+
+
+
+
+        Efficient Pairing-Free Certificateless Signcryption
+         Scheme for Secure Data Transmission in IoMT
+                          Jianhong Zhang , Chenghe Dong , and Yining Liu , Senior Member, IEEE
+
+
+
+     Abstract—The Internet of Medical Things (IoMT) builds a                       to connect with the medical IT system over the Internet to
+ bridge between patients and doctors, facilitating patients’ being                 enable monitoring of health conditions at any time and from
+ diagnosed and monitored by uploading physiological indicators                     any location. It can help medical professionals in treating more
+ without visiting the hospital. However, physiological indicators
+ are sensitive data of patients, making it a challenge to achieve                  patients while also making patients more comfortable and con-
+ verifiability of data sources while ensuring data privacy dur-                    venient. Patients can stay in touch with medical professionals
+ ing data transmission of IoMT. Due to its ease of deployment                      as needed, which not only reduces healthcare costs but also
+ and the ability to provide both encryption and signature, cer-                    improves the quality of care and treatment. Researchers antic-
+ tificateless signcryption (CLSC) is suitable for designing secure                 ipate that more than 75 billion IoT medical devices will be
+ data-transfer protocol in IoMT. Nevertheless, internal adversaries
+ “malicious users” and “malicious KGC,” capable of launching                       able to connect to the Internet by 2025 [1].
+ Type I and Type II attacks, threaten the security of present                         To provide reliable and predictive healthcare, hospitals
+ CLSC schemes, making most of them insecure. In this work,                         use IoMT devices to collect patients’ physiological data in
+ after giving an example of a recent CLCS scheme suffering Type                    real-time to monitor changes in patients’ ailments. However,
+ I attack, we propose an efficient pairing-free CLCS scheme suit-                  the transmitted data in the IoMT involves some sensitive
+ able for secure data transmission in IoMT based on the idea of
+ zero-knowledge proof. It not only provides confidentiality and                    information related to the individual patient. According to the
+ unforgeability of transmitted data under the Type I and Type II                   Health Insurance Portability and Accountability Act [2], [3],
+ attacks but also achieves lower computational and communica-                      patient health information must be protected. Due to the
+ tion overhead, and public verifiability. Finally, compared with the               openness of communication in the IoMT, it is possible for
+ five recent CLSC schemes, theoretical analysis and experimental                   adversaries to eavesdrop, manipulate, counterfeit, replicate,
+ testing results show that the proposed scheme outperforms the
+ other five schemes in terms of computation and communication                      and delete data during communication. This might lead physi-
+ costs as well as security. Therefore, our scheme is better suited                 cians to make inaccurate diagnoses or forecasts for a patient’s
+ for constructing secure data transmission in IoMT scenarios.                      condition. For instance, an adversary sends deteriorating phys-
+    Index Terms—Certificateless signcryption (CLSC), confiden-                     iological indicators to a hospital by intercepting and then
+ tiality, general elliptic curve cryptography (ECC), pairing free,                 replacing the data sent by a medical device, which makes the
+ unforgeability.                                                                   doctor think that the patient’s health is deteriorating and make
+                                                                                   a wrong diagnosis after analyzing the data. Therefore, it is
+                                                                                   extremely challenging to secure the privacy and integrity of
+                            I. I NTRODUCTION                                       data.
+         ITH climate change, environmental degradation, and                           Encryption and signature can solve the above problems.
+ W       the global pandemic of the corona-virus-disease
+ (COVID-19), the number of patients requiring rescue has
+                                                                                   However, they can lead to a significant drain on the resources
+                                                                                   of these wearable IoMT devices. Energy constraints in wear-
+ increased significantly. Due to inadequate medical resources,                     able devices are a genuine issue, especially for sensors plugged
+ it is becoming more and more difficult for patients to have                       into areas that are nearly inaccessible or difficult to replace.
+ direct access to professional doctors or medical personnel.                       Therefore, it is extremely necessary to consider these con-
+ Fortunately, as a new type of Internet of Things, the Internet                    straints when designing data authentication and encryption
+ of Medical Things (IoMT) allows any smart medical devices                         protocols. Signcryption is a type of competitive cryptographic
+                                                                                   primitive,which was first proposed by Zheng [4]. In contrast to
+    Manuscript received 4 July 2023; accepted 21 July 2023. Date of pub-           the traditional encryption-then-signature mode, it can perform
+ lication 25 July 2023; date of current version 24 January 2024. This              both signature and encryption functions in a single logical
+ work was supported in part by the National Natural Science Foundation of          step, significantly reducing computational overhead. At the
+ China under Grant 62172005; in part by the Natural Science Foundation of
+ Beijing under Grant 4212019 and Grant M22002; and in part by the Open             moment, numerous signcryption systems [5], [7], [8], [9], [10],
+ Research Fund of Key Laboratory of Cryptography of Zhejiang Province              [11], [12] mainly depend on public key infrastructure (PKI) or
+ under Grant ZCL21014. (Corresponding author: Jianhong Zhang.)                     identity-based cryptography (IBC). The IBC-based and PKI-
+    Jianhong Zhang and Chenghe Dong are with the College of Information
+ Sciences and Technology, North China University of Technology, Beijing            based cryptosystems make those signcryption systems suffer
+ 100144, China (e-mail: zjhncut@163.com).                                          from key escrow problems or complex certificate management
+    Yining Liu is with the Guangxi Key Laboratory of Trusted Software, Guilin      to maintain the use of public-key certificates. For resource-
+ University of Electronic Technology, Guilin 541004, China (e-mail: lyn7311@
+ sina.com).                                                                        constrained medical devices, the potential single-point failure
+    Digital Object Identifier 10.1109/JIOT.2023.3298840                            or heavy computing and storage burden cannot be afforded.
+                                   2023 IEEE. Personal use is permitted, but republication/redistribution requires IEEE permission.
+                        2327-4662 c
+                                      See https://www.ieee.org/publications/rights/index.html for more information.
+Authorized licensed use limited to: Universita degli Studi di Roma Tor Vergata. Downloaded on January 30,2026 at 07:33:20 UTC from IEEE Xplore. Restrictions apply.
+ ZHANG et al.: EFFICIENT PAIRING-FREE CERTIFICATELESS SIGNCRYPTION SCHEME                                                                                     4349
+
+
+
+ In 2008, Barbosa and Farshim [10] introduced the concept                          our proposed scheme. Sections VI and VII present an anal-
+ of certificateless signcryption (CLSC) to overcome the above                      ysis of the system and an evaluation of its performance,
+ issues.                                                                           respectively. Finally, the conclusion of this article is given
+    Since then, a large number of CLSC schemes [5], [12], [13],                    in Section VIII.
+ [14], [15], [16], [26], [27], [28], [29] have been presented and
+ applied in different fields, such as, the Internet of Vehicles,
+ 5G mobile communication networks, etc. However, these                                                       II. R ELATED W ORK
+ schemes either require heavy computational overhead, or fail                         Signcryption is a cost-efficient method to achieve secure
+ to provide data confidentiality or unforgeability, making them                    communication in IoMT because it can achieve both sig-
+ unsuitable for application in IoMT. Medical terminal devices                      nature and encryption functions in a logical-step with low-
+ in IoMT are generally very small, have limited resources,                         computational cost. In a PKI-based signcryption scheme, a
+ and are often deployed in special environments that are dif-                      user must use its certificate to prove the legitimacy of its
+ ficult to access. This requires that these factors must be                        public key. In an IBC-based signcryption scheme, key escrow
+ taken into account when designing security protocols. Since                       issues make the resource-limited medical devices even more
+ CLSC does not require certificates, it simplifies the deploy-                     vulnerable in terms of security, since a malicious KGC can
+ ment and management of secure communication in the IoMT.                          generate a ciphertext in the name of the user. In 2008, to avoid
+ Therefore, it is suitable for use in medical IoMT consisting                      key escrow and complex certificate management, Barbosa and
+ of resource-constrained devices. However, there are two types                     Farshim [10] introduced the first CLSC system by combining
+ of adversaries in CLSC schemes: 1) Type-I adversary and                           certificateless cryptography and bilinear pairing. However, the
+ 2) Type-II adversary, both of which are internal adversaries.                     scheme is vulnerable to malicious-but-curious KGC attacks.
+ Type-I adversary is considered a malicious user who can arbi-                     To overcome the above security flaws, Liu et al. proposed a
+ trarily replace anyone’s public key, even though it does not                      novel CLSC scheme in [12]. Although this scheme can resist
+ have a master private key. Type-II adversary is considered a                      malicious-but-curious KGC attacks, it suffers from public key
+ malicious key generator center (KGC) who knows the mas-                           replacement attacks. In 2011, Sun and Li [11] suggested a
+ ter secret key and can compute the user’s partial private key,                    CLSC technique that requires just one bilinear pair opera-
+ even though it is not allowed to replace the public keys of                       tion, which was subsequently shown to have flaws. In [15],
+ the users. Most existing CLSC schemes [11], [12], [13], [14],                     to resist public key replacement attacks, Cheng presented an
+ [15], [16], [17] are vulnerable to Type I or Type II adver-                       improved CLSC scheme by introducing random factors in the
+ saries, making them insecure. Therefore, designing a secure,                      signcryption phase of the scheme [12]. Unfortunately, Cheng
+ lightweight CLSC scheme for IoMT remains a challenge.                             and Wen [15] showed Cheng’s scheme still has security flaws,
+    In order to design a CLSC scheme suitable for secure data                      and then put forward an improved CLSC scheme in [16]. In
+ transmission in IoMT, the main contributions of the work are                      2019, Luo’s scheme was found to be insecure against known
+ outlined as follows.                                                              session-specific temporary information (KSSTI) attacks by
+    1) Motivated by the aforementioned performance and secu-                       Rastegari et al., and then a practical CLSC scheme against
+        rity issues of existing CLSC schemes, we take a recent                     KSSTI attacks was proposed [14]. However, Lin et al. subse-
+        IoMT-based CLSC scheme as an example, show that                            quently launched an attack on Rastegari et al.’s CLSC scheme
+        the CLSC scheme is vulnerable to Type I adversary                          in [17].
+        attacks, and point out that the scheme cannot provide                         To reduce computational costs to accommodate resource-
+        the unforgeability of ciphertexts. And we give a detailed                  constrained devices, Zhang et al. [18] presented a lightweight
+        attack.                                                                    CLSC scheme. However, since the experimental environ-
+    2) We present an efficient pairing-free CLSC scheme with                       ment and test results are not presented, the effectiveness
+        public verification for securely transmitting data between                 of the scheme cannot be stated. In 2019, to satisfy the
+        resource-constrained medical devices and data recipients                   secure communication requirement of the resource-constrained
+        in IoMT, which provides public verification and lower                      IoT devices, Karati et al. proposed a general CLSC scheme
+        computational and communication overhead, while also                       that enables public verification with low-computational cost
+        being proven to be indistinguishable and unforgeable                       in [19]. Regrettably, it was shown to fail to provide unforge-
+        under the Type I and Type II attacks.                                      ability in [9]. In 2020, Kumar et al. [20] gave a novel
+    3) We evaluate the performance of the proposed scheme                          CLSC scheme to achieve secure data transmission among IoT
+        by comparing it with five recent CLSC schemes. The                         devices, it achieve less communication overhead and comput-
+        experimental results show that the proposed scheme out-                    ing cost. Recently, Gong et al. also presented a lightweight
+        performs the other five schemes in terms of security and                   CLSC scheme for IoT devices using bilinear map in [5],
+        performance.                                                               However, this scheme is insecure under Type I attacks and does
+ The structure of this article is as follows. Section II pro-                      not provide ciphertext unforgeability. Chen et al. [26] proposed
+ vides a review of some related works on CLSC. Section III                         an efficient certificateless online/offline signcryption scheme
+ presents preliminary concepts that are essential for con-                         using online-offline technique, which reduces the computa-
+ structing the proposed scheme. Section IV describes the                           tional overhead of secure data sharing between IoT devices.
+ system model and design goals. In Section V, we present                           Unfortunately, it is also insecure.
+
+
+Authorized licensed use limited to: Universita degli Studi di Roma Tor Vergata. Downloaded on January 30,2026 at 07:33:20 UTC from IEEE Xplore. Restrictions apply.
+ 4350                                                                                  IEEE INTERNET OF THINGS JOURNAL, VOL. 11, NO. 3, 1 FEBRUARY 2024
+
+
+
+    The schemes mentioned above incur significant communi-
+ cation and computation overheads due to the introduction of
+ time-consuming bilinear pairings. In 2008, Gopisetti et al. [21]
+ introduced the first efficient pairing-free CLSC scheme.
+ However, their scheme is unable to achieve the confiden-
+ tiality of the encrypted data. In 2011, Liu and Xu also
+ presented a pairing-free CLSC scheme in [22], which was
+ subsequently found to be insecure in [32]. In 2017 and
+ 2022, Yu and Yang [24] proposed a practical pairing-free
+ CLS scheme and a pairing-free certificateless aggregate sign-
+ cryption scheme [30], respectively. However, both schemes
+ fail to satisfy their claimed security properties. Recently,
+ Dai and Xu [27] proposed a pairing-free CLSC scheme for
+ authentication of multisource data in vehicle sensor networks.
+ Chen et al. [29] also proposed a pairing-free CLSC scheme
+ for medical IoT. However, neither of these schemes is resis-
+ tant to public key replacement attacks, which allow an
+ adversary to forge a ciphertext that can be verified by the
+ recipient.
+    Most of the existing CLSC schemes have security flaws,                         Fig. 1.   System model for the proposed scheme in IoMT.
+ as evident from the above schemes. In the CLSC scheme,
+ there are two types of adversaries: 1) Type I adversaries and
+ 2) Type II adversaries. Type I adversary can replace the user’s                             IV. S YSTEM M ODEL AND S ECURITY M ODEL
+ public key, but cannot access the KGC’s private key, while                        A. System Model
+ Type II adversary has the master private key but is not per-
+ mitted to replace the public key of the user. These two types                        Our system model for the IoMT is shown in Fig. 1. It con-
+ of adversaries correspond to malicious users and malicious                        tains four types of entities, and the role of each entity in the
+ KGCs, respectively. Since they are internal attackers, their                      system model are listed as follows.
+ attacks are very strong. Therefore, it is a challenge to design a                    1) Sensor Devices: These sensing devices are worn or
+ lightweight CLSC scheme that is resistant to Type I and Type                             implanted in the patient’s body to sense and collect
+ II attacks, to meet the requirements for secure data sharing in                          the patient’s physiological indicators, such as heart rate,
+ IoMT networks.                                                                           blood oxygen content, etc., which can then be aggre-
+                                                                                          gated into an aggregation center (such as a mobile
+                                                                                          phone) and then sent out.
+                          III. P RELIMINARIES
+                                                                                      2) KGC: KGC denotes the Key Generation Center. It is
+    This section discusses the preliminaries needed for con-                              responsible for initializing system setting and generating
+ structing the proposed scheme.                                                           the master public and private key pair. Additionally, it
+                                                                                          is also responsible for generating partial private keys for
+ A. Elliptic Curve Cryptography                                                           patient’s sensor devices and doctors.
+    Elliptic curve cryptography (ECC) is based on the mathe-                          3) Cloud Server: The cloud server in the IoMT system
+ matics of elliptic curves, which are a type of algebraic curve                           has abundant storage capacity, and it is responsible for
+ defined by a cubic equation y2 = x3 +ax+b mod p. An elliptic                             storing the data sensed by the sensor device worn by
+ curve E defined over finite field Fp consists of all the points                          the patient or implanted in the body. Doctors are able
+ (x, y) satisfying the equation y2 = x3 + ax + b mod p. If a gen-                         to monitor or diagnose the patients’ health status by
+ erator Q and a prime number q satisfy the equation qP = O,                               downloading the monitoring data from the cloud server.
+ it is possible to form a cyclic addition group G consisting of                       4) Doctor: It is the receiver and user of the data; by analyz-
+ a set of points in the form dQ and an infinite point denoted                             ing the monitoring data obtained from the cloud service
+ by O, where d ∈ Z.                                                                       center, it provides a diagnosis result.
+
+ B. Security Assumptions                                                           B. Security Model
+    Computational Diffie–Hellman (CDH) Assumption: For a                              In a CLSC scheme, there are two types of adversaries:
+ cyclic addition group G with generator Q and a prime order q,                     1) Type I adversaries and 2) Type II adversaries, where Type
+ given a three-tuple (Q, d1 Q, d2 Q) ∈ G3 , it is difficult to                     I adversaries can replace the user’s public key, and Type II
+ compute d1 d2 Q, where d1 andd2 are unknown values in Zq .                        adversaries have the master private key. In addition, since sign-
+    Square Diffie–Hellman (Square-DH) Assumption: For a                            cryption implements encryption and signature functions in one
+ cyclic addition group G with generator Q and a prime order q,                     logical step, therefore, a CLSC scheme must provide two secu-
+ given a 2-tuple (Q, dQ) ∈ G2 , it is difficult to compute d2 Q,                   rity properties under Type I and Type II adversaries’ attacks:
+ where d a unknown values in Zq .                                                  1) message confidentiality and 2) ciphertext unforgeability.
+
+Authorized licensed use limited to: Universita degli Studi di Roma Tor Vergata. Downloaded on January 30,2026 at 07:33:20 UTC from IEEE Xplore. Restrictions apply.
+ ZHANG et al.: EFFICIENT PAIRING-FREE CERTIFICATELESS SIGNCRYPTION SCHEME                                                                                     4351
+
+
+
+    1) Confidentiality: For Type I adversary AI and Type II                        s ∈ Zq as the master secret key and computes its public key
+       adversary AII ,after they execute an interactive game                       Ppub = sP. Furthermore, four hash functions are chosen as
+       with a challenger B through a series of Oracle queries,                     follows:
+       respectively, they still cannot guess which message the
+                                                                                                     H0 : {0, 1}∗ × G × G → {0, 1}l0
+       ciphertext corresponds to from two known messages and
+       one of the known message ciphertexts with a nonnegli-                                         H1 : {0, 1}l0 × G × G → Zq
+       gible probability. Then the scheme is considered indis-                                       H2 : {0, 1}l0 × G × G → {0, 1}l1
+       tinguishable under adaptively chosen ciphertext attacks                                       H3 : G × {0, 1}∗ × {0, 1}∗ → Zq∗ .
+       (IND-CLSC-CCA2). Please refer the readers to [5], [16],
+       [26], [27], and [28] for detailed descriptions of security                  Finally, system parameter param              =     (G, q, P, Ppub ,
+       games.                                                                      H0 , H1 , H2 , H3 ) are published and s is kept secretly.
+    2) Unforgeability: For Type I adversary AI and Type II
+       adversary AII ,after they execute an interactive game with                  B. Partial Private-Key-Extract
+       a challenger B by making a series of Oracle queries,                           The algorithm is executed between an entity and the KGC.
+       respectively, they still cannot forge a ciphertext that can                 The KGC accepts param, master key s, and an entity’s iden-
+       be accepted by the receiver with a nonnegligible proba-                     tity IDi as inputs, and generates the pseudo identity PIDi and
+       bility. Then the scheme is considered to have existential                   partial private key dIDi of the entity with IDi as follows.
+       unforgeability under adaptively chosen message attacks                         1) An entity with the identity IDi randomly chooses γi ∈ Zq
+       (EUF-CLSC-CMA). For a more extensive explanation                                   to compute Ri = γi P and sends (IDi , Ri ) to the KGC via
+       of the security game, interested readers can refer to [5],                         a secure channel.
+       [16], [26], [27], and [28].                                                    2) Upon receiving (Ri , IDi ), the KGC computes PIDi =
+                                                                                          IDi ⊕ H0 (πi , Ppub , sRi ), where πi denotes the identity
+ C. Security Goals                                                                        validity period. Next, the KGC selects a random number
+   Based on the system architecture and security model of the                             αi ∈ Zq to compute Ti = αi P, hi = H1 (PIDi , Ti , P, Ppub )
+ medical Internet of Things, our scheme should satisfy four                               and dIDi = αi + s · hi mod q. Finally, the KGC returns
+ security goals.                                                                          (PIDi , πi , dIDi , Ti ) to the entity.
+   1) Confidentiality: The sensitive data collected by the
+       sensor device should be transmitted in the form of                          C. Public/Private Key Generation
+       ciphertext, and no one except the receiver can recover                        The algorithm outputs the private keys ski = (xIDi , dIDi ) and
+       the corresponding plaintext through the ciphertext.                         public keys (pki = (QIDi , Ti )) of the entity with the identity
+   2) Unforgeability: The unforgeability of transmitted data is                    IDi , where QIDi = xIDi P and xIDi is a random number in Zq .
+       critical to ensuring the accuracy of the data. It prevents
+       unauthorized entities from creating a fake signcryp-                        D. Signcryption
+       text, and ensures that doctors know which patient the                          For a sender entity with the pseudo-identity PIDi and public
+       analyzed data comes from.                                                   key pki = (QIDi , Ti ), if it wishes to send a message m to the
+   3) Public Verification: Any one can use the sender’s pub-                       receiver possessing the pseudo-identity PIDj and public key
+       lic key to verify the authenticity and integrity of a                       pkj = (QIDj , Tj ), the execution process is as follows.
+       signcryptext without having access to any secret keys.                         1) The sender entity with public key pki randomly selects
+   4) Low-Computational Cost: Due to the limitation of the                               u ∈ Zq and computes U = u(QIDi + Ti + hi Ppub ), where
+       sensor device’s own resources in IoMT, the design of                              hi = H1 (PIDi , Ti , P, Ppub ).
+       the protocol should reduce the computational complexity                        2) Then it computes hj = H1 (PIDj , Tj , P, Ppub ), Y =
+       and communication volume of the device as much as                                 H2 (PIDj , U, u(xIDi +dIDi )(hj QIDj +hi (Tj +hj Ppub ))), and
+       possible.                                                                         c = Y ⊕ m.
+                                                                                      3) Next, it randomly chooses k ∈ Zq to calculate I = kP,
+        V. R EVIEWS OF C HEN ET AL .‘ S CLSC S CHEME                                     r = H3 (I, c, t) and θ = r(hi xIDi + hj dIDi ) + k mod q,
+    To demonstrate the potential threat of Type I attacks on                             where t denotes the current timestamp.
+ CLSC schemes, we take an efficient CLSC scheme without                               4) Finally, the obtained signcryptext is denoted as δ =
+ pairing in [29] by Chen et al. as an example. The scheme                                (U, r, θ, I, c, t) and is transmitted to the receiver, i.e., the
+ consists of five algorithms, which we discuss briefly below.                            entity possessing the public key pkj .
+ Interested readers are referred to [29] for more details.
+                                                                                   E. Unsigncrypt
+ A. Setup                                                                             Once receiving a signcryptext δ = (U, r, θ, I, c, t), the
+   Upon receiving a security parameter λ as input, the KGC                         receiver with the public key pkj and pseudo-identity PIDj first
+ generates a tuple of Elliptic curve parameters (E, q, P, G),                      checks the validity of the time-stamp t. Then, the receiver uses
+ where E is an elliptic curve defined over a finite field Fp , G is                its private key skj = (dIDj , xIDj ) to execute the following steps.
+ an additive group with order q generated by a generator P, and                       1) It computes Y = H2 (PIDj , U, (hj xIDj + hi dIDj )U) and
+ pandq are two large primes. Then the KGC randomly chooses                                decrypts m = Y ⊕ c.
+
+Authorized licensed use limited to: Universita degli Studi di Roma Tor Vergata. Downloaded on January 30,2026 at 07:33:20 UTC from IEEE Xplore. Restrictions apply.
+ 4352                                                                                     IEEE INTERNET OF THINGS JOURNAL, VOL. 11, NO. 3, 1 FEBRUARY 2024
+
+
+
+    2) And then it computes I = θ P−r(hi QIDi +hj (Ti +hi Ppub ))                      makes the form of the public key QIDs cannot be restricted.
+       and verifies whether r = H3 (I, c, t) holds.                                    Thus, for the following:
+    3) If the above verification is valid, the recovered message                                                                       
+       m is accepted; otherwise ⊥ is output.                                                             hs QIDs + hr Ts + hs Ppub        (1)
+                                                                                       where hr = H1 (PIDr , Tr , P, Ppub ), we can rewrite (1) into the
+        VI. ATTACK ON C HEN ET AL .’ S CLSC S CHEME                                    form of
+                                                                                                                             
+    In a CLSC scheme, there exist two types of adversaries:                                            hs QIDs + hr Ppub + hr · Ts .               (2)
+ 1) AI and 2) AII , where AI can launch an attack by replac-
+ ing the entity’s public key, while AII is a malicious KGC                             Because QIDs has no relationship with hr , and the form of the
+ that can launch an attack using the master key it possesses.                          public key QIDs can be set arbitrarily, the term hr Ppub in (2)
+ Chen et al. [29] claimed that their scheme was secure against                         can be removed by setting the form of QIDs to β  P − hr Ppub .
+ Type I adversary attacks. However, upon analysis of their                                A Type I attack is a powerful attack that many existing
+ scheme, we find that it is not resistant to Type I attacks. By                        CLSC schemes are susceptible to. This is due to the fact that
+ replacing the sender’s public key, an adversary can forge a                           the format of the user’s public key is not restricted, allowing
+ signcryptext that will accepted by the receiver.                                      an adversary to replace a legitimate public key with special
+    The detailed attacks are give as follows.                                          values.
+    1) Let m be a message to be forged and PIDs be the
+        challenged sender’s pseudo identity.                                                             VII. O UR C ONSTRUCTION
+    2) Let PIDr and pkr = (QIDr , TID             ) denote the receiver’s
+                                                      r                                   In CLSC, the form of the public key, generated by the
+        pseudo identity and public key, respectively.                                  entity itself, is more flexible, making it challenging to design
+    3) An adversary AI selects α  , β  ∈ Zq at random to                             a secure CLSC scheme that can resist Type I and Type II
+        calculate TID              = β  P and QIDs = (α  P − hr Ppub )
+                                s
+                                               , P, P
+                                                                                       attacks. To enhance the security of the CLSC scheme and
+        where hr = H1 (PIDr , TID
+                      
+                                                r       pub ). And then it sets        achieve secure data transmission in the IoMT. We present a
+                                
+        pks = (TIDs , QIDs ) as the sender entity’s public keys.
+                                                                    , P, P
+                                                                                       novel pairing-free CLSC scheme in this section. The proposed
+    4) In addition, it computes hs = H1 (PIDs , TID                 s      pub ).    scheme comprises five algorithms: 1) Setup; 2) Partial Private
+    5) Then it randomly chooses u ∈ Zq to calculate U  = u P
+                                                  
+                                                                                       Key; 3) Public/Private Key Generation; 4) Signcryption; and
+        and Y  = H2 (PIDr , U  , u (hr QIDr + hs (TID     + h P
+                                                                    r     r pub ))).   5) Unsigncryption.
+    6) It computes c = Y ⊕ m .            
+
+    7) It randomly selects ξ  ∈ Zq to compute I  = ξ  P and
+                                                                                       A. Setup
+        r = H3 (I  , c , t ), where t is a time-stamp.
+    8) It computes θ  = ξ  + r (α  · hs + hr · β  ).                               The KGC receives a security parameter λ as input, and pro-
+    9) Finally, the forged signcryptext is denoted as δ  =                            duces the system public parameters Param = {q, G, P, Ppub ,
+        (U  , θ  , c , I  , r , t ).                                             H1 , H2 , H3 , H4 } and master secret key s, which is securely
+    In the following, we show that the forged signcryptext δ                          stored by the KGC. The process of generating the system
+ can pass the verification of the receiver and is accepted by it.                      parameters is the same as that of the setup algorithm in the
+ Because                                                                               scheme [29].
+                                                  
+      H2 PIDr , U  , hr xIDr + hs dIDr U                                          B. Partial Private Key
+                                                                     
+         = H2 PIDr , U  , u hr QIDr + hs TID         r
+                                                              + hr Ppub                  When provided with an identity IDi of an entity, the KGC
+          = Y                                                                     selects αi ∈ Zq at random and uses it to calculate Ti = αi P,
+            θ  P − r hs QIDs + hr TID   
+                                                 + h
+                                                    s Ppub
+                                                                                       hi = H1 (IDi , Ti , Ppub ), and dIDi = αi + s · hi mod q. Finally,
+                                               s
+                                                                                 the KGC returns the entity’s partial private keys (dIDi , Ti ).
+          = θ P − r hs α P − hr Ppub + hr β  P + hs Ppub
+                                    
+                                       
+          = θ  P − r hs α  + hr β  P                                             C. Public/Private Key Generation
+                                                         
+          = ξ + r α  · hs + hr β  P − r hs α  + hr β  P                         Given the system parameter Param, the entity with the iden-
+                                                                                       tity IDi chooses a secret value xIDi ∈ Zq∗ at random, and sets
+          = ξ P
+                                                                                       its full private key ski = (xIDi , dIDi ). And then it computes
+          = I.                                                                        YIDi = xIDi P, and sets its public key as pki = (YIDi , Ti ).
+ As a result, the forged signcryptext δ  = (U  , θ  , c , I  , r , t )
+ can pass the receiver’s verification and is accepted by the                           D. Signcryption
+ receiver.                                                                                For a sender with identity IDs and public key pks =
+    Discussion: The reason for launching such an attack is the                         (YIDs , Ts ), if it wants to send the data m to a receiver with
+ lack of authentication of public keys. Without the certificate,                       identity IDr and public key pkr = (YIDr , Tr ), it executes as
+ there is no way to ensure that a public key actually belongs to                       follows.
+ the claimed identity. The entity whose identity is IDs can ran-                          1) The sender entity randomly selects u ∈ Zq to compute
+ domly select an element to serve as its public key QIDs , which                              U = uP.
+
+Authorized licensed use limited to: Universita degli Studi di Roma Tor Vergata. Downloaded on January 30,2026 at 07:33:20 UTC from IEEE Xplore. Restrictions apply.
+ ZHANG et al.: EFFICIENT PAIRING-FREE CERTIFICATELESS SIGNCRYPTION SCHEME                                                                                     4353
+
+
+
+    2) Then it computes                                                                                 VIII. S ECURITY A NALYSIS
+                                                                                    In a CLSC scheme, there are two types of adversaries:
+               hr = H1 IDr , Tr , Ppub
+                                                                                 1) Type I adversaries and 2) Type II adversaries. In the fol-
+               hs = H1 IDs , Ts , Ppub                                             lowing, we demonstrate that the proposed CLSC scheme can
+                                 
+                fs = H3 YIDs , Ts                                                  provide data confidentiality and unforgeability under these two
+                                 
+                fr = H3 YIDr , Tr                                                  types of attacks launched by adversaries.
+                                                                                  Theorem 1 (Confidentiality): In the random Oracle model,
+                V = u · hr · fr YIDr + hs Tr + hr Ppub
+                                                                                   if an adversary breaks the IND-CCA2 security of the proposed
+                Y = H2 (IDr , IDs , U, V)                                          CLSC scheme with an advantage ξ , then we can build an
+                    c = Y ⊕m                                                       algorithm C that can utilize this adversary to solve the square-
+                                          
+                    r = H4 U, c, Ts , YIDs                                         DH problem with a nonnegligible probability.
+                                                                                    The proof of Theorem 1 can be derived from Lemma 1 and
+                    θ = u + r · fs · xIDs + dIDs mod q.
+                                                                                   Lemma 2, which demonstrate resistance against Type 1 and
+    3) Finally, the obtained signcryptext is denoted as δ =                        Type 2 adversaries, respectively.
+        (U, θ, c) and it is transmitted to the receiver with public                   Lemma 1: If there is an adversary AI which breaks the
+        key pkr .                                                                  IND-CCA2-I security of the proposed CLSC scheme with
+    Discussion: θ = u + r · (fs · xIDs + dIDs ) mod q is a zero-                   a nonnegligible advantage in probability polynomial time
+ knowledge proof of the discrete logarithm of the element                          (P.P.T.), then we can construct an algorithm B that can use
+ fs · YIDs + Ts + hs · Ppub with respect to P. Additionally,                       this adversary to solve an instance of the square-DH problem
+ f · xIDs and dIDs are also zero-knowledge proofs of the dis-                      with nonnegligible advantage
+                                                                                                                                       
+ crete logarithm of YIDs and Ppub with respect to the base P,                                    2         2 + qr          2     1         2
+ respectively. Therefore, θ ensures that the formats of Ts , Ppub ,                  ε ≥ 1−           1−              1−              1− 2
+                                                                                                qpp          qp           qus qH2         qsc
+ YIDs , and fs · YIDs + Ts + hs · Ppub must be scalar multiplica-
+ tion of generator P. This zero-knowledge proof we call double                     where qpp denotes the query times to partial private key Oracle,
+ zero-knowledge proof.                                                             qp is the query time to private key extract Oracle, qr is the
+                                                                                   query times to public key replacement Oracle, qH2 is the query
+                                                                                   time to H2 -hash Oracle, and qus and qsc denote the query times
+ E. Unsigncryption                                                                 to unsigncryption Oracle and signcryption Oracle, respectively.
+    Upon receiving the signcryptext δ = (U, θ, c), the receiver,                        Proof: Assuming that the proposed CLSC scheme is bro-
+ who possesses public key pkr and identity IDr , decrypts as                       ken by an adversary AI , In this scenario, we can build a
+ follows.                                                                          challenger B to solve the square-DH problem by using AI
+    1) It computes V  = (hr · fr · xIDr + hs dIDr ) · U and Y  =                 as a subroutine. Let (P, aP) be an instance of the square-DH
+       H2 (IDr , IDs , U, V  ).                                                   problem, our goal is to obtain a2 P by running an interactive
+    2) And then it recovers the message m = c ⊕ Y  .                             game between B and AI .
+    3) Next it computes r = H4 (U, c, Ts , YIDs ) and verifies                       For adversary AI , the challenger B creates a game simula-
+       whether the following equation holds:                                       tion environment for it and responds to a sequence of queries
+                                                                                 that are issued by AI .
+               θ P = U + r fs · YIDs + Ts + hs · Ppub .
+                    ?
+                                                                                      1) Setup: The setup algorithm is invoked by the
+                                                                                         challenger B to produce the system parameters
+    4) If the above verification holds, then m is accepted;
+                                                                                         params = (G, P, q, H1 , H2 , H3 , H4 ), and the public
+       otherwise, the receiver outputs ⊥.
+                                                                                         key is set to Ppub = aP. Subsequently, B sends
+                                                                                         (G, P, q, H1 , H2 , H3 , H4 , Ppub ) to the adversary AI .
+ F. Public Verification                                                               2) Phase 1: During this phase, let ID∗s and ID∗r denote the
+   For a signcryptext δ = (U, θ, c), anyone can verify the                               identities of the challenged entities, i.e., the sender and
+ source and validity of this data.                                                       the receiver, respectively. AI can adaptively issue a poly-
+   1) It computes r = H4 (U, c, Ts , YIDs ) and verifies whether                        nomially bounded number of queries to the following
+       the following equation holds:                                                     Oracles.
+                                                                                         a) H1 -Oracle Queries: AI issues a hash query with
+               θ P = U + r fs · YIDs + Ts + hs · Ppub .
+                   ?
+                                                                                               (IDi , Ti , Ppub ), B maintains a list H1list which is
+                                                                                               initially empty. If the query item (IDi , Ti , Ppub )
+    2) If the above verification holds, then it means that the
+                                                                                               exists in the list H1list , the corresponding value hi is
+       signcryptext is valid and from the sender with identity
+                                                                                               returned. Otherwise, B randomly chooses hi ∈ Zq∗
+       IDs and public key (Ts , YIDs ).
+                                                                                               and returns it to AI . Finally, (hi , IDi , Ti , Ppub ) is
+    Correction is obvious since
+                                                                                               inserted into the list H1list .
+                                               
+              U + r fs · YIDs + Ts + hs · Ppub                                            b) H2 -Oracle Queries: AI issues a hash query with
+                                                                                             (IDi , IDj , U ij , V ij ), B maintains a list H2list which is
+                 = uP + r fs · xIDs + dIDs P
+                                                                                           initially empty. If the query item (IDi , IDj , U ij , V ij )
+                 = u + r fs · xIDs + dIDs P = θ P.                                            exists in the list H2list , the corresponding Y         ij is
+
+Authorized licensed use limited to: Universita degli Studi di Roma Tor Vergata. Downloaded on January 30,2026 at 07:33:20 UTC from IEEE Xplore. Restrictions apply.
+ 4354                                                                                  IEEE INTERNET OF THINGS JOURNAL, VOL. 11, NO. 3, 1 FEBRUARY 2024
+
+
+
+              returned. Otherwise, B randomly chooses                 Yij ∈ Zq∗           sender and the receiver, respectively. The response of B
+              and returns it to AI . Finally, (IDi , IDj , U , V ij , Y
+                                                                    ij      ij )          is as follows.
+              is inserted to the list H2list .                                               a) If IDi ∈ {ID∗s , ID∗r }, then B retrieves private key
+          c) H3 -Oracle Queries: AI issues a hash query to B                                     (xIDi , dIDi ) from the list L and runs the signcryption
+              with (YIDi , Ti ), B maintains an initially empty list                             algorithm to produce the signcryptext δ.
+              H3list . If the query item (YIDi , Ti ) exists in the list                     b) If IDi = ID∗s and IDj = ID∗r , the challenger B
+              H3list , then fi is returned. If (YIDi , Ti ) does not exist                       retrieves the private key (xIDj , dIDj ) from the list L
+              in the list H3list , B randomly chooses fi ∈ Zq∗ and                               by using IDj , and performs as follows.
+              returns it to AI . Finally, (YIDi , Ti , fi ) is inserted to                        i) It randomly chooses r ∈ Zq to compute U =
+              the list H3list .                                                                      −r · (t∗ + hs )aP, where (t∗ + hs ) is from the list
+          d) H4 -Oracle Queries: AI issues a hash query with                                         H4list .
+              (U ij , ci , Ti , YIDi ), the challenger B maintains a list                        ii) Next, it computes V = (hj · fj · xIDj + hi dIDj )U
+              H4list , which is initially empty. If U ij = aP and                                    and Y = H2 (IDj , IDi , U, V), where hi =
+              IDi = ID∗s , then B sets ri = (t∗ + hs )−1 , where                                     H1 (IDi , Ti , Ppub ), hj = H1 (IDj , Tj , Ppub ) and
+              t∗ is from the list L in the creating-user Oracle.                                     fj = H3 (YIDj , Tj ).
+              If U ij = aP and the query item (U ij , ci , Ti , YIDi )                          iii) Then it calculates c = m ⊕ Y by using the
+              exists in the list H4list , then the corresponding ri is                               message m.
+              returned. Otherwise, B randomly chooses ri ∈ Zq∗                                  iv) And it sets r = H4 (U, c, Ti , YIDi ) and adds
+              and returns it to AI . Finally, (U ij , ci , Ti , YIDi , ri ) is                       (U, c, Ti , YIDi , r) to the list H4list .
+              inserted in the list H4list .                                                      v) It sets θ = r · fs · xs∗ , where fs = H3 (YIDs , Ts ).
+    3) Creating-User Oracle: When AI issues a creating-user                                     vi) Finally, the signcryptext δ = (θ, U, c) is
+       query with IDi , if IDi = ID∗s and IDi = ID∗r , then                                          returned to AI . Note that
+       B randomly chooses dIDi , xIDi ∈ Zq and sets Ti =
+                                                                                                      θP = r · fs xs∗ P
+       dIDi P − hi Ppub and YIDi = xIDi P, where hi can be
+                                                                                                                                                    
+       obtained by querying H1 -Oracle with IDi . If IDi = ID∗r ,                                        = −r · t∗ + hs aP + r · fs xs∗ P + r · t∗ + hs aP
+       B randomly chooses xr∗ ∈ Zq , then it sets dIDi = ⊥,                                                                                            
+       xIDi = xr∗ and Ti = tr∗ · aP, where tr∗ ∈ Zq is a random                                          = −r · t∗ + hs aP +r · fs xs∗ P + t∗ aP +hs aP
+       number. Additionally, it also sets YIDi = xr∗ P. When
+       IDi = ID∗s , B randomly chooses xs∗ , t∗ ∈ Zq to set                                               = U +r fs YIDs + Ts +hs · Ppub .
+       YIDi = xs∗ P, Ti = t∗ aP, xIDi = xs∗ and dIDi = ⊥.                                                     ··
+       Meanwhile, it also sets ti = t∗ . Finally, B inserts the
+       tuple (IDi , Ti , YIDi , xIDi , dIDi , hi , ti ) in the list L which                c) If IDi = ID∗r and IDj = ID∗s , this case is similar to
+       is initially empty. It should be noted that when IDi ∈                                   the case of IDi = ID∗s and IDj = ID∗r above.
+       {ID∗s , ID∗r }, the corresponding xs∗ or xr∗ can be returned                        d) If IDi ∈ {ID∗s , ID∗r } and IDj ∈ {ID∗r , ID∗s }, then B
+       to AI .                                                                                  aborts it.
+    4) Public-Key-Request Oracle: When AI makes a query to                            9) Unsigncryption Oracle: When receiving a query for
+       the public-key-request Oracle with the identity IDi , the                         (IDi , IDj , δ), the response of B is as follows.
+       challenger B checks whether IDi exists in the list L. If                            a) If IDj ∈ {ID∗r , ID∗s }, B retrieves private key
+       it exists in the list, B sets pki = (YIDi , Ti ) as public key                           (xIDj , dIDi ) corresponding to IDj from the list L.
+       and returns it to AI . Otherwise, B issues a creating-user                               Then it decrypts δ by invoking the unsigncryption
+       query with IDi to obtain the public key pki .                                            algorithm and returns m to AI .
+    5) Partial-Private-Key Oracle: When AI issues a query to                               b) If IDj ∈ {ID∗r , ID∗s } and IDi ∈ {ID∗r , ID∗s }, B parses
+       the Oracle with IDi , if IDi = ID∗r and IDi = ID∗s , then                                δ into (θ, c, U) and retrieves private key (xIDi , dIDi )
+       B retrieves dIDi from the list L and returns it to AI .                                  corresponding to IDi from the list L. And then it
+       Otherwise, B outputs ⊥.                                                                  recovers u = θ − r · (fi · xIDi + ti + hi · s) mod q
+    6) Public-Key-Replacement Oracle: When AI queries                                           where fi = H3 (YIDi , Ti ), r = H4 (U, c, Ti , YIDi ) and
+       the Oracle with (IDi , pki = (YID                , T  )), B checks                    hi = H1 (IDi , Ti , Ppub ). Next, it computes
+                                                             i
+                                                          i
+       whether IDi exists in the list L. If it exists, then                                                                                  
+                                                   , T  ) in the public                               V = u · hj · fj YIDj + hi Tj + hj Ppub .
+       it replaces (YIDi , Ti ) with (YID             i   i
+       key pki .
+                                                                                               Finally, the message m is recovered by computing
+    7) Private-Key-Extract Oracle: When AI makes a query to                                    c ⊕ H2 (IDi , IDj , U, V).
+       the Oracle with IDi , if IDi ∈ {ID∗r , ID∗s }, (IDi , xIDi , dIDi )                 c) Otherwise, B aborts it and outputs ⊥.
+       exists in the list L, and public-key-replacement Oracle is                    10) Challenge: AI outputs two equal-length messages
+       not made with IDi . Then (xIDi , dIDi ) is returned to AI .                       (m0 , m1 ) and two identities (ID∗s , ID∗r ), where ID∗s and
+       Otherwise, B aborts it.                                                           ID∗r correspond to the sender and the receiver in the
+    8) Signcryption Oracle: When AI submits a signcryption                               challenged identities, respectively. B randomly selects
+       query with (IDi , IDj , m), where IDi and IDj denote the                          b ∈ {0, 1} and ensures that ID∗s and ID∗r ever appear
+
+
+Authorized licensed use limited to: Universita degli Studi di Roma Tor Vergata. Downloaded on January 30,2026 at 07:33:20 UTC from IEEE Xplore. Restrictions apply.
+ ZHANG et al.: EFFICIENT PAIRING-FREE CERTIFICATELESS SIGNCRYPTION SCHEME                                                                                     4355
+
+
+
+        in the list Hilist i ∈ {1, 2, 3, 4}. B then randomly selects               where qp is the query-times to private-key-extract Oracle, qH2
+        V ∗ ∈ G and sets U ∗ = −aP. Subsequently, it com-                          is the query-time to H2 -hash Oracle, and qus and qsc denote the
+        putes Y ∗ = H2 (ID∗s , ID∗r , U ∗ , V ∗ ), c∗ = mb ⊕ Y ∗ and               query-times to unsigncryption Oracle and signcryption Oracle,
+        θ ∗ = (t∗ + hs )−1 · fs xs∗ , where t∗ and hs are from the                 respectively.
+        lists L and H1list . Finally, B sends δ ∗ = (θ ∗ , c∗ , U ∗ ) to                 Proof: Assuming that there is an adversary AII who
+        the adversary AI . Note that                                               breaks our proposed CLSC scheme, then we can create a
+                            −1                                                   challenger B that solves the square-DH problem by using AII
+             θ P = t∗ + hs       · fs xs∗ P
+                             ∗        −1                                         as a subroutine. Let (P, aP) represent a square-DH problem
+                 = −aP + t + hs              · fs xs∗ P + aP                       instance, our goal is to acquire a2 P through an interactive
+                                      −1  ∗                                  game between B and AII .
+                 = −aP + t∗ + hs             · fs xs P + t∗ + hs aP
+                                   −1                                             Similar to Lemma 1, the adversary AII and the challenger
+                 = U ∗ + t∗ + hs           fs YIDs + Ts + hs · Ppub                B need to perform a series of queries to the Oracles.
+                                                           
+                 = U ∗ + rs fs YIDs + Ts + hs · Ppub .                                1) Setup: The setup algorithm is invoked by the chal-
+                                                                                          lenger B to generate the system parameters params =
+      Here, rs = (t∗ + hs )−1 is obtained by the list H4list .
+                                                                                          (G, P, q, H1 , H2 , H3 , H4 , Ppub ), where the public key is
+  11) Phase 2: In this phase, all queries are similar to those
+                                                                                          Ppub = sP and s ∈ Zq is a random number. Then B
+      in phase 1, with the exception that δ ∗ cannot be queried
+                                                                                          sends (G, P, q, H1 , H2 , H3 , H4 , Ppub ) and master secret
+      for unsigncrytion Oracle, and ID∗s and ID∗r cannot
+                                                                                          key s to the adversary AII .
+      be queried private key Oracle and partial-private-key
+                                                                                      2) Phase 1: In the phase, let ID∗s and ID∗r be a pair of
+      Oracle, respectively.
+                                                                                          the challenged identities, representing the sender and
+  12) Guess: Finally, AI returns its bit-guessing b ∈ {0, 1}.
+                                                                                          receiver, respectively. AI can adaptively issue a bounded
+      According to the calculation process of V ∗ in the decryp-
+                                                                                          number of queries to the following Oracles.
+      tion phase, we can see that after the challenger B
+                                                                                            a) H1 /H2 -Oracle Queries: AII issues a hash query
+      retrieves V ∗ from the list H2list , it can be represented
+                                                                                                for H1 /H2 -Oracle, B gives the same responses as
+      in the following format:
+                                                                                              Lemma 1.
+             V ∗ = hr · fr xr∗ + hs dIDr · U ∗                                              b) H3 -Oracle Queries: AII issues a hash query with
+                                          
+                 = − hr · fr xr∗ + hs dIDr · aP                                                 (YIDi , Ti ), B maintains a list H3list which is ini-
+                                                                                                tially empty. If the query item (YIDi , Ti ) exists in
+                                                
+                 = − hr · fr xr∗ aP − hs tr∗ + hr · a aP                                        the list H3list , then fi is returned. If (YIDi , Ti ) does
+                                                                                            not exist in the list H3list , then B randomly chooses
+                 = − hr · fr xr∗ aP − hs tr∗ + hr a2 P.                                         fi ∈ Zq∗ and returns it to AII . Finally, (YIDi , Ti , fi )
+        Thus, B can solve the square-DH problem                                                 is inserted into the list H3list .
+                                                                                          c) H4 -Oracle Queries: AII issues a hash query with
+                            −V ∗ − hr · fr xr∗ aP
+                    a P=
+                     2                                                                        (U ij , ci , Ti , YIDi ), B maintains a list H4list which is
+                                hs tr∗ + hr
+                                                                                                initially empty. If U ij = aP and IDi = ID∗s , then
+        by retrieving V from the hash list H2list .                                             B sets ri = −(fi · αi )−1 mod q. If U ij = aP and
+    Probability Analysis: According to the above game, we                                       the query item (U ij , ci , Ti , YIDi ) exists in the list
+ know that if the game does not abort during the simulation                                     H4list , then ri is returned. Otherwise, B randomly
+ process, then B can solve the square-DH problem. The prob-                                     chooses ri ∈ Zq∗ and returns it to AII . Finally,
+ ability of aborting during the Partial-Private-Key query phase                                 (U ij , ci , Ti , YIDi , ri ) is inserted in the list H4list .
+ is 2/qpp , while during the private-key-extract query phase,                               d) Creating-User Oracle: When AII issues a creating-
+ the probability of aborting is [(2 + qr )/qp ]. During the sign-                               user query with IDi , if IDi ∈ {ID∗r , ID∗s }, then B
+ cryption query phase, the probability of aborting is (2/qsc )2 ,                               randomly chooses ti , xIDi ∈ Zq to set Ti = ti P,
+ and during the unsigncryption query phase, the probability of                                  YIDi = xIDi P and dIDi = ti + s · hi mod q
+ aborting is (2/qus ); in addition, we must ensure that V ∗ was                                 where hi is obtained by querying H1 -Oracle. When
+ ever issued a query to H2 -Oracle. Thus, the probability of                                    IDi = ID∗r , B randomly chooses ti , αi ∈ Zq to set
+ solving the square-DH problem is at least                                                      Ti = ti P, YIDi = αi aP, dIDi = ti + s · hi mod q and
+                                                     
+               2          2 + qr         2     1         2                                      xIDi = ⊥. When IDi = ID∗s , B randomly chooses
+  ε ≥ 1−             1−             1−               1− 2     .                                        ∗ ∈ Z to set T = d ∗ P−h ·sP, Y
+                                                                                                αi , dID          q           i             i      IDi = αi aP,
+              qpp           qp          qus qH2         qsc                                               i
+                                                                                                             ∗ ,t = d ∗ −h ·s and x
+                                                                                                                                    IDi
+                                                                                                dIDi = dID      i  i      IDi     i        ID i = ⊥. Finally, B
+                                                                                                inserts the tuple (IDi , Ti , YIDi , xIDi , dIDi , hi , ti , αi )
+    Lemma 2: If there is an adversary AII which breaks the
+                                                                                                in the list L which is initially empty.
+ IND-CCA2-II security of the proposed CLSC scheme by a
+                                                                                            e) Public-Key-Request Oracle: When AII makes a
+ nonignorable advantage of in probability polynomial time,
+                                                                                                query to the Oracle with identity IDi , B verifies
+ then we can create an algorithm B that can solve an instance
+                                                                                                whether IDi exists in the list L. If it exists, then
+ of the square-DH problem with nonignorable advantage
+                                                                                          B sets pki = (YIDi , Ti ) as public key and returns it
+                    2           2   1         2                                                 to AII . Otherwise, B issues a creating-user query
+          ε ≥ 1−          1−            1− 2
+                    qp         qus qH2       qsc                                                with IDi to obtain public key pki .
+
+Authorized licensed use limited to: Universita degli Studi di Roma Tor Vergata. Downloaded on January 30,2026 at 07:33:20 UTC from IEEE Xplore. Restrictions apply.
+ 4356                                                                                  IEEE INTERNET OF THINGS JOURNAL, VOL. 11, NO. 3, 1 FEBRUARY 2024
+
+
+
+           f) Private-Key-Extract Oracle: When AII makes a                                 −dIDs · (fs αs )−1 mod q, where αs is from the list L.
+               query to the Oracle with IDi , if IDi ∈ {ID∗r , ID∗s }                      Finally, B sends δ ∗ = (θ ∗ , c∗ , U ∗ ) to the adversary AI .
+               and (IDi , xIDi , dIDi ) exists in the list L, Then                         Note that
+               (xIDi , dIDi ) is returned to AII . Otherwise, B aborts
+                                                                                                    θ ∗ P = −dIDs · (fs αs )−1 P
+               it.
+           g) Signcryption Oracle: When receiving a signcryp-                                             = aP − aP − dIDs · (fs αs )−1 P
+                                                                                                                                                
+               tion query with (IDi , IDj , m) from AII , where                                           = aP − (fs αs )−1 (fs αs )aP + dIDs · P
+                                                                                                                                      
+               IDi and IDj denote the sender and the receiver,                                            = U ∗ + rs∗ fs αs aP + dIDs P
+               respectively, B  s response is given as follows.                                                                              
+                                                                                                          = U ∗ + rs∗ fs YID∗s + Ts∗ + hs Ppub
+                i) If IDi ∈ {ID∗r , ID∗s }, B retrieves private key
+                   (xIDi , dIDi ) from the list L by making a private-                   where rs∗ = −(fs αs )−1 can be obtained from the list
+                   key-extract query with IDi , and then it runs the                     H4list .
+                   signcryption algorithm to produce the signcryp-                    4) Phase 2: In this phase, all queries are similar to those
+                   text δ.                                                               in phase 1 with the exception that δ ∗ cannot be queried
+               ii) If IDi = ID∗s and IDj = ID∗r , then B retrieves                       for unsigncrytion Oracle, and ID∗s and ID∗r cannot be
+                   the private key (xIDj , dIDj ) and computes                           queried for private-key-extract Oracle.
+                   A) It randomly chooses u ∈ Zq to compute U =                       5) Guess: Finally, AII outputs its guess b ∈ {0, 1}. The
+                        uaP.                                                             challenger B can retrieve V ∗ from the list H2list by using
+                   B) It computes V = (hj · fj · xIDj + hi dIDj )U                       (U ∗ , ID∗s , ID∗r ). According to the process of computing
+                        and Y = H2 (IDj , IDi , U, V), where hi =                        V ∗ , we know that V ∗ can be expressed as the following
+                        H1 (IDi , Ti , Ppub ), hj = H1 (IDj , Tj , Ppub )                format:
+                        and fj = H3 (YIDj , Tj ).                                                                                      
+                                                                                                        V ∗ = hr · fr · xIDr + hs dIDr · U ∗
+                   C) And then it recovers the message c = m⊕Y.                                                                          
+                   D) Next it sets r = rs∗ · u and adds (U, c, Ti ,                                          = hr · fr · αr · a + hs dIDr · U ∗
+                        YIDi , r) to the list H4list .                                                       = hr fr αr a2 P + hs (tr + hr s)aP.
+                   E) It sets θ = −u · dIDs · (fs αs )−1 mod q.
+                                                                                           Thus, B can solve the square-DH problem
+                   F) Finally, the signcryptext δ = (θ, U, c) is
+                        returned to AII .                                                                      V ∗ − hs (tr + hr s)aP
+                                                                                                       a2 P =
+             iii) If IDi = ID∗r and IDj = ID∗s , this case is similar                                                 hr fr αr
+                   to the case of IDi = ID∗s and IDj = ID∗r above.                       by searching the hash list H2list .
+              iv) If IDi ∈ {ID∗s , ID∗r } and IDj ∈ {ID∗r , ID∗s }, then              Probability Analysis: According to the above game, we
+                   B aborts it.                                                    know that if the game does not abort in the simulation process,
+           h) Unsigncryption Oracle: When receiving a query                        then B can solve the square-DH problem. During the private
+               for (IDi , IDj , δ), B  s response is as follows.                  key extract query phase, the probability of aborting is (2/qp ).
+                i) If IDj ∈ {ID∗r , ID∗s }, B retrieves private key                During the signcryption query phase, the probability of abort-
+                   (xIDj , dIDj ) corresponding to IDj from the list L.            ing is (2/qsc )2 ; during the unsigncryption query phase, the
+                   And the it decrypts δ to obtain m by invoking                   probability of aborting is (2/qus ); in addition, we must ensure
+                   the unsigncryption algorithm and returns m to                   V ∗ has been made a H2 -query. Thus, the probability of solving
+                   AII .                                                           the CDH problem is at least
+               ii) If IDj ∈ {ID∗r , ID∗s } and IDi ∈ {ID∗r , ID∗s }, B                                                            
+                                                                                                        2          2      1         2
+                   parses δ into (θ, c, U) and retrieves private key                        ε ≥ 1−            1−              1− 2       .
+                   (xIDi , dIDi ) corresponding to IDi from the list L.                                 qp        qus qH2          qsc
+                   And then it recovers u = θ − r · (fi · xIDi + ti +                According to Lemma 1 and 2, we can conclude that if AI
+                   hi · s) mod q where fi = H3 (YIDi , Ti ), r =                  and AII succeed in the above two simulation games with a
+                   H4 (U, c, Ti , YIDi ) and hi = H1 (IDi , Ti , Ppub ).           nonnegligible probability, then it means that the challenger B
+                   Next, it computes                                               can resolve the square-DH problem in a nonignorable prob-
+                                                                               ability. However, this is in contradiction with the difficulty
+                         V = u · hj · fj YIDj + hi Tj + hj Ppub .
+                                                                                   of solving the square-DH assumption. Therefore, our CLSC
+                 Finally, the message m is recovered by comput-                    scheme is IND-CCA2 secure in the ROM, and Theorem 1 is
+                 ing c ⊕ H2 (IDi , IDj , U, V).                                    proved.
+            iii) Otherwise, B aborts it and outputs ⊥.                                Theorem 2 (Unforgeability): In the ROM, if there exists
+    3) Challenge: AII outputs two equal-length messages                            an adversary which breaks the EUF-CMA security of the
+       (m0 , m1 ) and two identities (ID∗s , ID∗r ), where ID∗s and                proposed CLSC scheme with an advantage ξ , then we can
+       ID∗r correspond to the challenged identities. B randomly                    create an algorithm C that utilizes this adversary to solve the
+       selects b ∈ {0, 1} and ensures that ID∗s and ID∗r have                      square-DH problem in a nonnegligible probability.
+       been queried to all Hi Oracle i ∈ {1, 2, 3, 4}. And                            The proof of Theorem 2 can be derived from Lemma 3
+       B randomly selects V ∗ ∈ G to compute U ∗ = aP,                             and Lemma 4, which correspond to resistance against Type 1
+       Y ∗ = H2 (IDi , ID∗ , U ∗ , V ∗ ), c∗ = mb ⊕ Y ∗ and θ ∗ =                  adversaries and Type 2 adversaries, respectively.
+
+Authorized licensed use limited to: Universita degli Studi di Roma Tor Vergata. Downloaded on January 30,2026 at 07:33:20 UTC from IEEE Xplore. Restrictions apply.
+ ZHANG et al.: EFFICIENT PAIRING-FREE CERTIFICATELESS SIGNCRYPTION SCHEME                                                                                     4357
+
+
+
+    Lemma 3: In the random Oracle model, if there is an adver-                        8) Signcryption Oracle: When a signcryption query for
+ sary AI that breaks the EUF-CMA-I security of the proposed                              (IDi , IDj , m) is received from AI , where IDi and IDj
+ CLSC scheme with a nonnegligible probability , then we can                              denote the sender and the receiver, respectively. The
+ construct an algorithm B to solve square-DH problem with the                            response of B is as follows.
+ advantage                                                                                 a) If IDi ∈ {ID∗s , ID∗r }, then B retrieves private key
+                                                                                          (xIDi , dIDi ) from the list L and runs the signcryption
+                    2 + qr      2        2                                                      algorithm to produce the signcryptext δ.
+             ε ≥ 1−          1−       1− 2
+                      qpp       qp      qsc                                                b) If IDi = ID∗s and IDj = ID∗r , then B retrieves the
+                                                                                                private key (xIDj , dIDj ), and computes.
+ where qpp is the query times to partial private key Oracle, qp                                  i) It retrieves the private key (xIDj , dIDj ) from the
+ is the query times to private key Oracle, qr is the query times                                    list L.
+ to public key replacement Oracle and qsc is the query time to                                  ii) It randomly chooses rs ∈ Zq to set U =
+ the signcryption Oracle.                                                                           −rs πs aP where πs are from the lists L. (Note
+       Proof: Let (P, aP) be an instance of the square-DH                                           that in the case of ID∗s = IDi , it implies that
+ problem, the goal in this proof is to calculate a2 P from aP                                       i = s.)
+ by invoking the adversary AI as a subroutine. Therefore, B                                   iii) It computes V = (hj · fj · xIDj + hi dIDj )U
+ needs to execute an interactive game with an adversary AI .                                        and Y = H2 (IDj , IDi , U, V), where hi =
+    1) Setup: The setup algorithm is run by B                                                       H1 (IDi , Ti , Ppub ), hj = H1 (IDj , Tj , Ppub ) and
+        to produce system parameters param                                 =                        fj = H3 (YIDj , Tj ).
+        (G, q, P, Ppub , H1 , H2 , H3 , H4 ), where the public                                 iv) And then it computes c = m ⊕ Y.
+        key Ppub is set as Ppub = aP. After that, B sends param                                 v) Next it sets rs = H4 (U, c, Ts , YIDs ) and adds
+        to the adversary AI .                                                                       the tuple (U, c, Ts , YIDs , rs ) in the list H4list .
+    2) H1 /H2 /H3 /H4 -Oracle Queries: AI issues a hash query                                  vi) It sets θ = fs · ζs · rs .
+        for H1 /H2 /H3 /H4 -Oracle, B returns the correspond-                                vii) Finally, the signcryptext δ = (θ, U, c) is
+        ing responses by searching the list H1list /H2list /H3list /H4list .                        returned to AI .
+        The responses to query Hi Oracle (i=1,2,3,4) are similar                           c) If IDi = ID∗r and IDj = ID∗s , this case is similar to
+        to those in Lemma 1.                                                                    the case of IDi = ID∗s and IDj = ID∗r above.
+    3) Creating-User Oracle: Let ID∗s and ID∗r be a pair of the                            d) If IDi ∈ {ID∗s , ID∗r } and IDj ∈ {ID∗r , ID∗s }, then B
+        challenged identities. When AI issues a creating-user                                   aborts it.
+        query with IDi , if IDi ∈ {ID∗s , ID∗r }, then B randomly                        Note that for IDi = ID∗s and IDj = ID∗r , the obtained
+        chooses dIDi , xIDi ∈ Zq and sets Ti = dIDi P − hi Ppub                          signcryptext δ = (θ, U, c) is valid since it satisfies
+        and YIDi = xIDi P, where dIDi ∈ Zq is a random number
+                                                                                               θ P = fs · ζs · rs P
+        and hi is obtained by querying H1 -Oracle. When IDi ∈                                                      
+        {ID∗s , ID∗r }, B randomly chooses ζi , πi ∈ Zq to set YIDi =                              = −rs πs aP + rs fs · (ζs P) + (πs aP − hs aP)
+        ζi P, Ti = πi aP − hi aP, xdIDi = ζi , dIDi = ⊥ . Finally,                                                               
+        B inserts the tuple (IDi , Ti , YIDi , xIDi , dIDi , hi , πi ) in the                                        + hs · Ppub
+                                                                                                                                      
+        list L which is initially empty. (Note that when IDi ∈
+        {ID∗s , ID∗r }, dIDi = πi · a but it is unknown for B.)                                    = U + rs fs · YIDs + Ts +hs · Ppub .
+    4) Public-Key-Request Oracle: When AI makes a query
+        to the Oracle with identity IDi , B verifies whether IDi                      9) Forgery Phase: Finally, the adversary AI outputs a
+        exists in the list L. If it exists, then B sets pki = (YIDi , Ti )               forged signcryptext δ ∗ = (θ ∗ , U ∗ , c∗ ) with the sender
+        as the public key of the corresponding identity IDi and                          identity ID∗s and the receiver ID∗r under the constraint
+        returns it to AI . Otherwise, B issues a creating-user                           that Hi (i = 1, 2, 3, 4) has been queried. If the identi-
+        query with IDi to obtain the public key pki .                                    ties of the sender and the receiver do not corresponds
+    5) Partial-Private-Key Oracle: When AI issues a query to                             to ID∗s and ID∗r , B aborts it during this phase. Then the
+        the Oracle with IDi , if IDi ∈ {ID∗s , ID∗r }, then B retrieves                  forged signcryptext δ ∗ = (θ ∗ , U ∗ , c∗ ) must satisfy the
+        dIDi from the list L and returns it to AI . Otherwise, B                         following relation:
+                                                                                                                                              
+        outputs ⊥.                                                                              θ ∗ P = U ∗ + r∗ fs · YID∗s + Ts∗ + h∗s · Ppub    (3)
+    6) Public-Key-Replacement Oracle: When AI queries the
+        Oracle with (IDi , pki = (YID     , T  )), B checks whether
+                                                i
+                                                                                           then we have
+                                              i
+                                                                                                                                                     
+        IDi exists in the list L. If it exists, then the public key                            θ ∗ aP = aU ∗ + r∗ · a · fs · YID∗s + Ts∗ + h∗s · Ppub
+        pki = (YIDi , Ti ) of the corresponding identity IDi is                                                                            
+        replaced with pki = (YID     , T  ).
+                                          i
+                                                                                                      = aU ∗ + r∗ · a · fs · YID∗s + πs a2 P
+                                       i
+    7) Private-Key-Extract Oracle: When AI makes a query to
+        the Oracle with IDi , if IDi ∈ {ID∗s , ID∗r }, (IDi , xIDi , dIDi )                                              
+                                                                                           r∗ πs a2 P = θ ∗ − r∗ · fs · ζs aP − aU ∗
+        exists in the list L and public-key-replacement Oracle is
+        not queried with IDi . Then B returns (xIDi , dIDi ) to AI .                                         −1  ∗                        
+        Otherwise, B aborts it.                                                                  a2 P = r∗ πs       θ − r∗ · fs · ζs aP − aU ∗
+
+Authorized licensed use limited to: Universita degli Studi di Roma Tor Vergata. Downloaded on January 30,2026 at 07:33:20 UTC from IEEE Xplore. Restrictions apply.
+ 4358                                                                                  IEEE INTERNET OF THINGS JOURNAL, VOL. 11, NO. 3, 1 FEBRUARY 2024
+
+
+
+        where aU ∗ can be obtained by the following steps:                            4) Public-Key-Request Oracle, Private-Key-Extract Oracle,
+        1) retrieving V ∗ corresponding to U ∗ from the list H2lis                       and Signcryption Oracle: When AII make a query for
+        and 2) according to the step 1 in Unsigncryption phase,                          the three Oracles, the responses are the same as those
+        we have V ∗ = (hr · fr · xID∗r + hs dID∗r )U ∗ , then                            as Lemma 3.
+                                                                                      5) Forgery Phase: Finally, the adversary AII outputs its
+                                   V ∗ − hr · fr · ζr∗ U ∗
+                         aU ∗ =                            .                             forged signcryptext δ ∗ = (θ ∗ , U ∗ , c∗ ) with the sender’s
+                                          hs πr                                          identity ID∗s and the receiver’s identity ID∗r under the
+        Thus, the square-DH problem can be solved, i.e.,                                 constraint that Hi (i = 1, 2, 3, 4) has been queried. Then
+                                              ∗                     ∗
+                                                                                        the forged signcryptext δ ∗ = (θ ∗ , U ∗ , c∗ ) should satisfy
+                    (θ ∗ − r∗ · fs · ζs )aP − V −hhr ·fs πr ·ζr r∗ U                     the following relation.
+           a2 P =                                                        .
+                                       r∗ πs                                                                                                  
+                                                                                                θ ∗ P = U ∗ + r∗ fs · YID∗s + Ts∗ + h∗s · Ppub
+    Probability Analysis: Based on the above game, we can
+ conclude that if the game does not abort during the simula-                               then it also means that the following relation holds:
+ tion process, then B can solve the square-DH problem. The                                                                                              
+                                                                                                  θ ∗ aP = aU ∗ + r∗ · a · fs · YID∗s + Ts∗ + h∗s · Ppub
+ probability of aborting during the private key extract query                                                                                
+ phase is (2/qp ). During the partial private key query phase,                                           = aU ∗ + r∗ · fs · ζs a2 P + dIDs aP
+ the probability of aborting is [(2 + qr )/qpp ]. During the sign-
+ cryption query phase, the probability of aborting is (2/qsc )2 .                                                        
+ Therefore, the probability of solving the square-DH problem                               r∗ fs · ζs a2 P = θ ∗ − r∗ dIDs aP − aU ∗
+ is at least                                                                                              ∗          
+                                                
+                     2 + qr          2            2                                                       θ − r∗ dIDs aP − aU ∗
+           ε ≥ 1−               1−         1− 2        .                                            a P=
+                                                                                                      2
+                       qpp          qp           qsc                                                            r∗ fs · ζs
+                                                                                          where aU ∗ can be obtained in a similar way to Lemma 3.
+    Lemma 4: In the ROM, if there is an adversary AII that                            Therefore, it means that the square-DH problem can be
+ breaks the EUF-CMA-II security of the proposed CLSC                               solved. However, this contradicts the difficulty of solving the
+ scheme with a nonnegligible probability , then we can con-                        square-DH problem.
+ struct an algorithm B to solve square-DH problem with the                            Probability Analysis: Based on the above game, we can
+ advantage                                                                         deduce that if the game does not abort in the above simu-
+                                                                               lation process, then B is capable of solving the square-DH
+                            2         2
+                  ε ≥ 1−         1− 2                                              problem. During the private-key-extract query phase, the prob-
+                           qp        qsc
+                                                                                   ability of an abort occurring is (2/qp ). Meanwhile, during
+ where qp is the query times to private key Oracle and qsc is                      the signcryption query phase, the probability of aborting is
+ the query time to the signcryption Oracle.                                        (2/qsc )2 . Consequently, the probability of solving the square-
+      Proof: Let (P, aP) be an instance of the square-DH                           DH problem is at least
+ problem, the goal in this proof is to calculate a2 P from aP                                                                
+                                                                                                                  2          2
+ by utilizing the adversary AII as a subroutine. To achieve it,                                       ε ≥ 1−          1− 2        .
+ B needs to engage in an interactive game with AII .                                                             qp         qsc
+    1) Setup: The setup algorithm is run by B and out-
+       puts the system parameters param = (G, q, P, Ppub ,                                            IX. P ERFORMANCE A NALYSIS
+       H1 , H2 , H3 , H4 ), where public key is Ppub = sP and                         In this section, we evaluate the performance of the proposed
+       s ∈ Zq is master secret key. Finally, B sends param and                     CLSC scheme by comparing it with several recent CLSC
+       master secret key s to AII .                                                schemes [5], [26], [27], [28], [29]. The experimental run-
+    2) H1 /H2 /H3 /H4 -Oracle Queries: AII issues a hash query                     ning environment was built on a Dell laptop configured with
+       for H1 /H2 /H3 /H4 -Oracle, B returns the corresponding                     Intel Core i7-6600U CPU@2.6 Ghz,4-GB RAM, and Ubuntu
+       responses by searching the list H1list /H2list /H3list /H4list .            18.04 LTS 64-bit installed on VMware Workstation Pro 15.5.2
+    3) Creating-User Oracle: Let ID∗s and ID∗r be a pair of                        virtualization software in Windows 10 system. In addition, a
+       the challenged identities, i.e., the sender’s identity and                  Raspberry Pi 4 B model was used as the IoMT device with
+       the receiver’s identity in the challenge phase. When                        a Linux Raspberry Pi 4.19.75 operating system, Cortex-A72
+       AI issues a creating-user query with IDi , if IDi ∈                         (ARM v8) 1.5-GHz CPU and 4 GB of RAM. To implement
+       {ID∗s , ID∗r }, then B randomly chooses ti , xIDi ∈ Zq                      our cryptographic algorithms, we adopt the Charm-Crypto
+       and sets Ti = ti P and YIDi = xIDi P. It computes                           0.50 cryptographic library, and use the Python programming
+       dIDi = ti + hi · s mod q where hi is obtained by                            language to write the simulation experiment code. In order
+       querying H1 -Oracle. When IDi ∈ {ID∗s , ID∗r }, B ran-                      to achieve an 80-bit security level, we initialized the pairing-
+       domly chooses ζi , dIDi ∈ Zq to set YIDi = ζi aP,                           based and original ECC-based elliptic curve parameters, as
+       Ti = dIDi P − hi sP, xIDi = ⊥. Finally, B inserts the                       shown in Table II.
+       tuple (IDi , Ti , YIDi , xIDi , dIDi , hi , ζi ) in the list L which           For the sake of comparison, we consider only time-
+       is initially empty.                                                         consuming cryptographic operations, and they are defined with
+
+Authorized licensed use limited to: Universita degli Studi di Roma Tor Vergata. Downloaded on January 30,2026 at 07:33:20 UTC from IEEE Xplore. Restrictions apply.
+ ZHANG et al.: EFFICIENT PAIRING-FREE CERTIFICATELESS SIGNCRYPTION SCHEME                                                                                     4359
+
+
+                                                                     TABLE I
+                                    C OMPARISON OF D IFFERENT S CHEMES IN T ERMS OF P ERFORMANCE AND S ECURITY
+
+
+
+
+                                                                     TABLE II
+                                         PAIRING - AND ECC-BASED C RYPTOGRAPHIC PARAMETER C ONFIGURATION
+
+
+
+
+ the following notations. Tpsm , Tsm , Tp , Tinv , and Tm2p , which
+ denote the running time of a scalar multiplication on a bilin-
+ ear pairing group, the running time of a scalar multiplication
+ on general elliptic curves, the running time of a bilinear pair-
+ ing operation, the running time of a modulo inverse operation,
+ and the running time of a hash-to-point operation, respectively.
+
+ A. Computation Costs
+    In terms of computational efficiency for a CLSC scheme,
+ the computational performance is primarily determined by the
+ computational costs of the signcryption and unsigncryption
+ algorithms. In light of this reason, we focuses exclusively on
+ the computational costs of the signcryption and unsigncryp-                       Fig. 2.    Running time comparison of signcryption and unsigncryption
+                                                                                   algorithms for several schemes.
+ tion algorithms. Specifically, in the scheme [26], to generate
+ and decrypt a signcryptext, the time spent in the signcryption
+ phase and the unsigncryption phase are 3Tpsm and 2Tpsm +5Tp ,
+ respectively. Therefore, the total time spent is 5Tpsm + 5Tp .                    B. Communication Costs
+ While in the scheme [5], to generate and decrypt a signci-                           In a signcryption scheme, the communication cost is mainly
+ phertext, the time required in the signcryption phase and the                     dependent on the size of the ciphertext. During the simu-
+ usigncryption phase is 3Tpsm + 1Tinv and 2Tpsm + 1Tp , respec-                    lation experiment phase, we chose the elliptic curves listed
+ tively. The total time required is 5Tpsm + 1Tinv + 1Tp . Both of                  in Table II because the compared schemes include bilinear
+ the above CLSC schemes are constructed based on a bilinear                        pairing-based signcryption schemes and pairing-free signcryp-
+ pairing group.                                                                    tion schemes. For simplicity, we set the length of the encrypted
+    In the scheme [27], it needs to take 3Tsm and 5Tsm to gener-                   message to 160 bits. In schemes [26] and [5], the sizes of
+ ate and decrypt a signcryptext in the signcryption and unsign-                    the ciphertexts are approximately 3392 and 1344 bits, respec-
+ cryption phases, respectively. Thus, the total time required                      tively. The sizes of the ciphertexts in schemes [27], [28], [29]
+ is 8Tsm . For the scheme [28], the runtime is 4Tsm + 1Tinv                        are approximately 640, 640, and 1120 bits, respectively. In
+ and 5Tsm during the signcryption and unsigncryption phases,                       our proposed scheme, the ciphertext length is only 640 bits,
+ respectively, and its total runtime is 9Tsm + 1Tinv . In addition,                which is the same as the ciphertext’s size in scheme [27], [28],
+ for the scheme [29], the time required for both signcryption                      57.14% of the scheme [29]. However the scheme [28], [29]
+ and unsigncryption phases is 6Tsm . In our proposed scheme,                       are insecure, as can be seen from Table I. In addition, we
+ the time required during the signcryption and unsigncryption                      find that the length of the ciphertext in the bilinear pairing-
+ phases is 3Tsm and 4Tsm , respectively. Thus, the total time                      based certificateless signcryption schemes is longer than that
+ required in our scheme is only 7Tsm .                                             in the pairing-free certificateless signcryption schemes. The
+    The computational cost of these CLSC schemes in both                           reason is that the elements in general ECC [33] are defined
+ signcryption and unsigncryption phases are compared in                            over the-based field Fq , and its size is O(logq), whereas
+ Table I and Fig. 2. Based on the results presented in Fig. 2                      the elements in pairing-based cryptography are defined
+ and Table I, it can be concluded that our CLSC scheme                             over the extension field Fqk , its element size is O(klogq).
+ outperforms several other CLSC schemes in terms of the                            Therefore, ECC-based protocol has smaller parameters than
+ computational costs spent during encryption and decryption                        pairing cryptography-based protocol at the same security
+ phases, and it has the least running time.                                        level.
+
+Authorized licensed use limited to: Universita degli Studi di Roma Tor Vergata. Downloaded on January 30,2026 at 07:33:20 UTC from IEEE Xplore. Restrictions apply.
+ 4360                                                                                  IEEE INTERNET OF THINGS JOURNAL, VOL. 11, NO. 3, 1 FEBRUARY 2024
+
+
+
+ C. Security                                                                       Type I and Type II adversary attacks. Since our proposed
+    Security is the most fundamental property of a crypto-                         method does not require performing bilinear pairing opera-
+ graphic protocol. In a secure CLSC scheme, IND-CLSC-                              tions, which makes the proposed scheme more suitable for
+ CCA2 and EUF-CLSC-CMA are the two most essential                                  application in IoMT. Finally, compared to the five recent
+ properties to ensure its security, the former ensuring the con-                   schemes, experimental results show that our scheme outper-
+ fidentiality of the transmitted message and the latter ensuring                   forms all the other five schemes in terms of balancing security
+ the unforgeability of the transmitted message. However, in                        and performance.
+ certificateless cryptography, there are two types of internal
+ attackers: 1) Type I attacker and 2) Type II attacker. Type                                                      R EFERENCES
+ I attacker can launch attack by replacing the user’s pub-
+                                                                                    [1] “Internet of Things (IoT) connected devices installed base worldwide
+ lic keys, and Type II attacker possess master secret key of                            from 2015 to 2025.” Statista. 2016. [Online]. Available: https://
+ key generation center. The security overview of the proposed                           www.statista.com/statistics/471264/iot-number-of-connected-devices-
+ scheme and other related CLSC schemes [5], [26], [27], [28],                           worldwide/
+                                                                                    [2] “Health insurance portability and accountability act of 1996 (HIPAA).”
+ [29] is shown in Table I. In schemes [5], [26], [27], [29],                            Centers for Disease Control and Prevention. 2018. [Online]. Available:
+ a Type I adversary can forge a signcryptext by replacing                               https://www.cdc.gov/phlp/publications/topic/hipaa.html#print
+ the user’s public keys, and the forged signcryptext can be                         [3] J. Calvillo-Arbizu, I. Román-Martínez, and J. Reina-Tosina, “Internet
+ correctly decrypted by the receiver. Thus, the four schemes                            of Things in health: Requirements, issues, and gaps,” Comput. Methods
+                                                                                        Programs Biomed., vol. 208, Sep. 2021, Art. no. 106231.
+ do not resist EUC-CLSC-CMA security property under the                             [4] Y. Zheng, “Digital signcryption or how to achieve cost(signature &
+ Type I attack. In scheme [28], for a malicious receiver, if                            encryption)       cost(signature) + cost(encryption),” in Advances in
+ its public key is replaced, then the receiver can still decrypt                        Cryptology (Lecture Notes in Computer Science 1294). Heidelberg,
+                                                                                        Germany: Springer, 1997, pp. 165–179.
+ the corresponding plaintext. As a result, the scheme can-                          [5] B. Gong, Y. Wu, Q. Wang, Y. H. Ren, and C. Guo, “A secure
+ not satisfy the IND-CLSC-CCA security property. For the                                and lightweight certificateless hybrid signcryption scheme for Internet
+ proposed CLSC scheme, it can resist attacks from Type I and                            of Things,” Future Gener. Comput. Syst., vol. 127, pp. 23–30,
+                                                                                        Feb. 2022.
+ Type II adversaries, thus providing the IND-CLSC-CCA2 and                          [6] P. Nayak and G. Swapna, “Security issues in IoT applications using
+ EUC-CLSC-CMA security properties.                                                      certificateless aggregate signcryption schemes: An overview,” Internet
+    Security reduction in security proofs is used to establish the                      Things, vol. 21, Apr. 2023, Art. no. 100641.
+                                                                                    [7] P. Kasyoka, M. Kimwele, and S. M. Angolo, “Cryptanalysis of a
+ level of security provided by a cryptographic scheme. This                             pairing-free certificateless signcryption scheme,” ICT Exp., vol. 7, no. 2,
+ is important because it provides a strong guarantee that the                           pp. 200–204, 2021.
+ scheme will remain secure even in the face of attacks by a                         [8] A. Karati, S. H. Islam, G. P. Biswas, M. Z. A. Bhuiyan, P. Vijayakumar,
+                                                                                        and M. Karuppiah, “Provably secure identity-based signcryption scheme
+ determined adversary. In the schemes [26], [27], [28], [29],                           for crowdsourced industrial Internet of Things environments,” IEEE
+ to achieve security proof of unforgeability, the correspond-                           Internet Things J., vol. 5, no. 4, pp. 2904–2914, Aug. 2018.
+ ing security proofs are given, however, these schemes only                         [9] B. Zhang, “Comments on ‘provably secure generalized signcryption
+                                                                                        scheme with public verifiability for secure data transmission between
+ provide loose security reduction since they rely on the “fork-                         resource-constrained IoT devices,”’ IEEE Internet Things J., vol. 7,
+ ing lemma” technique of Pointcheval and Stern [25]. On the                             no. 5, pp. 4666–4670, May 2020.
+ other hand, both the scheme [5] and our scheme provide a                          [10] M. Barbosa and P. Farshim, “Certificateless signcryption,” in Proc.
+ tight security reduction since they do not utilize the forking                         ASIACCS, 2008, pp. 369–372.
+                                                                                   [11] Y. Sun and H. Li, “ID-based signcryption KEM to multiple recipi-
+ lemma technique. It is important to note that loose security                           ents,” Chin. J. Electron., vol. 20, no. 2, pp. 317–322, 2011.
+ reduction has a flaw in that even if the hard problem can be                      [12] H. X. Li, C. H. Wu, and L. J. Pang, “Completely anonymous certifi-
+ solved efficiently, it does not necessarily mean that the corre-                       cateless multi-receiver signcryption scheme with sender traceability,”
+                                                                                        J. Inf. Security Appl., vol. 71, Dec. 2022, Art. no. 103384.
+ sponding cryptographic scheme can be broken efficiently. In                       [13] S. Miao, F. Zhang, S. Li, and Y. Mu, “On security of a cer-
+ this regard, our scheme and the scheme [5] provide stronger                            tificateless signcryption scheme,” Inf. Sci., vol. 232, pp. 475–481,
+ security compared to other schemes with a loose security                               May 2013.
+                                                                                   [14] P. Rastegari, W. Susilo, and M. Dakhlalian, “Efficient certificateless sign-
+ reduction.                                                                             cryption in the standard model: Revisiting Luo and Wan’s scheme from
+                                                                                        wireless personal communications (2018),” Comput. J., vol. 62, no. 8,
+                                                                                        pp. 1178–1193, 2019.
+                             X. C ONCLUSION                                        [15] L. Cheng and Q. Wen, “An improved certificateless signcryption in the
+                                                                                        standard model,” Int. J. Netw. Security, vol. 17, no. 5, pp. 597–606,
+    In IoMT, patient physiological data collected through med-                          2015.
+ ical terminal devices are privacy-sensitive. CLSC has the                         [16] M. Luo and Y. Wan, “An enhanced certificateless signcryption
+ advantages of easy deployment, low-computational overhead,                             in the standard model,” Wireless Pers. Commun., vol. 98, no. 3,
+                                                                                        pp. 2693–2709, 2018.
+ and the ability to simultaneously provide encryption and signa-
+                                                                                   [17] X.-J. Lin, L. Sun, Z. Yan, X. Zhang, and H. Qu, “On the security
+ ture, making it suitable for designing secure data transmission                        of a certificateless signcryption with known session-specific temporary
+ protocols in IoMT networks to ensure the authenticity of                               information security in the standard model,” Comput. J., vol. 63, no. 8,
+ patient identities and the privacy of transmitted data. However,                       pp. 1259–1262, 2020.
+                                                                                   [18] B. Zhang, Z. Jia, C. Zhao, and J. Hu, “An efficient certificateless
+ there are some security flaws in the existing certificate-less                         generalized signcryption scheme,” Security Commun. Netw., vol. 2018,
+ sigcryption schemes, which can bring great potential risks to                          May 2018, Art. no. 3578942.
+ the secure transmission of data in IoMT. To alleviate these                       [19] A. Karati, C.-I. Fan, and R.-H. Hsu, “Provably secure and general-
+                                                                                        ized signcryption with public verifiability for secure data transmission
+ problems, we propose a new CLSC scheme capable of provid-                              between resource-constrained IoT devices,” IEEE Internet Things J.,
+ ing IND-CLSC-CCA2 and EUC-CLSC-CMA security under                                      vol. 6, no. 6, pp. 10431–10440, Dec. 2019.
+
+Authorized licensed use limited to: Universita degli Studi di Roma Tor Vergata. Downloaded on January 30,2026 at 07:33:20 UTC from IEEE Xplore. Restrictions apply.
+ ZHANG et al.: EFFICIENT PAIRING-FREE CERTIFICATELESS SIGNCRYPTION SCHEME                                                                                     4361
+
+
+
+ [20] M. Kumar, H. K. Verma, and G. Sikka, “A secure data transmission              [27] C. Dai and Z. W. Xu, “Pairing-free certificateless aggregate signcryption
+      protocol for cloud-assisted edge-Internet of Things environment,” Trans.           scheme for vehicular sensor networks,” IEEE Internet Things J., vol. 10,
+      Emerg. Telecommun. Technol., vol. 31, no. 6, 2020, Art. no. e3883.                 no. 6, pp. 5063–5072, Mar. 2023.
+ [21] S. R. Gopisetti, R. B. Amarapu, G. Thumbur, and V. P. Reddy, “A               [28] H. Z. Du, Q. Y. Wen, S. S. Zhang, and M. C. Gao, “A pairing-free
+      new pairing-free certificateless signcryption scheme,” J. Sci. Ind. Res.,          certificateless signcryption scheme for vehicular ad hoc networks,” Chin.
+      vol. 81, no. 12, pp. 1326–1335, 2022.                                              J. Electron., vol. 30, no. 5, pp. 947–955, 2021.
+ [22] W.-H. Liu and C.-X. Xu, “Certificateless signcryption scheme without          [29] X. Chen, D. B. He, M. K. Khan, M. Luo, and C. Peng, “A secure cer-
+      bilinear pairing,” J. Softw., vol. 22, no. 8, pp. 1918–1926, 2011.                 tificateless signcryption scheme without pairing for Internet of Medical
+ [23] D. H. Lee, W. B. Kim, D. H. Seo, and I. Y. Lee, “An efficient public               Things,” IEEE Internet Things J., vol. 10, no. 10, pp. 9136–9147,
+      verifiable certificateless multi-receiver signcryption scheme for IoT envi-        May 2023.
+      ronments,” IEICE Trans. Inf. Syst., vol. E104-D, no. 11, pp. 1869–1879,       [30] H. Yu and R. Ren, “Certificateless elliptic curve aggregate signcryption
+      2021.                                                                              scheme,” IEEE Syst. J., vol. 16, no. 2, pp. 2347–2354, Jun. 2022.
+ [24] H. Yu and B. Yang, “Pairing-free and secure certificateless signcryption      [31] R. Ortega, A. Astolfi, G. Bastin, and H. Rodriguez, “Stabilization of
+      scheme,” Comput. J., vol. 60, no. 8, pp. 1187–1196, 2017.                          food-chain systems using a port-controlled Hamiltonian description,” in
+ [25] D. Pointcheval and J. Stern, “Security arguments for digital signa-                Proc. Amer. Control Conf., Chicago, IL, USA, 2000, pp. 2245–2249.
+      tures and blind signatures,” J. Cryptol., vol. 13, no. 3, pp. 361–396,        [32] D. B. He, “Security Analysis of a certificateless signcryption scheme,” J.
+      2000.                                                                              Softw., vol. 24, no. 3, pp. 618–622, 2013.
+ [26] J. Chen, L. Wang, M. Wen, K. Zhang, and K. Chen, “Efficient certifi-          [33] Z. J. Cao and L. H. Liu, “On the disadvantages of pairing-based cryp-
+      cateless online/offline signcryption scheme for edge IoT devices,” IEEE            tography.” 2015. [Online]. Available: https://eprint.iacr.org/2015/084.
+      Internet Things J., vol. 9, no. 11, pp. 8967–8979, Jun. 2022.                      pdf
+
+
+
+
+Authorized licensed use limited to: Universita degli Studi di Roma Tor Vergata. Downloaded on January 30,2026 at 07:33:20 UTC from IEEE Xplore. Restrictions apply.
+

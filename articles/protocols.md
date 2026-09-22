@@ -1,273 +1,286 @@
 # Protocol Descriptions — CLAS/VANET Schemes
 
-> Aggregated scheme descriptions from all paper summaries.
+> Regenerated 2026-09-21 by Professor merge from the 24 crew-audited
+> `summaries/*.md` (22 Full-text + 2 Abstract-only). Each entry states its
+> pairing family explicitly. Full equations live in `summaries/<key>.md` and
+> `schemes/<key>.md`; this file is an index, not a source.
 
-## A Certificateless Aggregate Signature Scheme for Security and Privacy Protection in VANET
-*Source: [cahyadi2022-clas-scheme](cahyadi2022-clas-scheme.md)*
+## Legend
 
-1. **Setup**: KGC selects system parameters $(q, G_1, G_2, e, P, s, P_{pub})$ and hash functions
-2. **Extract**: KGC computes partial private key $D_i = sH_1(ID_i)$ for user $i$
-3. **SetKey**: User selects secret value $x_i$, computes public key $PK_i = x_iP$
-4. **Sign**: For message $m_j$, signer picks $r_j$, computes $R_j = r_jP$, $h_j = H_2(m_j, ID, PK, R_j)$, $S_j = r_j + h_j x_i \mod q$
-5. **Aggregate**: Aggregator computes $\sigma = \sum S_j$, $R = \sum R_j$
-6. **Verify**: RSU checks pairing equation
+- **[P]** pairing-based (bilinear map in verification) — 5 schemes
+- **[PF]** pairing-free (ECC/HECC scalar multiplication only) — 15 constructions
+- **[A]** Abstract-only (no verified construction) — 2 papers
+- **[R]** review/cryptanalysis (no new construction)
 
----
+## Cahyadi et al. 2022 — CLAS for Security and Privacy Protection in VANET [P]
 
-## A Comprehensive Survey on Certificateless Aggregate Signature in Vehicular Ad Hoc Networks
-*Source: [cahyadi2022-survey](cahyadi2022-survey.md)*
+*Source: [summaries/cahyadi2022-clas-scheme.md](summaries/cahyadi2022-clas-scheme.md) · Full-text (p.8–12)*
 
-The survey describes the generic CLAS protocol flow for VANETs:
-
-1. **System Setup**: KGC initializes with master secret/public key pair
-2. **Vehicle Registration**: TA registers vehicles, KGC issues partial private keys
-3. **Key Generation**: Vehicles combine partial private key with chosen secret value
-4. **Message Signing**: Vehicles sign safety messages with their full private key
-5. **Aggregation**: RSU or aggregator combines multiple signatures
-6. **Batch Verification**: RSU verifies aggregate signature in constant time
+1. **Setup**: $G_1, G_2, \hat{e}: G_1 \times G_1 \to G_2$; KGC $a, P_{pub} = aP$; TRA $b, T_{pub} = bP$
+2. **Registration**: TRA issues $Q_{ID_i}$, vehicle checks $\hat{e}(psk_{ID_i}, P) = \hat{e}(Q_{ID_i}, P_{pub})$
+3. **Vehicle-Key-Gen**: $vsk = x_i$, $vpk = x_iP$
+4. **Pseudonym-Gen**: TRA batch-issues one-time $(PID_i, K_i)$
+5. **Sign**: $S_i = psk_{ID_i}K + vsk_{ID_i}P_{pub} + h_iu_iP_{rsui}$ (p.10)
+6. **Verify**: $\hat{e}(S, P) = \hat{e}(PID_iD_i + vpk_{ID_i}, P_{pub}) \cdot \hat{e}(h_iU_i, P_{rsui})$ (eq.6, p.12)
+7. **Aggregate-Verify**: summed form of eq.6 (eq.8, p.12); 583 bytes/msg
 
 ---
 
-## Pairing-Free Certificateless Aggregate Signcryption Scheme for Vehicular Sensor Networks
-*Source: [dai2022](dai2022.md)*
+## Cahyadi & Hwang 2022 — Comprehensive Survey [R]
 
-1. **Setup**: KGC initialization
-2. **KeyGen**: Vehicle key generation (partial + secret value)
-3. **Signcrypt**: Encrypt and sign message simultaneously
-4. **Aggregate Signcrypt**: Combine multiple signcryptptions
-5. **Unsigncrypt + Verify**: Decrypt and verify aggregate
+*Source: [summaries/cahyadi2022-survey.md](summaries/cahyadi2022-survey.md) · Full-text*
+
+Generic eight-algorithm CLAS framework (Setup → PseudonymGen → Partial-Private-Key-Gen → … → Aggregate-Verify, pp.1268–1269 §3.1); break-fix chain table (Table 1, p.1270); cost tables (Table 3, pp.1272–1273). No concrete construction — survey only.
 
 ---
 
-## PCAS: Cryptanalysis and Improvement of Pairing-Free Certificateless Aggregate Signature Scheme with Conditional Privacy-Preserving for VANETs
-*Source: [gong2023](gong2023.md)*
+## Dai & Xu 2023 — Pairing-Free CLASC for Vehicular Sensor Networks [PF]
 
-1. **Setup**: KGC generates system parameters
-2. **KeyGen**: Vehicle receives $D_i$ from KGC, chooses $x_i$, computes $PK_i$
-3. **Sign**: For message $m_i$: pick $k_i$, compute $R_i = k_iP$, $h_i = H(ID_i \| m_i \| R_i)$, $\sigma_i = k_i + h_i(x_i + D_i) \mod q$
-4. **Aggregate**: Aggregator sums all $\sigma_i$ and $R_i$
-5. **Verify**: RSU checks pairing equation; batch mode aggregates across vehicles
+*Source: [summaries/dai2022.md](summaries/dai2022.md) · Full-text (Algorithms 1–7, pp.5065–5066)*
 
----
-
-## eCLAS: An Efficient Pairing-Free Certificateless Aggregate Signature for Secure VANET Communication
-*Source: [han2022](han2022.md)*
-
-1. **Setup**: Parameter and master key generation
-2. **Extract**: Partial private key issuance
-3. **SetKey**: Vehicle public key generation
-4. **Sign**: Message signing with timestamp
-5. **Aggregate**: RSU collects and aggregates signatures
-6. **Verify**: Single pairing verification checks all signatures
+1. **Setup**: $G, q, P$, $P_{Pub} = sP$, $H_1, H_2, H_3$
+2. **Extract**: $d_{ID} = y_{ID} + h_{ID}s$, check $d_{ID}P = Y_{ID} + h_{ID}P_{Pub}$
+3. **SetKey**: $sk = (x_{ID}, d_{ID})$, $PK = (K_{ID}, Y_{ID})$, $K_{ID} = X_{ID} + Y_{ID}$
+4. **Signcrypt**: $w_i = u_i + h_i(x_{ID_i} + d_{ID_i})$, $\sigma_i = (U_i, c_i, w_i)$
+5. **Unsigncrypt/Verify**: $w_iP = U_i + h_i(K_{ID_i} + h_{ID_i}P_{Pub})$ (Alg.5)
+6. **Aggregate-Verify**: $WP = \sum U_i + \sum h_i(K_{ID_i} + h_{ID_i}P_{Pub})$ (Alg.7)
 
 ---
 
-## An Efficient and Secure Certificateless Aggregate Signature Scheme for Vehicular Ad Hoc Networks
-*Source: [iqbal2023](iqbal2023.md)*
+## Gong et al. 2023 — PCAS [PF]
 
-1. **Setup**: HECC parameter generation
-2. **Extract**: KGC issues partial private key
-3. **KeyGen**: Vehicle generates secret value and public key
-4. **Sign**: Sign message using HECC operations
-5. **Aggregate**: Sum individual signatures
-6. **Verify**: Check against aggregated value
+*Source: [summaries/gong2023.md](summaries/gong2023.md) · Full-text (LICLAS forgery §4.2 p.5; PCAS §5.2 pp.7–8)*
 
----
-
-## A Comprehensive Review of ECC-based Certificateless Aggregate Signature for VANETs and Cryptanalysis of Quantum-Secure CLAS
-*Source: [lode2026](lode2026.md)*
-
-The paper reviews multiple scheme architectures:
-1. **Pairing-based CLAS**: Uses bilinear maps $e: G_1 \times G_1 \to G_2$
-2. **Pairing-free ECC CLAS**: Uses only scalar multiplication on elliptic curves
-3. **HECC-based CLAS**: Uses hyperelliptic curves for smaller keys
-4. **Quantum-resistant CLAS**: Attempts lattice/hash-based approaches (found vulnerable)
+1. **Setup**: $T_{pub} = s_1P$, $P_{pub} = s_2P$, $H, H_1$–$H_4$ (no pairings, no Map-to-Hash)
+2. **KeyGen**: $d_{i,j} = r_i + s_2h_{1i,j}$; $D_{i,j} = R_i + \alpha_{i,j}X_i$
+3. **Sign**: ECC scalar-mult signing with pseudonym $pseu_{i,j}$ (p.8)
+4. **Verify**: $w_iP - h_{4i}Y_{1i} = h_{3i}D + h_1P_{pub}$ form, Eq.(1) (p.8)
+5. **Aggregate-Verify**: summed form Eq.(2) (p.8); −25% transmission, −16.56%/−25.34% computation vs LICLAS
 
 ---
 
-## Security Analysis of Conditional Privacy-Preserving Authentication Schemes for VANETs
-*Source: [shim2023](shim2023.md)*
+## Han et al. 2022 — eCLAS [A]
 
-The paper analyzes attacks on existing schemes:
-1. **Wang et al. CLAS**: Malicious-but-passive KGC attack
-2. **Xiong et al. CLS**: Forgery + key recovery attack
+*Source: [summaries/han2022.md](summaries/han2022.md) · Abstract-only (+ OA link)*
 
----
-
-## On the security of aggregate signature-based conditional privacy-preserving authentication schemes for VANETs
-*Source: [shim2026](shim2026.md)*
-
-The paper analyzes Setup, Sign, Aggregate, and Verify phases of the Zhu-Guan and Chen-Guan schemes, identifying where cryptographic binding fails. The countermeasure modifies the signing equation to include hash values that bind the signature to the specific public key.
+Abstract-level flow only: vehicles sign distinct messages → signatures aggregate into one short signature → RSU verifies (V2I). No verified equations (no PDF).
 
 ---
 
-## ES-CLAS: An Efficient Certificateless Fully Aggregate Signature Scheme for Vehicular Ad Hoc Networks
-*Source: [tao2026](tao2026.md)*
+## Iqbal et al. 2023 — HECC CLAS [PF]
 
-1. **Setup**: System parameters and master key generation
-2. **Extract**: KGC issues partial private key via secure channel
-3. **SetKey**: Vehicle generates secret value and public key
-4. **Sign**: Vehicle signs message with timestamp, producing $(S_i, R_i)$
-5. **Aggregate**: Aggregator computes full aggregate $\sigma$
-6. **Verify**: Single verification equation checks all signatures simultaneously
-7. **Trace**: TA reveals real identity from pseudonym when malicious behavior detected
+*Source: [summaries/iqbal2023.md](summaries/iqbal2023.md) · Full-text (§5 Fig.3, pp.6–8)*
 
----
-
-## Efficient Certificate-Less Aggregate Signature Scheme with Conditional Privacy-Preservation for VANETs Enhanced Smart Grid System
-*Source: [vallent2021](vallent2021.md)*
-
-1. **Setup**: System initialization for VANET + smart grid
-2. **KeyGen**: Vehicle key generation
-3. **Sign**: Vehicle signs smart grid messages
-4. **Aggregate**: RSU/smart grid aggregator combines signatures
-5. **Verify**: Aggregate verification at smart grid control center
+1. **Setup**: genus-2 hyperelliptic curve, divisor $D$, $Dot_{pb} = Dot_p \cdot D$
+2. **PRPKG** (open channel): user sends $(EID_{usr}, F_{usr})$; DoT returns encrypted $(P_{usr}, L_{usr})$
+3. **PRKG**: $SK = (G_{usr}, P_{usr})$, $PK = (F_{usr}, L_{usr})$
+4. **SIGG**: $S_{OBU} = T_{OBU} + H_{3usr}(G_{usr} + P_{usr})$, $\sigma = (S_{OBU}, W_{OBU})$
+5. **SIGV**: $S_{OBU} \cdot D - W_{OBU} = H_{3usr}(F_{usr} + L_{usr} + H_{2usr} \cdot Dot_{pb})$ (p.8)
+6. Aggregation follows eCLAS [29]; 1.92 ms / 1160 bits
 
 ---
 
-## A Conditional Privacy-Preserving Certificateless Aggregate Signature Scheme in the Standard Model for VANETs
-*Source: [wang2022](wang2022.md)*
+## Lode & Pinapati 2026 — ECC-CLAS Review + Quantum-Secure Cryptanalysis [R]
 
-1. **Setup**: System parameters without random oracles
-2. **Extract**: KGC issues partial private key
-3. **SetKey**: Vehicle generates public key
-4. **Sign**: Sign using standard model techniques
-5. **Aggregate**: Full aggregation across vehicles
-6. **Verify**: Standard model verification
+*Source: [summaries/lode2026.md](summaries/lode2026.md) · Full-text*
+
+Reviews pairing-based → pairing-free ECC → HECC → quantum-resistant CLAS; Table 2 notation (p.9); Huang-cancellation break of quantum-secure CLAS (pp.12–13). No new construction.
 
 ---
 
-## A Privacy-Preserving Certificate-Less Aggregate Signature Scheme with Detectable Invalid Signatures for VANETs
-*Source: [wang2025-detectable](wang2025-detectable.md)*
+## Shim & Kwon 2026 — Aggregate-Signature CPPA Cryptanalysis [R]
 
-1. **Setup**: System parameters
-2. **KeyGen**: Vehicle key pair generation
-3. **Sign**: Vehicle signs message
-4. **Aggregate**: Combine signatures
-5. **Verify**: Check aggregate; if fail → detection phase
-6. **Detect**: Test individual signatures to find invalid ones
+*Source: [summaries/shim2026.md](summaries/shim2026.md) · Full-text (5 pp.)*
+
+Zhu–Guan forgery ($B = -h_3P_{pub}$) and Chen–Guan forgery ($\theta = b_i - x'_ih_{4i}$); hash-binding patches ($h_5, h_6$). Cryptanalysis only.
 
 ---
 
-## ECAE: An Efficient Certificateless Aggregate Signature Scheme Based on Elliptic Curves for NDN-IoT Environments
-*Source: [wang2025-ecae](wang2025-ecae.md)*
+## Shim 2023 — CPPA Cryptanalysis [R]
 
-1. **Setup**: KGC initializes system parameters
-2. **KeyGen**: Terminal device key generation
-3. **Sign**: Device signs data with timestamp
-4. **Aggregate**: NDN router aggregates signatures
-5. **Verify**: Low-latency batch verification at router
+*Source: [summaries/shim2023.md](summaries/shim2023.md) · Full-text*
+
+Malicious-but-passive KGC trapdoor ($Q = \alpha P$) breaking Wang et al.; one-signature η-shift and two-signature key-recovery breaking Xiong et al. (pp.5–6). Victim equations use pairings (victims' constructions). Cryptanalysis only.
 
 ---
 
-## A New Efficient and Provably Secure Certificateless Signature Scheme Without Bilinear Pairings for the Internet of Things
-*Source: [wei2025](wei2025.md)*
+## Tao & Cui 2026 — ES-CLAS Fully Aggregate [PF]
 
-1. **Attack demonstration**: Shows vulnerability in existing PF-CLS class
-2. **Enhanced signing**: Modified signature algorithm
-3. **Verification**: Updated verification equation
+*Source: [summaries/tao2026.md](summaries/tao2026.md) · Full-text (Fig.3 p.5; eq.6 p.6)*
 
----
-
-## An Efficient Certificateless Aggregate Signature Scheme Resistant to Collusion Attacks for VANETs
-*Source: [wu2025-collusion](wu2025-collusion.md)*
-
-1. **Setup**: System parameters
-2. **KeyGen**: Enhanced key generation preventing collusion
-3. **Sign**: Signing with collusion resistance
-4. **Aggregate**: Signature aggregation
-5. **Verify**: Aggregate verification
-6. **Simulate**: NS3 + SUMO realistic evaluation
+1. **Setup**: general one-way hashes only (no map-to-point, no pairings)
+2. **Extract/KeyGen**: certificateless key pair with timestamped pseudonym
+3. **Sign**: single ECC signing equation, eq.(6) verification (p.6)
+4. **Aggregate**: full aggregation into one $(U, V)$-style aggregate
+5. **Verify/Trace**: single aggregate check + lightweight TA traceability; −24.3% computation
 
 ---
 
-## A Secure and Efficient Certificateless Aggregate Signature Authentication Scheme With Pseudonyms for VANETs
-*Source: [wu2025-pseudonyms](wu2025-pseudonyms.md)*
+## Vallent et al. 2021 — ECLAS for VANET + Smart Grid [PF]
 
-1. **Setup**: System parameters
-2. **PseudonymGen**: TA generates pseudonyms for vehicles
-3. **KeyGen**: KGC issues partial keys, vehicles choose secret values
-4. **Sign**: Vehicle signs with pseudonym-based key
-5. **Aggregate**: RSU combines signatures
-6. **Verify**: Aggregate verification
+*Source: [summaries/vallent2021.md](summaries/vallent2021.md) · Full-text (§4 pp.6–9, eqs.1–10)*
 
----
-
-## A Security-Enhanced Certificateless Aggregate Signcryption Scheme for Vehicular Ad Hoc Networks
-*Source: [wu2025-signcryption](wu2025-signcryption.md)*
-
-1. **Attack analysis**: Public key replacement on Dai et al.
-2. **Enhanced signcrypt**: Combined encryption + signature with ECC
-3. **Aggregate**: Multiple signcryptions combined
-4. **Unsigncrypt + verify**: Joint decryption and verification
+1. **Setup**: $E: y^2 = x^3 + ax + b$, KGC $\alpha/P_{pub}$, TRA $\beta/T_{pub}$, $H_1, H_2, H_3$ (pp.6–7)
+2. **Pseudonym/PPK**: $ID_i = (PID_1‖PID_2‖T_i)$; $psk_i = d_i + H_2(ID_i‖Q_{IDi}})\alpha$ (p.7)
+3. **Vehicle-KeyGen**: $vpk_i = x_iP$, $sk_i = x_i + psk_i$ (pp.7–8)
+4. **Sign**: $h_i = H_3(\ldots)$ (eq.1), $S_i = h_ir_i + sk_i$ (eq.2), $\sigma_i = (R_i, S_i)$ (p.8)
+5. **Individual Verify**: $S_iP = h_iR_i + vpk_i + Q_{IDi} + h_{i,0}P_{pub}$ (eq.6, p.8)
+6. **Aggregate-Verify**: summed form (eq.10, p.9); 184 bytes/msg
+7. Caveat: source eq.9 drops $Q_{IDi}$ vs eq.1/eq.5 (paper inconsistency, p.9 vs p.8)
 
 ---
 
-## A Security-Enhanced Conditional Privacy-Preserving Certificateless Aggregate Signature Scheme for VANETs
-*Source: [xu2023](xu2023.md)*
+## Wang et al. 2022 — Standard-Model CLAS [P]
 
-1. **Setup**: Enhanced system parameters
-2. **KeyGen**: Security-hardened key generation
-3. **Sign**: Signing with enhanced security
-4. **Aggregate**: Signature aggregation
-5. **Verify**: Enhanced verification
+*Source: [summaries/wang2022.md](summaries/wang2022.md) · Full-text (§V p.6; 2 pairings §VII.B p.10)*
 
----
-
-## A New Conditional Privacy-Preserving Certificateless Aggregate Signature Scheme in the Standard Model for VANETs
-*Source: [yuan2023](yuan2023.md)*
-
-1. **Attack analysis**: KGC + public key replacement on prior scheme
-2. **Improved Setup**: Standard model parameters
-3. **Improved KeyGen**: Resisting KGC attacks
-4. **Sign**: Standard model signing
-5. **Aggregate**: Signature aggregation
-6. **Verify**: Standard model verification
+1. **Setup**: $params = \{G_1, G_2, q, e, P, Q, P_{pub}, H_1, H_2, H_3\}$ (no random oracles)
+2. **PseudonymGen**: $PID_{i,j} = \{ID_i \oplus H_1(kP + T_{i,j}), T_{i,j}\}$
+3. **PPKGen/KeyGen**: $d_i = r_i + k_is$; $PK_i = (X_i, R_i)$
+4. **Sign**: $W_i = (d_i + h_ix_i)Q + V_i$, $\sigma_i = (U_i, V_i, W_i)$
+5. **Verify**: $e(W_i, P) = e(R_i + k_iP_{pub} + h_iX_i + U_i, Q)$ (eq.1, p.6)
+6. **Aggregate-Verify**: summed form (eq.2, p.6); 2 pairings, zero map-to-point; 388 B / 784 B@n=100
 
 ---
 
-## A Lightweight Certificateless Aggregate Signature Scheme without Pairing for VANETs
-*Source: [yue2025](yue2025.md)*
+## Wang C. et al. 2025 — ECAE for NDN-IoT [PF]
 
-1. **Setup**: System parameters
-2. **KeyGen**: Standard CLAS key generation
-3. **Sign**: Vehicle signs message
-4. **Aggregate**: Aggregator combines signatures AND adds own signature
-5. **Verify**: Simultaneous verification of aggregate + aggregator signature
+*Source: [summaries/wang2025-ecae.md](summaries/wang2025-ecae.md) · Full-text · scope NDN-IoT, NOT VANET*
 
----
-
-## Notes on the Security of Certificateless Aggregate Signature Schemes
-*Source: [zhang2014](zhang2014.md)*
-
-The paper analyzes attacks and proposes:
-1. **Attack 1**: KGC observes and deduces
-2. **Attack 2**: KGC forges using master key
-3. **Attack 3**: Signers collude
-4. **Attack 4**: KGC + signer collude (most destructive)
-5. **New scheme**: Individual validity ↔ aggregate validity
+1. **Setup**: $P_{pub} = sP$, $H_1, H_2, H_3$ (p.10)
+2. **PseudonymGen**: $PID_i = \{MID_i, T_i\}$
+3. **KeyGen**: $SK_i = d_i + h_{2i}x_i$, $PK_i = (K_i, R_i)$ (pp.12–13)
+4. **Sign**: $V_i = u_i + h_{3i}SK_i$, $\sigma_i = (U_i, V_i)$
+5. **Verify**: $V_iP = U_i + h_{3i}K_i + h_{2i}P_{pub}$ (pp.13–14)
+6. **Aggregate-Verify**: $VP = U + \sum(h_{3i}K_i + h_{2i}P_{pub})$; constant-size aggregate; −46.18%/−55.56%
 
 ---
 
-## Efficient Pairing-Free Certificateless Signcryption Scheme for Secure Data Transmission in IoMT
-*Source: [zhang2024](zhang2024.md)*
+## Wang X. et al. 2025 — Detectable Invalid Signatures [P]
 
-1. **Setup**: System parameters
-2. **KeyGen**: User key generation
-3. **Signcrypt**: Combined encryption + signature
-4. **Unsigncrypt + Verify**: Joint decryption and verification
-5. **Public verify**: Third-party verification without decryption
+*Source: [summaries/wang2025-detectable.md](summaries/wang2025-detectable.md) · Full-text (§3 pp.4–5; 4 pairings)*
 
----
-
-## A Security-Enhanced Pairing-Free Certificateless Aggregate Signature for Vehicular Ad-Hoc Networks
-*Source: [zheng2023](zheng2023.md)*
-
-1. **Setup**: System parameters
-2. **KeyGen**: Vehicle key generation
-3. **Sign**: Message signing
-4. **Aggregate**: Signature aggregation
-5. **Verify**: Pairing-free aggregate verification
+1. **Setup/KeyGen**: pairing-based CLAS key issuance
+2. **Sign**: $S_i = r_iW + g_ix_iU + h_id_i$ (pp.4–5)
+3. **Verify**: $e(S,P) = e(R,W)\,e(\sum g_iX_i,U)\,e(\sum h_iQ_i,K_{pub})$ — 4 pairings (p.5)
+4. **Aggregate + Detect**: aggregate check, then Alg.1 vs Alg.2 invalid-signature search (p.5)
 
 ---
 
+## Wei et al. 2025 — PF-CLS for IoT (single-signer, NOT aggregate) [PF]
+
+*Source: [summaries/wei2025.md](summaries/wei2025.md) · Full-text (Def.1 p.8; §5 p.8)*
+
+1. **Attack**: Common Factor Substitution ($X^*, R^*, T^*$ independent randoms, Def.1 p.8)
+2. **Enhanced Sign**: modified ECC signing
+3. **Verify**: $vP = T + h_2(X_{ID} + R_{ID} + h_1P_{pub})$ (p.8)
+4. IoT-CLS scope — single signer, no aggregation; 480-bit signatures
+
+---
+
+## Wu & Heng 2025 — Collusion-Resistant CLAS [A]
+
+*Source: [summaries/wu2025-collusion.md](summaries/wu2025-collusion.md) · Abstract-only (closed)*
+
+No verified construction. Hedged claims only: Type-I/II/III resistance, MIRACL + NS3/SUMO evaluation. Unverified pending PDF.
+
+---
+
+## Wu & Ye 2025 — Pseudonym CLAS [PF]
+
+*Source: [summaries/wu2025-pseudonyms.md](summaries/wu2025-pseudonyms.md) · Full-text (pp.124–139)*
+
+1. **Setup**: four/five hashes $H_0$–$H_4$ (paper says "four", lists five, p.130)
+2. **PseudonymGen**: $VID_i = RID_i \oplus H_0(x_iT_{pub})$ style pseudonyms (p.130)
+3. **KeyGen**: partial + secret binding with $H_4$-collision Type-III argument (Thm.3, pp.133–134)
+4. **Sign/Verify**: $\sigma_iP = U_i + h_{3,i}(PK_i + h_{1,i}P_{pub})$ (p.130)
+5. **Aggregate-Verify**: summed form; generalized forking lemma (Alg.1/Lemma 1, p.127); 160 B / 112n+72 B
+
+---
+
+## Wu & Chen 2025 — Security-Enhanced CLASC [PF]
+
+*Source: [summaries/wu2025-signcryption.md](summaries/wu2025-signcryption.md) · Full-text (§5.2 p.6)*
+
+1. **Attack**: Dai et al. CLASC falls to Type-I public-key replacement (§4.2–4.3 p.5)
+2. **Enhanced Signcrypt**: ECC-only combined encrypt+sign (no pairings, §5.2 p.6)
+3. **Aggregate/Unsigncrypt**: $W$-summed aggregate, joint decrypt+verify; 92-byte signcryptions
+4. IND-CCA2/CDH + EUF-CMA/ECDL in ROM via forking lemma (§6 pp.7–9)
+
+---
+
+## Xu et al. 2024 — Security-Enhanced CLAS [PF]
+
+*Source: [summaries/xu2023.md](summaries/xu2023.md) · Full-text (§V pp.13487–13489)*
+
+1. **Setup**: $P_{pub} = sP$, $T_{pub} = tP$, $H_0$–$H_4$ (p.13487)
+2. **PseudonymGen**: $AID/MID/PID$ issue with $\Delta T_i$ (pp.13487–13488)
+3. **PPKGen/KeyGen**: $d_i = r_i + sh_{1i}$; $SK_i = (x_i, d_i)$, $PK_i = (X_i, R_i)$ (p.13488)
+4. **Sign**: $S_i = k_i + h_{2i}x_i + h_{3i}d_i$, $\sigma_i = (K_i, S_i)$ (p.13488)
+5. **Verify**: $\alpha_i = S_iP - K_i - h_{2i}X_i - h_{3i}(R_i + h_{1i}P_{pub}) = 0$ (p.13488)
+6. **Aggregate-Verify + BQS**: summed check + Binary Quick Search, Alg.1 (p.13488)
+7. Revocation extension with $z_i$ (§VII, p.13494); 148 bytes/msg
+
+---
+
+## Yuan et al. 2023 — Standard-Model CLAS [P]
+
+*Source: [summaries/yuan2023.md](summaries/yuan2023.md) · Full-text (cryptanalysis §4 pp.6–7; scheme §5 pp.7–9)*
+
+1. **Attack**: KGC forgery ($Q = lP$ trapdoor) + public-key replacement on prior SM scheme (§4)
+2. **Setup**: $y_{pub} = sP$, $Z = H_3(y_{pub})$, $H_1$–$H_5$ (pp.7–8)
+3. **Sign**: $W_i = (d_i\varphi_i + h_ix_i + u_i)Z$, $\sigma_i = (U_i, W_i)$ (p.8)
+4. **Verify**: $e(W_i, P) = e((R_i + k_iy_{pub})\varphi_i + h_iX_i + U_i, Z)$ (eq.3, pp.8–9)
+5. **Aggregate-Verify**: summed form (eq.4, p.9); SM Theorems 1–2 under CDHP; 260 B / 656 B@n=100
+
+---
+
+## Yue et al. 2025 — Lightweight CLAS with Aggregator Signature [PF]
+
+*Source: [summaries/yue2025.md](summaries/yue2025.md) · Full-text*
+
+1. **Attack**: ephemeral/temporary rogue-key forgery on Zheng et al. via signature randomness
+2. **Fix**: aggregator adds its own signature; simultaneous verification of aggregate + aggregator signature
+3. **Costs**: Table 4 computation (ECC-only, no $T_{bp}/T_{htp}$), Table 5 communication (ours $3|G| + 3|\mathbb{Z}_q^*|$ vs Zheng $4|G| + 3|\mathbb{Z}_q^*|$)
+4. Type-I/II only — NO Type-III claim
+
+---
+
+## Zhang et al. 2024 — Pairing-Free CLSC for IoMT [PF]
+
+*Source: [summaries/zhang2024.md](summaries/zhang2024.md) · Full-text (§VII.D–F p.4353) · scope IoMT, NOT VANET*
+
+1. **Setup/KeyGen**: ECC certificateless keys with zero-knowledge-proof binding idea
+2. **Signcrypt**: $\theta = u + r \cdot f_s \cdot x_{IDs} + d_{IDs}$ (p.4353)
+3. **Unsigncrypt/Verify**: $\theta P = U + r'(f_sY_{IDs} + T_s + h_sP_{pub})$ — publicly verifiable by anyone (p.4353)
+4. $7T_{sm}$ total, 640-bit ciphertexts; IND-CLSC-CCA2 + EUF-CLSC-CMA, tight reduction without forking lemma
+
+---
+
+## Zhang et al. 2014 — Xiong-CLAS Cryptanalysis + New Scheme [P]
+
+*Source: [summaries/zhang2014.md](summaries/zhang2014.md) · Full-text (§3.2 p.34; §4 pp.35–36)*
+
+1. **Attack 1**: honest-but-curious KGC 4-stage forgery recovering $x_{ID_n}Q$ (§3.2.1 p.34)
+2. **Attack 2**: malicious-but-passive KGC sets $Q = tP$ at setup (§3.2.2 pp.34–35)
+3. **Attacks 3–4**: insider-signer collusion, insider + malicious-KGC collusion (most destructive)
+4. **New scheme**: $T_1 = H_1(\ldots)$, $T_2 = H_2(\ldots)$, $S = r_{ID}T_1 + d_{ID}T_2$; short aggregate valid iff every individual signature valid (Theorem 1, §4 pp.35–36)
+
+---
+
+## Zheng et al. 2023 — Security-Enhanced Pairing-Free CLAS [PF]
+
+*Source: [summaries/zheng2023.md](summaries/zheng2023.md) · Full-text (§V.B p.3827; §VI.A p.3827)*
+
+1. **Attack**: Han key-recovery ($d_m = a \cdot h_{2m}$, $T_m = h_{2m}^{-1}$) (§V.B p.3827)
+2. **Setup/KeyGen**: ECC-only params (scalar-mult/point-add, zero $e(\ldots)$ in construction)
+3. **Sign/Verify/Aggregate**: pairing-free signing with revised key binding (§VI.A p.3827)
+4. EUF-CMA in ROM; §VII Tables II–III timings (pp.3830–3831); later shown rogue-key vulnerable (Yue 2025)
+
+---
+
+## Provenance (Professor merge)
+
+- Mode: aggregate index — 22 Full-text + 2 Abstract-only sources (han2022, wu2025-collusion carry no construction here).
+- Access date: 2026-09-21.
+- What changed (crew round 2): rebuilt every entry from the audited summaries — removed the pairing-based verification equation previously shown for Gong 2023 [PF]; replaced generic $D_i = sH(ID_i)$ / "pairing-free equation" placeholders with paper-true equations or explicit Abstract-only caveats; labeled the 5 pairing-based schemes [P]; fixed Yue 2025 (no Type-III); scoped ECAE/Wei/Zhang2024 out of VANET.

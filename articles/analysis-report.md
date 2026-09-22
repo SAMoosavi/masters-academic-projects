@@ -16,8 +16,10 @@ This report analyzes 24 papers on certificateless aggregate signature (CLAS) sch
 |----------|-------|------------|
 | Proposed Schemes | 14 | 58% |
 | Cryptanalysis/Attacks | 5 | 21% |
-| Surveys/Reviews | 3 | 13% |
-| Signcryption | 3 | 8% |
+| Surveys/Reviews | 2 | 8% |
+| Signcryption | 3 | 13% |
+
+*Note: categories overlap (e.g. Gong 2023 cryptanalyzes LICLAS and proposes PCAS; Wu & Chen 2025 cryptanalyzes Dai 2022 and proposes an enhanced signcryption). Counts sum to 24 papers excluding `Vault Index.md`, which is an index, not a paper: 14 + 5 + 2 + 3 = 24.*
 
 ## 2. Research Timeline
 
@@ -41,7 +43,7 @@ This report analyzes 24 papers on certificateless aggregate signature (CLAS) sch
 ### Latest Advances (2024–2026)
 - **Tao & Cui (2026)**: Fully aggregate signature — reduces computation by ≥24.3%.
 - **Wu & Ye (2025)**: Pseudonym-based CLAS with generalized forking lemma proof.
-- **Wu & Heng (2025)**: First CLAS resisting Type-III adversaries with NS3+SUMO simulation.
+- **Wu & Heng (2025)**: Claims first CLAS resisting Type-III (collusion) adversaries — Abstract-only, unverified pending PDF (see `summaries/wu2025-collusion.md`).
 - **Shim & Kwon (2026)**: Found flaws in Zhu-Guan and Chen-Guan schemes. Proposed next-generation paradigm for 5G-V2X.
 - **Lode & Pinapati (2026)**: Comprehensive review + cryptanalysis of quantum-secure CLAS.
 
@@ -51,7 +53,7 @@ This report analyzes 24 papers on certificateless aggregate signature (CLAS) sch
 1. **KGC Attacks** (malicious-but-passive KGC): Zhang 2014, Shim 2023, Yuan 2023
 2. **Public Key Replacement Attacks**: Shim & Kwon 2026, Yuan 2023
 3. **Forgery Attacks**: Gong 2023, Wu & Heng 2025, Yue 2025
-4. **Type-III Adversary Resistance**: Only Wu & Heng (2025), Wu & Ye (2025), Yue (2025) address this
+4. **Type-III Adversary Resistance**: Only Wu & Ye (2025, verified Full-text) and Wu & Heng (2025, Abstract-only — collusion claim hedged, needs PDF) address this. Yue (2025) does NOT claim Type-III (rogue-key focus; "does not explicitly address Type III" — see `summaries/yue2025.md`).
 5. **Rogue Key Attacks**: Yue 2025 identified temporary rogue key vulnerability in Zheng's scheme
 
 ### Security Models Used
@@ -65,10 +67,12 @@ This report analyzes 24 papers on certificateless aggregate signature (CLAS) sch
 ### Cryptographic Foundations
 | Approach | Papers | Advantage |
 |----------|--------|-----------|
-| ECC (Pairing-free) | 16 papers | Low computation, widely deployed |
-| Hyperelliptic Curve | 1 (Iqbal 2023) | Smaller key sizes |
-| Bilinear Pairing | 3 (Iqbal, Zhang 2014, Dai 2022) | Flexible verification |
-| Signcryption | 3 (Dai 2022, Wu & Chen 2025, Zhang 2024) | Combined encryption+signature |
+| ECC (Pairing-free) | 13 papers | Low computation, widely deployed |
+| Hyperelliptic Curve (pairing-free) | 1 (Iqbal 2023) | Smaller key sizes |
+| Bilinear Pairing | 5 (Cahyadi et al. 2022, Wang et al. 2022, Yuan et al. 2023, Zhang et al. 2014, Wang et al. 2025-detectable) | Expressive verification at high cost |
+| Signcryption (all pairing-free) | 3 (Dai 2022, Wu & Chen 2025, Zhang 2024) | Combined encryption+signature |
+
+*Correction (crew audit 2026-09-21): Iqbal 2023 is HECC-based pairing-free (HCDLP, ROM, Type I/II only) and Dai 2022 is explicitly pairing-free (zero pairing operators in source PDF, pp.5063–5072) — both removed from the pairing row. Pairing-based constructions are: Cahyadi et al. 2022 (bilinear ê, eq.6/eq.8), Wang et al. 2022 (2 pairings, §VII.B), Yuan et al. 2023 (standard-model bilinear, §5), Zhang et al. 2014 (Xiong cryptanalysis + §4 scheme), Wang et al. 2025-detectable (4 pairings, §3). Shim 2023/2026 describe pairing-based victims; all other constructions are ECC/HECC-only.*
 
 ### Security Enhancement Strategies
 - **Pseudonym mechanisms**: Conditional privacy with traceability
@@ -96,7 +100,7 @@ Best performing schemes (from literature):
 1. **Post-quantum security**: Only Lode & Pinapati (2026) touch on quantum-secure CLAS — identified weaknesses
 2. **6G-V2X scalability**: Shim & Kwon (2026) note need for beyond-linear architectures
 3. **Practical deployment**: Most schemes lack real-world VANET testbed validation
-4. **Type-III resistance**: Only 3 of 18 scheme-proposing papers address Type-III adversaries
+4. **Type-III resistance**: Only 2 papers claim Type-III adversaries (Wu & Ye 2025 verified; Wu & Heng 2025 Abstract-only hedged)
 5. **Standard model adoption**: Only 2 papers use standard model — most rely on ROM
 6. **Cross-domain integration**: Limited work on combining CLAS with blockchain/IoT layers
 
@@ -110,7 +114,7 @@ Our proposed scheme should compare against:
 - **Zheng et al. (2023)**: Established pairing-free baseline
 
 ### Our Contributions Should Address
-1. Resistance to Type-III adversaries (only ~17% of schemes achieve this)
+1. Resistance to Type-III adversaries (only 2 of 24 papers claim this: Wu & Ye 2025 verified, Wu & Heng 2025 hedged)
 2. Lower computation and communication overhead than Tao & Cui (2026)
 3. Practical simulation validation (NS3 + SUMO, as Wu & Heng 2025)
 4. Standard model security (optional but strong differentiator)
@@ -123,3 +127,11 @@ The CLAS-for-VANET field has matured significantly from 2014–2026. Recent work
 
 *Report generated from 24 papers. See individual summaries in `summaries/` directory.*
 *Charts available in `comparison-charts/`.*
+
+---
+
+## Provenance
+
+- Mode: Full-text + Abstract-only mixed (22 Full-text summaries + 2 Abstract-only: han2022 eCLAS, HTML-only + OA link; wu2025-collusion, closed-access, no OA PDF).
+- Access date: 2026-09-21.
+- What changed (fix round): (1) recount — Surveys/Reviews 3→2 so categories sum 24 (14+5+2+3=24, excluding `Vault Index.md`); fixed swapped percentages (Surveys 8%, Signcryption 13%); (2) pairing table — removed Iqbal 2023 (HECC pairing-free) and Dai 2022 (pairing-free, verified zero pairing operators) from Bilinear Pairing row; Zhang 2014 is the only pairing-based scheme; (3) Type-III claim — removed Yue 2025 (no Type-III claim; rogue-key focus); kept Wu & Ye 2025 (verified) + Wu & Heng 2025 (hedged Abstract-only); updated §§3, 6, 7 and the §2 timeline bullet accordingly. All other sections preserved.

@@ -20,8 +20,8 @@ tags: [category, standard-model, security-proof]
 
 | Paper | Year | Focus | Pairing-Free | Type III |
 |-------|------|-------|:---:|:---:|
-| [[wang2022]] | 2022 | CLAS, CDHP assumption | ✓ | ✗ |
-| [[yuan2023]] | 2023 | CLAS, CDHP assumption | ✓ | ✗ |
+| [[wang2022]] | 2022 | CLAS, CDHP assumption (pairing-based, 2 pairings) | ✗ | ✗ |
+| [[yuan2023]] | 2023 | CLAS, CDHP assumption (pairing-based) | ✗ | ✗ |
 
 ## Related Categories
 

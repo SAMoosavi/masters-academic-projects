@@ -1,0 +1,20 @@
+SOURCE: no full text (Abstract-only / unresolvable). Key none. Access 2026-09-21.
+DOI: 10.1016/j.comnet.2025.111637
+PII: S1389128625006048
+Title: An efficient certificateless aggregate signature scheme resistant to collusion attacks for VANETs
+Authors (Crossref): Wanqing Wu, Yanxu Heng
+Venue (Crossref): Computer Networks, volume 272, article 111637, published-print 2025-11, publisher Elsevier BV
+URL: https://doi.org/10.1016/j.comnet.2025.111637
+
+WHAT WAS TRIED:
+1. Disk: find /home/sam/snap/zotero-snap/common/Zotero/storage/ -iname *collusion* -> no hits; -iname *wu*/*111637*/*comnet* -> only Wu+Ye 2025 pseudonyms PDF (8ABM5M6N) and Wu+Chen 2025 signcryption PDF (BI625HQ9); 94 PDFs total, none is this paper. User bib has no file field.
+2. Crossref GET https://api.crossref.org/works/10.1016/j.comnet.2025.111637 -> 200, bib verified (see above), no abstract, TDM links require Elsevier API key.
+3. OpenAlex GET https://api.openalex.org/works/https://doi.org/10.1016/j.comnet.2025.111637 -> 200: is_oa false, oa_status closed, pdf_url null, has_fulltext false, abstract_inverted_index null, any_repository_has_fulltext false.
+4. Unpaywall v2 GET (api.unpaywall.org/v2/...) -> 422, no OA record.
+5. Semantic Scholar graph API for DOI -> 403.
+6. ScienceDirect article page https://www.sciencedirect.com/science/article/pii/S1389128625006048 -> 403 (Elsevier closed access). LinkingHub redirect only.
+Chain result: publisher PDF -> Unpaywall -> CORE(skipped, no key, OpenAlex already negative) -> abstract-only fallback. Even abstract not retrievable; title + bib only.
+
+ABSTRACT: not retrievable (OpenAlex null, Elsevier blocked). No abstract text dumped.
+
+NOTE: Prior summaries/wu2025-collusion.md detailed claims (Type I/II/III proofs, ECC pairing-free equations, MIRACL/NS3+SUMO numbers) are unverified against any fetched source and must not be cited as verified.

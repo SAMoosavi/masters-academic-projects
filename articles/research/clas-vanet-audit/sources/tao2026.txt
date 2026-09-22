@@ -1,0 +1,894 @@
+2858                                                        IEEE TRANSACTIONS ON INTELLIGENT TRANSPORTATION SYSTEMS, VOL. 27, NO. 3, MARCH 2026
+
+
+
+
+              ES-CLAS: An Efficient Cerificateless Fully
+                  Aggregate Signature Scheme for
+                   Vehicular Ad Hoc Networks
+                                             Qi Tao        and Xiaohui Cui , Senior Member, IEEE
+
+   Abstract—In this work, it reviewed the recent authentication
+scheme based on certificateless aggregate signature (CLAS) in
+vehicular ad hoc network (VANET). The previously proposed
+scheme solved a few of the security problems in VANETs, but
+it cann’t resist forgery attacks. Besides, the computation and
+communication cost is not sufficiently low that would affect the
+efficient delivery of emergency traffic messages. In this paper, we
+propose a new efficient cerificateless fully aggregate signature
+scheme for VANETs. The proposed scheme used the general
+one-way hash function operations instead of the expensive map-
+to-point hash functions. It inherits the characteristics of CLAS
+by aggregating various message signatures from different vehicles
+into a single signature, thus reducing the computation and
+communication overhead of the scheme. A lightweight conditional
+traceability method is designed to enable the traffic management
+department to reveal the real identity of malicious vehicles. Based
+on elliptic curve discrete logarithm (ECDL) problem, it proved
+that the proposed scheme is existential unforgeability under
+the adaptive chosen-message attack and satisfies security goals.
+Performance analysis shows that our scheme is more efficient than
+similar schemes in terms of computation and communication
+overhead. It will reduce at least 24.3% in computation cost than
+compared schemes.
+  Index Terms—Vehicular ad hoc network, aggregate signature,                        Fig. 1. VANET system model.
+privacy protection, traceability, smart transportation.
+
+                       I. I NTRODUCTION                                             A typical VANET includes On-Board Unit (OBU) embedded
+                                                                                    in the vehicle, Roadside Unit (RSU) installed alongside the
+V     EHICULAR ad hoc network (VANET) is an important
+      basic infrastructure to support the development of intel-
+ligent vehicles. With the gradual maturity of 5G technology
+                                                                                    road, Key Generation Center(KGC) and Trusted Authority(TA)
+                                                                                    [2] as shown in Fig. 1.
+and satellite Internet technology, the landing application of                          In the VANET, based on the Dedicated Short Range Com-
+Internet of Vehicles technology has entered a stage of rapid                        munication (DSRC) protocol, the OBUs and the RSUs would
+development. It could realize the all-around network connec-                        self-organize to form a multi-hop communication network
+tion between the vehicle and the pedestrian, the vehicle and the                    [3]. It provides an effective channel to transmit safety infor-
+vehicle, the vehicle and the infrastructure, and the vehicle and                    mation and avoid traffic accidents [4]. Through the sensor
+the service network, so as to improve the autonomous driving                        device, wireless communication device, GPS, camera, and
+ability and promote the application of autonomous driving [1].                      other equipment installed inside the vehicle, the OBU device
+                                                                                    can collect its state information and peripheral environmental
+   Received 7 May 2023; revised 21 November 2023, 3 April 2024,                     information, and share information with other vehicles or
+31 October 2024, and 9 December 2025; accepted 22 December 2025. Date
+of publication 22 January 2026; date of current version 10 March 2026. This         nearby RSUs based on DSRC protocol [5]. RSU transmits the
+work was supported in part by the Youth Science Fund Project of South               traffic information collected within the communication area to
+China Normal University under Grant 22KJ16; in part by the Open Research            the local Traffic Management Center (TMC) by the optical
+Fund Program of Key Laboratory of Agricultural Blockchain Application,
+Ministry of Agriculture and Rural Affairs under Grant 2022KLABA06;                  fiber communication network. Based on the collected traffic
+and in part by the Key Research and Development Projects in Hubei                   information, the TMC makes intelligent analyses and decisions
+Province under Grant 2022BAA041. The Associate Editor for this article was          on traffic conditions and feedback on the decision information
+H.-N. Dai. (Corresponding author: Qi Tao.)
+   Qi Tao is with the School of Data Science and Engineering, South China           to each vehicle. In this way, it would realize the functions of
+Normal University, Shanwei 516600, China (e-mail: qtao@m.scnu.edu.cn).              emergency warning and route planning.
+   Xiaohui Cui is with the Key Laboratory of Aerospace Information Security            However, with the persistent penetration of the VANET
+and Trusted Computing, Ministry of Education, School of Cyber Science and
+Engineering, Wuhan University, Wuhan 430072, China.                                 system by the ubiquitous and open communication standards
+   Digital Object Identifier 10.1109/TITS.2025.3650665                              of wireless communication and network attacks of traditional
+              1558-0016 © 2026 IEEE. All rights reserved, including rights for text and data mining, and training of artificial intelligence and
+                        similar technologies. Personal use is permitted, but republication/redistribution requires IEEE permission.
+                                      See https://www.ieee.org/publications/rights/index.html for more information.
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 11,2026 at 11:34:30 UTC from IEEE Xplore. Restrictions apply.
+TAO AND CUI: ES-CLAS: AN EFFICIENT CERIFICATELESS FULLY AGGREGATE SIGNATURE SCHEME FOR VANETs                                                                  2859
+
+
+
+internet network, the information security challenge has                                based on elliptic curve cryptography and general one-
+become a serious factor affecting the development of the                                way hash functions. The scheme turns out to be a better
+VANET [6]. The transmitted message may contain sensitive                                performance overhead compared with the existing related
+information likely the driver’s identity, the passenger inquiry                         schemes. In comparison to existing schemes, our scheme
+preference, the vehicle’s running state, driving track, and                             reduces the computation cost by at least 24.3% compared
+personal living habits. Once that information is obtained by                            with the schemes [6], [11], [12], [13], [14], [15].
+malicious users, the damage to the vehicle and passenger                              • It proves that the ES-CLAS scheme for the VANET
+may be incalculable. For example, if the identity of the driver                         is secure under adaptive chosen-message attacks. And
+is revealed, the location that the driver frequently visits such                        we further prove that the scheme is secure against the
+as a school, church, or hospital, will be exposed to the                                Man-in-the-Middle attack, replay attack, Sybil attack, and
+attacker, and the privacy-sensitive information may promote                             modification attack.
+computer-aided crime. Besides, researchers have carried out
+high-profile hacks of vehicles, likely the 2016 Tesla Model S                       A. Organization
+and the 2018 BMW i3, to abruptly shut down system engines
+by remote operation while the vehicle was in normal motion                             The remainder of this work is as follows: We revisit existing
+[7]. The impact of information security risks on the VANET                          works related to ours in Section II. Section III introduces the
+is not only on the user’s privacy information disclosure                            definitions of complexity assumptions, system model and sys-
+but also on the safety of drivers and traffic management.                           tem security goals. Section IV reviews and analyses the secu-
+Therefore, the information security challenges must be solved                       rity of Thumbur et al. [11] scheme. Section V constructs a new
+in the development of VANET.                                                        efficient ES-CLAS scheme for VANET. Section VI describes
+   Due to the characteristics of the VNAET environment, it                          security proof and analysis, section VII introduces the perfor-
+is quite different from the Internet network and the Internet                       mance analysis, and section VIII presents the conclusion.
+of Things. The traditional security schemes can not be well
+applied to the dynamic self-organizing multi-hop wireless                                                     II. R ELATED W ORK
+VANET. In addition, there exist many types of attacks in the                           Cryptography is an effective solution to provide security
+VANET, such as usurpation, forgery, privacy leakage, and                            for data in the VANET network. Shamir [16] introduced
+Witch attack. In recent years, researchers focus on authenti-                       an identity-based public key cryptosystem (ID-PKC). In this
+cation signature schemes in VANETs to protect information                           scheme, any user is free to choose the public key, while the
+security. An authentication scheme with aggregation signature                       user’s private key is issued from the private key generator
+was proposed to resist collusion attacks for VANETs [8].                            (PKI). Some ID-PKC schemes have been proposed [17], [18].
+But, it discovered that their scheme cannot resist forgery                          In the ID-PKC schemes, since the PKI generated the user’s
+attacks. Chen and Chen [9] proposed an improved conditional                         private key, the possibility of malicious attacks cannot be
+privacy preserving authentication scheme with certificateless                       ruled out for PKI, which could be faked as legitimate users
+aggregate signature to reduced the communication overhead                           sending messages. Traditional cryptosystems are facing serious
+of the scheme. However, their scheme was proved ineffective                         challenges of key escrow [13].
+against impersonation attacks [10]. And the authors in [10]                            Certificateless signature scheme (CLS) provides a method
+thought their method could fully compress single signature.                         for the key escrow challenges. The certificateless aggregate
+However, due to the necessity of partially compressed ele-                          signature(CLAS) scheme was firstly introduced by Al-Riyami
+ments in the verification process, their scheme would not                           and Paterson [5] in 2003, which avoided the overhead of
+perform after aggregation. Existing schemes addressed some                          certificate management by solving the key escrow problem
+security problems in VANETs, but they are still not completely                      in the ID-PKC system. However, Huang et al. [19] proved the
+safe. And the performance of these schemes is insufficient to                       scheme [5] is difficult to resist forgery attacks under its own
+meet the communication requirements of resource-constrained                         defined security model. Later, several CLAS schemes were
+devices in VANETs.                                                                  described from the view of enhanced security or increased
+   To solve the above problems, our goal is to find a new                           efficiency [20], [21], [22]. Shen et al. [21] discovered that the
+efficient and security certificateless fully aggregate signature-                   scheme [20] was insecure through concrete attacks on adver-
+based authentication scheme (ES-CLAS) in VAENT. Namely,                             sary A1 and adversary A2, where adversary A1 would replace
+we consider both reducing the communication and computa-                            the user’s public key but couldn’t access the KGC’s (Key Gen-
+tion cost for resource-constrained RSU devices and vehicles,                        eration Center, KGC) secret key and adversary A2 has access
+as well as protecting the user privacy security and tracking                        the KGC’s secret key but couldn’t change the user’s public
+of the accident vehicle. The contributions of this work are as                      key. Kumar et al. [22] introduced a pairing-based secure CLAS
+follows.                                                                            scheme in VANETS under the Computational Diffie-Hellman
+   • It briefly reviews the efficient and secure CLAS scheme                        assumption and the random oracle model. Zhong et al. [23]
+      [11], then demonstrate the security weaknesses of the                         presented an efficient CLAS-based authentication scheme
+      scheme and give a concrete instance.                                          for vehicle-to-infrastructure communication. In their scheme,
+   • Considering the limited capacity of the device in VANET,                       pseudonyms are used to achieve conditional privacy protec-
+      map-to-point hash function and bilinear pairings with                         tion. But, it proved that the scheme [23] was vulnerable to
+      high cost were not adopted. We construct an ES-CLAS                           attacks from the compromised KGC, and an adversary could
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 11,2026 at 11:34:30 UTC from IEEE Xplore. Restrictions apply.
+2860                                                        IEEE TRANSACTIONS ON INTELLIGENT TRANSPORTATION SYSTEMS, VOL. 27, NO. 3, MARCH 2026
+
+
+
+                                                                                    the existing scheme should be further optimized to reduce the
+                                                                                    communication delay of emergency traffic information.
+
+                                                                                                              III. P RELIMINARIES
+                                                                                    A. Elliptic Curve Cryptosystem (ECC)
+                                                                                       Let Zq? be a finite field, the order q is prime, q > 3. The
+                                                                                    non-singular elliptic curve group G = {(x, y)ky2 = (x3 +ax+b)
+                                                                                    mod q} ∪ {∅}, where 4a3 + 27b2 , 0, (a, b) ∈ Zq? , and {∅} is
+                                                                                    the infinity point. For random point P(x1 , y1 ) ∈ G, the point
+                                                                                                                                   P + P + ··· + P
+                                                                                    multiplication of ECC is defined as lP = „           ƒ‚      …,
+                                                                                                                                           l
+                                                                                    where l ∈ Zq? and l > 0.
+                                                                                      Define 1. Elliptic Curve Discrete Logarithm(ECDL):
+                                                                                    assumption [29]. For a given {P, xP} ∈ G, it is negligible for
+                                                                                    the advantage to get x ∈ Zq? in probability polynomial time.
+Fig. 2. The system model.
+                                                                                    B. System Model
+pose as a legitimate user to generate a valid signature [14].                          There are five entities in the proposed system model, as
+Cui et al. [24] constructed an enhanced CLAS scheme in                              shown in Fig. 2, including the Trusted Authority (TA), Traffic
+VANETs. In their scheme, it adopted the general one-way                             Management Center (TMC) server, the Key Generation Center
+hash operators to reduce vehicle performance loss. However,                         (KGC), Roadside Units (RSUs), and vehicles installed with
+Du et al. [25] found that the scheme [24] couldn’t resist attacks                   OBU. The system model for VANET consists of an applica-
+from the compromised KGC and presented a secure paring-                             tion layer and a management layer. The management layer
+free CLAS scheme with the advantages of CL-PKC.                                     includes TA, KGC, and TMC. The application layer includes
+   To deal with key distribution and escrow as well as variable                     RSU devices and vehicles, which communicated with the
+signature length, Verma et al. [26] proposed the first pairing-                     management layer through a secure fiber optic communication
+free compact certificate-based aggregate signature (CAS)                            network. The brief details of each entity are shown below.
+scheme in 2020. Recently, Mei et al. [6] proposed a conditional                        • TA. TA is a trusted management device. Vehicles and
+privacy CLAS scheme over bilinear pairings in VANETs,                                    RSUs in VANETs are registered and managed through
+where full aggregation of a large number of different signatures                         TA. The TA server communicated with RSU devices by
+could reduce the computing and communication overhead. In                                the wired transport layer security protocol. Vehicles and
+their proposed scheme, it claimed that the scheme had the                                RSU devices should be registered with TA before an oper-
+least computation cost and was existentially unforgeable under                           ation, then the TA will generate pseudonyms for them.
+the random Oracle model. Thumbur et al. [11] proposed an                                 So, vehicles can transmit messages with pseudonyms to
+efficient and secure CLAS scheme. In their scheme, it required                           protect data privacy and message integrity. It requires
+one point multiplication operation on the elliptic curve and had                         the TA should have powerful computation and enough
+better efficiency than the existing CLAS schemes. However,                               storage memory, and usually set multiple TA to avoid
+we demonstrated that the scheme [11] attack arises from                                  performance bottlenecks.
+the weakness of the signature. Ali et al. [12] introduced an                           • TMC. TMC is responsible for providing navigation,
+efficient and provably secure conditional privacy protection                             vehicle traceability, intelligent traffic control, entertain-
+authentication scheme under the Elliptic Curve Cryptography                              ment, traffic rescue, and other services. It collected traffic
+for VANETs. Yu et al. [10] proposed an efficient conditional                             messages from RSUs by a secure channel.
+privacy-preserving CLAS scheme for VANET, where the                                    • KGC. KGC is a semi-trusted device. It is used to generate
+scheme was secure under adaptively chosen message attacks.                               the partial private key for vehicles in VANETs. It requires
+Zhou et al. [15] reviewed the recent VANET authentication                                the KGC should have powerful computation and usually
+schemes and further improve the security model of the scheme.                            set multiple KGCs to avoid performance bottlenecks.
+Then they proposed an improved CLAS scheme for VANET.                                  • RSUs. The RSUs are wireless communication devices.
+In their scheme, it made the security proof of the scheme based                          It is installed on the infrastructure along the roadside at
+on the general forking lemma. And they claimed the proposed                              special intervals. They have distributed all over the system
+scheme is more efficient.                                                                network, serving as bridges between the management
+   To sum up, the existing CLAS scheme solved some security                              layer and the application layer. RSU devices can verify
+problems in VANET, but still faced the challenge of mes-                                 the received messages and transmit the process result
+sage forgery attacks. In addition, since the transmission of                             to application layer devices for data analysis. To ensure
+traffic messages in VANETs through the wireless network,                                 RSUs help vehicles verify messages, it assumes RSU
+the bandwidth resources are limited. And road conditions                                 devices are semi-trusted and collect and mine vehicle
+in the city scene are complex, which affects the message                                 information out of curiosity but wouldn’t refuse message
+accessibility greatly [27], [28]. The communication load of                              verification.
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 11,2026 at 11:34:30 UTC from IEEE Xplore. Restrictions apply.
+TAO AND CUI: ES-CLAS: AN EFFICIENT CERIFICATELESS FULLY AGGREGATE SIGNATURE SCHEME FOR VANETs                                                                  2861
+
+
+
+  • OBUs. The OBU device is embedded in every vehicle. It                                from simulator C. Λ attemps to forge traffic information
+    connects with nearby RSU devices and other vehicles to                               {m0 , sg0 , V PKi } based on {PID0 , T 0 }.
+    share traffic messages by DSRC protocol such as IEEE                              • Forgery. The adversary Λ wins the game only when the
+    802.11p [30]. The OBU device includes a Tamper-Proof                                 result of Verify(PID0 , m0 , sg0 , T 0 , V PKi ) is valid.
+    Device (TPD) that stores the secret key from the TA                               The ES-CLAS scheme should satisfy the following security
+    server, which has less computation and storage memory.                          requirements [30], [31], [32]. The next will introduce the
+    It works with GPS, micro-sensor, and embedded systems                           security objectives of the proposed scheme, as follows.
+    based on the DSRC protocol. Our proposed scheme                                   • Message integrity and user anonymity: The ES-CLAS
+    assumes that the OBU device is not secure.                                           scheme can check the shared message’s integrity to
+                                                                                         prevent the adversary from changing it. At the same time,
+                                                                                         it could preserve the privacy of the vehicle’s users, even
+C. Security Model
+                                                                                         if an adversary intercepts the communications as they are
+   The proposed scheme contains the following eight algo-                                being transmitted, the user’s real identity and behavior
+rithms.                                                                                  cannot be discovered.
+  • Initialization. The system initializes and inputs a secret                        • Unlinkability: In the ES-CLAS scheme, RSUs and mali-
+    key λ. The KGC and TA select a cyclic group G. Then                                  cious vehicles are unable to link messages delivered by
+    publish the system parameters. The vehicle Vi and RSU                                the same vehicle to safeguard privacy.
+    send RID to TA for registration by a secure channel.                              • Traceability: TMC can discover the vehicle’s real identity
+  • Pseudo-identity generation. TA calls this algorithm. It                              from the accident messages, preventing malicious vehi-
+    generates a pseudonyms PID for the vehicle Vi .                                      cles from denying their responsibility for traffic accidents.
+  • Partial private key generation. Vi sends the pseudonym                            • Resistance to attacks: The ES-CLAS scheme should resist
+    PID to KGC, then KGC runs this algorithm and issues a                                the basic attacks, including the Man-in-the-Middle attack,
+    partial private key Ri for Vi .                                                      the replay attack, the Sybil attack and the modification
+  • Generation of vehicle key and signature. Vi would run this                           attack.
+    algorithm to generate the vehicle key based on the partial
+    private key Ri . Then generate the message’s signature sg                                IV. R EVIEW OF T HUMBUR ET AL .’ S S CHEME
+    with the vehicle key.                                                             Thumbur et al.’s scheme [11] proposed a certificateless
+  • Signature verification. Once receiving the information,                         aggregate signature-based authentication scheme for VANETs,
+    the vehicle or RSU will first check T in the valid time                         as follows.
+    period. Then verify the signature sg. It takes sg as input,
+                                                                                      • System Setup.
+    and outputs true only if the sg is valid, otherwise outputs
+                                                                                         The KGC and TA select a q-order cyclic group G. P
+    false and rejects the message.
+                                                                                         is a generator of G. KGC chooses a secret key s ∈ Zq?
+  • Aggregate signature generation. The algorithm is per-
+                                                                                         and calculates P pub = sP. TA selects a secret trace
+    formed by RSU. When receiving n different signatures
+                                                                                         key b ∈ Zq? and outputs T pub = bP. Then publish the
+    sgi from vehicles, RSU calls this algorithm   and generates
+                                         Pn                                              system parameters (P, q, E, G, H1 , H2 , H3 , P pub , T pub , Zq? ).
+    a single aggregate signature S G = i=1 sgi .
+                                                                                         The vehicle Vi and RSU send RID to TA for registration.
+  • Aggregate signature verification. The algorithm is per-
+                                                                                      • Pseudo-identity generation.
+    formed by TA or RSU. When receiving the aggregate
+                                                                                         The pseudo-identity of vehicles is generated by TA, which
+    information S G, the verifier checks S G. It takes S G as
+                                                                                         is used to transmit traffic messages to prevent disclosure
+    input, and outputs true only if the S G is valid, otherwise
+                                                                                         of the vehicle’s identity information. The vehicle Vi
+    outputs false and rejects these messages.
+                                                                                         chooses a param ti ∈ Zq? , and sends {PID1 = ti P, Ki =
+  • Traceability of vehicles. The algorithm is performed by
+                                                                                         ti T pub ⊕ RID} to TA. TA selects a valid period 4T , calcu-
+    TMC. It can track the vehicle based on the signature
+                                                                                         lates RIDi = Ki ⊕ bPID1 , PID2 = RIDi ⊕ H1 (PID1 , 4T ),
+    information.
+                                                                                         and sends PID = {PID1 , PID2 } to the KGC.
+   Define 2: The proposed scheme is secure under adaptive                             • Partial private key generation.
+chosen-message attacks only if there exists no poly(t)-time                              KGC selects a param ri ∈ Zq? and calculates Ri = ri P,
+algorithm for any adversary Λ to win the following games                                 psk = (ri + sH1 (PID, Ri , P pub )). Then send {psk, Ri , PID}
+with non-negligible advantages ε.                                                        to the vehicle Vi .
+  • Setup. The adversary Λ forges a challenge message                                 • Set secret value.
+    signature {m0 , sg0 , RID0 , T 0 , V PKi }. The simulator C calls                    Vi selects a secret key vsk ∈ Zq? and calculates Xi = vsk·P.
+    the system setup, and returns the public key {P pub , T pub }                     • Vehicle key generation.
+    to Λ. The Λ can query random oracles, pseudo-identity,                               Vi generates its pulic key vpk = {Qi , Ri } and private key
+    vehicle secret key and public key, and signatures from the                           VS K = {psk, vsk}.
+    simulator C.                                                                      • Signature generation.
+  • Inquiry. In this phase, Λ can query the results of random                            The shared message mi should be signed with pseudo-
+    oracles Hi(i=RID,m) , pseudo-identity PID, vehicle secret                            identity by a vehicle to ensure the authentication.
+    key and public key, and signature sg multiple times                                  Vi selects ui ∈ Zq? and the current time T , then
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 11,2026 at 11:34:30 UTC from IEEE Xplore. Restrictions apply.
+2862                                                        IEEE TRANSACTIONS ON INTELLIGENT TRANSPORTATION SYSTEMS, VOL. 27, NO. 3, MARCH 2026
+
+
+
+    calculates Ui = ui P, h2i = H2 (PID, Xi ), h3i =
+    H3 (PID, mi , vpk, Ui , T ), and S i = [ui + h3i (psk + h2i vsk)]
+    mod q. The signature of mi is σi = (Ui , S i ), and the
+    transmitted information {PID, vpk, mi , T , σi } is sent to the
+    nearly RSU.
+  • Signature verification.
+    Once receiving the information {PID, vpk, mi , T , σi } from
+    an RSU, the verifier first verifies T in the valid period
+    4T . Then calculate h1i = H1 (PID, Ri , P pub ), and check
+    the formula S i · P = Ui + h3i (Qi + h1i P pub ) holds true
+    or not. Only if the result is true, the verifier accepts the
+    message.
+  • Aggregate signature generation. When receiving the
+    transmitted information {PID, vpk, mi , T , σi } from vehi-
+    cles, RSU would generate an aggregate signature                Pn by
+    computing σagg = (U1 , U2 , . . . , Un , S ) where S = i=1 si .
+  • Aggregate signature verification.
+    When       receiving             the        aggregate    information
+    {(PIDi , vpki , mi , T )i=1,...,n , σagg },    the    verifier     first
+    checks the freshness of T in every transmitted
+    message.P Then P            check          whether    the      formula
+                 n                 n
+    S · P = i=1 Ui + i=1 h3i (Qi + h1i P pub ) holds true or
+    not. Only if the result is true, the verifier accepts the
+    aggregate signature, otherwise rejects these messages.
+
+A. Security Analysis of Thumbur et al.’s Scheme
+   The security of the signature-based authentication scheme
+required that any malicious vehicle couldn’t impersonate
+another one. Here, we demonstrate that Thumbur et al.’s
+scheme can’t meet the basic security requirement.                                   Fig. 3. Details of the operation of the ES-CLAS scheme.
+   Assume the adversary has obtained several valid transmitted
+information {PID, vpk, mi , T , σi }(i>1) from the same vehicle Vi .
+It can parse the signature σi and get (Ui , S i ). Then calculate                   vehicle, which greatly increases the difficulty of detecting
+h1i = H1 (PID, Ri , P pub ) and h3i = H3 (PID, mi , vpk, Ui , T ) for               the authenticity of the transmitted information. Following this
+each message mi . Let x = psk + h2i vsk. So x is a fixed value                      weakness, we propose a new efficient ES-CLAS scheme for
+for different signatures from the same vehicle Vi . There exists                    VANETs in the next section.
+a group of formulas
+                                                                                                     V. P ROPOSED ES-CLAS S CHEME
+                         S i1 = ui1 + h3i1 x
+                       8
+                                                                                      In this section, we introduce a new efficient and secure ES-
+                       ˆ
+                       ˆ
+                       <S = u + h x
+                       ˆ
+                            i2   i2     3i2
+                                                                  (1)               CLAS scheme for VANETs.
+                       ˆ
+                       ˆ
+                       ˆ . . .
+                         S in = uin + h3in x
+                       :
+                                                                                    A. System Architecture
+  According
+      S −S to the equation (1), the adversary can deduce                            The system operation details of the proposed scheme are
+x = h3i j −h3ik
+        i   i
+                   and ui for each message. If that, the                            shown in Fig. 3, as follows.
+             j    k   j,k                                                             1) According to traffic regulations, each vehicle should be
+adversary could impersonate any vehicle Vi to forge a valid
+                                                                                         registered with the TMC before it is driven on the road,
+signature σ? with a fake message m? by recalculating h3i? =
+                                                                                         so as to track the vehicle and identity the owner in case
+H3 (PID, m? , vpk, Ui , T ) and S i? = [ui + h3i? x] mod q. The
+                                                                                         of special event(e.g. accident, traffic jam, etc.).
+signature σ? = (Ui , S i? ) is valid on the transmitted information
+                                                                                      2) During system initialization, KGC and TA select a
+is {PID, vpk, m? , T , σ? }.
+                                                                                         random secret key s and a secret trace key b respectively,
+                  S i? · P = (ui + h3i? x)P                                              and generate the system public key. The TA then sends
+                           = Ui + h3i? (psk + h2i vsk)P                                  b to the TMC over an SSL secure channel.
+                                                                                      3) When vehicles first enter the VANETs, the vehicle’s
+                           = Ui + h3i? (Qi + h1i P pub )                    (2)
+                                                                                         OBU device will communicate with the nearby RSU
+   Thumbur et al.’s scheme attack arise from the weakness of                             device via a 20Mbps bandwith based on IEEE 802.11P
+the signature σ? . The adversary only needs to tamper with part                          protocol [33], and will submit the registration informa-
+of the signature data S i to forge a signature of any legitimate                         tion (PID1 , AID).
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 11,2026 at 11:34:30 UTC from IEEE Xplore. Restrictions apply.
+TAO AND CUI: ES-CLAS: AN EFFICIENT CERIFICATELESS FULLY AGGREGATE SIGNATURE SCHEME FOR VANETs                                                                  2863
+
+
+
+   4) After receiving the registration information (PID1 , AID),                      • Partial private key generation. KGC chooses a random
+      TA gets the vehicle identity RID based on the Pseudo-                             param ri ∈ Zq? for the vehicle Vi . And it calculates a
+      identity generation algorithm, and verifies the validity of                       partial private key Ri for Vi .
+      the RID by cross-checking with the vehicle registration
+                                                                                                       Ri = (ri + sH1 (PID, P pub )) mod             q          (4)
+      database from TMC. The TA will then issue a system
+      anonymous identity PID = (PID1 , PID2 ) for the valid                             Then KGC sends {Ri , PID} to Vi by a secure
+      vehicle, for which the KGC will generate a partially                              communication channel.
+      signed private key. So, the vehicle communicates anony-                         • Generation of vehicle key and signature. Vi chooses
+      mously with other vehicles and the RSU, protecting the                            a random secret key xi . It generates public key
+      vehicle’s privacy information.                                                    V PKi = {Ui = Ri · P pub }. The shared message mi
+   5) The vehicle sends a traffic message m to nearby RSU. It                           should be signed with pseudo-identity to ensure
+      uses the signature algorithm to generate the message sig-                         authentication. Vi selects the current time T , then
+      nature sg, and send (sg, m, PID, V PK, Xi ) to the nearby                         calculates wi1 = H1 (PID, Ui , T ), wi2 = H2 (PID, mi , T ),
+      RSU. To ensure that critical information is conveyed                              Xi = xi wi1 P pub , and the signature sg of mi .
+      promptly and reliably in the VANET, it strictly limits
+                                                                                                            sg = (wi1 xi + wi2 Ri )     mod      q              (5)
+      the end-to-end delay threshold to within 100ms, and
+      uses short heartbeat packet intervals of 20ms to maintain                         After       that,       the        transmitted     information
+      connection stability [34].                                                        {PID, V PKi , mi , T , Xi , sg} is sent to the nearby vehicles
+   6) After receiving multiple traffic messages every second,                           and RSU.
+      the RSU verifies the validity of the messages using                             • Signature verification. Once receiving the information
+      the aggregate signature verification algorithm. Only if                           {PID, V PKi , mi , T , Xi , sg} from an RSU, the verifier
+      messages are valid, the RSU forwards to other devices                             first verifies T in the valid period 4T . Then calculate
+      in the system.                                                                    wi = H2 (PID, mi , T ), and check the equation (6) holds
+   7) Once receiving a traffic accident message, TMC will run                           true or not. Only if equation (6) is true, it means the
+      the algorithm of traceability to trace the vehicle’s RID                          message is valid, and the verifier receives the message,
+      from the traffic message, and retrieve vehicle registration                       otherwise, the message is invalid and discarded.
+      databases to obtain the owner information.                                                           sg · P pub = (wi1 xi + wi2 Ri )P pub
+                                                                                                                      = Xi + wi Ui                              (6)
+B. The Proposed Scheme                                                                • Aggregate signature generation. When receiving n
+                                                                                        messages {PID, V PKi , mi , T , Xi , sg} from vehicles, RSU
+   The proposed ES-CLAS scheme contains the following                                   would check the freshness of T in each transmitted
+eight algorithms.                                                                       message, then generate an aggregate signature by
+  • Initialization. The system inputs a secret key λ. Key                               computing     σagg P      = (w1 , w2 , . . . , wn , X, S G) where
+                                                                                             Pn                      n
+    Generation Center (KGC) and Trusted Authority(TA)                                   X = i=1 Xi , S G = i=1 sgi .
+    select a q-order cyclic group G with a generator P. KGC                           • Aggregate           signature             verification.       When
+    chooses a secret key s ∈ Zq? and calculates P pub = sP. TA                          receiving      the         aggregate        traffic     information
+    selects a secret trace key b ∈ Zq? and outputs T pub = bP.                          {(PID, V PKi , mi )i=1,...,n , σagg }, the verifier checks whether
+    KGC and TA select two secure general one-way hash                                   the equation (7) holds true or not. Only if equation
+    function H1 : {0, 1}? × G × G → Zq? , H2 : {0, 1}? ×                                (7) is true, it means the aggregate information is valid,
+    {0, 1}? × G → Zq? . Then publish the system parame-                                 and the verifier receives the information, otherwise, the
+    ters (P, q, E, G, H1 , H2 , P pub , T pub , Zq? ). The vehicle Vi and               information is invalid and rejected.
+    RSU send its identity RID to TA for registration. TA sends                                                       Pn
+    the trace key b to the Traffic Management Center (TMC).                                        S G · P pub = i=1 sgi
+                                                                                                                     Pn
+  • Pseudo-identity generation. Vehicle Vi chooses a ran-                                                       = i=1 (wi1 xi + wi2 Ri )P pub )
+    dom param ti ∈ Zq? , calculates {PID1 = ti P, AIDi =
+                                                                                                                     Pn
+                                                                                                                = i=1 (wi2 Ui ) + X                     (7)
+    RIDi ⊕ ti T pub }, then sends {PID1 , AIDi } to TA by a secure
+    communication channel.                                                            • Traceability of vehicles. The algorithm is performed
+    The TA server verifies the vehicle identity RIDi = AIDi ⊕                           by TMC, which is deployed in the traffic management
+    bPID1 . Only if the RIDi is valid, it selects a valid period                        department. Based on the public signature information
+    4T , generates the pseudonym PID = {PID1 , PID2 }, and                              from vehicles, TMC can analyze the pseudo-identity and
+    sends it to vehicle Vi and KGC.                                                     track the vehicle by running this algorithm as follows.
+                                                                                                       RIDi = PID2 ⊕ H1 (bPID1 , PID1 , 4T )                    (8)
+                   PID2 = RIDi ⊕ H1 (ti T pub , PID1 , 4T )                 (3)
+                                                                                                  VI. S ECURITY P ROOF AND A NALYSIS
+      Vehicle Vi can protect its privacy information by sending                       This section analyzes the efficiencies of the proposed ES-
+      traffic messages with a pseudonym to its nearby vehicles                      CLAS scheme in meeting the security requirements under the
+      and RSU.                                                                      presumption that the ECDL assumption is difficult to solve.
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 11,2026 at 11:34:30 UTC from IEEE Xplore. Restrictions apply.
+2864                                                        IEEE TRANSACTIONS ON INTELLIGENT TRANSPORTATION SYSTEMS, VOL. 27, NO. 3, MARCH 2026
+
+
+
+A. Security Proof                                                                      4) Public key-Query. The simulator C uses a list Lvpk to
+    Theorem 1: Assume the adversary can access a random                                     store public key (PIDi , V PK). After receiving a query
+oracle model and obtain the signature of any message.                                       request {PID | PIDi , PID0 } from Λ, the simulator
+If there is no existing poly(t)-time for an adversary to                                    sends the result from Lvpk when the record has been
+solve the ECDL problem with non-negligible advantage                                        queried. If the record is first queried, the simulator C
+ε, the ES-CLAS scheme would be secure against adaptive                                      returns V PK = {Ui = R0i P pub } and adds (PIDi , V PK)
+chosen-message attacks.                                                                     into Lvpk .
+    If an adversary Λ can forge an effective signature, it will                        5) Signature-Query. C processes the signature query
+succeed with non-negligible advantages ε under the model as                                 (PID, mi , T ) as follows:
+shown in section III. Define parameters qH1 , qH2 , qvsk , qvpk , q sg                         a) If mi = m0 ∧ PIDi , PID0 , it checks (PIDi , h1i , h2i ),
+are used to label the query number of random oracles H1 ,                                          and (PIDi , vsk), then calculates the signature
+H2 , vehicle private key, vehicle public key, and signature,                                       sg = h1i xi0 + h2i R0i . It publishes sg to Λ.
+respectively. So, there exists a poly(t)-time algorithm with                                   b) If mi = m0 ∧ PIDi = PID0 , the simulator C aborts
+probability ε0 = (qH qHε qvsk ) for Λ to solve the ECDL                                            the simulation and takes the process event as E2 .
+                            1   2
+assumption. The security simulation proceeds as follows.
+                                                                                       Forgery: The adversary Λ selects a random
+    Proof. Given an instance (P, A = aP) of ECDL assumption
+                                                                                    challenge message {mi , PIDi , T }, and outputs signature
+based on the elliptic curve E : y2 = x3 + ax + b mod q over a
+                                                                                    sg = H1 (PIDi , Ui , T )xi + H2 (PIDi , mi , T )Ri of the message
+big prime finite field Zq? , the challenger C’s goal is to distinct
+                                                                                    mi . According to the rules of the simulation, the adversary
+Z=? a. The adversary Λ would try to forge a random challenge
+                                                                                    can generate two valid signatures with different values
+message signature {m0 , sg0 , RID0 , T 0 } j . According to [26], it
+                                                                                    (h1i xi + h2i Ri ) from the same random-tape. Let’s say that
+constructs a simulation process as follows.
+                                                                                    PID0i = PID1 and Ui0 = Ui , without loss of generality. Then,
+    Init. The challenger C selects collision-resistant
+                                                                                    there have the following equations.
+cryptographic hash functions H1 , H2 .
+                                                                                             (
+    Setup. The challenger C selects a group G with                                             sg1 = H11 (PID, Ui , T )xi1 + H21 (PID, mi , T )R1
+generator P, and secure params (s, b) ∈ Zq? randomly.                                                                                                 (9)
+                                                                                               sg2 = H12 (PID, Ui , T )xi2 + H22 (PID, mi , T )R2 .
+And calculate the public key {P pub = sP, T pub = bP}, then
+send {P, q, E, G, H1 , H2 , P pub , T pub , Zq? } to the adversary Λ.                 According to the construction of C, there exists h11i = h21i
+    Inquiry. Adversary Λ is allowed to query the results                            and h12i , h22i . For the sake of deduction, the equations (9) can
+of Hi(i=1,2) , vehicle’s private key, vehicle’s public key and                      be converted to equations (10), respectively.
+signature sg multiple times. The simulator C maintains the
+empty list LHi , Lvsk , Lvpk and L sg as follows.
+                                                                                                       (
+                                                                                                         sg1 = h11i xi1 + h12i (ri1 + sh11i )
+    1) H1 -Query. The simulator C let a list LH1 to store                                                                                         (10)
+                                                                                                         sg2 = h21i xi2 + h22i (ri2 + sh21i ).
+        the result (PIDi , H1i ). After receiving a query request
+        {PIDi | PIDi , PID0 } from Λ, C checks LH1 and returns                         According to equations (10), the simulator C outputs s =
+        the result if the request had been received. Otherwise,                     (h11i h12i − h21i h22i )−1 ((sg1 − sg2 ) − (h11i xi1 − h21i xi2 ) − (h12i ri1 − h22i ri2 ))
+        C selects a random parameter h1i ∈ Zq? . Then return h1i                    as a solution to solve the ECDL problem.
+        to Λ and add (PIDi , h1i ) into LH1 .                                          Based on the above simulation analysis, Λ can forge
+    2) H2 -Query. The simulator C let a list LH2 to store the                       the signature {m0 , sg0 , PID0 , V PK 0 , T 0 , X 0 } with an advantage
+        result (PIDi , H2i ). After receiving a query request                       ε0 = (qH qHε qvsk ) , where the probability of h1i is 1/qH1 , h2i =
+                                                                                                1   2
+        {PIDi , mi , T | PIDi , PID0 } from Λ, C checks LH2 and                     H2 (PID0 , m0 , T ) is 1/qH2 , and the probability of Lvsk = (R0i , xi0 )
+        returns the result if the request had been received.                        is 1/qvsk . Since the simulator C solves the ECDL problem with
+        Otherwise, C selects a random parameter h2i ∈ Zq? and                       an ignorable advantage (qH qHε qvsk ) , it means that the solution
+        sets h2i = H2 (PID, mi , T ). Then return h2i to Λ and add
+                                                                                                                         1   2
+                                                                                    of the ECDL problem that is Theorem 1 is satisfied. However,
+        (PIDi , h2i ) into LH2 .                                                    it is hard to deal with the ECDL problem within a short time.
+    3) Private key-Query. The simulator C uses the list Lvsk to                     So, our proposed ES-CLAS scheme is secure against forgery
+        store partial private key (PIDi , vsk). After receiving a                   under adaptive chosen-message attacks in the random oracle
+        query request {PIDi } from Λ, C returns the result from                     model.
+        Lvsk if the same value has been queried. Otherwise, C                          According to [6] and [9], there are two types of adversary
+        processes as follows:                                                       attacks according to their different capabilities as follows.
+          a) If PIDi = PID0 , according to the ECDL                                    Public Key Replacement Attacks (Type I): The adversary is
+              assumption, it is difficult for Λ to address                          allowed to replace the target vehicle’s public key, but it cannot
+              the ECDL problem and deduce ti from PID1 .                            get the secret key.
+              So, if PIDi = PID0 , it means the vehicle has                            Malicious KGC Attacks (Type II): The adversary can obtain
+              been compromised. The simulator C aborts the                          the system secret key but cannot replace the public key of the
+              simulation and takes the process event as E1 .                        target vehicle.
+          b) If PIDi , PID0 , it selects random {R0i , xi0 } ∈ Zq∗                     Theorem 2: If there is no existing poly(t)-time for an
+              and publishes vsk = {R0i , xi0 } to Λ. Then it adds                   adversary to solve the ECDL problem with non-negligible
+              (PIDi , vsk) into Lvsk .                                              advantage ε, the ES-CLAS scheme is existentially unforgeable
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 11,2026 at 11:34:30 UTC from IEEE Xplore. Restrictions apply.
+TAO AND CUI: ES-CLAS: AN EFFICIENT CERIFICATELESS FULLY AGGREGATE SIGNATURE SCHEME FOR VANETs                                                                      2865
+
+
+
+against Type I attacks in the random oracle model under the                                1) If mi = m0 ∧ PIDi , PID0 , it calls the signing
+intractability of the ECDL problem.                                                              algorithm for Λ to generate the corresponding
+   Define parameters qH1 , qH2 , qvsk , qvpk , q sg are used to label                            signature sg.
+the query number of random oracles H1 , H2 , vehicle private                               2) If mi = m0 ∧ PIDi = PID0 , it checks LH1 , LH2 , Lvpk
+key, vehicle public key, and signature, respectively. So, there                                  and Lvsk to obtain (PIDi , h1i , h2i , vsk), and calculates
+exists a poly(t)-time algorithm with probability ε0 = (qH qHε qvsk )                             sg = h1i xi0 + h2i R0i . Then send the result sg to Λ.
+                                                                 1  2
+for the challenger C to solve the ECDL assumption. The                                 Forgery: The adversary Λ outputs a forged signature
+security simulation proceeds as follows.                                            sg = h1i xi0 +h2i R0i with the message mi . According tho the rules
+   Proof: If the Type I adversary Λ can forge a valid signature,                    of the simulation [35], the adversary can generate two valid
+there exists a challenger C that can solve the ECDL problem                         signatures with different values h1i from the same random-
+using the adversary Λ as a subroutine.                                              tape. Let’s say that PID0i = PID1 , without loss of generality.
+   Given an instance (P, A = sP) of ECDL assumption, the                            Then, there have the following equations.
+challenger C’s goal is to distinct Z=? s by interacting with the                          (
+adversary Λ. The challenger C selects a target pseudonym                                    sg1 P pub = h11i xi1 P pub + h12i (ri1 + sh11i )P pub
+                                                                                                                                                        (11)
+PID0 , and the adversary Λ can access the following oracles.                                sg2 P pub = h21i xi2 P pub + h22i (ri2 + sh21i )P pub .
+   Setup: The challenger C set P pub = A and T pub . Then
+send the public params {P, q, E, G, H1 , H2 , P pub , T pub , Zq? } to                 According to equations (12), the simulator C outputs
+the adversary Λ, where the hash functions H1 and H2 are                             s = (h11i h12i − h21i h22i )−1 ((sg1 − sg2 ) − (h11i xi1 − h21i xi2 )) as a solution
+described below.                                                                    to solve the ECDL problem. Based on the above simulation
+   Inquiry: Adversary Λ is allowed to query the results of                          analysis, Λ can forge the signature of the target pseudonym
+Hi(i=1,2) , vehicle’s private key, vehicle’s public key and signa-                  PID0 with an advantage ε0 = (qH qHε qvsk ) , where the probability
+                                                                                                                                 1  2
+ture sg multiple times. The simulator C maintains the empty                         of h1i = H1 (PID, Ui , T ) is 1/qH1 , h2i and vsk is 1/qH2 and
+list LHi , Lvsk , Lvpk and L sg as follows.                                         1/qvsk , respectively. Since the challenger C solves the ECDL
+   • H1 -Query. The simulator C let a list LH1 to store                             problem with an ignorable advantage (qH qHε qvsk ) , it means that
+                                                                                                                                             1  2
+      the result (PIDi , H1i ). After receiving a query request                     the ECDL problem is intractable. So, the ES-CLAS scheme
+      {PIDi } from Λ, C checks LH1 and returns the result if                        is secure against Type I attacks.
+      the request had been received. Otherwise, C selects a                            Theorem 3: If there is no existing poly(t)-time for an
+      random parameter h1i ∈ Zq? . Then return h1i to Λ and                         adversary to solve the ECDL problem with non-negligible
+      add (PIDi , h1i ) into LH1 .                                                  advantage ε, the ES-CLAS scheme is existentially unforgeable
+   • H2 -Query. The simulator C let a list LH2 to store                             against Type II attacks in the random oracle model under the
+      the result (PIDi , H2i ). After receiving a query request                     intractability of the ECDL problem.
+      {PIDi , mi , T } from Λ, C checks LH2 and returns the result                     Proof: Suppose the Type II adversary Λ can forge a valid
+      if the request had been received. Otherwise, C selects a                      signature, there exists a challenger C that can solve the ECDL
+      random parameter h2i ∈ Zq? and sets h2i = H2 (PID, mi , T ).                  problem using the adversary Λ as a subroutine.
+      Then return h2i to Λ and add (PIDi , h2i ) into LH2 .                            Given an instance (P, A = αP) of ECDL assumption, the
+   • Public key-Query. The simulator C uses a list Lvpk to                          challenger C is able to find α by interacting with the adversary
+      store pseudo-identity (PIDi , Ui , Ri , Xi , xi ). After receiving            Λ. The challenger C selects a target pseudonym PID0 , and the
+      a query request {PIDi } from Λ, the simulator sends                           adversary Λ can access the following oracles.
+      the result (Ui , Xi ) from Lvpk when the record has been                         Setup: The challenger C selects a random s ∈ Zq? , and
+      queried. Otherwise, it selects random params {R0i , xi0 , h1i } ∈             set P pub = sP and T pub . Then send the public params
+      ZP∗ , and calculates Ui = R0i P pub and Xi = xi0 h1i P pub . If               {P, q, E, G, H1 , H2 , P pub , T pub , Zq? } and secret key to the adver-
+      PIDi , PID0 , it adds the tuple (PIDi , Ui , R0i , Xi , xi0 ) into            sary Λ.
+      Lvpk . If PIDi = PID0 , it inserts (PIDi , Ui , ⊥, Xi , xi0 ) into               Inquiry: Adversary Λ is allowed to query the results of
+      Lvpk . Then, the result (Ui , Xi ) would be sent to Λ.                        Hi(i=1,2) , vehicle’s private key, vehicle’s public key and signa-
+   • Private key-Query. The simulator C uses the list Lvsk to                       ture sg multiple times. The simulator C maintains the empty
+      store partial private key (PIDi , vsk). After receiving a                     list LHi , Lvsk , Lvpk and L sg as follows.
+      query request {PIDi } from Λ, C returns the result from                          • H1 -Query. Similar to theorem 2.
+      Lvsk if the same value has been queried. Otherwise, if                           • H2 -Query. Similar to theorem 2.
+      PIDi = PID0 , C aborts the simulation and defines the                            • Public key-Query. The simulator C uses a list Lvpk to
+      process event as E1 . And if PIDi , PID0 , it selects                               store pseudo-identity (PIDi , Ui , Ri , Xi , xi ). After receiving
+      random {R0i , xi0 } ∈ Zq∗ and publishes vsk = {R0i , xi0 } to Λ.                    a query request {PIDi } from Λ, the simulator sends the
+      Then it adds (PIDi , vsk) into Lvsk .                                               result (Ui , Xi ) from Lvpk if the record has been queried.
+   • Public    key Replace-Query. After receiving a query request                         Otherwise, C does as follows.
+        PIDi , Ui0 , Xi0 from Λ, the simulator would replace the                          1) If PIDi = PID0 , it selects random params {R0i , xi0 , h1i } ∈
+      ˚
+
+      original public key of PIDi with (Ui0 , Xi0 ), while updating                       ZP∗ , and set H1 (PIDi , P pub ) = h1i , R0i = ri0 P + sh1i , Ui =
+      the corresponding tuple in Lvpk to (PIDi , Ui , ⊥, Xi , ⊥).                         R0i P pub and Xi = xi0 h1i P pub = h1i (αP). Then add the tuple
+   • Signature-Query. C processes the signature query                                     (PIDi , Ui , ⊥, Xi , xi0 ) into Lvpk and send the result (Ui , Xi )
+      (PID, mi , T ) as follows:                                                          to Λ.
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 11,2026 at 11:34:30 UTC from IEEE Xplore. Restrictions apply.
+2866                                                        IEEE TRANSACTIONS ON INTELLIGENT TRANSPORTATION SYSTEMS, VOL. 27, NO. 3, MARCH 2026
+
+
+
+     2) If PIDi , PID0 , it selects random params                                         freshness timestamp T and a random secret param xi , the
+     {R0i , xi0 , c0i , h1i } ∈ ZP∗ , and set H1 (PIDi , P pub ) = h1i ,                  value of each xi for each sg is unique. So, no adversary
+     R0i = ri0 P + sh1i , Ui = R0i P pub and Xi = xi0 h1i P pub =                         can connect the two signatures on the same vehicle. The
+     h1i (c0i P). Then add the tuple (PIDi , Ui , R0i , Xi , xi0 ) into                   ES-CLAS scheme is unlinkability.
+     Lvpk and send the result (Ui , Xi ) to Λ.                                         3) Traceability: Anonymity protects the vehicle’s trajec-
+  • Private key-Query. The simulator C uses the list Lvsk to                              tory from attackers. However, in certain circumstances
+     store a partial private key (PIDi , vsk). After receiving a                          (likely accidents and traffic jams), the vehicle’s real
+     query request {PIDi } from Λ, C returns the result from                              identity should be retrieved by the traffic manage-
+     Lvsk if the same value has been queried. Otherwise, if                               ment department. This conditional traceability enable
+     PIDi = PID0 , C aborts the simulation and defines the                                the TMC to discover the vehicle’s real identity RID
+     process event as E1 . If PIDi , PID0 , C recovers the                                based on the traceability algorithm in section V, where
+     tuple (PIDi , Ui , R0i , Xi , xi0 ) from Lvpk . If such tuple not                    RID = PID2 ⊕ H1 (bPID1 , PID1 , 4T ). It is useful for
+     in Lvpk , it selects random {R0i , xi0 } ∈ Zq∗ and publishes                         the traffic management department to track and prevent
+     vsk = {R0i , xi0 } to Λ. Then it adds (PIDi , vsk) into Lvsk .                       vehicles from denying their responsibility for traffic
+  • Signature-Query. Similar to theorem 2.                                                accidents. Hence, the ES-CLAS scheme only provides
+   Forgery: The adversary Λ outputs a forged signature                                    TMC with tracking service for malicious vehicles.
+sg = h1i xi0 +h2i R0i with the message mi . According tho the rules                    4) Resistance to attacks: Due to Theorem 1, the proposed
+of the simulation [35], the adversary can generate two valid                              ES-CLAS scheme can resist basic attacks, including
+signatures with different values h1i from the same random-                                the Man-in-the-Middle attack, the replay attack, and
+tape. Let’s say that PID0i = PID1 , without loss of generality.                           the modification attack. Even though the KGC is com-
+Then, there have the following equations.                                                 promised, the adversary can’t forge a valid signature,
+       (                                                                                  because the secret key xi is a random param that is hard
+         sg1 P pub = h11i xi1 P pub + h12i (ri1 + sh11i )P pub                            to deduce from Xi .
+                                                                   (12)
+         sg2 P pub = h21i xi2 P pub + h22i (ri2 + sh21i )P pub .
+                                                                                             • Resistance to Man-in-the-Middle Attack. Assume an
+   According to equations (12), it gets (sg1 − sg2 )sP = (h11i −                               adversary has got a vehicle’s pseudo-identity PID,
+(h1i )αP + (h11i − h21i )h2i s2 P. Finally, the simulator C outputs
+  2                                                                                            and attempts to impersonate a vehicle to forge a
+α = (h11i − h21i )−1 ((sg1 − sg2 )s − (h11i − h21i )h2i s2 ) as a solution                     valid message signature {m, sg, V PK = (Ui ), Xi , T }.
+to solve the ECDL problem. Based on the above simulation                                       It should deduce the secret params (xi , Ri ), so it
+analysis, Λ can forge the signature of the target pseudonym                                    firstly gets the xi from Xi , and Ri from Ui . According
+PID0 with an advantage ε0 = (qH qHε qvsk ) , where the probability                             to the analysis of Theorem 1, it is hard for the
+                                                                                               adversary to solve the ECDL problem to get (xi , Ri ).
+                                      1  2
+of h1i , h2i and vsk is 1/qH1 , 1/qH2 and 1/qvsk , respectively.
+Since the challenger C solves the ECDL problem with an                                         So, the proposed scheme can resistance to Man-in-
+ignorable advantage ε0 , it means that the ECDL problem                                        the-Middle attacks.
+is intractable. So, the ES-CLAS scheme is secure against                                     • Resistance to Replay Attack. In the proposed
+Type II attacks.                                                                               scheme, the freshness timestamp T is used to gener-
+                                                                                               ate a signature. It can resistance the message replay
+B. Security Analysis                                                                           attacks by verifying whether equation (6) is held.
+   This section would discuss the ES-CLAS scheme meeting                                     • Resistance to Sybil Attack. According to the formal
+the necessary security requirements introduced in section III                                  proof (Theorems 1, 2 and 3) of the proposed scheme
+(security objectives).                                                                         in Section VI-A, it is difficult for adversary to imper-
+                                                                                               sonate other legitimate vehicles to forge a valid
+   1) Message integrity and user anonymity: As proof
+                                                                                               signature based on the ECDL assumption under the
+      of Theorem 1, it is hard for the adversary with
+                                                                                               random oracle model. The proposed scheme has
+      advantage ε0 = (qH qHε qvsk ) to deal with the ECDL
+                           1  2                                                                anti-forgery security under adaptive chosen-message
+      assumption in probability polynomial time. Since the
+                                                                                               attack, type I attack and type II attack. So, the
+      ES-CLAS scheme is secure to defend against mes-
+                                                                                               proposed scheme can resistance to Sybil attacks.
+      sage forgery under adaptive selective-message attacks, it                              • Resistance to Modification Attack. As proof of
+      can achieve message integrity by checking the validity                                   Theorem 1, the adversary can’t forge a valid mes-
+      of the message verification equation (6). In addition,
+                                                                                               sage signature. The proposed system would accept
+      since the vehicle’s pseudo-identity PID = {PID1 =
+                                                                                               the shared traffic message only if equation (6) is
+      ti P, PID2 = RIDi ⊕ H1 (ti T pub , PID1 , 4T )} satisfied with
+                                                                                               valid. So, the proposed scheme can resistance to
+      ECDL assumption, so the adversary couldn’t deduce the
+                                                                                               modification attacks.
+      real identity RID from PID2 . Hence, the proposed ES-
+      CLAS scheme for VANETs has the characteristics of                               To reflect the security of the scheme more clearly, the
+      message integrity and vehicle anonymity.                                      existing state-of-the-art schemes [6], [10], [11], [12], [13],
+   2) Unlinkability: In our proposed scheme, the verifier                           [14], [15] are selected for comparison. According to the result
+      sends signature {PID, V PK, m, T , X, sg} to nearby RSU.                      in table I, the proposed scheme can meet the full of basic
+      Due to the signature sg is generated based on the                             security requirements for VANETs.
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 11,2026 at 11:34:30 UTC from IEEE Xplore. Restrictions apply.
+TAO AND CUI: ES-CLAS: AN EFFICIENT CERIFICATELESS FULLY AGGREGATE SIGNATURE SCHEME FOR VANETs                                                                  2867
+
+
+
+                                                                             TABLE I
+                                                   S ECURITY C OMPARISON B ETWEEN D IFFERENT S CHEMES
+
+
+
+
+                                   TABLE II                                         needs to calculate seven point multiplication operations and
+               T HE C OMPUTATION OVERHEAD C OMPARISON                               two modular multiplication operations to generate pseudo-
+                                                                                    identity and message signature, so the PIMS of the scheme
+                                                                                    [11] is 7T sm + 3T mm ≈ 7 × 6.38 + 3 × 0.2325 ≈ 45.3575ms.
+                                                                                    The SVOM of the scheme [11] including three point multipli-
+                                                                                    cation operations and one modular multiplication operation, is
+                                                                                    3T sm + T mm ≈ 3 × 6.38 + 0.2325 ≈ 19.3725ms. The BVMM of
+                                                                                    the scheme [11] is (2n + 1)T sm + nT mm ≈ (12.9925n + 6.38)ms,
+                                                                                    which includes (2n + 1) point multiplication operations and
+                                                                                    n modular multiplication operations. In the scheme [14], it
+                  VII. P ERFORMANCE A NALYSIS                                       should calculate seven point multiplication operations and two
+  This section would discuss the performance analysis of the                        modular multiplication operations to generate pseudo-identity,
+ES-CLAS scheme against existing state-of-the-art schemes in                         private key and signature. So the PIMS of the scheme [14] is
+VANETs [6], [11], [12], [13], [14], [15].                                           7T sm +2T mm ≈ 7×6.38+2×0.2325 ≈ 45.125ms. The SVOM of
+                                                                                    the scheme [14] is 3T bp +2T sm +2T mm ≈ 3×20.01+2×6.38+
+A. Computation Cost Analysis and Comparison                                         2 × 0.2325 ≈ 73.255ms, including three bilinear pairing oper-
+   It selects a bilinear map e : G1 × G1 → GT with 80 bits                          ations, two point multiplication operations, and two modular
+security level, where G1 is an additive group with prime order                      multiplication operations. The BVMM in the scheme [14] is
+q generated by the point P on a super singular elliptic curve                       3T bp + 2nT sm + 2nT mm ≈ (13.225n + 60.03)ms, including three
+E : y2 = x3 + x(mod p) with embedding degree d = 2. Then                            bilinear pairing operations, 2n point multiplication operations,
+it selects an elliptic curve on 80 bits security level as: G is                     and 2n modular multiplication operations. Then the cost of
+an additive group generated by a non-singular elliptic curve                        PIMS, SVOM and BVMM for other schemes [6], [12], [13],
+E : y2 = x3 + ax + b( mod P) with order q, where p, q are                           [15] can be calculated with the similar method as shown
+two 160 bits prime numbers.                                                         in table III. The PIMS of our scheme needs three point
+   To calculate the execution cost of the basic cryptographic                       multiplication operations and three modular multiplication
+operations, it constructs an experiment environment with the                        operations. Hence, the PIMS of our scheme is 3T sm + 3T mm ≈
+JPBC library [36] under the experiment platform including                           3×6.38+3×0.2325 ≈ 19.8375ms. The SVOM of our scheme,
+Windows 7 operating system, an Intel I7-4770 processor with                         including two point multiplication operations and one modular
+2.40 GHz, and 4 GB memory. From the experiment, it was                              multiplication operation, is 2T sm + T mm ≈ 2 × 6.38 + 0.2325 ≈
+found that the basic computational cost is shown in table II,                       12.9925ms. The total cost of BVMM in our scheme to batch
+in which the cost of the point addition operation is negligible.                    verify n message signatures, where it would calculate n point
+   To compare the computation cost of the proposed ES-                              multiplication operations and n modular multiplication opera-
+CLAS scheme with existing related schemes, it takes the                             tions. So the BVMM of our scheme is (n + 1)T sm + nT mm ≈
+computational cost of anonymity, message signature and                              6.38n + 0.2325n + 6.38 ≈ (6.6125n + 6.38)ms. In order to
+its verification, and batch message verification as the core                        more clearly show the performance benefit, it compared the
+indicator. Define PIMS as the total time of pseudo-identity                         execution time of message signature between our scheme and
+generation, private key generation and message signature.                           the state-of-the-art schemes [6], [11], [12], [13], [14], [15],
+SVOM is the total time of single verification of one message.                       as shown in Fig. 4, in which the comparison results show
+BVMM is the total time of aggregate signature verification of                       that our scheme has lower computation cost compared with
+multiple traffic messages.                                                          other schemes. Figure 5 shows the time delay of 100 messages
+   The comparison results of the computation overhead of                            aggregate verification between our scheme and the schemes
+different schemes are shown in table III. The scheme [11]                           [6], [11], [12], [13], [14], [15], in which our scheme has
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 11,2026 at 11:34:30 UTC from IEEE Xplore. Restrictions apply.
+2868                                                        IEEE TRANSACTIONS ON INTELLIGENT TRANSPORTATION SYSTEMS, VOL. 27, NO. 3, MARCH 2026
+
+
+
+                                                                            TABLE III
+                                                     C OMPUTATION OVERHEAD OF D IFFERENT S CHEMES
+
+
+
+
+Fig. 4. Computation overhead to sign one message.                                   Fig. 6. Transmission overhead.
+
+
+                                                                                       The performance improvement of our scheme concerning
+                                                                                    the state-of-the-art schemes are listed in table IV. The total
+                                                                                    cost of PIMS in our scheme is 25.985ms, which has the
+                                                                                    improvement of (57.42 − 19.8375)/57.42 × 100% ≈ 65.5%,
+                                                                                    (45.375 − 19.8375)/45.3758 × 100% ≈ 56.3%, 48.8%, 49.1%,
+                                                                                    56%, 24.3%,respectively over the schemes [6], [11], [12], [13],
+                                                                                    [14], [15]. In a similar manner, it can calculate the performance
+                                                                                    improvement of the BVMM of the proposed scheme for 100
+                                                                                    messages aggregate verification. The BVMM of our scheme
+                                                                                    has the improvement of (2632.04−667.63)/2632.04×100% ≈
+                                                                                    74.6%, 48.9%, 48.9%, 66.9%, 51.7%, and 50%, respectively
+Fig. 5. Computation overhead to aggregate message verification.                     over the schemes [6], [11], [12], [13], [14], [15]. The results
+                                                                                    in table IV show that the performance of our scheme is
+                                                                                    significantly improved compared with the existing schemes.
+                                  TABLE IV
+                  T HE C OMPUTATION C OST C OMPARISON
+                          OF D IFFERENT S CHEMES                                    B. Communication Overhead Analysis and Comparison
+                                                                                       The communication cost is mainly consumed in
+                                                                                    pseudonyms, signatures, and timestamps. Assume the
+                                                                                    network quality is good and the data transmission will not
+                                                                                    be affected. As detailed earlier, the length of p and p is 64
+                                                                                    bytes and 20 bytes respectively. So the length of elements in
+                                                                                    G1 and G is 128 bytes and 40 bytes respectively. Besides,
+                                                                                    the length of a hash function is 20 bytes and the length of a
+                                                                                    timestamp is 4 bytes. The communication overhead is shown
+                                                                                    in table V.
+                                                                                       The vehicle transmission message in the scheme [6]
+the best effect compared with other schemes. And with the                           includes (PID = (PID1 , PID2 ), σ = (sig, ID), T ), where
+increase in the message number, the performance advantage                           (PID1 , PID2 , sig) ∈ G1 , and (ID, T ) ∈ Zq? . The total trans-
+of our scheme will be more obvious.                                                 mission cost of the scheme [6] is 3 × 128 + 2 × 4 = 392 bytes.
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 11,2026 at 11:34:30 UTC from IEEE Xplore. Restrictions apply.
+TAO AND CUI: ES-CLAS: AN EFFICIENT CERIFICATELESS FULLY AGGREGATE SIGNATURE SCHEME FOR VANETs                                                                  2869
+
+
+
+                                                                            TABLE V
+                                                          T HE S IZE OF C OMMUNICATION OVERHEAD
+
+
+
+
+                                                                                                              VIII. C ONCLUSION
+                                                                                       In this paper, we analyzed Thumbur et al’s scheme in
+                                                                                    VANETs and proved that the scheme is insecure to defend
+                                                                                    against impersonation attacks. Besides, we constructed a new
+                                                                                    efficient cerificateless fully aggregate signature scheme for
+                                                                                    VANETs. The proposed ES-CLAS scheme implements mes-
+                                                                                    sage authentication and integrity, unlinkability, nonrepudiation
+                                                                                    but vehicle anonymity, and traceability. Moreover, we proved
+                                                                                    that the ES-CLAS scheme is secure against forgery under the
+                                                                                    random oracle model. In addition, compared with the existing
+                                                                                    relevant schemes, the signature and verification overhead of
+Fig. 7. Communication overhead comparison.
+                                                                                    ES-CLAS scheme decreased by about 24.3% and 48.9%
+                                                                                    respectively. Communication cost decreased by about 19.2%.
+The vehicle transmission message in the scheme [11] includes                           Our future work will explore to design authentication
+(PID = (PID1 , PID2 ), vpk = (Qi , Ri ), σ = (U, S ), T ), where                    schemes for VANETs with different functions, includ-
+(PID1 , PID2 , U, Qi , Ri ) ∈ G, and (S , T ) ∈ Zq? . So, the total                 ing aggregate signature based on smart contract, group
+transmission cost of the scheme [11] is 5 × 40 + 2 × 4 =                            signature, etc.
+208bytes. The vehicle transmission message in the scheme
+[12] includes (AID = (AID1 , AID2 , T i ), σ = (η, A, pk), ti ),
+                                                                                                                   R EFERENCES
+where (AID1 , AID2 , A, pk) ∈ G, and (η, T i , ti ) ∈ Zq? . So,
+the total transmission cost of the scheme [12] is 4 × 40 +                          [1]  S.-H. Sun, J.-L. Hu, Y. Peng, X.-M. Pan, L. Zhao, and J.-Y. Fang,
+3 × 4 = 172bytes. The vehicle transmission message in the                                “Support for vehicle-to-everything services based on LTE,” IEEE Wire-
+scheme [13] includes (PS UID = (PS 1 , PS 2 ), σ = (U, V), T ),                          less Commun., vol. 23, no. 3, pp. 4–8, Jun. 2016.
+                                                                                    [2] M. Bayat, M. Barmshoory, M. Rahimi, and M. R. Aref, “A secure
+where (PS 1 , PS 2 , U, V) ∈ G1 , and T ∈ Zq? . So, the total                            authentication scheme for VANETs with batch verification,” Wireless
+transmission cost of the scheme [13] is 4 × 128 + 4 =                                    Netw., vol. 21, no. 5, pp. 1733–1743, Jul. 2015.
+516bytes. The vehicle transmission message in the scheme                            [3] C. Campolo, A. Molinaro, and R. Scopigno, “Vehicular ad hoc
+                                                                                         networks,” in Guide to Wireless Ad Hoc Networks. Cham, Switzerland:
+[14] includes (PID, ω, σ = (R, V), T ), where (PID, R, V) ∈ G1 ,                         Springer, 2015.
+and (ω, T ) ∈ Zq? . So, the total transmission cost of scheme [14]                  [4] J. Cheng et al., “Accessibility analysis and modeling for IoV in an
+is 3×128+3×4 = 396bytes. The vehicle transmission message                                urban scene,” IEEE Trans. Veh. Technol., vol. 69, no. 4, pp. 4246–4256,
+                                                                                         Apr. 2020.
+in the scheme [15] includes(PIDi = (PID1 , PID2 , T i ), pki =                      [5] S.-J. Horng, S.-F. Tzeng, P.-H. Huang, X. Wang, T. Li, and M. K. Khan,
+(Xi , Ri ), σ = (U, s), T ), where (PIDi , pki = (Xi , Ri ), U) ∈ G,                     “An efficient certificateless aggregate signature with conditional privacy-
+and (s, T , T i ) ∈ Zq? . So, the total transmission cost of scheme                      preserving for vehicular sensor networks,” Inf. Sci., vol. 317, pp. 48–66,
+                                                                                         Oct. 2015.
+[15] is 4 × 40 + 3 × 4 = 172bytes. In our scheme, the vehicle                       [6] Q. Mei, H. Xiong, J. Chen, M. Yang, S. Kumari, and M. K. Khan,
+transmission message includes (PID = (PID1 , PID2 ), V PKi =                             “Efficient certificateless aggregate signature with conditional privacy
+(Ui ), Xi , T , sg), where (PID1 , PID2 , Xi , Ui ) ∈ G, and (T , sg) ∈                  preservation in IoV,” IEEE Syst. J., vol. 15, no. 1, pp. 245–256,
+Zq? . The total transmission cost for our scheme is 4 × 40 +                             Mar. 2021.
+                                                                                    [7] B. R. Payne, “Car hacking: Accessing and exploiting the CAN bus
+4 × 2 = 168bytes, where the communication cost decreased by                              protocol,” J. Cybersecurity Educ., Res. Pract., vol. 2019, no. 1, p. 5,
+about 19.2% compared with the related scheme [11]. Compar-                               Jun. 2019.
+ison of signature length and transport cost for a single message                    [8] W. Xiong, R. Wang, Y. Wang, Y. Wei, F. Zhou, and X. Luo, “Improved
+                                                                                         certificateless aggregate signature scheme against collusion attacks for
+versus n messages is shown in table V. The transmission                                  VANETs,” IEEE Syst. J., vol. 17, no. 1, pp. 1098–1109, Mar. 2023.
+cost for our scheme is shown in Fig. 6. The communication                           [9] Y. Chen and J. Chen, “CPP-CLAS: Efficient and conditional privacy-
+costs related to the number of messages are shown in Fig. 7,                             preserving certificateless aggregate signature scheme for VANETs,”
+                                                                                         IEEE Internet Things J., vol. 9, no. 12, pp. 10354–10365, Jun. 2022.
+where the communication cost of our scheme is better than                           [10] S. Yu et al., “Efficient ECC-based conditional privacy-preserving aggre-
+the scheme [11] and is lower than other schemes [6], [12],                               gation signature scheme in V2V,” IEEE Trans. Veh. Technol., vol. 72,
+[13], [14], [15].                                                                        no. 11, pp. 15028–15039, Nov. 2023.
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 11,2026 at 11:34:30 UTC from IEEE Xplore. Restrictions apply.
+2870                                                         IEEE TRANSACTIONS ON INTELLIGENT TRANSPORTATION SYSTEMS, VOL. 27, NO. 3, MARCH 2026
+
+
+
+[11] G. Thumbur, G. S. Rao, P. V. Reddy, N. B. Gayathri, D. V. R. K. Reddy,         [29] D. He, S. Zeadally, B. Xu, and X. Huang, “An efficient identity-based
+     and M. Padmavathamma, “Efficient and secure certificateless aggregate               conditional privacy-preserving authentication scheme for vehicular ad
+     signature-based authentication scheme for vehicular ad hoc networks,”               hoc networks,” IEEE Trans. Inf. Forensics Security, vol. 10, no. 12,
+     IEEE Internet Things J., vol. 8, no. 3, pp. 1908–1920, Feb. 2021.                   pp. 2681–2691, Dec. 2015.
+[12] I. Ali, Y. Chen, N. Ullah, R. Kumar, and W. He, “An efficient and              [30] R. Lu, L. Zhang, J. Ni, and Y. Fang, “5G vehicle-to-everything services:
+     provably secure ECC-based conditional privacy-preserving authentica-                Gearing up for security and privacy,” Proc. IEEE, vol. 108, no. 2,
+     tion for vehicle-to-vehicle communication in VANETs,” IEEE Trans.                   pp. 373–389, Feb. 2020.
+     Veh. Technol., vol. 70, no. 2, pp. 1278–1291, Feb. 2021.                       [31] J. Zhang, J. Cui, H. Zhong, Z. Chen, and L. Liu, “PA-CRT: Chinese
+[13] P. Kumar and V. Sharma, “On the security of certificateless aggregate               remainder theorem based conditional privacy-preserving authentication
+     signature scheme in vehicular ad hoc networks,” in Soft Comput-                     scheme in vehicular ad-hoc networks,” IEEE Trans. Dependable Secure
+     ing: Theories and Applications. Cham, Switzerland: Springer, 2018,                  Comput., vol. 18, no. 2, pp. 722–735, Mar. 2021.
+     pp. 715–722.                                                                   [32] Q. Tao, X. Cui, H. Ding, Z. Shen, and Y. Li, “ELSP-MA: An efficient
+[14] I. A. Kamil and S. O. Ogundoyin, “On the security of privacy-                       lightweight and security-enhanced privacy-preserving message authenti-
+     preserving authentication scheme with full aggregation in vehicular ad              cation scheme for VANETs,” IEEE Trans. Veh. Technol., vol. 74, no. 10,
+     hoc network,” Secur. Privacy, vol. 3, no. 3, pp. 1–20, May 2020.                    pp. 16055–16064, Oct. 2025.
+[15] Y. Zhou, Z. Wang, Z. Qiao, B. Yang, and M. Zhang, “An efficient                [33] Z. Xia, J. Wu, L. Wu, Y. Chen, J. Yang, and P. S. Yu, “A comprehensive
+     and provably secure identity authentication scheme for VANET,” IEEE                 survey of the key technologies and challenges surrounding vehicular
+     Internet Things J., vol. 10, no. 19, pp. 17170–17183, Oct. 2023.                    ad hoc networks,” ACM Trans. Intell. Syst. Technol., vol. 12, no. 4,
+[16] A. Shamir, “Identity-based cryptosystems and signature schemes,” in                 pp. 1–30, Jun. 2021.
+     Advances in Cryptology (CRYPTO 1984). Cham, Switzerland: Springer,             [34] S. Bartoletti et al., “Positioning and sensing for vehicular safety appli-
+     1985, pp. 47–53.                                                                    cations in 5G and beyond,” IEEE Commun. Mag., vol. 59, no. 11,
+[17] J. Cui, J. Zhang, H. Zhong, and Y. Xu, “SPACF: A secure privacy-                    pp. 15–21, Nov. 2021.
+     preserving authentication scheme for VANET with cuckoo filter,” IEEE           [35] P. David and S. Jacques, “Security arguments for digital signatures and
+     Trans. Veh. Technol., vol. 66, no. 11, pp. 10283–10295, Nov. 2017.                  blind signatures,” J. Cryptol., vol. 13, pp. 361–396, Jan. 2000.
+[18] C. Wang, Z. Dai, D. Zhao, and F. Wang, “A novel identity-based                 [36] A. De Caro and V. Iovino, “JPBC: Java pairing based cryptography,” in
+     authentication scheme for IoV security,” Int. J. Netw. Secur., vol. 22,             Proc. IEEE Symp. Comput. Commun. (ISCC), Jun. 2011, pp. 850–855.
+     pp. 627–637, Jun. 2020.
+[19] X. Huang, W. Susilo, Y. Mu, and F. Zhang, “On the security of
+     certificateless signature schemes from asiacrypt 2003,” in Proc. Cryptol.
+     Netw. Security: 4th Int. Conf., Xiamen, China, Dec. 2005, pp. 13–25.
+[20] Y.-C. Chen, R. Tso, M. Mambo, K. Huang, and G. Horng,                                                    Qi Tao received the Ph.D. degree from the School of
+     “Certificateless aggregate signature with efficient verification,” Secur.                                Cyber Science and Engineering, Wuhan University,
+     Commun. Netw., vol. 8, no. 13, pp. 2232–2243, Sep. 2015.                                                 in 2021. He is currently a Lecturer with South China
+[21] H. Shen, J. Chen, J. Shen, and D. He, “Cryptanalysis of a certificateless                                Normal University. His research interests include
+     aggregate signature scheme with efficient verification,” Secur. Commun.                                  data governance and security, blockchain technol-
+     Netw., vol. 9, no. 13, pp. 2217–2221, Sep. 2016.                                                         ogy, cloud computing, and food safety.
+[22] P. Kumar, S. Kumari, V. Sharma, X. Li, A. K. Sangaiah, and S. H. Islam,
+     “Secure CLS and CL-AS schemes designed for VANETs,” J. Supercom-
+     put., vol. 75, no. 6, pp. 3076–3098, Jun. 2019.
+[23] H. Zhong, S. Han, J. Cui, J. Zhang, and Y. Xu, “Privacy-preserving
+     authentication scheme with full aggregation in VANET,” Inf. Sci.,
+     vol. 476, pp. 211–221, Jan. 2018.
+[24] J. Cui, J. Zhang, H. Zhong, R. Shi, and Y. Xu, “An efficient certificateless
+     aggregate signature without pairings for vehicular ad hoc networks,” Inf.
+     Sci., vols. 451–452, pp. 1–15, Jul. 2018.
+[25] H. Du, Q. Wen, and S. Zhang, “An efficient certificateless aggregate sig-
+     nature scheme without pairings for healthcare wireless sensor network,”
+     IEEE Access, vol. 7, pp. 42683–42693, 2019.
+[26] G. K. Verma, B. B. Singh, N. Kumar, and V. Chamola, “CB-CAS:                                             Xiaohui Cui (Senior Member, IEEE) received the
+     Certificate-based efficient signature scheme with compact aggregation                                    Ph.D. degree in computer science and engineering
+     for industrial Internet of Things environment,” IEEE Internet Things J.,                                 from the University of Louisville, USA, in 2004.
+     vol. 7, no. 4, pp. 2563–2572, Apr. 2020.                                                                 He is currently a Professor with the School of Cyber
+[27] J. Cheng, G. Yuan, M. Zhou, S. Gao, C. Liu, and H. Duan, “A fluid                                        Science and Engineering, Wuhan University. He is
+     mechanics-based data flow model to estimate VANET capacity,” IEEE                                        the Chief Scientist of the National Key Research and
+     Trans. Intell. Transp. Syst., vol. 21, no. 6, pp. 2603–2614, Jun. 2020.                                  Development Program of China. His main research
+[28] Q. Tao, H. Ding, T. Jiang, and X. Cui, “B-DSPA: A blockchain-                                            interests include big data, cluster intelligence theory,
+     based dynamically scalable privacy-preserving authentication scheme in                                   blockchain technology, and high-performance com-
+     vehicular ad hoc networks,” IEEE Internet Things J., vol. 11, no. 1,                                     puting.
+     pp. 1385–1397, Jan. 2024.
+
+
+
+
+Authorized licensed use limited to: Universita degli Studi di Napoli Federico II. Downloaded on August 11,2026 at 11:34:30 UTC from IEEE Xplore. Restrictions apply.
+

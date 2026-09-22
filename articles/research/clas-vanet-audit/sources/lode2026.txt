@@ -1,0 +1,1660 @@
+                                                            Computers and Electrical Engineering 135 (2026) 111174
+
+
+                                                                      Contents lists available at ScienceDirect
+
+
+                                                   Computers and Electrical Engineering
+                                                     journal homepage: www.elsevier.com/locate/compeleceng
+
+
+
+
+A comprehensive review of ECC-based certificateless aggregate
+signature for Vehicular Ad-Hoc Networks (VANETs) and
+cryptanalysis of quantum-secure CLAS
+Vijaya Lode ∗, Anil Pinapati
+Department of Computer Science and Engineering, National Institute of Technology Calicut, Kerala, India
+
+
+
+ARTICLE                    INFO                                     ABSTRACT
+
+Keywords:                                                           Vehicular Ad Hoc Networks (VANETs) are one of the essential and exciting types of ad
+Authentication                                                      hoc networks in the present intelligent transportation systems where the group of vehicles
+Security & privacy                                                  communicate to ensure vehicular safety and improve the standard of living for those who
+Vulnerabilities
+                                                                    drive. While in communication, VANETs are vulnerable to privacy and security attacks. To
+VANETs
+                                                                    provide authenticity in VANETs, signed messages are verified by road side units. If the number
+CLAS
+ECC
+                                                                    of messages increases, it will increase the time to verify every message. To minimize the
+                                                                    computational overhead in VANETs and to verify each signature, it is enough to verify a single
+                                                                    signature called aggregate signature. This paper provides a critical survey on different ways
+                                                                    of computing pairing-free certificateless aggregate signature (CLAS) based on Elliptic Curve
+                                                                    Cryptography(ECC). A CLAS scheme is a digital signature that combines multiple signatures
+                                                                    from different messages coming from different vehicles into one single short signature to keep
+                                                                    the signature verification process at a low cost and to reduce the signature size. This paper
+                                                                    focuses on the thorough overview of ECC-based CLAS schemes, we also continue our work by
+                                                                    performing a rigorous security analysis of a recent quantum-secure CLAS scheme and exposing
+                                                                    a crucial weakness in it.
+
+
+Contents
+
+  1.      Introduction ..............................................................................................................................................................................   2
+  2.      Aggregate signature fundamentals ...............................................................................................................................................              3
+  3.      Preliminaries ............................................................................................................................................................................    4
+           3.1.   ECC...............................................................................................................................................................................    4
+           3.2.   Computational hardness assumptions ...............................................................................................................................                    4
+           3.3.   CLAS scheme in VANETs.................................................................................................................................................                5
+           3.4.   Security model for CLAS in VANETs ................................................................................................................................                    5
+                   3.4.1.     Game-1: ..........................................................................................................................................................        6
+                   3.4.2.     Game-2: ..........................................................................................................................................................        6
+                   3.4.3.     Game-3: ..........................................................................................................................................................        6
+           3.5.   Security requirements for CLAS scheme ..........................................................................................................................                      7
+  4.      Literature review .......................................................................................................................................................................     7
+           4.1.   Overview of technology evaluation ..................................................................................................................................                  7
+           4.2.   Foundational CLAS constructions .....................................................................................................................................                 8
+
+
+
+  ∗ Corresponding author.
+       E-mail addresses: vijaya_p220102cs@nitc.ac.in (V. Lode), anilpinapti@nitc.ac.in (A. Pinapati).
+
+https://doi.org/10.1016/j.compeleceng.2026.111174
+Received 15 December 2025; Received in revised form 23 February 2026; Accepted 7 April 2026
+Available online 13 April 2026
+0045-7906/© 2026 Elsevier Ltd. All rights are reserved, including those for text and data mining, AI training, and similar technologies.
+V. Lode and A. Pinapati                                                                                                            Computers and Electrical Engineering 135 (2026) 111174
+
+        4.3.    Recurring vulnerability cycle: Attack taxonomy ................................................................................................................ 8
+                 4.3.1.     Type-I and type-II adversary attacks .................................................................................................................. 8
+                 4.3.2.     Coalition attacks .............................................................................................................................................. 8
+                 4.3.3.     Malicious-but-passive KGC attacks ..................................................................................................................... 8
+                 4.3.4.     Public key replacement and universal attacks ..................................................................................................... 8
+                 4.3.5.     Fully Chosen-Key attacks .................................................................................................................................. 9
+                 4.3.6.     Critical observations ......................................................................................................................................... 9
+        4.4.    Application specific adaptations....................................................................................................................................... 9
+        4.5.    The pairing computation bottleneck ................................................................................................................................. 9
+                 4.5.1.     Summary and research gaps .............................................................................................................................. 9
+        4.6.    Attacks proposed on CLAS schemes - a mathematical study .............................................................................................. 10
+                 4.6.1.     Malicious-but-passive KGC attack....................................................................................................................... 10
+                 4.6.2.     Honest but curious KGC attack .......................................................................................................................... 10
+                 4.6.3.     Public key replacement attack ........................................................................................................................... 11
+        4.7.    Forgery attack................................................................................................................................................................ 11
+                 4.7.1.     Collusion attack ............................................................................................................................................... 11
+        4.8.    Signature swapping or coalition attack ............................................................................................................................. 11
+                 4.8.1.     Message injection attack ................................................................................................................................... 11
+  5.    Cryptanalysis of Huang et al. [10] quantum-secure certificateless aggregate signature scheme ........................................................ 12
+        5.1.    Cancellation attack on Huang et al. [10] aggregate signatures ........................................................................................... 12
+        5.2.    Attack intuition .............................................................................................................................................................. 12
+        5.3.    Attack description .......................................................................................................................................................... 13
+        5.4.    Why the attack succeeds ................................................................................................................................................. 13
+        5.5.    Consequences................................................................................................................................................................. 13
+        5.6.    Mitigation...................................................................................................................................................................... 13
+        5.7.    Detailed literature of ECC based CLAS schemes in VANETs................................................................................................ 13
+  6.    Security and performance analysis .............................................................................................................................................. 18
+        6.1.    Security analysis ............................................................................................................................................................ 18
+        6.2.    Performance analysis ...................................................................................................................................................... 18
+  7.    Challenges and future research directions .................................................................................................................................... 18
+        7.1.    Current challenges in existing methods ............................................................................................................................ 19
+        7.2.    Future research directions ............................................................................................................................................... 19
+  8.    Conclusion ................................................................................................................................................................................ 20
+        Declaration of generation AI and AI-supportive technologies in writing .......................................................................................... 20
+        Declaration of competing interest ................................................................................................................................................ 20
+        Data availability ........................................................................................................................................................................ 20
+        References................................................................................................................................................................................. 20
+
+
+
+
+1. Introduction
+
+    Vehicular Ad-hoc Networks (VANETs) signify a groundbreaking advancement in Intelligent Transportation Systems (ITS),
+facilitating instantaneous communication between vehicles and roadside infrastructure. Utilizing Vehicle-to-Vehicle (V2V) and
+Vehicle-to-Infrastructure (V2I) communication paradigms, VANETs enable the sharing of safety-critical information, traffic con-
+ditions, and environmental data, which significantly enhance road safety and traffic efficiency. The fundamental architecture of
+VANETs, as shown in Fig. 1, comprises three primary entities: a Trusted Authority (TA) responsible for system initialization and
+management, includes two components Tracing Authority (TRA) to trace back malicious vehicles and Key Generation Center (KGC)
+to generate part of the keys to the vehicles. Road Side Units (RSUs) serving as communication intermediaries, and On-Board Units
+(OBUs) embedded within vehicles for data collection and dissemination [1]. These components communicate via wireless protocols
+such as IEEE 802.11p and cellular networks (3G/4G) [2,3], operating under the Dedicated Short-Range Communications (DSRC)
+standard [4].
+    However, the open wireless nature and high mobility characteristics of VANETs introduce significant security and privacy
+vulnerabilities. The network faces threats including message forgery, impersonation attacks, privacy breaches, and denial-of-service
+attempts. Simultaneously, VANETs demand stringent requirements: messages must be authenticated to ensure integrity, yet vehicle
+privacy must be preserved to prevent tracking. Moreover, traffic safety applications demand real-time responsiveness, requiring
+ultra-low latency and high computational efficiency. Traditional Public Key Infrastructure (PKI) based solutions, while secure, impose
+substantial certificate management overhead that is unsuitable for the dynamic VANETs environment. Identity-Based Cryptography
+(IBC), suggested as a substitute, removes the need for certificates but faces the fundamental issue of key escrow, as KGC holds all
+private keys. Certificateless Public Key Cryptography (CL-PKC) was introduced by Al-Riyami et al. [5] elegantly resolves both issues
+by distributing key generation between the TA and users, eliminating both the certificate management burden and complete key
+escrow. To address the computational bottleneck of verifying numerous messages from multiple vehicles, Boneh et al. [6] introduced
+aggregate signatures, enabling a single signature that combines numerous signatures into a compact signature that is verifiable in
+
+                                                                                                 2
+V. Lode and A. Pinapati                                                                     Computers and Electrical Engineering 135 (2026) 111174
+
+
+
+
+                                                     Fig. 1. Architecture of VANETs.
+
+
+
+one operation. When combined with certificateless cryptography, Certificateless Aggregate Signature (CLAS) schemes offer an ideal
+solution for VANETs, providing privacy-preserving authentication with efficient batch verification.
+   Among various mathematical foundations for CLAS schemes, Elliptic Curve Cryptography (ECC) has emerged as particularly
+promising for resource-constrained vehicular environments. Compared to RSA and bilinear pairing-based approaches, ECC provides
+comparable security levels while utilizing much smaller key sizes and reduced computational complexity. For example, a 256-bit
+ECC key is as safe as a 3072-bit RSA key [7,8], resulting in faster signing and verification operations, lower bandwidth consumption,
+and reduced storage requirements—critical factors for OBUs with limited processing power and memory [9].
+   Within last ten years many pairing-free ECC-based CLAS schemes have been suggested in terms of computational efficiency.
+However most of these schemes subsequently found to be insecure by other researchers who demonstrated concrete attacks and
+proposed improved schemes, creating recurring cycle of cryptanalysis and improvement. Despite this, no comprehensive survey
+exists that consolidates these findings and systematically evaluates all existing pairing-free ECC-based CLAS schemes under a unified
+security framework. This motivates our work to perform rigorous mathematical cryptanalysis on each scheme, find areas of weakness,
+and provide a concise taxonomy of attacks to be use in the future. The key contributions of our paper as follows.
+
+    • Survey of pairing-based CLAS schemes, categorized according to the recurring security attacks they are susceptible to, such as
+      public key replacement attack, forgery attack, etc in the literature.
+    • Comprehensive description and evidence-based analysis of known attacks.
+    • New vulnerability (Cancellation Attack) discovered in a recent quantum-secure CLAS scheme [10].
+    • Significant contrast of ECC-based CLAS schemes (contributions, strengths, limitations).
+    • Full-fledged performance measurement in terms of computational complexity and security.
+
+   Organization: The remainder of this paper is organized as follows: Section 2 provides the fundamentals of aggregate signatures.
+Section 3 presents preliminary concepts and security requirements. Section 4 provides related work and a detailed survey on ECC-
+based CLAS schemes. Section 5 presents analysis of quantum-secure CLAS, Section 6 provides comparative security and performance
+analysis. Section 7 addresses challenges and future directions. Finally, the conclusion is outlined in Section 8.
+
+2. Aggregate signature fundamentals
+
+     In this section, we will discuss aggregate signatures and the different types of aggregate signatures in detail. An aggregate
+signature is composed of four algorithms: Key-Gen, Sign, Combine, and Verify. The initial two are similar to the basic digital signature
+concept. An 𝑛 tuple vector with triples serves as input to the algorithm Combine, which is composed of a message (𝑚𝑖 ), a signature
+(𝜎𝑖 ), and a public key (𝑝𝑘𝑖 ). A single signature 𝜎𝑖 is produced by the Sign process, and it acts as a signature for each of the messages
+that are provided. 𝜎 is referred to as an aggregate signature, and it should be the same length as signature on one message. Lastly,
+a vector of 𝑛 pairs (𝑝𝑘𝑖 , 𝑚𝑖 ) and aggregate signature 𝜎 are given as input to the algorithm Verify. Finally, it will produce the output
+valid, only if 𝜎 is the aggregate signature of the 𝑛 valid signatures; otherwise, the output is invalid.
+     Combine algorithm is used to combine numerous message signatures from various signers into a single, brief signature, as shown
+in Fig. 2. Anyone can verify, using the aggregate signature, that each individual signer correctly signed their respective message
+using their own public key. Anyone can do this aggregation, and no secret keys are needed. All the public keys and original messages
+must be required to verify the aggregated signature [11].
+
+                                                                    3
+V. Lode and A. Pinapati                                                                         Computers and Electrical Engineering 135 (2026) 111174
+
+
+
+
+                                                          Fig. 2. Aggregate Signature.
+
+
+
+    Aggregate signature methods come in three varieties: multi-signatures, non-sequential signatures, and sequential aggregate
+signatures. In multi-signature schemes, each participant 𝑈𝑖 contributes their signature 𝜎𝑖 to the same message 𝑀. All participants
+end up endorsing the identical message. A collection of signatures 𝜎𝑖 and public keys 𝑝𝑘𝑖 can be aggregated by a third party to
+produce the final signature (𝜎) ← Mulsig(𝜎𝑖 , 𝑝𝑘𝑖 , 𝑀) which is then transmitted to a verifier. Subsequently, the verifier employs 𝜎
+along with the pairs (𝑝𝑘𝑖 , 𝑀) to assess the legitimacy of 𝜎 for 𝑖 signers utilizing 𝑝𝑘𝑖 and the message 𝑀.
+    In non-sequential aggregate signature schemes, 𝜎𝑖 represents the signature generated by each user 𝑈𝑖 as they sign a distinct
+message 𝑀𝑖 with their private key 𝑠𝑘𝑖 . Any outside group, such as an aggregating party or a user, combines public keys with a set
+of signatures 𝜎𝑖 to make the final unified signature 𝜎 ← Aggregate(𝜎𝑖 , 𝑝𝑘𝑖 , 𝑀𝑖 ). After that, a verifier uses 𝜎 and the pairs (𝑝𝑘𝑖 , 𝑀𝑖 )
+to check if 𝜎 is legitimate or not. The non-sequential aggregate signature schemes are the independent combination of the group of
+messages, signature and the public keys with reference to the sequence of the parties involved. In sequential aggregate signatures,
+aggregation happens when each signer gets an aggregate-so-far signature and adds it to their own signature [12].
+
+3. Preliminaries
+
+   This section presents the fundamental principles of ECC, outlines the security and privacy needs for VANETs, and discusses the
+CLAS scheme within the context of VANETs.
+
+3.1. ECC
+
+    ECC has emerged as a robust cryptographic technique that offers safe data protection and transmission in a variety of fields. A
+strong foundation for key exchange, digital signatures, and encryption is provided by ECC.
+    The fundamental concept of ECC lies in the mathematical properties of elliptic curves defined over finite fields. The mathematical
+operations of ECC define the elliptic curve.
+
+        𝑦2 = 𝑥3 + 𝑎𝑥 + 𝑏                                                                                                                         (1)
+
+where 4𝑎3 + 27𝑏2 ≠ 0, each set of numbers ‘‘a’’ and ‘‘b’’ produces a different elliptic curve. Together with a point at infinity(O), the
+elliptic curve consists of all points (𝑥, 𝑦) that satisfy the Eq. (1), where the private key is a random number, and the public key is a
+point of the curve. In order to derive the public key, multiply the private key with the generator point 𝑃 of the curve defined over
+the group 𝐺 [13].
+    𝐸(𝑎,𝑏) (𝐹𝑞 ) is a group if 𝐹𝑞 is a field and 𝐸(𝑎,𝑏) is an elliptic curve. Where elliptic curve 𝐸(𝑎,𝑏) over the field 𝐹𝑞 as 𝐸(𝑎,𝑏) (𝐹𝑞 ). This
+curve shows the set of points on 𝐸(𝑎,𝑏) and the single addition operation specified for 𝐸(𝑎,𝑏) (𝐹𝑞 ). It is therefore impossible to divide
+or multiply any point in 𝐸(𝑎,𝑏) (𝐹𝑞 ). The most straightforward and time-consuming operation in the ECC is scalar multiplication,
+i.e. 𝑘𝑃 = 𝑃 + 𝑃 + ⋯ + 𝑃 . For each integer 𝑘, 𝑃 is a point defined on the elliptic curve 𝐸(𝑎,𝑏) over the field 𝐹𝑞 .
+
+3.2. Computational hardness assumptions
+
+  ECC relies on several fundamental computational hardness assumptions to guarantee its security. These assumptions are the
+mathematical foundation for ECC-based cryptographic algorithms and are outlined as follows.
+
+                                                                       4
+V. Lode and A. Pinapati                                                                        Computers and Electrical Engineering 135 (2026) 111174
+
+    • Elliptic Curve Discrete Logarithm Problem (ECDLP): Security of ECC is based on the intractability of the discrete logarithm
+      on elliptic curves. A point on the curve, e.g. a point 𝑃 = 𝑘𝐺, where 𝐺 is a known point and 𝑘 is an unknown scalar, is
+      computationally infeasible to compute 𝑘 given (𝑃 , 𝐺). The inability to efficiently solve this problem provides the basis for
+      ECC’s cryptographic strength.
+    • Elliptic Curve Computational Diffie–Hellman Problem (ECCDH): Let 𝐸 is an elliptic curve over a finite field, and that G is a base
+      point of elliptic curve 𝐸. Two users select private keys 𝑎 and 𝑏, and compute their respective public keys as 𝑃 = 𝑎𝐺 and
+      𝑄 = 𝑏𝐺. ECCDH assumption states that, given (𝐺, 𝑃 , 𝑄), it is hard to compute the shared secret 𝑆 = 𝑎𝑏𝐺 [14].
+    • Elliptic Curve Decisional Diffie–Hellman Problem (ECDDH): Given an elliptic curve 𝐸, a generator point 𝐺, and three points
+      𝐴 = 𝑎𝐺, 𝐵 = 𝑏𝐺, and 𝐶 = 𝑐𝐺, determine whether 𝐶 = 𝑎𝑏𝐺. In other words, the task is to decide whether the tuple (𝐺, 𝐴, 𝐵, 𝐶)
+      represents a valid Diffie–Hellman tuple. This problem is computationally hard and closely related to the ECCDH.
+
+3.3. CLAS scheme in VANETs
+
+   In the following section, we present a generalized overview of the CLAS framework, consolidating the core design principles
+and components discussed across the reviewed papers. In VANETs, the CLAS scheme typically consists of eight algorithms: Setup,
+PseudoIdGen, PartialPrivatekeyGen, VehicleKeyGen, Sign, Verify, AggregateSign, and AggregateVerify.
+
+    • Setup(1𝑘 → 𝑃𝑝𝑢𝑏 , 𝑠, params): In this section TA handles the system initiation, it consists of two basic parts that are mutually
+      exclusive: TRA and KGC, will execute this algorithm with security parameter 1𝑘 to produce a master public key 𝑃𝑝𝑢𝑏 , master
+      secret key 𝑠, and public params.
+    • PseudoIdGen: This algorithm will run by TRA, it will take the vehicle registration id: 𝑅𝐼𝐷𝑖 as an input and outputs the vehicle’s
+      pseudo id: 𝑃 𝐼𝐷𝑖 .
+    • PartialPrivatekeyGen: KGC will run this algorithm by giving 𝑃 𝐼𝐷𝑖 and params as input and generates the partial private key
+      of vehicle 𝑝𝑠𝑘𝑝𝑖𝑑𝑖 .
+    • VehicleKeyGen: The vehicle takes the 𝑃 𝐼𝐷𝑖 and 𝑝𝑠𝑘𝑝𝑖𝑑𝑖 and generates its private key 𝑣𝑠𝑘𝑃 𝐼𝐷𝑖 and public key 𝑣𝑝𝑘𝑃 𝐼𝐷𝑖
+      respectively.
+    • Sign: The 𝑃 𝐼𝐷𝑖 , 𝑝𝑠𝑘𝑃 𝐼𝐷𝑖 , 𝑣𝑠𝑘𝑃 𝐼𝐷𝑖 , and the message 𝑀𝑖 are added to the vehicle input params. The signature 𝜎𝑖 on 𝑀𝑖 is
+      returned. In addition to a timestamp 𝑇𝑖 , the vehicle sends 𝜎𝑖 , 𝑀𝑖, 𝑃 𝐼𝐷𝑖 , 𝑣𝑝𝑘𝑃 𝐼𝐷𝑖 , 𝑇𝑖 to RSU.
+    • Verify: RSU takes 𝜎𝑖 , 𝑀𝑖 , 𝑃 𝐼𝐷𝑖 , 𝑣𝑝𝑘𝑃 𝐼𝐷𝑖 , and 𝑇𝑖 as the input and verifies the 𝜎𝑖 . RSU accepts if 𝜎𝑖 is valid ; Otherwise, reject.
+    • AggregateSign: After the verification of 𝜎𝑖 , The aggregator RSU collects individual signatures (𝜎1 , 𝜎2 , . . . , 𝜎𝑛 ) on messages (𝑀1 ,
+      𝑀2 , 𝑀3 , . . . , 𝑀𝑛 ) and outputs 𝜎 as an aggregate signature .
+    • AggregateVerify: Upon receiving the aggregate signature 𝜎 for different traffic-related messages then the RSU or the application
+      server verifies the 𝜎 by inputting 𝑛 vehicles public keys (𝑣𝑝𝑘𝑃 𝐼𝐷1 , 𝑣𝑝𝑘𝑃 𝐼𝐷2 , . . . , 𝑣𝑝𝑘𝑃 𝐼𝐷𝑛 ), the vehicles pseudonyms (𝑃 𝐼𝐷1 ,
+      𝑃 𝐼𝐷2 , . . . , 𝑃 𝐼𝐷𝑛 ), and the resulting aggregate signature 𝜎 of message set (𝑀1 , 𝑀2 , . . . , 𝑀𝑛 ). Finally, when such a signature
+      is valid, the aggregate verifier will accept it: otherwise the aggregate verifier rejects it.
+
+3.4. Security model for CLAS in VANETs
+
+   Generally three categories of Adversary Models are defined for CLAS schemes, 𝑇 𝑦𝑝𝑒-𝐼 𝐴𝑑𝑣𝑒𝑟𝑠𝑎𝑟𝑦(1 ), 𝑇 𝑦𝑝𝑒-𝐼𝐼 𝐴𝑑𝑣𝑒𝑟𝑠𝑎𝑟𝑦(2 ),
+and 𝑇 𝑦𝑝𝑒-𝐼𝐼𝐼 𝐴𝑑𝑣𝑒𝑟𝑠𝑎𝑟𝑦(3 ) based on the behavior of attackers.
+
+    1. Type-I Adversary(1 ): Models an external attacker who can replace public keys but does not have access to the master secret
+       key. Represents malicious users or outsiders.
+    2. Type-II Adversary(2 ): Models a malicious KGC who possesses the master secret key but cannot replace public keys. Represents
+       insider attacks.
+    3. Type-III Adversary(3 ): Represents a malicious insider capable of compromising 𝑛 vehicles to perform a collusion attack. By
+       obtaining both the partial private keys and full private keys of these vehicles, the adversary can forge 𝑛 signatures that pass
+       batch verification, even though some individual signatures are invalid.
+
+A CLAS scheme is considered secure whenever it meets the following properties:
+
+    1. Correctness: For any legitimately generated signatures, the Verify algorithm always outputs 1.
+    2. Existential Unforgeability under Adaptive Chosen Message Attack (EUF-CMA): There is no polynomial time adversary that can
+       construct a valid aggregate signature of a set of messages without at least having a single private key of the associated identity.
+
+   Taking this scenario into account, the adversary  can play the three games: Game 1, Game 2, and Game 3. In these games,
+ ∈ (1 , 2 , 3 ) has access to the following oracles:
+
+    • CreateUser: Once a pseudoid (𝑃 𝐼𝐷𝑖 ) is received, oracle gives 𝑣𝑝𝑘𝑃 𝐼𝐷𝑖 to .
+
+    • RevealPartialPrivateKey: Once pseudo id (𝑃 𝐼𝐷𝑖 ) has been received, oracle returns the corresponding 𝑝𝑠𝑘𝑃 𝐼𝐷𝑖 to .
+
+                                                                      5
+V. Lode and A. Pinapati                                                                                 Computers and Electrical Engineering 135 (2026) 111174
+
+    • RevealPrivateKey: Oracle returns the 𝑣𝑠𝑘𝑃 𝐼𝐷𝑖 to , Whenever it receives the vehicle pseudo id (𝑃 𝐼𝐷𝑖 ),
+
+    • ReplaceKey: Once a new public key 𝑣𝑝𝑘𝑃 𝐼𝐷∗ is received, which is chosen by  for a 𝑃 𝐼𝐷𝑖 oracle updates the vehicle 𝑣𝑝𝑘𝑃 𝐼𝐷𝑖
+                                               𝑖
+      by 𝑣𝑝𝑘𝑃 𝐼𝐷∗ .
+                   𝑖
+
+
+    • Sign: After receiving 𝑣𝑝𝑘𝑃 𝐼𝐷𝑖 , 𝑃 𝐼𝐷𝑖 , and 𝑀𝑖 ∈ {0, 1}∗ , 𝜎𝑖 of 𝑀𝑖 is given to  from the oracle.
+    • BatchVerification: The Adversary  returns a set of 𝑛 signature tuples {𝑀𝑖 , 𝑃 𝐼𝐷𝑖 , 𝑣𝑝𝑘𝑃 𝐼𝐷𝑖 , 𝜎𝑖 , 𝑡𝑖 }𝑛𝑖=1 to the challenger . The
+      challenger then performs batch verification on these signatures and returns the verification outcome to .
+
+3.4.1. Game-1:
+   The Challenger(𝐶), which is targeted at Type-I Adversary(1 ) will perform the following steps.
+
+    • Setup: After  executes a setup procedure, 𝑠 and parameters are generated using a security parameter 𝑘 these are sent to 1
+      by 𝐶, and 𝐶 keeps 𝑠 as a secret to itself.
+
+    • Query: The Type-I Adversary (1 ) is allowed to run CreateUser, RevealPartialPrivateKey, ReplaceKey, and sign oracles.
+
+    • Forgery: At last, 1 produces an aggregate signature denoted as 𝜎𝑖∗ on the message set (𝑀1∗ , 𝑀2∗ , 𝑀3∗ , . . . , 𝑀𝑛∗ ) corresponding
+      to target identities (𝑃 𝐼𝐷1∗ , 𝑃 𝐼𝐷2∗ , 𝑃 𝐼𝐷3∗ , . . . , 𝑃 𝐼𝐷𝑛∗ ) with public keys(𝑣𝑝𝑘𝑃 𝐼𝐷∗ , 𝑣𝑝𝑘𝑃 𝐼𝐷∗ , 𝑣𝑝𝑘𝑃 𝐼𝐷∗ , . . . , 𝑣𝑝𝑘𝑃 𝐼𝐷𝑛∗ ).
+                                                                                                  1          2           3
+
+
+    • In this case, the adversary 1 prevail the Game-1 if the following holds.
+
+    • 𝜎𝑛∗ is a valid signature over the set (𝑀1∗ , 𝑀2∗ , 𝑀3∗ , . . . , 𝑀𝑛∗ ) corresponding to target identities (𝑃 𝐼𝐷1∗ , 𝑃 𝐼𝐷2∗ , 𝑃 𝐼𝐷3∗ , . . . , 𝑃 𝐼𝐷𝑛∗ )
+      with public keys(𝑣𝑝𝑘𝑃 𝐼𝐷∗ , 𝑣𝑝𝑘𝑃 𝐼𝐷∗ , 𝑣𝑝𝑘𝑃 𝐼𝐷∗ , . . . , 𝑣𝑝𝑘𝑃 𝐼𝐷𝑛∗ ).
+                                   1           2          3
+
+
+    • The 𝑃 𝐼𝐷𝑖∗ has not been queried for the partial private key 𝑝𝑠𝑘𝑃 𝐼𝐷𝑖 in RevealPartialPrivateKey queries.
+
+    • Sign oracles are never queried with 𝑃 𝐼𝐷𝑖∗ and 𝑀 ∗ .
+
+   Closure-1 Assuming that 1 cannot prevail Game-1 with a non-negligible advantage with in the time bound of polynomial time,
+the CLAS scheme is resistant to 1 .
+
+3.4.2. Game-2:
+   Challenger 𝐶 deals with Type-II Adversary (2 ) and will execute the following steps.
+
+    • Setup: 𝐶 executes the setup algorithm 𝑠, which is executed with input 𝑘 to produce output params. Both are sent to 2 by 𝐶.
+
+    • Query: The 2 can run the CreateUser, RevealPrivateKey, ReplaceKey and sign oracles. The 2 no longer needs RevealPartialPri-
+      vateKey since it has access to 𝑠.
+
+    • Forgery: Finally, 2 outputs an aggregate signature 𝜎𝑖∗ on the messages set (𝑀1∗ , 𝑀2∗ , 𝑀3∗ , . . . , 𝑀𝑛∗ ) corresponding to target
+      identities (𝑃 𝐼𝐷1∗ , 𝑃 𝐼𝐷2∗ , 𝑃 𝐼𝐷3∗ , . . . , 𝑃 𝐼𝐷𝑛∗ ) with public keys(𝑣𝑝𝑘𝑃 𝐼𝐷∗ , 𝑣𝑝𝑘𝑃 𝐼𝐷∗ , 𝑣𝑝𝑘𝑃 𝐼𝐷∗ , . . . , 𝑣𝑝𝑘𝑃 𝐼𝐷𝑛∗ ).
+                                                                                       1          2           3
+
+
+    • In this case, 2 prevail the Game-2 if the following holds:
+
+    • 𝜎𝑛∗ is a valid signature over the set (𝑀1∗ , 𝑀2∗ , 𝑀3∗ , . . . , 𝑀𝑛∗ ) corresponding to target identities (𝑃 𝐼𝐷1∗ , 𝑃 𝐼𝐷2∗ , 𝑃 𝐼𝐷3∗ , . . . ,
+      𝑃 𝐼𝐷𝑛∗ )with public keys(𝑣𝑝𝑘𝑃 𝐼𝐷∗ , 𝑣𝑝𝑘𝑃 𝐼𝐷∗ , 𝑣𝑝𝑘𝑃 𝐼𝐷∗ , . . . , 𝑣𝑝𝑘𝑃 𝐼𝐷𝑛∗ ).
+                                           1          2          3
+
+
+    • During RevealPrivateKey queries, the 𝑃 𝐼𝐷𝑖∗ has not asked for the private key 𝑣𝑠𝑘𝑃 𝐼𝐷𝑖 .
+
+    • Sign oracles are never queried with 𝑃 𝐼𝐷𝑖∗ and 𝑀𝑖∗ .
+
+   Closure-2 CLAS scheme is secured against 2 if 2 is unable to prevail in Game-2 for polynomial time with a non-negligible
+advantage.
+
+3.4.3. Game-3:
+   Challenger  deals with Type-III Adversary 3 and will execute the following.
+
+    • Setup: The challenger  executes the setup procedure to generate params and sends to 3 .
+    • Query: 3 executes the following queries: RevealPartialPrivateKey, RevealPrivateKey, ReplaceKey, Sign and BatchVerification.
+    • Forge: 3 outputs 𝑛 signature tuples {𝑀𝑖 , 𝑃 𝐼𝐷𝑖 , 𝑣𝑝𝑘𝑃 𝐼𝐷𝑖 , 𝜎𝑖 , 𝑡𝑖 }𝑛𝑖=1 , 3 wins the Game-3 if below two conditions hold:
+
+           1. All 𝑛 signatures pass batch verification algorithm, and
+
+                                                                             6
+V. Lode and A. Pinapati                                                                 Computers and Electrical Engineering 135 (2026) 111174
+
+           2. At least one signature among them is not valid.
+
+   Closure-3 CLAS scheme is secure against 3 if 3 cannot win Game-3 for a polynomial amount of time with a significant
+advantage. A CLAS scheme is considered unbreakable under an adaptive selected message attack if no polynomial-time attackers,
+denoted as 1 , 2 , and 3 , possess significant advantages in Game-1, Game-2, and Game-3 respectively, as defined by the preceding
+Closure-1, Closure-2, and Closure-3.
+
+3.5. Security requirements for CLAS scheme
+
+    To achieve security and privacy in VANETs, the following fundamental requirements must be established [15,16].
+
+   1. Message Authentication(1 ): The receiver must verify that the messages and signatures received by other vehicles are not
+      modified in the network.
+   2. Identity Privacy Preserving(2 ): Only TA Knows the true identity of a vehicle, which is kept under wraps.
+   3. Traceability(3 ): In the event of a malevolent vehicle, TA can disclose the true identity of the vehicle.
+   4. Unlinkability(4 ): Two or more messages cannot be linked to the same vehicle. That is the adversary should not be able to
+      link two or more communications originating from the same vehicle.
+   5. Non-Repudiation (5 ): No entity can deny the signature on the message later.
+   6. Resistance to Replay attack(6 ): By checking the Timestamp 𝑡𝑖 , the verifier can address the replay attacks.
+   7. Resistance to Impersonation attack(7 ): The network must be able to identify the attacker who created the signature for the
+      message, if any vehicle in VANETs tries to impersonate as a legitimate vehicle.
+   8. Resistance to Man-in-the-middle attack(8 ): The network must be able to detect, if there is any modification of the messages
+      while in the transmission by a malicious vehicle.
+   9. Resistance to Collusion attacks(9 ): The algorithm must be secure against collusion, ensuring that multiple vehicles cannot
+      collaborate to forge a valid aggregate signature.
+  10. Resistance to Type-I Adversary(1 ): The scheme must remain secure even when an adversary 1 is unable to obtain the
+      system’s master key but can replace or modify a vehicle’s public key.
+  11. Resistance to Type-II Adversary(2 ): The scheme must remain secure even if an adversary 2 gains access to the system’s
+      master key but cannot obtain any vehicle’s private key.
+  12. Resistance to Type-III Adversary(3 ): Type-III adversary resistance has two orthogonal goals listed below.
+
+            • Resistance to Message injection attacks: The algorithm must ensure that no adversary can inject unauthorized messages
+              into the aggregate signature without being detected.
+            • Resistance to Signature swapping attacks: The algorithm must be secure against signature swapping, ensuring that valid
+              signatures cannot be rearranged or replaced within the aggregate signature without detection.
+
+4. Literature review
+
+4.1. Overview of technology evaluation
+
+    To solve the privacy and security issues that come with vehicular ad hoc networks, a variety of authentication techniques have
+been put forth. In traditional PKI, a Certificate Authority (CA) provides and maintains digital certificates for every vehicle, was
+adopted by early VANETs authentication techniques [1,17,18]. However, this method increased communication overhead because
+each message required a certificate to be transmitted, places a heavy management burden on the CA to handle millions of vehicle
+certificates, including issuance, renewal and revocation operations. Which requires huge memory to store significant amount of data
+and to maintain multiple certificates. The investigation of alternative cryptographic paradigms was spurred by these constraints.
+    To eliminate certificate management overhead, researchers investigated Identity-Based Public Key Cryptography (ID-PKC),
+introduced by shamir [19]. In ID-PKC frameworks, user’s public keys are derived directly from publicly available information,
+such as vehicle identification numbers or pseudonyms, thereby eliminating the need for certificates entirely. A trusted Private
+Key Generator(PKG) computes private keys for users based on their identities using a master secret key. While several ID-PKC-
+based authentication schemes have been proposed for VANETs, demonstrating reduced communication overhead and simplified key
+management, this approach suffers from an inherent key escrow problem. The PKG can compute any user’s private key, enabling
+impersonation or decryption of messages. For safety-critical vehicular applications where message authenticity directly impacts
+human lives, this centralized trust assumption is unacceptable. To simultaneously eliminate certificates and avoid key escrow, AI-
+Riyami et al. [5] introduced CL-PKC in 2003, distributing trust between a KGC and users through a novel key generation protocol.
+The KGC creates a partial private key based on each user’s identity and master secret, while users independently select secret values
+unknown to the KGC. Since complete private keys requires both parts, neither users nor the KGC can forge signature on behalf of
+others, making CL-PKC attractive for VANETs authentication by removing both certificate overhead and full key escrow. However,
+conventional certificateless signature schemes verify signatures individually, causing computational delays when vehicles and RSUs
+receive multiple simultaneous messages. To address this Boneh et al. [6] proposed aggregate signature in 2003, enabling multiple
+signatures to be combined and verified collectively. Building on this, Castro and Dahab [20] merged certificateless cryptography
+with aggregate signatures in 2007, introducing the first CLAS scheme-providing certificate free operation, reduced key escrow risks
+and efficient batch verification suited for VANETs.
+
+                                                                  7
+V. Lode and A. Pinapati                                                                      Computers and Electrical Engineering 135 (2026) 111174
+
+Table 1
+Comparative summary of pairing-based CLAS schemes.
+ Scheme                         Year              Known vulnerabilities                                  Verif. cost               Formal proof
+ Castro & Dahab [20]            2007              Flawed security reductions                             Linear                    Yes (broken)
+ Gong et al. [21]               2007              Type-I forgery [22]                                    Linear                    No
+ Zhang et al. [23]              2008              Coalition attacks, sync needed [24]                    Linear                    Yes
+ Zhang & Zhang [25]             2009              Redefined security model                               Linear                    Yes
+ Gong et al. [26]               2010              Linear overhead scaling                                Linear                    Yes
+ Zhang et al. [27]              2010              Sync required for aggregation                          Linear                    Yes
+ Xiong et al. [28]              2013              Type-II forgery [29,30]                                Constant                  Yes (broken)
+ He et al. [29]                 2014              Malicious KGC attacks [41]                             Constant                  Yes
+ Cheng et al. [37]              2015              Coalition attacks [36]                                 Linear                    Yes
+ Horng et al. [40]              2015              Malicious KGC attacks [38]                             Optimized                 Yes
+ Shen et al. [42]               2016              Universal attack demonstrated                          Linear                    No
+ Li et al. [41]                 2018              ECDH-based (improved)                                  Constant                  Yes
+ Kumar et al. [35]              2018              Type-II forgery [34]                                   Linear                    Yes (broken)
+ Cahyadi et al. [43]            2022              Public Key Replacement, KGC attacks [44]               Linear                    Yes (broken)
+ Li et al. [44]                 2025              Improved                                               Constant                  Yes
+
+
+
+
+4.2. Foundational CLAS constructions
+
+    Castro and Dahab [20] proposed the first practical CLAS construction with formal security proofs, though they later identified
+flaws in their security reductions. At the same time Gong et al. [21] introduced a pairing based CLAS scheme without formal
+demonstrations, which was demonstrated to be susceptible to Type-I adversaries [22]. In 2008 Zhang et al. [23] proposed one more
+CLAS construction which, however, was refined by shim [24] in 2011 and demonstrated that it required clock synchronization
+also susceptible to coalition attacks. In 2009 Zhang and Zhang [25] re-defined the CLAS security model and developed a
+more stringent analytical model. A practical bilinear-map construction was then followed by Gong et al. [26] in 2010, but at
+linearly scaling overhead. Zhang et al. [27] during 2010–2011 introduced a scheme targeting many-to-one-authentication, but still
+required synchronization for randomness aggregation. A significant milestone came from Xiong et al. [28], achieving constant-
+time verification with a fixed number of pairing operations regardless of aggregate signatures, without requiring synchronized
+randomness. However, as detailed below, this and most other foundational constructions were subsequently found to critical security
+vulnerabilities.
+
+4.3. Recurring vulnerability cycle: Attack taxonomy
+
+   A defining characteristic of the CLAS literature is a persistent cycle of proposal, cryptanalysis, and attempted improvement. We
+categorize these vulnerabilities by attack type to reveal systematic patterns.
+
+4.3.1. Type-I and type-II adversary attacks
+    In standard CLAS security models, Type-I adversaries are external attackers who can replace public keys but lack the master
+secret, while Type-II adversaries represent a malicious KGC possessing the master secret. He et al. [29] sowed in 2014 that Xiong
+et al.’s [28] efficient scheme was insecure against Type-II adversaries. Tu et al. [30] independently demonstrated systematic Type-
+II forgery vectors and proposed improvements. Zhang et al. [31] contributed comprehensive analysis frameworks. Earlier Xiong
+et al. [32,33] attempted to enhance security for mobile environments(2011–2012) also proved vulnerable under subsequent analysis.
+Zhan and Wang [34] showed in 2019 that kumar et al.’s [35] health-care focused scheme similarly allowed for Type-II forgery.
+
+4.3.2. Coalition attacks
+   Coalition attacks involve legitimate signers colluding to forge aggregate signatures on behalf of non-participants. Shim [24] first
+identified this in Zhang et al.’s [23] scheme. Yang et al. [36] in 2018 proved that Cheng et al.’s [37] improved scheme is vulnerable,
+demonstrating that coalition resistance requires explicit design considerations frequently overlooked in CLAS constructions.
+
+4.3.3. Malicious-but-passive KGC attacks
+     A more subtle model of threat is that, the KGC deviating from key generation protocols in undetectable ways. Li et al. [38] showed
+that the privacy preservation and batch verification scheme [39] of the VANETs and the scheme proposed by Horng et al. [40] failed
+to resist such attacks in 2016. In 2018, Li, Yuan and Zhang [41] group showed that even a refined scheme by He et al. [29] was
+still insecure, and they came up with a new construction using ECCDH.
+
+4.3.4. Public key replacement and universal attacks
+   Shen et al. [42] developed a universal attack in 2016, proving adversaries could generate valid signatures without any user’s
+secret information. Cahyadi et al.’s 2022 [43] CLAS construction was found vulnerable to public key replacement and malicious
+KGC attacks, with Li et al. [44] in 2025 revealing the vulnerabilities and proposing improvements.
+
+                                                                    8
+V. Lode and A. Pinapati                                                                     Computers and Electrical Engineering 135 (2026) 111174
+
+4.3.5. Fully Chosen-Key attacks
+   Wang et al. [45] introduced a paradigm-shifting threat model in 2019: fully chosen-key attacks, where adversaries possess all
+signer’s private keys but produce invalid individual signatures that aggregate into valid composites. Their analysis revealed that no
+existing pairing-based CLAS scheme secure under traditional models could withstand these attacks, fundamentally challenging the
+security foundations of the entire class of pairing-based constructions.
+
+4.3.6. Critical observations
+   The recurring vulnerability pattern reveals systematic issues: schemes built on similar bilinear pairing foundations share common
+algebraic weakness; progressively sophisticated adversary models consistently outpace existing security guarantees and proposed
+improvements frequently address specific attacks without achieving comprehensive security, continuing the break-and-fix cycle.
+
+4.4. Application specific adaptations
+
+   A number of CLAS schemes have been constructed for specific domains. Horng et al. [40] focused on VANETs using privacy
+preservation, batch verification; Kumar et al. [35] scaled CLAS to healthcare IoT; Xu et al. [46] considered secure routing in resource
+constrained VANETs using the ECCDH assumption. More recently, Nyangaresi et al. [47] constructed more powerful authentication
+protocols, Li et al. [48] suggested certificateless signcryption with non-repudiation property, and Zhang et al. [49] combined with
+pairings with fuzzy extraction methods. Nevertheless, domain-specific properties could never pay off in overcoming underlying
+cryptographic flaws: Li et al. [38] defeated Horng et al. [40], Zhan and Wang [34], Kumar et al. [35] and Cahayadi et al. [43]
+defeated by Li et al. [44] shows that domain-specific adaptations are never able to replace fundamentally secure cryptographic
+primitives.
+
+4.5. The pairing computation bottleneck
+
+   In addition to security vulnerabilities, there is a common performance limitation of all pairing-based CLAS schemes. Bilinear
+pairing operations are computationally intensive when compared to basic elliptic curve operations such as scalar multiplication and
+point addition. Xu et al. [46] noted that most existing schemes suffer from either security vulnerabilities or excessive computational
+costs. This overhead is especially prohibitive in resource constrained settings such as IoT devices, mobile systems and vehicular OBUs
+with limited processing power and energy. Even Xiong et al.’s [28] constant-time verification scheme required pairing operations
+whose absolute cost remained impractical for time-critical applications.
+
+4.5.1. Summary and research gaps
+    Table 1 provides a comparative study of the pairing-based CLAS schemes, categorized by their known vulnerabilities, verification
+cost and whether formal security proofs were provided. The table highlights the persistent pattern of the security failures across the
+literature. The literature reveals three critical gaps: (i) pairing-based CLAS constructions continue to fall to increasingly sophisticated
+attacks, with Wang et al. [45] proving no existing scheme is can withstand fully-chosen key attacks; (ii) bilinear pairing overhead
+cannot be tolerated within real-time vehicular performance specifications; and (iii) application-specific adaptations are not able to
+absorb underlying cryptographic weaknesses.
+    These gaps collectively motivate the pairing-free CLAS schemes that rely solely on ECC. By using scalar multiplication instead of
+bilinear pairings achieve both provable security against comprehensive adversary models and computational efficiency suitable for
+environments with limited resources, including VANETs, IoT systems, and mobile edge computing. For example, J Cui et al. [50]
+proposed a pairing-free CLAS scheme tailored for VANETs, thereby obviating the necessity for bilinear pairings and map-to-point
+hash functions. Gayathri et al. [51] put forward a pairing-free CLAS scheme for healthcare wireless medical sensor networks that
+allows for anonymous authentication while greatly lowering the computational overhead. J Liu et al. [52] introduced an enhanced
+pairing-free CLAS scheme that mitigates security vulnerabilities found in prior healthcare schemes while preserving computational
+efficiency. Later, Thumbur et al. [53] created an efficient and most secure pairing-free CLAS-scheme for VANETs which is provably
+secure based on ECCDH. Since then, many pairing-free CLAS schemes have been published in the literature, each meeting different
+security needs and use cases. The literature survey section will provide a comprehensive review of these plans and compare them
+with one another. But our review is restricted to ECC based CLAS schemes for vehicular ad-hoc networks.
+    The research direction was initiated for VANETs in 2018 through the work of J Cui et al. [50], who proposed the first
+elliptic curve-based CLAS scheme that eliminates the computational overhead of bilinear pairings. These foundational contributions
+opened new avenues for efficiency-oriented cryptographic design, prompting substantial research activity that has yielded numerous
+improved and specialized ECC-based CLAS schemes. The subsequent evolution of this domain has been characterized by diverse
+research objectives, including enhanced security models addressing sophisticated adversarial scenarios, optimization strategies
+targeting resource-constrained environments, and domain-specific adaptations. Researchers have pursued multiple evolutionary
+paths, with some focusing on cryptanalysis and security enhancements of existing schemes, while others have explored novel
+construction methodologies and optimized implementations for specific deployment contexts. To provide a holistic understanding
+of this rapidly evolving field, we present a comprehensive comparative study of existing schemes, examining their structural design
+principles, systematically analyzing their security models, cryptographic assumptions, computational complexity, performance
+characteristics, and practical applicability across different deployment scenarios. By concentrating on pairing-free constructions,
+this review addresses the most promising direction for practical VANETs authentication, providing a comprehensive understanding
+of current capabilities, limitations, and future research opportunities in this critical domain.
+
+                                                                    9
+V. Lode and A. Pinapati                                                                          Computers and Electrical Engineering 135 (2026) 111174
+
+                          Table 2
+                          Common notations used for attack analysis.
+                           Symbol                                  Definition
+                           𝑃                                       Generator Point of the Elliptic Curve Group 𝐺 over 𝐹𝑞
+                           𝛼                                       Master secret key of KGC
+                           𝑃𝑝𝑢𝑏 = 𝛼𝑃                               Public key of KGC
+                           𝐼𝐷𝑖                                     Identity of user i
+                           𝑝𝑠𝑘𝑖                                    Partial private key generated by KGC for user 𝑖
+                           𝑥𝑖 ∕𝑠𝑘𝑖                                 User 𝑖’s secret value
+                           𝑃 𝐾𝑖                                    User 𝑖’s public key
+                           𝐷𝑖 = 𝑝𝑠𝑘𝑖 𝑃                             Partial public key component of user 𝑖
+                           𝐻1 , 𝐻2                                 Cryptographic hash functions
+                           𝑟𝑖                                      Random nonce chosen by user 𝑖
+                           𝑅𝑖 = 𝑟𝑖 𝑃                               Ephemeral public value of user 𝑖
+
+
+
+
+                                                          Fig. 3. AttackTaxonomy.
+
+
+
+4.6. Attacks proposed on CLAS schemes - a mathematical study
+
+    Section 4.3 identified recurring attack categories across pairing-based CLAS schemes. In this section, we formally analyze the
+mathematical structure of those attacks as well as the recent attacks proposed on pairing free CLAS schemes, and attack taxonomy
+is shown in Fig. 3. To ensure readability, Table 2 defines the common notations used throughout the attack descriptions.
+
+4.6.1. Malicious-but-passive KGC attack
+    • Adversary Capability: The KGC follows the protocol but embeds a hidden trapdoor during system setup.
+      In the malicious-but-passive KGC attack, the KGC embeds a secret parameter 𝑢 during the system setup by defining a public
+      value 𝑄 = 𝑢𝑃 . The KGC can also get the partial private key 𝑝𝑠𝑘𝑖 for every user because it has the master secret key. The KGC
+      can make a signature for any identity by choosing a random 𝑟𝑖 , calculating 𝑅𝑖 = 𝑟𝑖 𝑃 , getting the hash value ℎ𝑖 , and putting
+      together the signing component 𝑆𝑖 = 𝑝𝑠𝑘𝑖 + 𝑢𝑃 𝐾𝑖 + 𝑢ℎ𝑖 𝑅𝑖 . The pair (𝑅𝑖 , 𝑆𝑖 ) passes the verification test because the trapdoor
+      𝑢 ensures that the pairing equation is valid. The KGC can also create an aggregate signature that works by adding up all the
+      forged 𝑆𝑖 values. So, the malicious KGC can create fake individual and aggregated signatures without having to access any
+      user’s real secret key [38].
+    • Root cause: The system setup does not prevent the KGC from embedding trapdoor parameters in public values.
+
+
+4.6.2. Honest but curious KGC attack
+    • Adversary Capability: KGC executes the protocol correctly but attempts to reconstruct signing capability from observed
+      signatures.
+
+                                                                       10
+V. Lode and A. Pinapati                                                                       Computers and Electrical Engineering 135 (2026) 111174
+
+      KGC behaves correctly during the protocol execution but silently attempts to reconstruct the user’s signing capability. Since
+      the KGC knows the master secret 𝛼, it can compute 𝛼𝑅𝑖 from the publicly transmitted ephemeral value 𝑅𝑖 = 𝑟𝑖 𝑃 without
+      learning the user’s randomness 𝑟𝑖 . The KGC can also regenerate the partial private key of any identity 𝖨𝖣𝑖 as ppk 𝖨𝖣𝑖 = 𝛼𝑄𝖨𝖣𝑖 ,
+      where 𝑄𝖨𝖣𝑖 = 𝐻1 (𝖨𝖣𝑖 ) is publicly derived. After intercepting a valid signature (𝑅∗𝑖 , 𝑉𝑖∗ ) on a message 𝑚𝑖 , the KGC recomputes
+      the associated hash values using public information. By rearranging the signature verification equation, the KGC isolates a
+      constant term
+                       ( ∗                                )
+             𝜅𝑖 = ℎ∗−1
+                   2,𝑖
+                        𝑉𝑖 − ℎ∗1,𝑖 ppk 𝖨𝖣𝑖 − ℎ∗2,𝑖 (𝛼𝑅∗𝑖 ) ,
+
+      which represents the concealed input of the user’s personal key. This extracted constant allows the KGC to produce valid
+      signatures on user messages using the user id 𝖨𝖣𝑖 , even though it does not receive the actual secret key. As a result, a curious
+      yet protocol-following KGC may construct personal signatures and add fake entries to an aggregate signature, thus disrupting
+      the integrity of the whole system [44] [42].
+    • Root Cause: The signature equation is linearly decomposable, allowing the KGC to algebraically isolate the user’s secret
+      contribution.
+
+4.6.3. Public key replacement attack
+    • Adversary capability: An external attacker who can replace the user’s public key.
+      An attacker modifies user A’s real public key 𝑃 𝐾𝑎 = 𝑥𝑎 𝑃 to a malicious public key 𝑃 𝐾𝑎′ = 𝑥′𝑎 𝑃 , where 𝑥′𝑎 is chosen by the
+                                                                                                                              ?
+      attacker. The attacker then forges a signature as 𝜎 ′ = 𝑑𝑎 +𝑥′𝑎 ℎ+𝑟. During verification, the verifier checks 𝜎 ′ 𝑃 = 𝑑𝑎 𝑃 +𝑃 𝐾𝑎′ ℎ+𝑅,
+      which can be rewritten as 𝜎 ′ 𝑃 = 𝑑𝑎 𝑃 +(𝑥′𝑎 𝑃 )ℎ+𝑟𝑃 . Since the attacker knows 𝑥′𝑎 , this equality holds, making the forged signature
+      appear valid [54].
+    • Root cause: The scheme does not bind the public key to the partial private key, this allows independent replacement without
+      invalidating signatures.
+
+4.7. Forgery attack
+
+    • Adversary capability: An external attacker exploiting the weak binding in the signature scheme.
+      Due to a vulnerability in the scheme where 𝜎𝑖 = 𝑠𝑘𝑖 ℎ𝑖 + 𝑟𝑖 and binding are weak, the attacker can compute 𝜎 ∗ = ℎ∗ 𝑠𝑃 + 𝑟∗
+      for any message 𝑚∗ , where ℎ∗ = 𝐻2 (𝑚∗ ) and 𝑟∗ are chosen. Verification only checks 𝜎 ∗ 𝑃 = (ℎ∗ 𝑠𝑃 + 𝑟∗ 𝑃 ) without proper user
+      binding, allowing forgery to occur even if you do not know the private key [55].
+    • Root cause: The hash function does not bind the user’s identity and public key, enabling the existential forgery.
+
+4.7.1. Collusion attack
+    • Adversary capability: An attacker who observed valid signature and exploits hash independence from the ephemeral value.
+      The scheme uses 𝜎 = 𝑑 + 𝑥 ⋅ ℎ + 𝑟, where 𝑅 = 𝑟𝑃 , but the hash ℎ = 𝐻2 (𝑚) does not include 𝑅, resulting in weak binding.
+      After observing a valid pair (𝜎, 𝑅), an attacker can choose any 𝑟′ and construct 𝜎 ′ = 𝜎 + 𝑟′ . During verification, the check
+            ?
+      𝜎 ′ 𝑃 = 𝐷 + 𝑃 𝐾 ⋅ ℎ + 𝑅′ uses the new 𝑅′ = 𝑅 + 𝑟′ 𝑃 while ℎ remains unchanged. Thus, the equation 𝜎 ′ 𝑃 = 𝑑𝑃 + (𝑥 ⋅ ℎ)𝑃 + 𝑟′ 𝑃
+      still holds, enabling the attacker to generate a different valid signature without knowing the private key [56].
+    • Root cause: The hash computation excludes the ephemeral value 𝑅, allows signature component substitution.
+
+4.8. Signature swapping or coalition attack
+
+    • Adversary capability: An attacker with access to two valid individual signatures who targets the aggregate verification.
+      When an attacker takes two valid signatures 𝛿1 = (𝜎1 , 𝑅1 ) and 𝛿2 = (𝜎2 , 𝑅2 ), and generates two invalid signatures 𝛿1′ = (𝜎1 , 𝑅2 )
+                                                        ∑                                                          ∑         ∑
+      and 𝛿2′ = (𝜎2 , 𝑅1 ), the aggregate signature 𝜎 = 2𝑖=1 𝜎𝑖 is produced, and the verifier verifies this by 𝜎𝑃 = 𝑛𝑖=1 𝐷𝑖 + 𝑛𝑖=1 𝑃 𝐾𝑖 .ℎ𝑖1 +
+      ∑𝑛
+        𝑖=1 𝑅𝑖 . The verification successfully verifies without detecting the invalid signatures; if 𝑅𝑖 is not included in any of the hash
+      computation, this is because the aggregation process depends only on the combined values rather than on checking each
+      individual signature [54,57].
+    • Root cause: Insufficient binding of parameters in the hash and also the aggregate signature verification does not enforce the
+      individual signature validity, only the correctness of the summed components.
+
+4.8.1. Message injection attack
+    • Adversary capability: An attacker who manipulates individual signature components while preserving the aggregate sum.
+      Adversary takes two valid signatures 𝛿1 = (𝜎1 , 𝑅1 ) and 𝛿2 = (𝜎2 , 𝑅2 ) and generates two invalid signatures 𝜎1∗ = 𝜎 + 𝑐 and
+      𝜎2∗ = 𝜎 − 𝑐 and sets the message tuples as (𝐼𝐷1 , 𝑃 𝐾1 , 𝑚1 , 𝛿1 = (𝜎1∗ , 𝑅1 ) and (𝐼𝐷2 , 𝑃 𝐾2 , 𝑚2 , 𝛿2 = (𝜎2∗ , 𝑅2 ) and sends these
+                                                                                                        ∑
+      signatures to the verifier. After receiving these signatures, the aggregator aggregates 𝜎 = 2𝑖=1 𝜎𝑖 , and the verifier verifies
+                   ∑𝑛         ∑𝑛              ∑𝑛                                                 ∑2           ∑               ∑
+      this by 𝜎𝑃 = 𝑖=1 𝐷𝑖 + 𝑖=1 𝑃 𝐾𝑖 .ℎ𝑖1 + 𝑖=1 𝑅𝑖 , this will be valid because (𝜎1 + 𝜎2 )𝑃 = 𝑖=1 𝐷𝑖 + 2𝑖=1 𝑃 𝐾𝑖 ℎ𝑖1 + 2𝑖=1 𝑅𝑖 [57].
+                                                                                     ∗   ∗
+
+    • Root cause: The linear structure of the aggregate signature allows cancellation of injected components, making the individual
+      tampering undetectable at the aggregate level.
+
+                                                                     11
+V. Lode and A. Pinapati                                                                                   Computers and Electrical Engineering 135 (2026) 111174
+
+The weakness of the above attacks suggest that there are three general mathematical flaws in the current CLAS schemes.
+   (i) inadequate binding of signature elements, identity and message in computation of hash; (ii) the KGC can introduce the
+trapdoors or algebraically isolate the secret of the users because of the linear signature structure and; (iii) aggregate verification
+which verifies only the summed values and not the individual signature validity.
+
+5. Cryptanalysis of Huang et al. [10] quantum-secure certificateless aggregate signature scheme
+
+    This section shows the cancellation attack on Huang et al. [10] scheme: an adversary can cancel out or neutralize parts of
+a signature in the aggregate by carefully changing components of individual signatures before aggregation. This can create a final
+aggregate that verifies correctly but contains invalid or malicious signatures. In order to contextualize and examine the signature and
+aggregation processes, we first observe that the scheme’s [10] fundamental initialization phases — Setup, Extract-Partial-Private-Key,
+Set-Secret-Value, Set-Private-Key, and Set-Public-Key — refer to [10], pp. 5–6 for in detail explanation about the parameters.
+
+    • CL-Sign: To sign a message 𝑚𝑖 , vehicle 𝑉𝑖 (with 𝐼𝐷𝑖 and 𝑠𝑘𝑖 ) samples 𝑦𝑖,2 ← 𝐷𝑍 𝑛 ,𝜎 , sets 𝑦𝑖,1 = 𝑦𝑖,2 ℎ, computes 𝑐𝑖 = 𝐻2 (𝑚𝑖 , 𝑦𝑖,2 , 𝑡𝑖 ),
+      𝑍𝑖,1(= 𝑑𝑖,1 + 𝛼𝑖 𝑠𝑖,1 ℎ +)𝑦𝑖,1 , 𝑍𝑖,2 = 𝑑𝑖,2 + 𝛼𝑖 𝑠𝑖,2 − 𝑦𝑖,2 , and 𝑍𝑖 = 𝑍𝑖,1 + 𝑍𝑖,2 ℎ. Signature: 𝜎𝑖 = (𝑐𝑖 , 𝑍𝑖 ) with acceptance probability
+                      𝐷𝑍       (𝜎𝑖 )
+      min 1, 𝑀𝐷𝑍 𝑛,𝜎                           . Vehicle sends msg𝑖 = {𝐼𝐷𝑖 , 𝑚𝑖 , 𝜎𝑖 , 𝑡𝑖 } to the RSU.
+                        𝑛,𝜎,𝑠𝑘𝑖 ⋅𝑐𝑖 (𝜎𝑖 )
+
+    • CL-Verify: Upon receiving message 𝑚𝑖 , the RSU checks the timestamp 𝑡𝑖 for freshness. Given 𝐼𝐷𝑖 , 𝑝𝑘𝑖 , 𝑚𝑖 , and 𝜎𝑖 = (𝑐𝑖 , 𝑧𝑖 ), it
+      validates
+                  ?
+              𝑧𝑖 = 𝑝𝑘𝑖 ⋅ 𝑐𝑖 .
+
+    • Aggregate-Sign: For identities {𝐼𝐷𝑖 }𝑛𝑖=1 and messages {𝑚𝑖 }, the aggregator outputs
+                           ∑
+                           𝑛
+              𝜎agg =                𝑧𝑖 .
+                              𝑖=1
+    • Aggregate-Verify: The verifier checks
+                       ? ∑
+                         𝑛
+                                                              √
+              𝜎agg =                𝑝𝑘𝑖 𝑐𝑖 ,      ‖𝜎agg ‖ ≤    𝛽ver
+                              𝑖=1
+
+      with 𝛽ver ≥ 𝑁(𝑠𝑛 + 1)(2𝑠𝑛 + 𝑛𝑞𝜅). If both conditions hold, the aggregate signature is valid.
+    • Correctness:
+      Correctness of a single signature,
+              𝑧𝑖 = 𝑧𝑖,1 + 𝑧𝑖,2 ℎ
+                  = (𝑑𝑖,1 + 𝛼𝑖 𝑠𝑖,1 )𝑐𝑖 + 𝑦𝑖,1 + (𝑑𝑖,2 + 𝛼𝑖 𝑠𝑖,2 )𝑐𝑖 − 𝑦𝑖,2 ℎ
+                  = 𝑑𝑖,1 + 𝑑𝑖,2 ℎ + 𝛼𝑖 (𝑠𝑖,1 + 𝑠𝑖,2 ℎ)𝑐𝑖 + 𝑦𝑖,1 − 𝑦𝑖,2 ℎ
+                  = 𝐻1 (𝐼𝐷𝑖 ) + 𝛼𝑖 𝑃𝑖 𝑐𝑖
+                  = 𝑝𝑘𝑖 .𝑐𝑖 .
+      For the aggregate,
+                           ∑
+                           𝑛                ∑
+                                            𝑛
+              𝜎agg =                𝑧𝑖 =      (𝑧𝑖,1 + 𝑧𝑖,2 ℎ)
+                              𝑖=1           𝑖=1
+                         ∑
+                         𝑛
+                           (                                                      )
+                       =    𝑑𝑖,1 + 𝑑𝑖,2 ℎ + 𝛼𝑖 (𝑠𝑖,1 + 𝑠𝑖,2 ℎ)𝑐𝑖 + (𝑦𝑖,1 − 𝑦𝑖,2 ℎ)
+                              𝑖=1
+                         ∑
+                         𝑛
+                           (                    )  ∑
+                                                   𝑛
+                       =    𝐻1 (𝐼𝐷𝑖 ) + 𝛼𝑖 𝑃𝑖 𝑐𝑖 =   𝑝𝑘𝑖 .𝑐𝑖 .
+                              𝑖=1                                𝑖=1
+
+5.1. Cancellation attack on Huang et al. [10] aggregate signatures
+
+    In this section, we describe a vulnerability in the Aggregate-Sign/Aggregate-Verify process mentioned above. This vulnerability
+is referred to as the Cancellation Attack. The attack takes advantage of the additive structure of the aggregation rule and the fact
+that the verifier inspects only the final aggregate output without validating the correctness of each individual signature component
+before the aggregation takes place.
+
+5.2. Attack intuition
+
+    During aggregation, the final signature is formed by a simple summation:
+                 ∑
+                 𝑛
+        𝜎agg =         𝑧𝑖 .
+                 𝑖=1
+
+                                                                                        12
+V. Lode and A. Pinapati                                                                         Computers and Electrical Engineering 135 (2026) 111174
+
+The verifier subsequently checks two conditions:
+              ? ∑
+                𝑛
+                                                                    √
+        𝜎agg =         (𝑝𝑘𝑖 ⋅ 𝑐𝑖 )        and           ‖𝜎agg ‖ ≤    𝛽ver .
+                 𝑖=1
+    Since only the combined sum is examined, an adversary can inject a perturbation +𝛥 into one component and compensate for
+it with a matching term −𝛥 in another. These modifications cancel out in the overall aggregate and therefore remain undetected.
+As a result, the adversary can tamper with individual contributions, even though the final aggregate continues to pass verification.
+
+5.3. Attack description
+
+   Suppose the adversary has access to two valid signature terms, namely 𝑧1 and 𝑧2 . The adversary selects an arbitrary vector 𝛥
+and constructs the modified values:
+
+        𝑧′1 = 𝑧1 + 𝛥,              𝑧′2 = 𝑧2 − 𝛥.
+
+All other 𝑧𝑖 values are left untouched. The aggregate signature becomes:
+               ( 𝑛 )
+       ∑𝑛        ∑                 ∑𝑛
+            ′
+          𝑧𝑖 =       𝑧𝑖 + 𝛥 − 𝛥 =     𝑧𝑖 .
+        𝑖=1            𝑖=1                        𝑖=1
+    Hence, the modified aggregate satisfies:
+                             ∑
+                             𝑛
+         ′
+        𝜎agg = 𝜎agg =              (𝑝𝑘𝑖 ⋅ 𝑐𝑖 ).
+                             𝑖=1
+
+Furthermore, Because the total sum remains constant, the norm bound is still valid.
+
+5.4. Why the attack succeeds
+
+    The following vulnerabilities in the system make the cancellation Attack feasible:
+
+    • Additive aggregation rule: The aggregation procedure is linear, which allows it to be easy to synthesize aggregate signatures and
+      prove them.
+    • Aggregate-only norm check: The global norm condition will not protect from tampering because the modifications cancel out
+      perfectly.
+
+    As a result, the opponent is able to arbitrarily manipulate selected signature elements and provide an aggregate signature that
+is still considered valid.
+
+5.5. Consequences
+
+    An adversary can use the cancellation attack to:
+
+    • Compromise or alter the personal contributions without detection and minimize or remove the influence of certain signers.
+    • Shrinkage of accountability through hiding the efforts of every vehicle and misguides the entire VANETs system, which depends
+      on the data that an aggregate signature verifies.
+
+    The adversary does not forge a signature; rather, it exploits the linearity of the aggregation mechanism.
+
+5.6. Mitigation
+
+   Randomized Aggregation Coefficients: To aid in preventing the cancellation attack, append random aggregation coefficients of
+each signature. In the aggregation, the RSU collects scalar sampled new random values 𝑟𝑖 ∈ Z𝑞 and accumulates them to obtain the
+                        ∑                                                                                                   ? ∑
+aggregate that is 𝜎agg = 𝑛𝑖=1 𝑟𝑖 𝑧𝑖 . Next, the verifier checks to determine whether or not the following is the case: 𝜎agg = 𝑛𝑖=1 𝑟𝑖 (𝑝𝑘𝑖 ⋅𝑐𝑖 ).
+Associating the signatures with random coefficients implies that there is no possible malicious alteration that can happen, i.e. the
+addition of +𝛥 to one of the parts and subtraction of −𝛥 to another, as a result of which the resulting alterations work out to
+canceling out in the independent selection of the values of the random coefficients, 𝑟𝑖 . Such a defense has a very low overhead since
+only a lightweight scalar generation of hash based signatures per signature is required, making batch verification quick.
+
+5.7. Detailed literature of ECC based CLAS schemes in VANETs
+
+    This section provides a comprehensive summary of ECC based CLAS schemes proposed over the years, as presented in Table
+3. Each entry specifies the year of publication, the main contribution, and the key design characteristics of the respective scheme.
+The survey focuses exclusively on ECC-based CLAS constructions. The discussion traces the progressive evolution of these schemes,
+reflecting continuous research efforts to enhance aggregation efficiency, scalability, and resistance to various cryptographic attacks.
+
+                                                                              13
+V. Lode and A. Pinapati                                                                                                        Computers and Electrical Engineering 135 (2026) 111174
+
+Table 3
+Pairing-free ECC-based CLAS schemes for VANETs.
+ Paper                     Year   Main contributions                                                 Strengths                                      Limitations
+ J Cui et al. [50]         2018   First ECC-based CLAS scheme for VANETs without using               •Instead of MapToPoint functions, which        •Later research found the scheme to be
+                                  bilinear pairings or MapToPoint hash functions; introduced         are expensive to compute, it only uses         insecure under the existing security model,
+                                  batch verification for V2I communication.                          general one-way hash functions.                vulnerable to certain forgery attacks.
+                                                                                                     •Secure based on ECDLP.                        •Security weaknesses were identified by
+                                                                                                     •More efficient than pairing-based             I.A. Kamil et al. [58]
+                                                                                                     schemes, due to the reduction of               •Limited to V2I communications.
+                                                                                                     computational overhead.
+
+
+ I.A.Kamil et al. [58]     2019   Cryptanalysis of Cui et al.’s (2018)[50] scheme demonstrating      •Eliminates certificate management issues      •Later found to have vulnerabilities by
+                                  security vulnerabilities;proposed an improved ECC-based CLAS       of traditional PKC and key escrow              Zhao et al. [59] in 2020, Xiong et al.
+                                  scheme with batch verification using just two scalar               problems of identity-based PKC.                [56] in 2023.
+                                  multiplication operations irrespective of signature count.         •Highly efficient batch verification (only 2   •Computational overhead increases with
+                                                                                                     scalar multiplications).                       number of individual operations despite
+                                                                                                     •No bilinear pairings or MapToPoint hash       batch efficiency.
+                                                                                                     functions. Better security posture than Cui    •Focused primarily on V2I
+                                                                                                     et al.’s [50] scheme.                          communications.
+
+
+ Kang Li et al. [60]       2019   Proposed an effective conditional privacy-preserving               •Separates signature generation into offline   •Requires storage for pre-computed offline
+                                  authentication system utilizing online/offline certificate-less    and online phases to enhance efficiency,       signature components.
+                                  aggregate signatures, eliminating the need for bilinear pairing    where heavy computations are performed         •Requires synchronization between offline
+                                  or map-to-point hash functions to mitigate security and privacy    offline before the message is known.           and online phases.
+                                  concerns in VANETs.                                                •No MapToPoint hash function overhead.         •Complexity in managing online/offline
+                                                                                                     •Particularly efficient for real-time          signature components.
+                                                                                                     VANETs applications .
+
+
+ Zhao et al. [59]          2020   Cryptanalysis of Kamil and Ogundoyin’s (2019) [58] scheme          •Identified security vulnerabilities in        •Later found by Thumbur et al. (2021)
+                                  showing that it is insecure against forgery attacks, followed by   previous schemes.                              [53] to have flaws in the design,
+                                  proposal of an improved CLAS scheme for Internet of Vehicles       •Support for vehicular communication           discovered vulnerabilities in Zhao et al.’s
+                                  (IoV).                                                             authentication & Provides aggregate            scheme.
+                                                                                                     signature efficiency.                          •May have computational overhead in
+                                                                                                     •Designed for resource-constrained IoV         high-density scenarios.
+                                                                                                     environments.                                  •It supports both V2V and V2I, but the
+                                                                                                                                                    primary focus is on V2I.
+
+
+ Xu et al. [61]            2020   Introduced a new-factor based aggregation mechanism to avoid       •Tailored for unique characteristics of IoV
+                                  information injection attack. Eliminated high computational        networks.                                      •Factor-contained aggregation mechanism
+                                  overhead associated with traditional certificate management.       •Reduces verification time and                 adds implementation complexity.
+                                                                                                     communication overhead through                 •Vehicle anonymity and traceability
+                                                                                                     signature aggregation.                         balance not extensively addressed.
+                                                                                                     •Designed specifically for limited in-car      •Certificate revocation strategies not
+                                                                                                     computing capabilities                         extensively detailed.
+
+
+ C Li et al. [62]          2020   Cryptanalysis of Zhong et al.’s (2019) [63] scheme                 •Constant aggregate signature length.          •High computational efficiency due to
+                                  demonstrating security vulnerabilities; Proposed a pairing-free    •Pseudonym-based conditional privacy           elimination of bilinear pairings.
+                                  CLAS scheme with constant-length aggregate signatures              preservation.                                  •Requires trusted authority infrastructure.
+                                  regardless of the number of users, using pseudonyms for            •Supports batch verification.                  May have vulnerabilities to public-key
+                                  conditional privacy protection.                                                                                   replacement attacks.
+                                                                                                                                                    •Limited real-world deployment validation.
+
+
+ Thumbur et al. [53]       2021   Found problems in Zhao et al.’s (2020)[59] design and come         •Eliminates expensive bilinear pairing         •Later cryptanalysis by Yang et al. [54] in
+                                  up with a new CLAS-based authentication system for VANETs.         operations.                                    2022, proved that the scheme is
+                                  Which gives better optimization in both computation and            •Better performance than previous              vulnerable to public key replacement
+                                  communication.                                                     pairing-based schemes.                         attacks from external adversaries and
+                                                                                                     •Supports ECCDH complexity assumption          coalition attacks involving malicious
+                                                                                                                                                    vehicles.
+                                                                                                                                                    •Vulnerable to signature forgery attacks as
+                                                                                                                                                    identified by subsequent researchers .
+                                                                                                                                                    •Cannot withstand certain coalition attacks
+                                                                                                                                                    [54].
+
+
+ Xin Ye et al. [64]        2021   Identified flaws in I A Kamil et al.’s (2020) [58] scheme. An      •Successfully defends against coalition        •When malicious signatures are added
+                                  improved CLAS proposal of the VANETs that could endure             attacks where malicious vehicles cooperate     during the aggregation process, the
+                                  coalition attacks.                                                 to forge signatures or hide real locations.    scheme does not work very well.
+                                                                                                     •While it prevents coalition attacks, the      •Signature is vulnerable to forgery attacks,
+                                                                                                     added mechanisms may introduce                 as identified by subsequent researchers .
+                                                                                                     additional computational or storage
+                                                                                                     overhead.
+                                                                                                     •RSU acts as both aggregator and verifier,
+                                                                                                     making the scheme more suitable for
+                                                                                                     real-world VANETs environment.
+
+
+ T F Vallent et al. [65]   2021   Developed a safe and practical CLAS scheme in VANETs that          •Vehicles use time-limited pseudonyms to       •Requires time synchronization for
+                                  can be used in a smart grid setting; on ECC with time-verified     authenticate communications.                   time-validated pseudo-IDs.
+                                  pseudo-identification to conditional privacy protection and        •Addresses KGC escrow problem.                 •Smart grid integration adds complexity to
+                                  overcome KGC escrow issue.                                         •Applicable to smart grid-enhanced             system architecture .
+                                                                                                     VANETs scenarios.                              •Requires robust KGC infrastructure
+                                                                                                                                                    despite escrow prevention.
+
+
+ Han et al. [66]           2022   Introduced an effective non-certificate aggregate signature        •Eliminates expensive bilinear pairing         •Later Zheng et al in 2023 [55] found
+                                  protocol that avoids bilinear pairing functions and multiplies     operations, using only elliptic curve point    secret key vulnerability. While better than
+                                  the computation cost by a large factor.                            multiplication and addition.                   individual signatures, aggregate signature
+                                                                                                     •Aggregate signature significantly reduces     size still grows with number of signers.
+                                                                                                     communication overhead compared to             •Certificate revocation mechanism not
+                                                                                                     individual signatures.                         extensively addressed .
+                                                                                                     •RSUs can verify aggregated signatures         •RSU becomes critical point for
+                                                                                                     much faster, suitable for high-density         verification; RSU compromise affects
+                                                                                                     vehicular scenarios.                           security.
+
+
+                                                                                                                                                                         (continued on next page)
+
+
+
+
+                                                                                              14
+V. Lode and A. Pinapati                                                                                                          Computers and Electrical Engineering 135 (2026) 111174
+
+Table 3 (continued).
+ Paper                     Year   Main contributions                                                   Strengths                                      Limitations
+ Wang et al. [67]          2022   Applied aggregate signature technology that uses several             •Trusted Registration Authority (TRA) can      •Relies on Random Oracle Model (ROM)
+                                  signatures in one short signature. Developed revocation              trace real identities when needed              for security proof.
+                                  mechanism based on RPID(Routing Protocol for IoT                     •Can effectively revoke malicious nodes        •Revocation list management overhead
+                                  Devices)-cuckoo filter to ensure that, through its use malicious     using cuckoo filters                           (cuckoo filter needs updates).
+                                  vehicles cannot influence aggregate verification.                    •Specifically designed for 5G-enabled          •Performance in real-world 5G networks
+                                                                                                       VANETs                                         not extensively validated.
+
+
+ X Yang et al. [54]        2022   Cryptanalysis of Thumbur et al.’s (2021) [53] scheme                 •Rigorous cryptanalysis with concrete          •Improved scheme proposed may also
+                                  demonstrating, it is vulnerable to coalition attacks and public      attack demonstrations.                         require independent security verification.
+                                  key replacement attacks; provided two concrete attack methods        •Proposed improved scheme to address           •Does not address all potential CLAS
+                                  showing that scheme cannot achieve expected security goals.          identified vulnerabilities.                    vulnerabilities comprehensively .
+                                                                                                       •Contributes to advancing VANETs security      •May not cover all possible attack vectors
+                                                                                                       understanding.                                 in dynamic VANETs environments.
+
+
+ Vijayakumar et al. [68]   2022   Demonstrated that Ali et al.’s [69] certificateless CPPA scheme      •Avoids computationally expensive bilinear     •Subsequent research has identified that
+                                  is not resistant to signature forgery attacks. Introduced a          pairing operations, using only ECC-based       similar CLAS schemes can be subject to
+                                  certificateless conditional privacy-saving authentication that is    operations.                                    the public-key replacement attacks, and to
+                                  security-enhanced to better trade-off security and efficiency.       •Addresses signature forgery vulnerabilities   malicious RSU and vehicle coalition
+                                                                                                       found in previous schemes.                     attacks.
+                                                                                                       •Provides anonymity while enabling             •While improved, still has communication
+                                                                                                       traceability by trusted authorities.           costs associated with signature
+                                                                                                                                                      transmission.
+                                                                                                                                                      •Security proof typically relies on random
+                                                                                                                                                      oracle model assumptions
+
+
+ Genc et al. [70]          2023   The scheme utilizes ECC and is pairing-free, making it               •Uses ECC without bilinear pairing             •Subsequent research [57] revealed that,
+                                  energy-efficient and lightweight. Key features include batch         operations, reducing computational             the scheme is vulnerable to forgery
+                                  message verification for improved efficiency.                        complexity.                                    signature attacks from Type-I and Type-II
+                                                                                                       •Enables efficient verification of multiple    adversaries.
+                                                                                                       signatures simultaneously, minimizing          •The scheme allows malicious actors to
+                                                                                                       delays.                                        perform injection and signature-swapping
+                                                                                                       •Eliminates costly MapToPoint hash             attacks .
+                                                                                                       operations.                                    •RSU becomes critical point for
+                                                                                                                                                      verification; RSU compromise affects
+                                                                                                                                                      security.
+
+
+ Xiong et al. [56]         2023   Identified critical vulnerability in I A Kamil et al.’s [58] work,   •Specifically designed to prevent              •Xu et al. (2024)[71] and Kabil et al.
+                                  where collusion attacks break the equivalent validity of             coordinated attacks by multiple malicious      [72] discovered this scheme can be
+                                  aggregate signatures. And they have improved the CLAS scheme         vehicles.                                      forged by Type-I and Type-II adversaries,
+                                  against collusion attacks from multiple malicious entities.          •Addresses weaknesses where multiple           indicating fundamental security weakness.
+                                                                                                       attackers cooperate to break signature         •Multiple elliptic curve operations still
+                                                                                                       validity.                                      required for signature generation and
+                                                                                                       •Reduces communication and verification        verification .
+                                                                                                       overhead through signature aggregation.        •Efficient revocation of compromised
+                                                                                                                                                      vehicles remains challenging.
+
+
+ Gong et al. [73]          2023   Identified critical vulnerability in Liu et al.’s CLAS scheme        •Avoids computationally expensive bilinear     •Subsequent research (Wu & Ye,
+                                  [52] and demonstrates that it is vulnerable to forgery attacks.      pairing operations, improving efficiency.      2024)[74] revealed that PCAS fails to
+                                  The authors subsequently introduce PCAS, an enhanced CLAS            •Eliminates costly MapToPoint hash             meet the essential unlinkability criterion
+                                  scheme aimed at facilitating authentication within VANETs.           operations.                                    in VANETs.
+                                                                                                       •Uses pseudonym mechanism to protect           •The pseudonym generation process is
+                                                                                                       vehicle identity while allowing                overly complicated with excessive entity
+                                                                                                       traceability.                                  interactions, creating significant
+                                                                                                                                                      computational overhead.
+                                                                                                                                                      •Efficient revocation of compromised
+                                                                                                                                                      vehicles remains challenging.
+
+
+  Wanqing Wu et al. [74]   2024   Cryptanalysis of Gong et al. [73] scheme; Proposed IPCAS.            •Pairing-free (ECC only); proven vs. both      •ROM-only proof: Security is proven in
+                                  Formal proofs cover Type-I, Type-II adversaries.                     adversary types; unlinkability fixed;          ROM, not standard model.
+                                                                                                       conditional privacy-preserving; efficient;     •No revocation mechanism: IPCAS does
+                                                                                                       standard ROM framework; covers all             not address malicious vehicle revocation.
+                                                                                                       VANETs security goals. •Outperforms PCAS       •Centralized KGC trust, single point of
+                                                                                                       and comparable CLAS schemes in both            failure.
+                                                                                                       computational overhead and
+                                                                                                       communicational overhead.
+                                                                                                       •Addresses real VANETs requirements.
+
+
+ H Zeng et al. [55]        2023   Analyzed the security of Han et al’s scheme [66] and proved          •Eliminates expensive bilinear pairing         •In 2025, Cao and Liu [75] has shown
+                                  that their scheme is not providing the security of the master        operations, significantly reducing             that the scheme is susceptible to forgery
+                                  key. Improved the scheme for VANETs that addresses security          computational costs.                           attacks. The transient key/value selected
+                                  vulnerabilities found in existing schemes.                           •Supports aggregation of multiple              during the signing phase lacks adequate
+                                                                                                       signatures for faster verification.            binding to the final signature.
+                                                                                                       •Optimized for vehicles with limited           •A malicious actor is capable of creating
+                                                                                                       computational capabilities.                    counterfeit signatures for any message,
+                                                                                                                                                      and the verifier is unable to identify the
+                                                                                                                                                      deception.
+                                                                                                                                                      •May have implicit trust assumptions that
+                                                                                                                                                      can be exploited.
+
+
+ Fei Zhu et al. [76]       2023   The authors first perform cryptanalysis on existing CLAS             •Addresses vulnerabilities found in            •Subsequent research [77] revealed that
+                                  schemes [61,64,66] and demonstrate concrete signature forgery        previous authentication schemes.               the scheme cannot withstand coalition
+                                  attacks, revealing that previous schemes cannot be deployed in       •Protects vehicle identities while allowing    attacks from malicious RSUs and vehicles.
+                                  practical VANET applications. Proposed a scheme that enhances        authorized traceability.
+                                  security against various attacks including forgery attacks           •Designed specifically for real-world          •The scheme is susceptible to replacement
+                                  identified in prior schemes.                                         VANETs deployment.                             attacks by public-key from dishonest
+                                                                                                                                                      adversaries.
+                                                                                                                                                      •Failed to consider all possible attack
+                                                                                                                                                      vectors in collaborative malicious
+                                                                                                                                                      scenarios.
+
+
+                                                                                                                                                                           (continued on next page)
+
+
+
+
+                                                                                             15
+V. Lode and A. Pinapati                                                                                                             Computers and Electrical Engineering 135 (2026) 111174
+
+Table 3 (continued).
+ Paper                          Year   Main contributions                                                  Strengths                                      Limitations
+ Sixian Yu et al. [78]          2023   The paper presents a highly effective CLAS scheme for               •Uses elliptic curve point multiplicative      •Based on patterns in similar ECC-based
+                                       ensuring conditional privacy in VANETs. Which is signed on          operations to reduce computation cost.         VANETs schemes, may be subject to
+                                       board to avoid channel conflicts - proclaimed the earliest          •On-board aggregation prevents                 future cryptanalysis.
+                                       scheme of adding aggregation on board.                              communication conflicts.                       •Primarily focused on vehicle-to-vehicle
+                                                                                                           •Designed for restricted computing and         scenarios.
+                                                                                                           communication resource situations.             •On-board aggregation may require
+                                                                                                                                                          sophisticated OBU capabilities.
+
+
+ Kabil et al. [72]              2024   The study analyzed Xiong’s CLAS scheme [56] for                     •Novel identity authentication: Uses           •Implementation of chameleon hashing
+                                       cryptographic weaknesses, showing that it was open to attacks       chameleon hashing-based identity               and small exponents test may add
+                                       that could substitute part of the key or the identity, as well as   authentication mechanism within ECC.           computational overhead compared to
+                                       showing that there were mathematical mistakes in the batch          •Achieves Type-III security through            simpler schemes.
+                                       verification process. These issues are resolved by CHAM-CLAS        implementation of small exponents test in      •may not have undergone extensive
+                                       technique that incorporates identity authentication module with     batch verification.                            real-world testing.
+                                       chameleon hashing in ECC.                                           •Identifies and corrects mathematical
+                                                                                                           errors in existing batch verification
+                                                                                                           process.
+
+
+ V Lode et al. [79]             2024   The proposed scheme offers an efficient aggregate signature         •Provides protection against insider threats   •lack extensive real-world testing and
+                                       that eliminates the need for pairing, allowing for the              without relying on tamper-resistant            validation.
+                                       verification of multiple messages by consolidating several          hardware                                       •Specific types of insider attacks addressed
+                                       signatures into one cohesive aggregate signature.                   •Lowers verification overhead and storage      not fully detailed.
+                                                                                                           requirements by combining multiple
+                                                                                                           signatures into one.
+                                                                                                           •Does not require tamper-proof devices,
+                                                                                                           reducing implementation costs and
+                                                                                                           hardware dependencies
+
+
+ Ran Xu et al. [71]             2024   The paper proposes a new pairing-free CLAS scheme designed          •Pairing-free construction reduces             •Primarily focused on smart home and
+                                       for IoT applications. Cryptanalysis of existing CLAS schemes        computational complexity compared to           IoT applications; applicability to other
+                                       revealing vulnerabilities-specifically identifying that Gong et     schemes using bilinear pairings .              domains like VANETs not extensively
+                                       al.’s [73] and Xiong et al.’s [56] schemes cannot resist            •Enables efficient authentication of           discussed
+                                       public-key replacement attacks , demonstrating that these           numerous messages while enhancing              •As a recent publication, extensive
+                                       current schemes are open to a number of security                    verification efficiency.                       real-world testing and deployment results
+                                       vulnerabilities. To address these issues, they enhanced the         •Designed to support smart home                may be limited.
+                                       scheme by designing an improved solution.                           scenarios involving networked appliances
+                                                                                                           and devices offering automated services.
+
+
+ Shao et al. [80]               2024   Formulated a verifiably secure lightweight authentication           •Combines signature and encryption in a        •Vulnerable to public key replacement
+                                       scheme (EPSLA) that relates to V2V communication. The               single operation, more efficient than          attacks according to Liu et al. (2025)[81]
+                                       scheme can fulfill batch unsigncryption and aggregate               sign-then-encrypt.                             security analysis.
+                                       signcryption capabilities for improved efficiency in practical      •Supports batch unsigncryption for             •Does not consider Type-III adversaries.
+                                       scenarios.                                                          efficient verification of multiple messages.   •Primarily designed for V2V
+                                                                                                           •Addresses the vulnerability of broadcast      communication; may not be optimized for
+                                                                                                           safety messages being only signed rather       V2I or V2X scenarios.
+                                                                                                           than encrypted.
+
+
+ Rui Guo et al. [82]            2024   Proposes a CLAS scheme for VANETs with dynamic revocation           •Supports real-time revocation of malicious    •In 2025, Zhengjun Cao [83] and
+                                       mechanism for compromised vehicles.                                 or compromised vehicles without requiring      colleagues identified that the scheme is
+                                                                                                           certificate revocation lists (CRLs).           susceptible to forgery attacks due to the
+                                                                                                           •Specifically designed for the                 lack of a strong connection between the
+                                                                                                           high-mobility, time-critical environment of    signer’s certificateless public key and the
+                                                                                                           vehicular networks.                            system’s public key. Dynamic revocation
+                                                                                                                                                          necessitates the prompt dissemination of
+                                                                                                                                                          revocation information throughout the
+                                                                                                                                                          network.
+                                                                                                                                                          •Requires coordinated deployment across
+                                                                                                                                                          VANETs infrastructure.
+                                                                                                                                                          •Relies on KGC for initial key generation,
+                                                                                                                                                          creating a potential single point of failure.
+
+
+ X Yang et al. [77]             2024   Proposes an enhanced CLAS scheme with improved security             •Fixes vulnerabilities in previous             •Conditional privacy relies on a trusted
+                                       properties. Implements conditional privacy preservation             certificateless schemes [76] and provides      authority for identity tracing, creating
+                                       allowing authorized authorities to trace vehicle identities when    stronger security guarantees.                  potential for abuse.
+                                       necessary.                                                          •Balances user privacy with accountability     •Additional mechanisms for conditional
+                                                                                                           - vehicles remain anonymous but can be         privacy may introduce some
+                                                                                                           traced by authorities when needed.             computational overhead.
+                                                                                                           •Optimized algorithms reduce                   •May require additional infrastructure for
+                                                                                                           computational costs for                        handling compromised or malicious
+                                                                                                           resource-constrained vehicles.                 vehicles.
+
+
+ Parvin Rastegari et al. [84]   2024   Introduced a new, secure, and efficient authentication              •Cryptanalyzed and found vulnerabilities
+                                       mechanism that upholds conditional privacy protection in            in previous certificateless schemes [85].      •Limited scalability of large scale VANETs
+                                       VANETs.                                                             •Resolves the vulnerability to malicious       deployment.
+                                                                                                           KGC attacks found in earlier scheme.           •Provides only a brief discussion of the
+                                                                                                           •Emphasizes minimizing overhead to             practical implementation challenges
+                                                                                                           enhance the practicality of deployment in      encountered in real VANETs environments.
+                                                                                                           real-world VANET environments.
+
+
+ Wanqing Wu et al. [86]         2025   Proposes a CLAS scheme incorporating pseudonym-based                •Uses changing pseudonyms to prevent           •Storing and managing multiple
+                                       privacy protection. Implements dynamic pseudonym generation         tracking and location privacy violations.      pseudonyms requires additional resources.
+                                       and management to enhance anonymity.                                •Different messages from same vehicle          •Pseudonym updates across the network
+                                                                                                           cannot be linked, enhancing privacy            require coordination.
+                                                                                                           protection.                                    •Pseudonym information adds to message
+                                                                                                           •Regular pseudonym updates prevent             size in bandwidth-limited environments.
+                                                                                                           long-term tracking attacks.
+
+
+                                                                                                                                                                                (continued on next page)
+
+
+
+
+                                                                                                 16
+V. Lode and A. Pinapati                                                                                                            Computers and Electrical Engineering 135 (2026) 111174
+
+Table 3 (continued).
+ Paper                     Year       Main contributions                                                 Strengths                                         Limitations
+ Feixiang Ye et al. [57]   2025       Proposes a certificateless authentication scheme specifically      •Specifically designed to prevent multiple        •Collusion-resistance mechanisms add
+                                      addressing collusion attacks in Internet of Vehicles (IoV).        malicious entities from collaborating to          complexity to the cryptographic protocol.
+                                      Introduces collusion-resistance mechanisms to prevent malicious    break security.                                   •Still requires trusted authorities for
+                                      entities from collaborating to compromise system security. This    •Addresses more sophisticated attack              certain operations despite
+                                      scheme analyzes Genc et al’s scheme [70] and proves that it is     scenarios including insider threats and           collusion-resistance.
+                                      not secure under Type-I, Type-II and Type-III adversaries. They    collaborative attacks.                            •While certificate-less, still requires secure
+                                      improved the scheme by addressing these attacks.                   •Balances user anonymity with                     distribution and management of partial
+                                                                                                         accountability and traceability                   key.
+                                                                                                         requirements.
+
+
+ Dong Liu et al. [81]      2025       Analyzed Shao et al.’s (2023)[80] certificate-less signcryption    •Addresses public key replacement attack          •Signcryption operations may have
+                                      scheme and uncovered vulnerabilities through security analysis,    vulnerabilities found in previous schemes.        computational costs for
+                                      especially showing how poor their security strategy is when it     •Uses a small index technique for                 resource-constrained vehicles.
+                                      comes to replacing public keys. Enhanced the scheme against        improved efficiency.                              •Aggregate signcryption with small index
+                                      EUF-CMA and indistinguishable against selected cipher text         •Supports aggregate signcryption and              may increase implementation complexity.
+                                      attacks.                                                           batch unsigncryption operations.                  •The security analysis is conducted in the
+                                                                                                                                                           random oracle model, which is an
+                                                                                                                                                           idealized assumption and may not fully
+                                                                                                                                                           reflect real-world cryptographic hardness
+                                                                                                                                                           guarantees.
+
+
+ Imam et al. [87]          2025       Identified critical tracking vulnerability in Zhou et al.’s [88]   •Superior privacy through complete                •Focus primarily on signature link-ability;
+                                      protocol through signature correlation analysis. Enhanced          signature unlinkability between messages.         other attacks are not explored
+                                      scheme to generate independent credentials per signing             •Reduced online computation via                   •Precomputed value storage demands may
+                                      operation to prevent linkage. Implemented offline                  precomputed cryptographic values.                 challenge minimal-resource devices.
+                                      pre-computation strategy to reduce real-time processing burden     •Fresh credential generation prevents             •Large-scale network behavior requires
+                                      on constrained devices                                             cross-message correlation.                        further investigation.
+
+
+ Yue et al. [89]           2025       Found that Zheng et al.’s (2022) [55] CLAS system is               •Successfully defends against ephemeral           •Requires dual verification(Aggregate
+                                      susceptible to temporary or ephemeral rogue key attacks,           rogue key attacks that compromise                 Generation + Aggregate Verification),
+                                      where an attacker can use random nonce in signatures to            existing pairing-free CLAS schemes.               introducing slight computational overhead
+                                      construct a temporary rogue key, therefore, supporting the         •Aggregator’s signature provides                  compared to Zheng et al.’s vulnerable
+                                      forgery of aggregate signatures using this rogue key and the       preliminary security check, preventing            scheme.
+                                      personal key of the aggregator. Checks the aggregate signature     unnecessary massive signature verification        •System requires trusted RSUs to act as
+                                      and the signatures of the aggregator simultaneously to prevent     computations when aggregate signature is          aggregators; malicious aggregators must
+                                      rogue key attacks.                                                 invalid.                                          be detected and reported to TA.
+                                                                                                         •Uses XOR encryption operations to
+                                                                                                         protect security of intermediate variables
+                                                                                                         during key generation.
+
+
+
+
+Table 4
+Comparison of security.
+ Scheme              1           2              3            4             5            6          7             8            9              1                 2            3
+ [50]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ✓                  ×             ×
+ [58]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ×               ×                  ×             ×
+ [60]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ✓                  ✓             ×
+ [59]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ✓                  ×             ×
+ [61]                ✓            ✓               ✓             ✓              ×             ✓           ×              ✓             ✓               ×                  ×             ✓
+ [62]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ✓                  ✓             ×
+ [53]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ×                  ✓             ×
+ [64]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ✓                  ✓             ✓
+ [65]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ✓                  ✓             ×
+ [66]                ✓            ✓               ✓             ✓              ✓             ✓           ×              ✓             ✓               ×                  ✓             ✓
+ [67]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ✓                  ✓             ✓
+ [54]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ✓                  ✓             ✓
+ [68]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ✓                  ✓             ×
+ [70]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ×                  ×             ×
+ [56]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ×                  ×             ×
+ [73]                ✓            ✓               ✓             ×              ×             ✓           ✓              ✓             ✓               ×                  ✓             ×
+ [74]                ✓            ✓               ✓             ✓              ✓             ✓           ✓              ✓             ✓               ✓                  ✓             ×
+ [55]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ×                  ×             ×
+ [76]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ×                  ✓             ×
+ [78]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ✓                  ✓             ×
+ [72]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ×               ✓                  ✓             ✓
+ [79]                ✓            ×               ✓             ✓              ✓             ✓           ✓              ✓             ✓               ✓                  ✓             ×
+ [71]                ✓            ×               ✓             ✓              ✓             ×           ✓              ✓             ✓               ✓                  ✓             ×
+ [80]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ×                  ✓             ×
+ [82]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ×               ×                  ×             ✓
+ [77]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ✓                  ✓             ×
+ [84]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ✓                  ✓             ×
+ [86]                ✓            ✓               ✓             ✓              ✓             ✓           ✓              ✓             ✓               ✓                  ✓             ×
+ [57]                ✓            ×               ✓             ✓              ✓             ✓           ✓              ✓             ✓               ✓                  ✓             ✓
+ [81]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ✓                  ✓             ✓
+ [87]                ✓            ✓               ✓             ✓              ×             ✓           ✓              ✓             ✓               ✓                  ✓             ×
+ [89]                ✓            ✓               ✓             ✓              ✓             ✓           ✓              ✓             ✓               ✓                  ✓             ×
+
+Here ✓ denotes that the scheme satisfies the security need, whereas ×indicates that the scheme fails to meet the security need.
+
+
+
+
+                                                                                                  17
+V. Lode and A. Pinapati                                                                     Computers and Electrical Engineering 135 (2026) 111174
+
+Table 5
+Comparison of computational cost.
+ Scheme               Single sign                  Verify                           Aggregate signature verify
+ [50]                 1𝑇𝑠.𝑚 + 1𝑇𝑝.𝑎 + 1𝑇ℎ          3𝑇𝑠.𝑚 + 2𝑇𝑝.𝑎 + 2𝑇ℎ              (𝑛 + 2)𝑇𝑠.𝑚 + (𝑛 + 1)𝑇𝑝.𝑎 + 2𝑛𝑇ℎ
+ [58]                 3𝑇𝑠.𝑚 + 2𝑇𝑝.𝑎 + 3𝑇ℎ          2𝑇𝑠.𝑚 + 𝑇𝑝.𝑎 + 𝑇ℎ                2𝑇𝑠.𝑚 + 𝑛𝑇𝑝.𝑎 + 𝑛𝑇ℎ
+ [60]                 𝑇𝑠.𝑚 + 𝑇ℎ                    3𝑇𝑠.𝑚 + 3𝑇𝑝.𝑎 + 2𝑇ℎ              (𝑛 + 2)𝑇𝑠.𝑚 + 3𝑛𝑇𝑝.𝑎 + 2𝑛𝑇ℎ
+ [59]                 2𝑇𝑠.𝑚 + 2𝑇ℎ                  4𝑇𝑠.𝑚 + 3𝑇𝑝.𝑎 + 𝑇ℎ               (𝑛 + 2)𝑇𝑠.𝑚 + (𝑛 + 3)𝑇𝑝.𝑎 + 𝑛𝑇ℎ
+ [61]                 1𝑇𝑠𝑚 + 1𝑇𝑝𝑎 + 1𝑇ℎ            3𝑇𝑠𝑚 + 2𝑇𝑝𝑎 + 2𝑇ℎ                2𝑛𝑇𝑠𝑚 + 𝑛𝑇𝑠𝑠𝑚 + (3𝑛 + 1)𝑇𝑝𝑎 + 2𝑛𝑇ℎ
+ [62]                 𝑇𝑠.𝑚 + 3𝑇ℎ                   3𝑇𝑠.𝑚 + 2𝑇𝑝.𝑎 + 3𝑇ℎ              (𝑛 + 2)𝑇𝑠.𝑚 + 2𝑛𝑇𝑝𝑎 + 3𝑛𝑇ℎ
+ [53]                 𝑇𝑠.𝑚                         3𝑇𝑠.𝑚 + 2𝑇𝑝.𝑎 + 2𝑇ℎ              (2𝑛 + 1)𝑇𝑠.𝑚 + (3𝑛 − 1)𝑇𝑝.𝑎 + 2𝑛𝑇ℎ
+ [64]                 𝑇𝑠.𝑚 + 𝑇ℎ                    2𝑇𝑠.𝑚 + 3𝑇𝑝.𝑎 + 3𝑇ℎ              (𝑛 + 1)𝑇𝑠.𝑚 + 2𝑇𝑝.𝑎 + 2𝑛𝑇ℎ
+ [65]                 2𝑇𝑠.𝑚 + 𝑇ℎ                   2𝑇𝑠.𝑚 + 3𝑇𝑝𝑎 + 𝑇ℎ                2𝑛𝑇𝑠.𝑚 + (4𝑛 − 2)𝑇𝑝𝑎 + 𝑛𝑇ℎ
+ [66]                 𝑇𝑠.𝑚 + 𝑇ℎ                    2𝑇𝑠.𝑚 + 𝑇𝑝.𝑎 + 𝑇ℎ                (𝑛 + 1)𝑇𝑠.𝑚 + (2𝑛 − 1)𝑇𝑝.𝑎 + 𝑛𝑇ℎ
+ [67]                 1𝑇𝑠𝑚 + 1𝑇ℎ                   1𝑇𝑠𝑚 + 2𝑇𝑝𝑎 + 2𝑇ℎ                2𝑇𝑠𝑚 + 2𝑇𝑝𝑎 + 2𝑇ℎ but generation requires 2𝑛𝑇𝑠𝑠𝑚 + 𝑛𝑇𝑠𝑚 + 𝑛𝑇ℎ
+ [54]                 𝑇𝑠.𝑚 + 2𝑇ℎ                   4𝑇𝑠.𝑚 + 3𝑇𝑝.𝑎 + 3𝑇𝑝.𝑎            4𝑛𝑇𝑠.𝑚 + 3𝑛𝑇𝑝.𝑎 + 3𝑛𝑇ℎ
+ [68]                 𝑇𝑠𝑚 + 2𝑇ℎ                    4𝑇𝑠𝑚 + 3𝑇𝑝𝑎 + 3𝑇ℎ                (2𝑛 + 2)𝑇𝑠𝑚 + 3𝑛𝑇𝑝𝑎 + 3𝑛𝑇ℎ
+ [70]                 3𝑇𝑠.𝑚 + 𝑇𝑝.𝑎 + 2𝑇ℎ           2𝑇𝑠.𝑚 + 2𝑇𝑝.𝑎 + 𝑇ℎ               (𝑛 + 1)𝑇𝑠.𝑚 + (3𝑛 − 1)𝑇𝑝.𝑎 + 𝑛𝑇ℎ
+ [56]                 2𝑇𝑠.𝑚 + 2𝑇ℎ                  2𝑇𝑠.𝑚 + 1𝑇𝑝𝑎 + 𝑇ℎ                (𝑛 + 1)𝑇𝑠.𝑚 + 𝑛𝑇𝑝𝑎 + 𝑛𝑇ℎ
+ [73]                 1𝑇𝑠.𝑚 + 3𝑇ℎ                  4𝑇𝑠.𝑚 + 2𝑇𝑝.𝑎 + 3𝑇ℎ              (2𝑛 + 1)𝑇𝑠.𝑚 + (2𝑛)𝑇𝑝.𝑎 + (2𝑛)𝑇ℎ
+ [74]                 1𝑇𝑠.𝑚 + 1𝑇ℎ                  3𝑇𝑠.𝑚 + 2𝑇𝑝.𝑎 + 2𝑇ℎ              (𝑛 + 2)𝑇𝑠.𝑚 + 3𝑛𝑇𝑝.𝑎 + 2𝑇ℎ
+ [55]                 1𝑇𝑠.𝑚 + 2𝑇ℎ                  4𝑇𝑠.𝑚 + 3𝑇𝑝𝑎 + 3𝑇ℎ               (3𝑛 + 1)𝑇𝑠.𝑚 + (3𝑛 − 1)𝑇𝑝𝑎 + 3𝑛𝑇ℎ
+ [76]                 1𝑇𝑠𝑚 + 2𝑇ℎ                   4𝑇𝑠𝑚 + 3𝑇𝑝𝑎 + 3𝑇ℎ                (2𝑛 + 3)𝑇𝑠𝑚 + (3𝑛 − 3)𝑇𝑠𝑠𝑚 + (3𝑛 + 1)𝑇𝑝𝑎 + 3𝑛𝑇ℎ
+ [78]                 1𝑇𝑠𝑚 + 1𝑇ℎ                   3𝑇𝑠𝑚 + 2𝑇𝑝𝑎 + 2𝑇ℎ                (2𝑛 + 1)𝑇𝑠𝑚 + (2𝑛 + 1)𝑇𝑝𝑎 + 2𝑛𝑇ℎ
+ [72]                 1𝑇𝑠𝑚 + 1𝑇ℎ                   3𝑇𝑠𝑚 + 3𝑇𝑝𝑎 + 2𝑇ℎ                (3𝑛 + 2)𝑇𝑠𝑚 + 3𝑛𝑇𝑝𝑎 + 𝑛𝑇ℎ
+ [79]                 1𝑇𝑠𝑚 + 1𝑇ℎ                   3𝑇𝑠𝑚 + 3𝑇𝑝𝑎 + 2𝑇ℎ                (2𝑛 + 1)𝑇𝑠𝑚 + (4𝑛 − 1)𝑇𝑝𝑎 + 2𝑛𝑇ℎ
+ [71]                 1𝑇𝑠𝑚 + 3𝑇ℎ                   5𝑇𝑠𝑚 + 3𝑇𝑝𝑎 + 3𝑇ℎ                (4𝑛 + 1)𝑇𝑠𝑚 + (4𝑛 − 3)𝑇𝑝𝑎 + 3𝑛𝑇ℎ
+ [80]                 1𝑇𝑠𝑚 + 2𝑇ℎ                   3𝑇𝑠𝑚 + 1𝑇𝑝𝑎 + 2𝑇ℎ + 1𝑋𝑂𝑅         2𝑛𝑇𝑠𝑚 + (3𝑛 − 2)𝑇𝑝𝑎 + 𝑛𝑇ℎ
+ [82]                 1𝑇𝑠𝑚 + 1𝑇ℎ                   3𝑇𝑠𝑚 + 2𝑇𝑝𝑎 + 2𝑇ℎ                (2𝑛 − 1)𝑇𝑠𝑚 + 2𝑛𝑇𝑝𝑎 + 2𝑛𝑇ℎ
+ [77]                 𝑇𝑠.𝑚 + 3𝑇𝑝.𝑎 + 2𝑇𝑚𝑚 + 2𝑇ℎ    4𝑇𝑠.𝑚 + 3𝑇𝑝.𝑎 + 3𝑇ℎ              2𝑛𝑇𝑠.𝑚 + (3𝑛 − 1)𝑇𝑝.𝑎 + (2𝑛 + 1)𝑇ℎ
+ [84]                 1𝑇𝑠𝑚 + 1𝑇ℎ                   3𝑇𝑠𝑚 + 3𝑇𝑝𝑎 + 2𝑇ℎ                (2𝑛 + 1)𝑇𝑠𝑚 + 3𝑛𝑇𝑝𝑎 + 2𝑛𝑇ℎ
+ [86]                 1𝑇ℎ                          𝑇𝑠𝑚 + 2𝑇𝑝𝑎 + 2𝑇ℎ                 𝑛𝑇𝑠𝑚 + (2𝑛 − 1)𝑇𝑝𝑎 + (𝑛 + 1)𝑇ℎ
+ [57]                 1𝑇𝑠𝑚 + 1𝑇ℎ                   3𝑇𝑠𝑚 + 3𝑇𝑝𝑎 + 2𝑇ℎ                (𝑛 + 2)𝑇𝑠𝑚 + 𝑛𝑇𝑠𝑠𝑚 + 3𝑛𝑇𝑝𝑎 + 2𝑛𝑇ℎ
+ [81]                 3𝑇𝑠𝑚 + 𝑇𝑝𝑎 + 2𝑇ℎ             4𝑇𝑠𝑚 + 2𝑇𝑝𝑎 + 2𝑇ℎ                (3𝑛 + 1)𝑇𝑠𝑚 + 𝑛𝑇𝑝𝑎 + 2𝑛𝑇ℎ
+ [87]                 2𝑇ℎ                          3𝑇𝑠𝑚 + 2𝑇𝑝𝑎 + 3𝑇ℎ                (2𝑛 + 1)𝑇𝑠𝑚 + (3𝑛 − 1)𝑇𝑝𝑎 + 3𝑛𝑇ℎ
+ [89]                 𝑇𝑠𝑚 + 2𝑇ℎ                    4𝑇𝑠𝑚 + 3𝑇𝑝𝑎 + 3𝑇ℎ                (3𝑛 + 5)𝑇𝑠𝑚 + 4(𝑛 + 1)𝑇𝑝𝑎 + 3(𝑛 + 1)𝑇ℎ
+
+
+
+
+6. Security and performance analysis
+
+6.1. Security analysis
+
+    Table 4 provides a comparative security analysis of the reviewed schemes based on the defined security requirements (1 -9 ) and
+(1 -3 ) in Section 3. In Section 4.6 we clearly defined and described along with the mathematical formulation that demonstrates
+how a security property can be violated. Following these attack descriptions, we systematically evaluated each scheme by analyzing
+its underlying mathematical construction to determine whether its satisfies or fails each security property.
+    The evaluation considers essential properties such as message authentication, privacy, traceability, unlinkability, and non-
+repudiation, which are crucial for secure communication in VANETs. Additionally, each scheme is evaluated for its resilience to
+the typical certificateless security threats — Type-I, Type-II and Type-III attacks — as well as common and sophisticated assaults
+such as replay, impersonation, man-in-the-middle, and collusion attacks. The table provides a clear overview of the overall robustness
+and dependability of the proposed and current designs in securing vehicular communications by highlighting whether each scheme
+successfully satisfies these security requirements.
+
+6.2. Performance analysis
+
+   Table 5 presents a comparative evaluation of the computational overhead involved in signature generation, verification, and
+aggregate verification across various schemes. The comparison is carried out based on the total number of scalar multiplications
+(𝑇𝑠𝑚 ), small scalar multiplications (𝑇𝑠𝑠𝑚 ), point additions (𝑇𝑝𝑎 ), module multiplications (𝑇𝑚𝑚 ), and hash operations (𝑇ℎ ) required by
+each scheme. These parameters are considered the most significant in determining the overall computational efficiency of elliptic
+curve-based constructions. By analyzing the cost in terms of these fundamental operations, the table highlights how different schemes
+optimize or reduce the computational load during individual signature verification and aggregate verification, thereby providing a
+clear indication of their suitability for real-time vehicular environments.
+
+7. Challenges and future research directions
+
+   Despite significant advancements in ECC-based CLAS schemes for VANETs, several critical challenges remain unresolved. This
+section identifies the current limitations and proposes promising research directions to address the evolving security and performance
+requirements of next-generation vehicular networks.
+
+                                                                     18
+V. Lode and A. Pinapati                                                                      Computers and Electrical Engineering 135 (2026) 111174
+
+7.1. Current challenges in existing methods
+
+    • Computational Overhead in Situations with High Densities: Although the CLAS schemes based on ECC are more efficient than
+      pairing-based methods, scalability is still an issue in crowded metropolitan settings. The aggregation and verification overhead
+      can surpass acceptable real-time restrictions (usually 100–300 ms for safety-critical applications) when hundreds of cars
+      broadcast safety messages simultaneously within the coverage area of a single RSU. The verification difficulty of existing
+      techniques increases linearly or almost linearly depending on the number of aggregated signatures, becoming unfeasible when
+      processing 𝑛 > 500 signatures at once.
+    • Efficiency and Security Trade-off : Current ECC-based CLAS schemes face a trade-off between efficiency and strong security.
+      Schemes designed to resist threats such as Type-II forgeries, public-key substitution, and key-replacement attacks often require
+      extra cryptographic checks during signing and verification. Incorporating secure key-validation steps, for instance, introduces
+      additional elliptic-curve multiplications and can raise the signing cost by roughly 30%–50% compared to less robust designs
+    • Danger of Malevolent Aggregation: The assumption of honest-but-curious aggregators is a basic drawback of several existing
+      CLAS methods. RSUs or intermediary vehicles carrying out aggregation may be compromised or act maliciously in real-world
+      VANETs deployments. Malevolent aggregators could:
+
+          – Use fake signatures to frame participants who are sincere.
+          – Reorder signatures to change the information regarding the message sequence.
+          – Aggregation delay that results in a safety-critical message timeout.
+
+      There is a single point of failure in the verification chain because the majority of current schemes lack the means to identify
+      or validate such aggregator misbehavior.
+    • Standardized security models are lacking : A single security model for assessing CLAS schemes on VANETs has not yet been agreed
+      upon by the research community. Direct comparison is challenging since different works use different adversarial models,
+      security definitions, and threat assumptions. While some techniques claim standard model security without thorough formal
+      analysis, others offer security proofs in the random oracle model. This disarray slows down real-world deployment and prevents
+      methodical evaluation.
+    • Limited Testing and Real-World Implementation: Although several ECC-based CLAS schemes provide good theoretical performance
+      metrics, there is still a lack of empirical validation using real VANETs hardware (OBUs and RSUs). Simulations frequently
+      ignore real-world factors such as:
+
+          – Processing delays in the network layer and protocol overhead.
+          – Cache behavior and memory limitations for embedded devices.
+          – Effects of running many processes at once (GPS processing, program execution).
+          – Effects of packet loss and wireless channel contention.
+
+    • Revocation’s Privacy-Efficiency Conundrum: A continuing difficulty is to provide efficient revocation while maintaining con-
+      ditional privacy. The revocation of vehicle’s credentials should cause all previously issued signatures to become invalid or
+      traceable. However, there is a significant communication cost associated with updating the revocation lists of every participant
+      in a highly mobile network. Revocation strategies based on accumulators and bloom filters add complexity to verification while
+      lowering bandwidth needs. Existing methods do not strike the best possible balance among revocation granularity, privacy
+      protection, and verification effectiveness.
+    • The Danger of Quantum Computing : The advent of quantum computing presents a long-term existential threat, even as ECC
+      provides sufficient security against traditional adversaries. In polynomial time, Shor’s method can solve the ECDLP on quantum
+      computers with enough power. Given that automobiles last only ten to fifteen years, the cryptographic techniques used
+      today need to account for post-quantum dangers. CLAS systems must be fundamentally redesigned in order to switch to
+      quantum-resistant alternatives.
+
+7.2. Future research directions
+
+    Future studies on ECC-based certificateless aggregate signature (CLAS) systems in VANETs could go in the following directions:
+
+    • Adaptive and Dynamic Aggregation: Vehicles regularly enter and exit communication ranges due to the dynamic topology
+      of VANETs. In order to add or remove signatures without re-aggregating all previously created ones, future ECC-based
+      CLAS schemes should include dynamic aggregation and disaggregation. This will lower the computational cost and increase
+      scalability during real-time message authentication.
+    • Effective Revocation Procedures: In current CLAS systems, revocation of harmful or inactive vehicles is still difficult. Ensuring that
+      compromised or expired keys are effectively excluded from aggregation through the integration of cryptographic accumulators
+      or lightweight blockchain-based revocation systems helps preserve overall security and trust.
+    • Adaptability to DoS Attacks: Mechanisms to identify and stop Denial-of-Service (DoS) attacks against signature verification
+      procedures should be incorporated into future plans. To stop attackers from flooding RSUs with too many verification requests,
+      pre-verification filters, batch verification prioritization, and adaptive rate-limiting can be implemented.
+
+                                                                    19
+V. Lode and A. Pinapati                                                                               Computers and Electrical Engineering 135 (2026) 111174
+
+      • Improved Privacy with the Use of Pseudonyms: ECC-based CLAS schemes that utilize adaptive pseudonym management can further
+        enhance privacy. Unlinkable aggregation, in conjunction with context-aware and periodic pseudonym modifications, can
+        guard against tracking attacks while preserving authentication accuracy. Hybrid pseudonym creation methods and randomized
+        pseudonym intervals can improve anonymity even further.
+      • Effective Identification of Invalid Signatures: It can take a lot of effort to find flawed individual signatures when aggregate
+        verification is unsuccessful. Reliability in congested vehicle situations can be increased by creating effective invalid signature
+        search algorithms that localize the faulty signature or signatures with little verification overhead, utilizing hierarchical or
+        Merkle tree-based techniques.
+      • Secure CLAS Post-Quantum Designs: Future studies should investigate hybrid ECC–lattice-based CLAS designs because ECC is
+        susceptible to quantum attacks. By offering quantum resistance and maintaining the effectiveness of elliptic curves, such
+        techniques can guaranty the long-term security of VANETs authentication systems.
+      • Combining AI with Edge Technologies: Performance can be further improved by integrating edge computing and artificial
+        intelligence (AI) into ECC-based CLAS. While AI-driven models can forecast trust levels, identify irregularities, and optimize
+        verification workloads in real time, edge nodes can manage partial aggregation or pre-verification.
+
+8. Conclusion
+
+    With a focus on pairing-free designs for effective V2V and V2I authentication, this paper surveys elliptic curve-based CLAS
+techniques for VANETs. By eliminating certificate administration and key escrow problems while guaranteeing minimal compu-
+tational and communication costs, ECC-based CLAS schemes successfully satisfy important security needs in VANETs. Achieving
+constant-time verification for large signature aggregates is still a significant research challenge, despite considerable advancements.
+To guarantee long-term security in intelligent transportation systems, future research should also concentrate on implementing
+quantum-resistant primitives, strengthening resilience to denial-of-service assaults, and refining revocation mechanisms.
+
+Declaration of generation AI and AI-supportive technologies in writing
+
+   In the process of working on this work, the author(s) relied on ChatGPT (GPT-4)1 and Paperpal2 in order to enhance the
+readability and language of the work. After using these tools/services, the author(s) checked and fixed the contents as necessary
+and bear(s) complete responsibility for the contents of the publication.
+
+Declaration of competing interest
+
+    The authors declare that they have no known competing financial interests or personal relationships that could have appeared
+to influence the work reported in this paper.
+
+Data availability
+
+      No data was used for the research described in the article.
+
+
+References
+
+ [1] Raya M, Hubaux J-P. Securing vehicular ad hoc networks. J Comput Secur 2007;15:39–68. http://dx.doi.org/10.3233/JCS-2007-15103.
+ [2] Mir ZH, Filali F. LTE and IEEE 802.11p for vehicular networking: A performance evaluation. EURASIP J Wirel Commun Netw 2014;2014(89).
+     http://dx.doi.org/10.1186/1687-1499-2014-89.
+ [3] Cseh C. Architecture of the dedicated short-range communications (DSRC) protocol. In: Proceedings of the 48th IEEE vehicular technology conference
+     (vTC’98): pathway to global wireless revolution. vol. 3, 1998, p. 2095–9. http://dx.doi.org/10.1109/VETEC.1998.686156.
+ [4] Author A. Dedicated short range communications (DSRC). 2003, [Online] http://grouper.ieee.org/groups/scc32/dsrc/index.html.
+ [5] Al-Riyami SS, Paterson KG. Certificateless public key cryptography. In: Laih C-S, editor. Advances in cryptology – ASIACRYPT 2003. Lecture notes in
+     computer science, vol. 2894, Berlin, Germany: Springer; 2003, p. 452–73. http://dx.doi.org/10.1007/978-3-540-40061-5_29.
+ [6] Boneh D, Gentry C, Lynn B, Shacham H. Aggregate and verifiably encrypted signatures from bilinear maps. In: Biham E, editor. Advances in cryptology –
+     EUROCRYPT 2003. Lecture notes in computer science, vol. 2656, Berlin, Germany: Springer; 2003, p. 416–32. http://dx.doi.org/10.1007/3-540-39200-9_26.
+ [7] Barker E. Recommendation for key management: Part 1 – general. NIST Special Publication 800-57, Part 1, Rev. 4, Gaithersburg, MD, USA: National
+     Institute of Standards and Technology (NIST); 2016, http://dx.doi.org/10.6028/NIST.SP.800-57pt1r4.
+ [8] Barker E. Recommendation for key management: Part 1 – general (revision 5). NIST Special Publication 800-57, Part 1, Rev. 5, Gaithersburg, MD, USA:
+     National Institute of Standards and Technology (NIST); 2020, http://dx.doi.org/10.6028/NIST.SP.800-57pt1r5.
+ [9] Zhu X, Jiang S, Wang L, Li H. Efficient privacy-preserving authentication for vehicular ad hoc networks. IEEE Trans Veh Technol 2014;63(2):907–19.
+     http://dx.doi.org/10.1109/TVT.2013.2294032.
+[10] Huang Y, Xu G, Song X, Liu Y, Wang Q. A quantum-secure certificateless aggregate signature protocol for vehicular ad hoc networks. Veh Commun
+     2023;39:100596. http://dx.doi.org/10.1016/j.vehcom.2024.100775.
+[11] Boneh D, Gentry C, Lynn B, Shacham H. A survey of two signature aggregation techniques. CryptoBytes 2003;6(2):1–8, https://crypto.stanford.edu/~dabo/
+     pubs/papers/aggsurvey.pdf.
+
+
+
+  1   https://chatgpt.com/
+  2   https://paperpal.com/
+
+
+                                                                           20
+V. Lode and A. Pinapati                                                                                    Computers and Electrical Engineering 135 (2026) 111174
+
+[12] Malina L, Hajny J, Zeman V. Trade-off between signature aggregation and batch verification. In: Proceedings of the 36th international conference on
+     telecommunications and signal processing. 2013, p. 57–61. http://dx.doi.org/10.1109/TSP.2013.6613891.
+[13] Anoop AMS. Elliptic curve cryptography: An implementation guide. 2007, https://informatika.stei.itb.ac.id/~rinaldi.munir/Kriptografi/2014-2015/ECC_
+     Tut_v1_0.pdf.
+[14] Cahyadi EF, Hwang M-S. Extensive review of certificateless aggregate signature mechanisms for vehicular ad hoc networks. IETE Tech Rev 2022;39:1265–76.
+     http://dx.doi.org/10.1080/02564602.2021.1962625.
+[15] Farash MS, Khan MK, Hammoudeh M. An efficient certificateless conditional privacy-preserving authentication method for vehicular ad hoc networks. Mob
+     Inf Syst 2019;2019(5):1–19. http://dx.doi.org/10.1155/2019/7593138.
+[16] Cahyadi EF, Hwang M-S. Enhanced and efficient anonymous authentication scheme with conditional privacy preservation for VANETs. IEEE Syst J
+     2022;16(4):5854–65. http://dx.doi.org/10.1109/JSYST.2021.3055078.
+[17] Hubaux J, Capkun S, Luo J. The security and privacy of smart vehicles. IEEE Secur Priv 2004;2(3):49–55. http://dx.doi.org/10.1109/MSP.2004.26.
+[18] Lu R, Lin X, Zhu H, Ho P-H, Shen X. ECPP: An efficient protocol for conditional privacy preservation in secure vehicular communication. In: Proceedings
+     of IEEE INFOCOM 2008 - the 27th conference on computer communications. Phoenix, AZ, USA; 2008, p. 1229–37. http://dx.doi.org/10.1109/INFOCOM.
+     2008.179.
+[19] Shamir A. Identity-based cryptosystems and digital signature schemes. In: Blakley GR, Chaum D, editors. Advances in cryptology — CRYPTO ’84. Lecture
+     notes in computer science, vol. 196, Berlin, Heidelberg: Springer-Verlag; 1985, p. 47–53. http://dx.doi.org/10.1007/3-540-39568-7_5.
+[20] Castro R, Dahab R. Lightweight certificateless signature scheme with support for aggregation. Report 2007/454, Cryptology ePrint Archive; 2007,
+     https://eprint.iacr.org/2007/454.pdf.
+[21] Gong Z, Long Y, Hong X, Chen K. Two certificateless aggregate signature schemes based on bilinear pairings. In: Proceedings of the 8th ACIS international
+     conference on SNPD 2007. Qingdao, China; 2007, p. 188–93. http://dx.doi.org/10.1109/SNPD.2007.132.
+[22] Zhang L, Zhang F. Security model for certificateless aggregate signature schemes. In: Proceedings of the international conference on computational
+     intelligence and security. 2008, p. 364–8. http://dx.doi.org/10.1109/CIS.2008.9.
+[23] Zhang L, Zhang F. A novel certificateless aggregate signature scheme. Comput Commun 2008;32(6):1079–85. http://dx.doi.org/10.1016/j.comcom.2008.
+     12.042.
+[24] Shim K-A. On the security of a certificateless aggregate signature scheme. IEEE Commun Lett 2011;15(10):1136–8. http://dx.doi.org/10.1109/LCOMM.
+     2011.081011.111214.
+[25] Zhang L, Qin B, Wu Q, Zhang F. An efficient certificateless aggregate signature scheme. In: Applied algebra, algebraic algorithms and error-correcting
+     codes (AAECC 2009). LNCS, vol. 5527, Berlin, Heidelberg: Springer; 2009, p. 259–73. http://dx.doi.org/10.1007/978-3-642-02181-7_28.
+[26] Gong Z, Long Y, Hong X, Chen K. Practical certificateless aggregate signatures from bilinear maps. J Inf Sci Eng 2010;26(6):2093–106, https://jise.iis.
+     sinica.edu.tw/JISESearch/fullText;jsessionid=8c6517ab6914dde1abcbd22cbf22?pId=525&code=E51EB3929A4AB83.
+[27] Zhang L, Qin B, Pei Q, Zhang F, Li J. Efficient many-to-one authentication with certificateless aggregate signatures. Comput Netw 2010;54(14):2482–91.
+     http://dx.doi.org/10.1016/j.comnet.2010.04.008.
+[28] Xiong H, Guan Z, Chen Z, Li F. An efficient certificateless aggregate signature with constant pairing computations. Inform Sci 2013;219:225–35.
+     http://dx.doi.org/10.1016/j.ins.2012.07.004.
+[29] He D, Tian M, Chen J. Insecurity of an efficient certificateless aggregate signature with constant pairing computations. Inform Sci 2014;268:458–62.
+     http://dx.doi.org/10.1016/j.ins.2013.09.032.
+[30] Tu H, He D, Huang B. Reattack of a certificateless aggregate signature scheme with constant pairing computations. Sci World J 2014;2014:343715.
+     http://dx.doi.org/10.1155/2014/343715.
+[31] Zhang F, Shen L, Wu G. Notes on the security of certificateless aggregate signature schemes. Inform Sci 2014;287:32–7. http://dx.doi.org/10.1016/j.ins.
+     2014.07.019.
+[32] Xiong H, Wu Q, Chen Z. Strong security enabled certificateless aggregate signatures applicable to mobile computation. Proceedings of the Third International
+     Conference on Intelligent Networking and Collaborative Systems (INCoS) 2011;92–9. http://dx.doi.org/10.1109/INCoS.2011.151.
+[33] Xiong H, Chen Z, Li F. An efficient and provably secure certificateless aggregate signature scheme. Journal of Network and Computer Applications
+     2012;35(2):689–95. http://dx.doi.org/10.1016/j.jnca.2011.10.009.
+[34] Zhan Y, Wang B. Cryptanalysis of a certificateless aggregate signature scheme for healthcare wireless sensor network. Secur Commun Netw 2019;2019:1–5.
+     http://dx.doi.org/10.1155/2019/6059834.
+[35] Kumar P, Kumari S, Sharma V, Sangaiah AK, Wei J, Li X. A certificateless aggregate signature scheme for healthcare wireless sensor network. Sustain
+     Comput: Inform Syst 2018;18:80–9. http://dx.doi.org/10.1016/j.suscom.2017.09.002.
+[36] Yang X, Wang J, Ma T, Li Y, Wang C. A short certificateless aggregate signature against coalition attacks. PLOS ONE 2018. http://dx.doi.org/10.1371/
+     journal.pone.0205453.
+[37] Tu H. Cryptanalysis and improvement of a certificateless aggregate signature scheme. Inform Process Lett 2013;113(17):643–8. http://dx.doi.org/10.1016/
+     j.ins.2014.09.065.
+[38] Li J, Yuan H, Zhang Y. Cryptanalysis and improvement of certificateless aggregate signature with conditional privacy-preserving for vehicular sensor
+     networks. Tech. Rep. 692, Cryptology ePrint Archive; 2016, [Online]. Available: https://eprint.iacr.org/2016/692.
+[39] Horng S-J, Tzeng S-F, Fan P, Wang X, Kim T-H. Efficient certificateless aggregate signature with batch verification for VANETs. IEEE Trans Intell Transp
+     Syst 2015;16(4):2063–72. http://dx.doi.org/10.1109/TITS.2014.2360137.
+[40] Horng S-J, Tzeng S-F, Huang P-H, Wang X, Li T, Khan MK. An efficient certificateless aggregate signature with conditional privacy-preserving for vehicular
+     sensor networks. Inform Sci 2015;317:48–66. http://dx.doi.org/10.1016/j.ins.2015.04.033.
+[41] Li J, Yuan H, Zhang Y. Cryptanalysis and improvement for certificateless aggregate signature. Fund Inform 2018;157(1–2):1–18. http://dx.doi.org/10.
+     3233/FI-2018-1620.
+[42] Shen H, Chen J, Shen J, He D. Cryptanalysis of a certificateless aggregate signature scheme with efficient verification. Secur Commun Netw 2016.
+     http://dx.doi.org/10.1002/sec.1480.
+[43] Cahyadi EF, Su T-W, Yang C-C, Hwang M-S. A certificateless aggregate signature scheme for security and privacy protection in VANET. Int J Distrib Sens
+     Networks 2022;18(5):1–13. http://dx.doi.org/10.1177/15501329221080658.
+[44] Li H, Shen C, Huang H, Wu C. A certificateless aggregate signature scheme for VANETs with privacy protection properties. PLOS ONE 2025.
+     http://dx.doi.org/10.1371/journal.pone.0317047.
+[45] Wu G, Zhang F, Shen L, Guo F, Susilo W. Certificateless aggregate signature scheme secure against fully chosen-key attacks. Inform Sci 2020;514:288–301.
+     http://dx.doi.org/10.1016/j.ins.2019.11.037.
+[46] Xu Z, He D, Kumar N, Choo K-KR. Efficient certificateless aggregate signature scheme for performing secure routing in VANETs. Secur Commun Netw
+     2020;2020:1–12. http://dx.doi.org/10.1155/2020/5276813.
+[47] Nyangaresi VO, Ghaib AA, Jasim HM, Abduljabbar ZA, Ma J, Sibahee MAA, Aldarwish AJY, Ali AH, Neamah HA. Message verification protocol
+     based on bilinear pairings and elliptic curves for enhanced security in vehicular ad hoc networks. Comput Mater Contin 2024;81(1):1029–57. http:
+     //dx.doi.org/10.32604/cmc.2024.053854.
+
+
+                                                                              21
+V. Lode and A. Pinapati                                                                                     Computers and Electrical Engineering 135 (2026) 111174
+
+[48] Luo C, Li D, Khan MS. An efficient certificateless anonymous signcryption communication scheme for vehicular ad hoc network. Sci Rep 2024;14:27079.
+     http://dx.doi.org/10.1038/s41598-024-77992-5.
+[49] Abduljabbar ZA, Nyangaresi VO, Ahmed AA, et al. Vehicular ad hoc networks verification scheme based on bilinear pairings and networks reverse fuzzy
+     extraction. Sci Rep 2025;15:29225. http://dx.doi.org/10.1038/s41598-025-15011-x.
+[50] Cui J, Zhang J, Zhong H, Shi R, Xu Y. An efficient certificateless aggregate signature without pairings for vehicular ad hoc networks. Inform Sci
+     2018;451–452:1–15. http://dx.doi.org/10.1016/j.ins.2018.03.060.
+[51] Gayathri N, Thumbur G, Kumar PR, Rahman MZU, Reddy PV. Efficient and secure pairing-free certificateless aggregate signature scheme for healthcare
+     wireless medical sensor networks. IEEE Internet Things J 2019;6(5):9064–75. http://dx.doi.org/10.1109/JIOT.2019.2927089.
+[52] Liu J, Wang L, Yu Y. Improved security of a pairing-free certificateless aggregate signature in healthcare wireless medical sensor networks. IEEE Internet
+     Things J 2020;7(6):5256–66. http://dx.doi.org/10.1109/JIOT.2020.2979613.
+[53] Thumbur G, Rao GS, Reddy PV, Gayathri NB, Reddy DVRK, Padmavathamma M. Efficient and secure certificateless aggregate signature-based authentication
+     scheme for vehicular ad hoc networks. IEEE Internet Things J 2021;8(3). http://dx.doi.org/10.1109/JIOT.2020.3019304.
+[54] Yang X, Chen A, Wang Z, Du X, Wang C. Cryptanalysis of an efficient and secure certificateless aggregate signature-based authentication scheme for
+     vehicular ad hoc networks. Secur Priv 2022;5(2). http://dx.doi.org/10.1155/2022/4472945, Art. no. e194.
+[55] Zheng H, Luo M, Zhang Y, Peng C, Feng Q. A security-enhanced pairing-free certificateless aggregate signature for vehicular ad-hoc networks. IEEE Syst
+     J 2023;17(3):3822–33. http://dx.doi.org/10.1109/JSYST.2022.3220869.
+[56] Xiong W, Wang R, Wang Y, Wei Y, Zhou F, Luo X. Improved certificateless aggregate signature scheme against collusion attacks for VANETs. IEEE Syst J
+     2023;17(1):1098–108. http://dx.doi.org/10.1109/JSYST.2022.3213245.
+[57] Ye F, Wu W. A security-enhanced certificateless conditional privacy-preserving authentication scheme with collusion-resistance for IoV. Comput Netw
+     2025;259:111084. http://dx.doi.org/10.1016/j.comnet.2025.111084.
+[58] Kamil IA, Ogundoyin SO. An improved certificateless aggregate signature scheme without bilinear pairings for vehicular ad hoc networks. J Inf Secur Appl
+     2019;44:184–200. http://dx.doi.org/10.1016/j.jisa.2018.12.004.
+[59] Zhao Y, Hou Y, Wang L, Kumari S, Khan MK, Xiong H. An efficient certificateless aggregate signature scheme for the internet of vehicles. Trans Emerg
+     Tel. Tech 2020;31(11):e3708. http://dx.doi.org/10.1002/ett.3708.
+[60] Li K, Au MH, Ho WH, Wang YL. An efficient conditional privacy-preserving authentication scheme for vehicular ad hoc networks using online/offline
+     certificateless aggregate signature. In: Proceedings of provSec 2019. Lecture notes in computer science, vol. 11821, Springer, Switzerland; 2019, p. 59–76.
+     http://dx.doi.org/10.1007/978-3-030-31919-9_4.
+[61] Xu G, Zhou W, Sangaiah AK, Zhang Y, Zheng X, Tang Q, Xiong N, Liang K, Zhou X. A security-enhanced certificateless aggregate signature authentication
+     protocol for in VANETs. IEEE Netw 2020;34(2):22–9. http://dx.doi.org/10.1109/MNET.001.1900035.
+[62] Li C, Wu G, Xing L, Zhu F, Zhao L. An efficient certificateless aggregate signature scheme designed for VANET. Comput Mater Contin 2020;63(2):725–42,
+     [Online]. Available: https://www.techscience.com/cmc/v63n2/38540/pdf.
+[63] Zhong H, Han SS, Cui J, Zhang J, Xu Y. Privacy-preserving authentication scheme with full aggregation in VANET. Inform Sci 2019;476:211–21.
+     http://dx.doi.org/10.1016/j.ins.2018.10.021.
+[64] Ye X, Xu G, Cheng X, Li Y, Qin Z. Certificateless-based anonymous authentication and aggregate signature scheme for vehicular ad hoc networks. Wirel
+     Commun Mob Comput 2021;2021:16. http://dx.doi.org/10.1155/2021/6677137.
+[65] Vallent TF, Hanyurwimfura D, Mikeka C. Efficient certificateless aggregate signature scheme with conditional privacy-preservation for vehicular ad hoc
+     networks enhanced smart grid system. Sensors 2021;21(9). http://dx.doi.org/10.3390/s21092900.
+[66] Han Y, Song W, Zhou Z, Wang H, Yuan B. eCLAS: An efficient pairing-free certificateless aggregate signature for secure VANET communication. IEEE Syst
+     J 2022;16(1). http://dx.doi.org/10.1109/JSYST.2021.3116029.
+[67] Wang Z, Wang H, Wang Y, Yang X. CLASRM: A lightweight and secure certificateless aggregate signature scheme with revocation mechanism for 5G-enabled
+     vehicular networks. Secur Commun Netw 2022;2022:3646960. http://dx.doi.org/10.1155/2022/3646960.
+[68] Zhou X, Luo M, Vijayakumar P, Peng C, He D. Efficient certificateless conditional privacy-preserving authentication for VANETs. IEEE Trans Veh Technol
+     2022;71(7):7863–75. http://dx.doi.org/10.1109/TVT.2022.3169948.
+[69] Ali I, Chen Y, Ullah N, Kumar R, He W. An efficient and provably secure ECC-based conditional privacy-preserving authentication for vehicle-to-vehicle
+     communication in VANETs. IEEE Trans Veh Technol 2021;70(2):1278–91. http://dx.doi.org/10.1109/TVT.2021.3050399.
+[70] Genc Y, Aytas N, Akkoc A, Afacan E, Yazgan E. ELCPAS: A new efficient lightweight certificateless conditional privacy preserving authentication scheme
+     for IoV. Veh Commun 2023;39:100549. http://dx.doi.org/10.1016/j.vehcom.2022.100549.
+[71] Xu R, Zhou Y, Yang Q, Yang K, Han Y, Yang B, Xia Z. An efficient and secure certificateless aggregate signature scheme. J Syst Archit 2024;147:103030.
+     http://dx.doi.org/10.1016/j.sysarc.2023.103030.
+[72] Kabil A, Aslan H, Azer MA, Rasslan M. CHAM-CLAS: A certificateless aggregate signature scheme with chameleon hashing-based identity authentication
+     for VANETs. Cryptography 2024;8(3):43. http://dx.doi.org/10.3390/cryptography8030043.
+[73] Gong Z, Gao T, Guo N. PCAS: Cryptanalysis and improvement of pairing-free certificateless aggregate signature scheme with conditional privacy-preserving
+     for VANETs. Ad Hoc Netw 2023;144:103134. http://dx.doi.org/10.1016/j.adhoc.2023.103134.
+[74] Wu W, Ye F. IPCAS: An improved conditional privacy-preserving certificateless aggregate signature scheme without bilinear pairing for VANETs. J Syst
+     Archit 2024;152:103175. http://dx.doi.org/10.1016/j.sysarc.2024.103175.
+[75] Cao Z, Liu L. A security-enhanced pairing-free certificateless aggregate signature for vehicular ad-hoc networks, revisited. 2025, Cryptology ePrint Archive,
+     Paper 2025/495, [Online]. Available: https://eprint.iacr.org/2025/495.
+[76] Zhu F, Yi X, Abuadbba A, Khalil I, Huang X, Xu F. A security-enhanced certificateless conditional privacy-preserving authentication scheme for vehicular
+     ad hoc networks. IEEE Trans Intell Transp Syst 2023;24(10):10456–66. http://dx.doi.org/10.1109/TITS.2023.3275077.
+[77] Yang X, Li S, Yang L, Du X, Wang C. Efficient and security-enhanced certificateless aggregate signature-based authentication scheme with conditional
+     privacy preservation for VANETs. IEEE Trans Intell Transp Syst 2024;25(9):12256–68. http://dx.doi.org/10.1109/TITS.2024.3367925.
+[78] Yu S, et al. Efficient ECC-based conditional privacy-preserving aggregation signature scheme in V2V. IEEE Trans Veh Technol 2023;72(11):15028–39.
+     http://dx.doi.org/10.1109/TVT.2023.3287989.
+[79] Lode V, Lasushe K, Pinapati A. Security in VANETs with insider attack resistance and signature aggregation. In: Proc. ADCIS. 2024, p. 499–512.
+     http://dx.doi.org/10.1007/978-981-99-9521-9_38.
+[80] Shao H, Piao C. A provably secure lightweight authentication based on elliptic curve signcryption for vehicle-to-vehicle communication in VANETs. IEEE
+     Trans Ind Informatics 2024;20(3):3738–47. http://dx.doi.org/10.1109/TII.2023.3313527.
+[81] Liu D, Tang W, Wang L, et al. A security enhanced certificateless aggregate signcryption scheme for VANETs. Peer-To-Peer Netw Appl 2025;18:204.
+     http://dx.doi.org/10.1007/s12083-025-02029-1.
+[82] Guo R, Dong R, Li X, Zhang Y, Zheng D. DRCLAS: An efficient certificateless aggregate signature scheme with dynamic revocation in vehicular ad-hoc
+     networks. Veh Commun 2024;47:100763. http://dx.doi.org/10.1016/j.vehcom.2024.100763.
+[83] Cao Z, Liu L. On the security of one certificateless aggregate signature scheme with dynamic revocation in vehicular ad-hoc networks. 2025, Cryptology
+     ePrint Archive, Paper 2025/939, [Online]. Available: https://eprint.iacr.org/2025/939.
+
+
+                                                                               22
+V. Lode and A. Pinapati                                                                               Computers and Electrical Engineering 135 (2026) 111174
+
+[84] Rastegari P. Authentication in VANETs with conditional privacy-preserving property using certificateless aggregate signature schemes. Int J Math Sci
+     Comput (IJMSC) 2024;10(4):51–62. http://dx.doi.org/10.5815/ijmsc.2024.04.05.
+[85] Wang H, Wang L, Zhang K, Li J, Luo Y. A conditional privacy-preserving certificateless aggregate signature scheme in the standard model for VANETs.
+     IEEE Access 2022;10:15605–18. http://dx.doi.org/10.1109/ACCESS.2022.3147595.
+[86] Wu W, Ye F. A secure and efficient certificateless aggregate signature authentication scheme with pseudonyms for VANETs. IEEE Internet Things J
+     2025;12(1):124–39. http://dx.doi.org/10.1109/JIOT.2024.3459033.
+[87] Imam AY, Li F. Efficient lightweight anonymous authentication scheme with certificateless aggregation for VANETs. Ad Hoc Netw 2025;125:102757.
+     http://dx.doi.org/10.1016/j.jisa.2025.104053.
+[88] Zhou Y, Cao L, Qiao Z, Xia Z, Yang B, Zhang M, Zhang W. An efficient identity authentication scheme with dynamic anonymity for VANETs. IEEE Internet
+     Things J 2023;10(11):10052–65. http://dx.doi.org/10.1109/JIOT.2023.3236699.
+[89] Yue Q, Jiang W, Lei H. A lightweight certificateless aggregate signature scheme without pairing for VANETs. Sci Rep 2025;15:23663. http://dx.doi.org/
+     10.1038/s41598-025-08656-1.
+
+
+
+
+                                                                           23
+

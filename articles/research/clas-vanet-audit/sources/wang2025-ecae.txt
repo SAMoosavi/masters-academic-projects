@@ -1,0 +1,1832 @@
+Article
+
+ECAE: An Efficient Certificateless Aggregate Signature Scheme
+Based on Elliptic Curves for NDN-IoT Environments
+Cong Wang 1 , Haoyu Wu 1 , Yulong Gan 1 , Rui Zhang 1 and Maode Ma 2, *
+
+                                         1   College of Artificial Intelligence, Tianjin University of Science and Technology, Tianjin 300457, China;
+                                             wangcongjcdd@tust.edu.cn (C.W.); 1981215263@mail.tust.edu.cn (H.W.); gyllaile@mail.tust.edu.cn (Y.G.);
+                                             zhangrui1113@mail.tust.edu.cn (R.Z.)
+                                         2   College of Engineering, Qatar University, Doha P.O. Box 2713, Qatar
+                                         *   Correspondence: acadmmd@gmail.com
+
+
+                                         Abstract: As a data-centric next-generation network architecture, Named Data Networking
+                                         (NDN) exhibits inherent compatibility with the distributed nature of the Internet of Things
+                                         (IoT) through its name-based routing mechanism. However, existing signature schemes
+                                         for NDN-IoT face dual challenges: resource-constrained IoT terminals struggle with cer-
+                                         tificate management and computationally intensive bilinear pairings under traditional
+                                         Public Key Infrastructure (PKI), while NDN routers require low-latency batch verification
+                                         for high-speed data forwarding. To address these issues, this study proposes ECAE, an
+                                         efficient certificateless aggregate signature scheme based on elliptic curve cryptography
+                                         (ECC). ECAE introduces a partial private key distribution mechanism in key generation,
+                                         enabling the authentication of identity by a Key Generation Center (KGC) for terminal
+                                         devices. It leverages ECC and universal hash functions to construct an aggregate veri-
+                                         fication model that eliminates bilinear pairing operations and reduces communication
+                                         overhead. Security analysis formally proves that ECAE resists forgery, replay, and man-
+                                         in-the-middle attacks under the random oracle model. Experimental results demonstrate
+                                         substantial efficiency gains: total computation overhead is reduced by up to 46.18%, and
+                                         communication overhead is reduced by 55.56% compared to state-of-the-art schemes. This
+                                         lightweight yet robust framework offers a trusted and scalable verification solution for
+                                         NDN-IoT environments.
+
+                                         Keywords: named data networking; internet of things; elliptic curve cryptography;
+Received: 21 March 2025                  certificateless aggregate signature; message authentication
+Revised: 23 April 2025
+Accepted: 25 April 2025
+Published: 26 April 2025
+
+Citation: Wang, C.; Wu, H.; Gan, Y.;     1. Introduction
+Zhang, R.; Ma, M. ECAE: An Efficient
+Certificateless Aggregate Signature
+                                              The widespread adoption of Internet of Things (IoT) smart devices across various
+Scheme Based on Elliptic Curves for      domains has profoundly transformed daily life [1–3]. However, the massive intercon-
+NDN-IoT Environments. Entropy 2025,      nection of devices and the exponential growth of data volumes have intensified critical
+27, 471. https://doi.org/10.3390/        challenges, such as data security threats and transmission efficiency bottlenecks, imposing
+e27050471
+                                         new demands on communication security and performance [4]. To address these issues,
+Copyright: © 2025 by the authors.        Named Data Networking (NDN) has emerged as a promising content-centric communica-
+Licensee MDPI, Basel, Switzerland.       tion paradigm due to its inherent advantages [5]. Unlike traditional address-based network
+This article is an open access article
+                                         architectures, NDN focuses on the data itself through a name-based routing mechanism, of-
+distributed under the terms and
+                                         fering enhanced flexibility, scalability, and built-in security. Nevertheless, deploying NDN
+conditions of the Creative Commons
+Attribution (CC BY) license
+                                         in IoT environments introduces complex security challenges arising from heterogeneous
+(https://creativecommons.org/            device capabilities, including identity authentication, message integrity assurance, and
+licenses/by/4.0/).                       privacy protection [6–8].
+
+
+Entropy 2025, 27, 471                                                                                               https://doi.org/10.3390/e27050471
+Entropy 2025, 27, 471                                                                                          2 of 25
+
+
+
+                              In the NDN architecture, digital signatures serve as a fundamental mechanism for
+                        data packet verification. By embedding cryptographically generated unique identifiers into
+                        data packets, digital signatures ensure content authenticity and integrity, playing a pivotal
+                        role in preventing data source spoofing, tampering, and man-in-the-middle attacks [9].
+                        However, this mechanism must satisfy the following two critical requirements: (1) IoT
+                        terminal devices, constrained in computational power and storage, struggle to handle the
+                        certificate chain validation and bilinear pairing operations required by traditional Public
+                        Key Infrastructure (PKI); (2) NDN routers must support low-latency and batch signature
+                        verification in high-speed data forwarding scenarios.
+                              Traditional PKI relies on digital certificates to bind user identities to public keys.
+                        However, the communication overhead associated with certificate issuance, storage, and re-
+                        vocation imposes significant burdens on resource-constrained IoT terminals. Furthermore,
+                        the risks of single points of failure in certificate authorities (CAs) and the complexity of
+                        cross-domain authentication limit PKI’s applicability in distributed IoT environments. Cer-
+                        tificateless Cryptography (CLC) provides a compelling alternative by integrating Identity-
+                        Based Cryptography (IBC) with partial private key distribution through a Key Generation
+                        Center (KGC). This approach eliminates the need for certificate management while avoid-
+                        ing the key escrow problem inherent in IBC. In this study, we propose a key generation
+                        mechanism that incorporates partial private key distribution, ensuring data packet security
+                        while reducing computational costs.
+                              Moreover, the data-centric nature of NDN may result in concurrent responses from
+                        multiple producer nodes for a single request. When using conventional signature schemes,
+                        routers must verify each data packet independently, leading to computational overhead
+                        that scales linearly with the number of packets. Aggregate signature (AS) techniques
+                        address this limitation by compressing independent signatures into a fixed-length aggre-
+                        gate result, thereby reducing verification complexity to a constant level and significantly
+                        enhancing router processing efficiency. This study further innovates by combining elliptic
+                        curve cryptography (ECC) with universal hash functions to eliminate the need for bilinear
+                        pairings, achieving substantial improvements in verification performance.
+
+                        1.1. Related Work
+                              In recent years, research on security in Named Data Networking-Based Internet of
+                        Things (NDN-IoT) has primarily focused on achieving two key objectives: protecting
+                        data integrity and ensuring data source authentication. Existing solutions can be broadly
+                        classified into four main categories: (1) signature authentication schemes based on edge
+                        computing [10,11]; (2) blockchain-based signature authentication schemes [12–15]; (3) cer-
+                        tificateless signature authentication schemes [16–19]; (4) batch signature authentication
+                        schemes [20–23].
+                              By offloading computational tasks to edge nodes, these approaches reduce the core
+                        network load and enhance overall system performance. For instance, Wang et al. [10]
+                        proposed the NIoTE framework, which improves data retrieval efficiency from neighboring
+                        service nodes through requested aggregation and distributed caching. Huang et al. [11]
+                        introduced a certificateless group signature scheme; however, its reliance on computation-
+                        ally intensive bilinear pairing operations resulted in high computational costs, limiting its
+                        practicality in large-scale deployments. Moreover, the scheme’s centralized edge gateway
+                        architecture for identity management presents a security vulnerability—if the gateway is
+                        compromised, regional data verification could be undermined.
+                              In blockchain-based authentication schemes, Lou et al. [12] proposed a distributed key
+                        management mechanism for NDN, leveraging blockchain to store hashed public keys in
+                        the NDN Testbed model, thus reducing the certificate chain verification time during user
+Entropy 2025, 27, 471                                                                                          3 of 25
+
+
+
+                        authentication. However, since blockchain stores data in transaction records, retrieving
+                        specific transactions requires traversing the entire block, which may lead to increased
+                        average retrieval delays as the number of transactions grows. Lei et al. [13] integrated
+                        cache poisoning protection and privacy-aware access control into a blockchain-based NDN
+                        network, but the approach’s computational overhead restricts its application to vehicular
+                        networks. Alsamhi et al. [14] combined federated learning with blockchain to protect
+                        model data and verify human–machine interactions, ensuring privacy and security. More
+                        recently, Yang et al. [15] proposed a blockchain-based encryption scheme that authenticates
+                        IoT devices and encrypts signals. However, its dependence on bilinear pairing operations
+                        leads to a significantly higher computational overhead than ECC-based alternatives.
+                              Certificateless signature schemes eliminate certificate management, provide lightweight
+                        solutions for resource-constrained environments, and significantly reduce management
+                        costs. Karati et al. [16] proposed a lightweight pairing-based signature scheme for IoT, but
+                        its security still relies on computationally expensive operations. Rezaeibagha et al. [17]
+                        enhanced Karati’s model from a security perspective but failed to resolve the efficiency
+                        bottleneck caused by pairing. Thumbur et al. [18] utilized the Elliptic Curve Discrete
+                        Logarithm Problem (ECDLP) for security; however, their complex ECC-based algorithm
+                        remained unsuitable for constrained environments. Bisheh-Niasar et al. [19] presented an
+                        efficient FPGA-based implementation of Ed25519, utilizing Karatsuba multiplication and
+                        parallelism to accelerate signing. While this provides hardware-level optimization, it lacks
+                        sufficient algorithm-level resistance against attacks.
+                              To alleviate the burden on resource-limited IoT devices, researchers have also explored
+                        batch signature authentication. Asami et al. [20] proposed an NDN aggregation signature
+                        scheme based on proof-of-concept identity verification to reduce communication overhead.
+                        This scheme enhances the efficiency of both signature generation and verification using
+                        aggregate signatures. Nonetheless, identity- and attribute-based schemes that rely on
+                        key escrows continue to pose critical security risks. Zhang et al. [21] introduced a multi-
+                        party authentication scheme based on a centralized certificate authority, drawing criticism
+                        due to its centralized trust model. Xue et al. [22] proposed a cooperative authentication
+                        framework using a name-prefix-based public key binding for distributed router verification,
+                        yet the model still depends on a vulnerable central authority. Zhu et al. [23] developed
+                        a reconfigurable certificateless signature scheme to prevent dishonest data modification
+                        and improve bandwidth efficiency. However, its trade-off between security and efficiency
+                        remains an issue.
+                              Although existing research has advanced NDN-IoT authentication technologies across
+                        various dimensions, several core challenges remain—particularly in balancing security
+                        with efficiency, improving attack resilience, and building a secure and trustworthy com-
+                        munication environment. Current solutions face three major limitations: (1) performance
+                        degradation due to bilinear pairing or other complex cryptographic computations when
+                        scaling to large numbers of connected devices; (2) dependence on centralized certificate
+                        authorities in batch signature schemes, which introduces single points of failure; and
+                        (3) insufficient anonymity, exposing users to traceability and privacy risks.
+                              These challenges underscore the urgent need for novel authentication mechanisms
+                        tailored to resource-constrained NDN-IoT environments—mechanisms that can simulta-
+                        neously address security, efficiency, and privacy concerns. Developing a highly secure,
+                        lightweight communication framework capable of resisting diverse attacks is crucial for
+                        enabling practical deployment in such environments.
+Entropy 2025, 27, 471                                                                                         4 of 25
+
+
+
+                        1.2. Motivation
+                              To ensure the core security properties of data integrity, authentication, and access
+                        control are upheld and to establish a more secure and trustworthy communication environ-
+                        ment, researchers have proposed a variety of communication security schemes aimed at
+                        defending against data tampering and unauthorized access. Despite these efforts, existing
+                        approaches still present significant limitations. For instance, in edge computing-based
+                        signature authentication schemes, such as the work by Huang et al. [11], edge comput-
+                        ing enhances local performance but fails to guarantee the legitimacy of producer data
+                        packets in cases where the edge gateway is compromised. In blockchain-based signa-
+                        ture authentication schemes, Lou et al. [12], Lei et al. [13], and Yang et al. [15] improved
+                        communication security through the use of blockchain. However, due to blockchain’s
+                        inherent efficiency bottlenecks and the computational overhead of bilinear pairing op-
+                        erations, these solutions remain unsuitable for large-scale deployment scenarios. In the
+                        domain of certificateless signature schemes, Karati et al.’s [16] scheme has been shown
+                        to be vulnerable to signature forgery attacks during security analysis. While Thumbur
+                        et al. [18] strengthened data security by leveraging the Elliptic Curve Discrete Logarithm
+                        Problem (ECDLP), the scheme’s computational complexity leads to reduced efficiency and
+                        increased communication overheads, particularly in resource-constrained environments.
+                        Regarding batch signature verification schemes, Xue et al. [22] proposed a cooperative con-
+                        tent authentication framework that enables verification across multiple routers. However,
+                        their approach heavily depends on third-party trust centers, thereby introducing potential
+                        security threats to end consumers and IoT devices. Experimental data show that, under
+                        typical conditions, a single bilinear pairing operation on an elliptic curve incurs approxi-
+                        mately 20 times the computational cost of a point multiplication operation. Moreover, hash
+                        function mappings to elliptic curve points are significantly more time-consuming than
+                        standard cryptographic hash functions. As the number of terminal devices increases, the
+                        size of aggregated signatures grows linearly, severely impacting communication efficiency
+                        and introducing considerable storage overheads. To address these challenges, this paper
+                        proposes a pairing-free and efficient signature authentication scheme, which demonstrates
+                        both strong security guarantees and high computational efficiency, making it well-suited
+                        for deployment in resource-constrained NDN-IoT environments.
+
+                        1.3. Contribution
+                             The main contributions of this paper are as follows:
+                        •   This paper proposes an efficient certificateless aggregate signature scheme based on
+                            elliptic curve cryptography (ECC) in the NDN-IoT environment, named ECAE. To
+                            accommodate resource-constrained devices, ECAE eliminates the need for compu-
+                            tationally expensive map-to-point hash functions and bilinear pairing operations,
+                            thereby improving system computational efficiency. Furthermore, by implementing
+                            aggregate signatures, ECAE ensures that the signature length remains constant regard-
+                            less of the number of terminal devices, effectively reducing communication overhead.
+                        •   ECAE adopts a key generation mechanism that integrates identity authentication
+                            with partial private key distribution, satisfying security functional requirements and
+                            ensuring secure communication.
+                        •   ECAE demonstrates strong security against various attacks in both theoretical anal-
+                            ysis and simulations while also exhibiting high computational efficiency and low
+                            communication overheads.
+                             This paper proposes an eﬃcient and conditionally confidential certificateless aggre-
+                        gate signature scheme for NDN-IoT, establishing a network model that consists of four
+Entropy 2025, 27, 471   main entities: the Key Generation Center (KGC) and NDN routers, consumers, and5 of   pro-
+                                                                                                               25
+                        ducers. The network model is illustrated in Figure 1.
+                        •     Line 1 represents an example of the process in which a consumer requests data for-
+                        2. Preliminaries
+                              warding from an NDN router.
+                        2.1.
+                         • System
+                              Line 2Architecture
+                                      illustrates the process of a consumer requesting data packets from multiple
+                             This
+                              producers.proposes an efficient and conditionally confidential certificateless aggregate
+                                   paper
+                         •
+                        signature
+                              Line 3scheme   for NDN-IoT,
+                                      demonstrates          establishing
+                                                     the interaction       a network
+                                                                      between        model
+                                                                               terminal      that consists
+                                                                                        devices (producers    four
+                                                                                                           ofin    main
+                                                                                                                Figure 1)
+                        entities: the Key  Generation   Center  (KGC)   and  NDN   routers, consumers,  and   producers.
+                              and the KGC for registration and the process of generating an aggregate signature
+                        The and
+                             network   model is data
+                                   transmitting  illustrated in via
+                                                       packets  Figure
+                                                                    the 1.
+                                                                        NDN router.
+
+
+
+
+                              Consumer
+
+
+
+
+                                                                      NDN Router
+
+
+
+
+                                              Key Generation Center
+                                                    (KGC)
+
+
+
+                                                                                   End Device       Producer
+                                                                                     (ED)
+
+
+                                               Line 1                              Line 2                      Line 3
+
+
+                        Figure1.1. System
+                        Figure     Systemnetwork
+                                          networkmodel
+                                                 modeldiagram.
+                                                       diagram.
+
+                        •     Line
+                               When 1 represents   an example
+                                      an Edge Device               of the process
+                                                          (ED) requests              in which
+                                                                            to join the        a consumer
+                                                                                         network            requests
+                                                                                                  as a producer       data for-
+                                                                                                                  or consumer
+                             warding
+                         in the  NDN-IoT fromsystem,
+                                               an NDN  it router.
+                                                          first transmits its real identity to the Key Generation Center
+                        •(KGC)Line  2  illustrates  the
+                                 through a secure channelprocess forofregistration.
+                                                                        a consumer     requesting data
+                                                                                    Subsequently,        packets
+                                                                                                    the KGC       froma partial
+                                                                                                              assigns    multi-
+                              ple producers.
+                         private  key and public parameters to the ED. Each ED possesses a unique real identity
+                        •alongLine
+                                with3 demonstrates
+                                      a corresponding thepublic–private
+                                                           interaction between      terminal
+                                                                             key pair        devices
+                                                                                        and must      (producers
+                                                                                                  obtain           in Figure
+                                                                                                         a signature         1)
+                                                                                                                      from the
+                         KGCand    the KGC
+                                before        for registration
+                                         transmitting           and the process
+                                                         any message.               of generating
+                                                                           Upon receiving         an aggregate signature
+                                                                                              a message–signature     pair,and
+                                                                                                                            the
+                              transmitting   data  packets   via  the  NDN    router.
+                         NDN router verifies the signature to ensure its validity and maintain message integrity.
+                         The roles
+                             Whenofanthe   key Device
+                                         Edge   entities in
+                                                        (ED)the  system to
+                                                               requests  arejoin the
+                                                                              described as follows:
+                                                                                     network   as a producer or consumer
+                        in
+                         • the  NDN-IoT     system,  it first transmits  its real identity
+                              KGC (Key Generation Center): The KGC acts as the publicKey   to the      Generation
+                                                                                                    parameter       Center
+                                                                                                               distribution
+                                through a
+                        (KGC)authority      secure
+                                          and key channel
+                                                   management  for center
+                                                                  registration.  Subsequently,
+                                                                           for the entire system.    KGC the
+                                                                                                theDuring assigns a partial
+                                                                                                               system’s  in-
+                        private  key  and  public  parameters     to the ED.   Each  ED  possesses  a unique  real identity
+                              itialization phase, it is responsible for generating and publishing system parameters.
+                        along with a corresponding public–private key pair and must obtain a signature from the
+                        KGC before transmitting any message. Upon receiving a message–signature pair, the NDN
+                        router verifies the signature to ensure its validity and maintain message integrity. The roles
+                        of the key entities in the system are described as follows:
+                        •    KGC (Key Generation Center): The KGC acts as the public parameter distribution
+                             authority and key management center for the entire system. During the system’s
+                             initialization phase, it is responsible for generating and publishing system parameters.
+Entropy 2025, 27, 471                                                                                                   6 of 25
+
+
+
+                            When a new entity requests to join the system, it must securely interact with the KGC
+                            to obtain public parameters, pseudonyms, and partial private keys.
+                        •   NDN Router: The NDN router verifies the authenticity and integrity of data packets
+                            during transmission. As a critical component ensuring secure data forwarding, it
+                            performs signature verification on the encapsulated producer information within the
+                            data packet. Additionally, it aggregates digital signatures from multiple terminal
+                            devices to enhance computational efficiency.
+                        •   Consumer: The consumer serves as the data requester in the proposed system, corre-
+                            sponding to the consumer entity in NDN. It requests the required data or services by
+                            sending Interest packets.
+                        •   Producer: The Producer is responsible for data generation in the NDN-IoT environ-
+                            ment, corresponding to the producer entity in NDN. It utilizes sensor devices to collect
+                            information such as soil moisture, vehicle location, and indoor temperature.
+
+                        2.2. Elliptic Curve Cryptography
+                             Elliptic curve cryptography (ECC) is a public-key cryptographic algorithm based
+                        on the mathematical principles of elliptic curves. Compared to traditional cryptographic
+                        algorithms (e.g., RSA), ECC offers higher performance and smaller key sizes for the same
+                        level of security, making it particularly suitable for resource-constrained environments
+                        such as mobile and IoT devices.
+                             The fundamental principle of ECC involves the addition and multiplication of points
+                        on an elliptic curve, enabling key generation, data encryption and decryption, and cryp-
+                        tographic operations such as digital signatures. Its security is based on the Elliptic Curve
+                        Discrete Logarithm Problem (ECDLP). Given a prime-order finite field Zq∗ , an elliptic
+                                                                n                                  o
+                        curve G is defined as follows: G = ( x, y) y2 = x3 + ax + b, a, b ∈ Zq∗ ∪ {O}, where
+                        4a3 + 27b2 mod p ̸= 0, O represents the point at infinity, and p is a prime number. The
+                        addition and multiplication of points on an elliptic curve are defined as follows:
+                        •    For any point, P( x1 , y1 ) ∈ G; then, P( x1 , y1 ) + O = O + P( x1 , y1 ) = P( x1 , y1 ).
+                        •    For two points, P(x1 , y1 ), Q(x2 , y2 ) × G; if x1 = x2 and y1 = −y2 , then P(x1 , y1 ) +
+                             Q(x2 , y2 ) = 0.
+                        •    If P( x1 , y1 ), P( x1 , y1 ) and P = ± Q, then P( x1 , y1 ) + Q( x2 , y2 ) = R( x3 , y3 ), where
+                             x3 = λ2 − x1 − x2 and y3 = λ( x1 − x3 ) − y1 , The definition of λ can be found in
+                             Equation (1).
+                                                                  ( y2 − y1
+                                                                    x − x ( mod p ), i f P ̸ = Q
+                                                                = 3x2 2 +1a                                                 (1)
+                                                                       1
+                                                                     2y ( mod p ), i f P = Q
+                                                                      1
+
+
+                        •    Scalar multiplication is defined as follows: lP = P1 + . . . + Pl , where l ∈ Zq∗ and l > 0.
+                             ECDLP: Given two points, P, Q ∈ G, it is computationally unfeasible to find an integer
+                             c ∈ Zq∗ such that Q = cP holds.
+
+                        2.3. Scheme Framework
+                              The commonly used identifiers in the implementation of this scheme are shown in
+                        Table 1.
+                              The implementation process of the proposed scheme mainly includes the following
+                        six steps:
+                        •    KGC System Initialization: The security parameters are input λ. The KGC initializes
+                             the system, generates the master key s and system params, and then keeps the master
+                             key, s, confidential while publishing the system params.
+Entropy 2025, 27, 471                                                                                                7 of 25
+
+
+
+                        •    Interaction between KGC and EDi to Generate Public and Private Keys: EDi sends
+                             its real identity IDi to the KGC. The KGC runs an algorithm offline to generate the
+                             pseudonym PIDi ; then, EDi selects a random value xi ∈ Zq∗ as its key value and sends
+                             the pseudonym PIDi to the KGC. The KGC runs an algorithm to generate the partial
+                             private key for EDi . Using the key value and the private key sent by the KGC as inputs,
+                             EDi generates its secret key SKi and public key PKi .
+                        •    The terminal device EDi signature generation: EDi uses PIDi , mi ∈ {0, 1}∗ and SKi as
+                             inputs to generate a signature σi .
+                        •    Single signature verification: the EDi or NDN router uses PIDi , mi ∈ {0, 1}∗ , σi and
+                             PKi as the inputs. If σi is valid, the output is accepted; otherwise, the output is rejected.
+                        •    The NDN router performs signature aggregation: The NDN router compresses the
+                             different signatures σi (i = 1, 2, . . . , n) from n data packets requested by the same con-
+                             sumer from n different producers within the same time period into a single signature
+                             σ.
+                        •    Other NDN routers perform aggregate signature verification: They take {PIDi , mi ,
+                             σi , PKi }(i = 1, 2, . . . , n) as the input. If σ is valid, the output is accepted; otherwise,
+                             the output is rejection.
+
+                        Table 1. Commonly used identifiers.
+
+                                      Parameter                                         Meaning
+                                      KGC                                      Key Generation Center
+                                    NDN Router                                       NDN Router
+                                       ED                                            End Device
+                                      EDi                                         The ith End Device
+                                       IDi                              The Real Identity of the ith End Device
+                                      PIDi                              The Pseudonym of the ith End Device
+                                        s                                        Private Key of KGC
+                                      Ppub                                        Public Key of KGC
+                                       SK i                               Private Key of the ith End Device
+                                       PK i                               Public Key of the ith End Device
+                                        ti                                       Current Timestamp
+                                        Ti                                Validity Period of the Pseudonym
+                                        σ                                          Single Signature
+                                        σi                                       Aggregate Signature
+                                        ⊕                                           XOR Operator
+
+
+                             The system process framework of this scheme is shown in Figure 2.
+
+                        2.4. Security Model
+                             In the proposed scheme, we consider Type I and Type II attackers as defined in [24].
+                        Due to the lack of certificate verification, an attacker may replace an entity’s public key
+                        with a public key of their choice. The two types of attackers are simulated as follows:
+                        •    Type I attacker: This attacker simulates an external adversary who can replace any
+                             entity’s public key with a specific value chosen by the attacker. However, a Type I
+                             attacker does not know the private key of the Key Generation Center (KGC).
+                        •    Type II attacker: This attacker simulates a malicious KGC that has access to the master
+                             key but cannot replace the public keys of other entities.
+                 Entropy 2025, 27, 471
+Entropy 2025, 27, 471                                                                                                                                            8 of 25    8
+
+
+
+
+                                                                          ① Initialize System
+
+
+
+
+                                                                                     KGC
+
+
+
+
+                                                                                                                                            ⑦ Single Signature
+                                                                                                                                               Verification
+
+
+
+
+                                                                                    ⑦ Single Signature
+                                                                                      Verification
+
+                                                                                                                               NDN Router
+
+
+                                                        ED
+
+
+                                                         Wireless Communication                          Wired Communication
+
+
+                                                        Figure
+                                         Figure 2. System      2. System
+                                                           process       process
+                                                                   framework     framework
+                                                                              of the scheme. of the scheme.
+
+                                              Furthermore,    both Type
+                                                       2.4. Security ModelI and Type II attackers can be classified into three attack
+                                         levels [25,26]:     In the proposed scheme, we consider Type I and Type II attackers as defined in
+                                         •    An ordinary  adversary
+                                                      Due to the  lackcan
+                                                                        of only  learn valid
+                                                                           certificate        verification
+                                                                                       verification,       messages.
+                                                                                                     an attacker   may replace an entity’s public
+                                         •    A strongwith a
+                                                       adversary   can
+                                                              public   replace
+                                                                     key of     public
+                                                                            their       keys
+                                                                                   choice. Thetotwo
+                                                                                                 forge
+                                                                                                     types   verificationare
+                                                                                                       validof attackers   messages, pro-
+                                                                                                                             simulated  as follows
+                                              vided that
+                                                      •  the attacker possesses   the corresponding    private  value.
+                                                           Type I attacker: This attacker simulates an external adversary who can replace
+                                         •    A super adversary
+                                                           entity’scan  obtain
+                                                                    public  keyvalid
+                                                                                 with verification   messages
+                                                                                       a specific value  chosenforbyathe
+                                                                                                                       public  key that
+                                                                                                                          attacker.     is
+                                                                                                                                    However,   a Ty
+                                              replaced without  submitting   any  content.
+                                                           attacker does not know the private key of the Key Generation Center (KGC).
+                                                      • a super
+                                              In general, Type IIadversary  may attacker
+                                                                  attacker: This issue thesimulates
+                                                                                            followinga queries:
+                                                                                                       malicious KGC that has access to the m
+                                         •                   keyt ):but
+                                              create-user (PID          cannot
+                                                                     This  oraclereplace
+                                                                                    modelthe   public
+                                                                                            takes PIDkeys    of other entities.
+                                                                                                       t as the input, where PIDt represents
+                                                             Furthermore,
+                                              the identity of the              both Type
+                                                                     t-th terminal   device.I It
+                                                                                              andthen
+                                                                                                  Type   II the
+                                                                                                       runs attackers  can be
+                                                                                                                  relevant      classifiedtointo
+                                                                                                                             algorithm            three attack
+                                                                                                                                               obtain
+                                                       els [25,26]:
+                                              the partial private key, Dt , the key value,xt , and the public key, PKt .
+                                         •             •     An ordinary
+                                              request-public-key              adversary
+                                                                      (PIDt ): This  oraclecan only learn
+                                                                                             model          validt as the
+                                                                                                     takes PID      verification  messages.
+                                                                                                                           input. It  searches the
+                                                       •     A strong     adversary   can  replace  public   keys
+                                              list L and returns the public key PKt of the t-th terminal device.   to forge  valid  verification   messages,
+                                         •                   vided that
+                                              replace-public-key           thePKt ,
+                                                                      (PIDt ,   attacker
+                                                                                       ′  possesses
+                                                                                    PKt ): This            corresponding
+                                                                                                      themodel
+                                                                                                 oracle                      private
+                                                                                                                  takes (PIDt ,        value.
+                                                                                                                                 PKt , PK  ′
+                                                                                                                                           t ) as the
+                                                       •     A  super    adversary   can   obtain  valid  verification  messages
+                                                                                                                               ′
+                                              input. It replaces the public key of the t-th terminal device with PKt and updates     for a   public
+                                                                                                                                                  thekey that i
+                                              corresponding  placed    withoutin list
+                                                               information       submitting
+                                                                                       L.      any content.
+                                         •    extract-secretIn(PIDt       ): This
+                                                                   general,          oracle model
+                                                                                 a super    adversary takesmay  PIDt    as the
+                                                                                                                    issue   the input.
+                                                                                                                                 followingIt searches
+                                                                                                                                              queries: the list L
+                                              and returns
+                                                        •    the   key      value    x . However,      if the   t-th   terminal
+                                                              create-user (PIDt ): This oracle model takes PID as the input,         device  has   beenwhere
+                                                                                                                                                           queried  PID repres
+                                              with a replace-public-key             request,  it returns    null.
+                                                              the identity of the t-th terminal device. It then runs the relevant algorithm to ob
+                                         •    extract-partial-secret
+                                                              the partial   (PIDt   ): Thiskey,
+                                                                                private     oracleD ,model
+                                                                                                      the key  takes     PIDxt as
+                                                                                                                    value,     , and    input.
+                                                                                                                                    thethe           key,searches
+                                                                                                                                                It then
+                                                                                                                                            public            PK .
+                                              the list, L,
+                                                        •  and   returns      the   partial  private    key,   D    .
+                                                              request-public-key (PID ): This oracle model takes PID as the input. It searche
+                                                                                                                  t
+                                         •    super-sign (PID listt , Lmtand
+                                                                           ): This   oracle
+                                                                                returns      model
+                                                                                           the public takes
+                                                                                                          key(PID
+                                                                                                                PK tof  , mt ) ast-th
+                                                                                                                           the         input, where
+                                                                                                                                   theterminal   device.  mt repre-
+                                              sents the• message        to be signed. The
+                                                              replace-public-key            (PIDoracle
+                                                                                                  , PK , PKoutputs
+                                                                                                                ): This a signature
+                                                                                                                           oracle model σt =takes
+                                                                                                                                              (Rt , U(PID
+                                                                                                                                                      t , Vt ), ,PK
+                                                                                                                                                                  such
+                                                                                                                                                                    , PK ) as th
+                                              that true ← Verify
+                                                              put. It t, ( m   σt ,
+                                                                           replaces params,   PID
+                                                                                        the public  , PK   ) . If  the  public     key has   not been
+                                                                                                   t keyt of the t-th terminal device with PK and update  replaced,
+                                                               ′
+                                              i.e., PKt = PKcorresponding
+                                                               t , PKt is the public        key returned
+                                                                                       information     in listbyL.the oracle model request-public-key
+Entropy 2025, 27, 471                                                                                                        9 of 25
+
+
+
+                             (PIDt ). Otherwise, PKt = PKt′ , where PKt′ is the latest public key value submitted to
+                             the oracle model replace-public-key (PIDt , PKt , PKt′ ).
+                              The following two games, namely Game 1 and Game 2, are designed for Super Type I
+                        and Super Type II adversaries, respectively. Super Type I adversary simulates an external
+                        adversary who can replace any entity’s public key with a specific value of their choice. Super
+                        Type II adversary simulates a malicious KGC that holds the master key and may engage in
+                        adversarial activities such as eavesdropping on signatures and issuing signature queries.
+                              Game 1. This game is played between the challenger, C, and the Super Type I adversary
+                        SA1 , where they interact within the proposed certificateless signature scheme. First, in the
+                        “Initialization” phase, challenger C runs the corresponding algorithm and generates the
+                        private key s, along with the public system parameters params. Then, C keeps s, secret while
+                        providing params to adversary SA1 . Second, in the “Query” phase, SA1 can adaptively
+                        access the following oracle queries: create-user (PID t ), request-public-key (PID t , PK t , PK ′t ),
+                        replace-public-key (PID t ), extract-secret (PID t ), extract-partial-secret (PID t ), and super-
+                        sign (PID t , mt ). After making all necessary queries, SA1 outputs a forged signature
+                        (PID t , mt , σt ). SA1 wins Game 1 if the following three conditions hold:
+                        •    SA1 has never queried the oracle extract-partial-secret (PIDt ).
+                        •    SA1 has never queried the oracle super-sign (PIDt , mt ).
+                        •    true ← Verify(mt, σt , params, PIDt , PKt ) , where PKt is the current public key of the
+                             t-th terminal device, which can be replaced by SA1 .
+
+                        Definition 1. The proposed certificateless signature scheme is existentially unforgeable against a
+                        Super Type-I adversary SA1 if, within polynomial time, SA1 undertakes the following: q H queries
+                        to the hash oracle, qCU queries to create-user (PID t ), q EPS queries to extract-partial-secret (PID t ),
+                        q ES queries to extract-secret (PID t ), q PK queries to request-public-key (PID t ), q RPK queries to
+                        replace-public-key (PID t , PK t , PK ′t ), and qSS queries to super-sign (PID t , mt ). If SuccSA1 , the
+                        probability of SA1 winning Game 1, is negligible, and the scheme is secure against a Super
+                        Type-I adversary.
+
+                              Game 2. This game takes place between a challenger C and a Super Type-II adver-
+                        sary SA2 , interacting within the proposed certificateless signature scheme. First, in the
+                        “Initialization” phase, challenger C runs the corresponding algorithms and generates a
+                        private key s, along with public system parameters params. Then, C keeps s secret while
+                        providing params to the adversary. Second, in the “Query” phase, SA2 can adaptively
+                        access the following oracle queries: create-user (PID t ), request-public-key (PID t , PK t , PK ′t ),
+                        replace-public-key (PID t ), extract-secret (PID t ), extract-partial-secret (PID t ), and super-
+                        sign (PID t , mt ). After making all necessary queries, SA2 outputs a forged signature
+                        (PID t , mt , σt ). SA2 wins Game 2 if the following three conditions hold:
+                        •    SA2 has never queried the oracle extract-secret (PIDt ).
+                        •    SA2 has never queried the oracle super-sign (PIDt , mt ).
+                        •    true ← Verify (mt, σt , params, PIDt , PKt ) , where PKt is the current public key of the
+                             t-th terminal device, which can be replaced by SA1 .
+
+                        Definition 2. The proposed certificateless signature scheme is existentially unforgeable against a
+                        Super Type-II adversary SA2 if, for any polynomial-time adversary SA2 , the success probability
+                        SuccSA2 of winning Game 2 is negligible. SA2 is allowed to undertake the following: q H queries to
+                        the hash oracle, qCU queries to create-user (PID t ), q EPS queries to extract-partial-secret (PID t ), q ES
+                        queries to extract-secret (PID t ), q PK queries to request-public-key (PID t ), q RPK queries to replace-
+                        public-key (PID t , PK t , PK ′t ), and qSS queries to super-sign (PID t , mt ). If SuccSA2 is negligible,
+                        then the scheme is secure against a Super Type-II adversary.
+Entropy 2025, 27, 471                                                                                         10 of 25
+
+
+
+                        2.5. Security Requirements
+                            In the NDN-IoT environment, an efficient certificateless aggregate signature scheme
+                        based on elliptic curves should meet the following security requirements:
+                        •    Data Integrity: Elliptic curve cryptography (ECC) should be used to protect data from
+                             unauthorized access during transmission. Encryption ensures that only legitimate
+                             entities possessing the corresponding decryption key can access and interpret the data,
+                             effectively maintaining the privacy and confidentiality of communications.
+                        •    Key Management: The secure generation, distribution, and updating of keys is essen-
+                             tial to prevent key leakage or misuse. A robust key management system is crucial for
+                             maintaining overall system security and ensuring the safety and validity of crypto-
+                             graphic keys.
+                        •    User Privacy: In an NDN-IoT system, content names are used to request data, and
+                             these names are semantically related to user preferences, making them visible within
+                             the network. Additionally, since each node in an NDN-IoT system can cache content,
+                             malicious users may still obtain content even if content names are protected. Therefore,
+                             user privacy protection must be ensured by maintaining content anonymity and
+                             protecting user behavior privacy, preventing attackers from inferring the content of
+                             user requests.
+                        •    Resistance to Various Security Attacks: The NDN-IoT system is vulnerable to multiple
+                             security threats, such as impersonation and replay attacks. Thus, the proposed signa-
+                             ture scheme must be capable of resisting various security attacks to ensure the safety
+                             and reliability of communications.
+
+                        3. Proposed Scheme
+                             This paper proposes an efficient certificateless aggregate signature scheme based on
+                        ECC, utilizing ECC and a general hash function while avoiding bilinear pairing operations
+                        and map-to-point hash functions.
+                             Meanwhile, considering a resource-constrained environment, we introduce an unau-
+                        thenticated aggregate signature method. The proposed scheme enables cryptographic
+                        signature aggregation for n concurrent message transmissions. A consumer sends requests
+                        to n producers over a period of time, with each producer generating a data packet. The
+                        original independent signatures from the n data packets are compressed into an aggre-
+                        gate signature within the NDN router, thereby reducing signature verification time and
+                        minimizing the storage overhead of the NDN router.
+
+                        3.1. System Initialization
+                             The KGC takes a security parameter, λ ∈ Z ∗ , as the input and selects a cyclic group G
+                        of prime order q, where P is a generator of G. Next, the KGC randomly selects a secret value
+                        s ∈ Zq∗ and computes the public key: Ppub = sP. Then, the KGC sets s as the master secret
+                        key and Ppub as the public key. The KGC also selects three general one-way hash func-
+                        tions: H1 : {0, 1}∗ × G → Zq∗ , H2 : {0, 1}∗ × G × G → Zq∗ , H2 : {0, 1}∗ × G × G → Zq∗ ,
+                         H2 : {0, 1}∗ × G × G → Zq∗ . Finally, the KGC keeps s confidential and publishes the sys-
+                                                     n                            o
+                        tem parameters: params = q, G, P, Ppub , H1, H2, H3 .
+
+                        3.2. Generation of Terminal Device Pseudonyms
+                             To prevent malicious users from launching traffic analysis attacks or user location
+                        tracking attacks in the NDN network, each terminal device EDi must register its real
+                        identity IDi with the KGC to generate a pseudonym for anonymous communication.
+                        Additionally, since the KGC manages the real identities, IDi , of all terminal devices, EDi ,
+                         Algorithm 1: Generation of 𝑬𝑫𝒊 Pseudonym
+Entropy 2025, 27, 471
+                         Input: 𝑝𝑎𝑟𝑎𝑚𝑠, 𝐼𝐷
+                                                                                                                                   11 of 25
+                         Output: 𝑃𝐼𝐷
+                         1.     𝑙 ∈ 𝑍∗ ;      //Generate a random constant
+                         2.     𝑀 = 𝑙 𝑃;
+                        in the system, it can effectively track malicious users. The terminal device EDi randomly
+                         3.     𝑁 = 𝑙𝑃 ; ∗
+                        selects a value li ∈ Zq and computes the following: Mi = l i P, Ni = l i Ppub , AIDi =
+                         4.     𝐴𝐼𝐷 = 𝐼𝐷 ⊕ 𝑁 ;
+                         5. i ⊕ N
+                        ID                     i submits {
+                                      𝑍 ∗ ; ED//Generate
+                                𝑠 i∈Then,                     aM  i , AID
+                                                                random     i , Ni } to the KGC. Upon receiving { Mi , AID i , Ni },
+                                                                          constant
+                                                                        ′
+                        the
+                         6.  KGC𝐼𝐷 = 𝐴𝐼𝐷 ⊕ 𝑁 = 𝐴𝐼𝐷 ⊕ (𝑙i 𝑠𝑃)AID
+                                    computes    the  following:      ID   =     = i𝐴𝐼𝐷⊕ Ni⊕=s𝑀    ; i ⊕ (li sP) = AIDi ⊕ sMi Thus,
+                                                                                                AID
+                         7.
+                        the realif (𝐼𝐷
+                                   identity==of𝐼𝐷      terminal device is retrieved. If IDi′ is invalid, the KGC discards
+                                                 the) then
+                        the request.𝑀𝐼𝐷 =
+                         8.            Otherwise,𝐻1(𝑇 , the𝑠𝐴𝐼𝐷
+                                                             KGC  ) ⊕ 𝐼𝐷
+                                                                     computes;//T isthe
+                                                                                      the validity
+                                                                                        following: period
+                                                                                                      MID     theH1
+                                                                                                          ofi =   PID
+                                                                                                                    ( Ti , sAIDi ) ⊕ IDi′
+                         9. then sends𝑃𝐼𝐷 PID= {𝑀𝐼𝐷      , 𝑇 };
+                        and                       i = { MID i , Ti } to ED i , where Ti represents the validity period of the
+                         10. else return null;
+                        pseudonym PIDi . The implementation process is illustrated in Algorithm 1 and Figure 3.
+                         11. return 𝐸𝐷 ← 𝑃𝐼𝐷
+
+
+                                      EDi                                                   KGC
+                                                             *
+                        Select a constant l i ∈ Z q ,
+                         Compute M i = l i P,
+                                    N =l P
+                                       i   i       pub
+                                                         ,
+
+                                   AIDi = IDi ⊕ N i
+                                                                              '
+                                                         {M i , AIDi , N i} IDi = AIDi ⊕ N i
+                                                                                = AIDi ⊕ (l i sP)
+                                                                                = AIDi ⊕ sM i
+                                                                           Check if IDi ? = IDi' ,
+                                                                           MIDi = H 1(T i , sAIDi ) ⊕ IDi' ,
+                                                                 {PIDi}    PIDi = {MIDi , T i}
+                                Store PID      i
+
+
+
+
+                         Figure3.3.Process
+                        Figure     Processof
+                                           ofgenerating
+                                              generatingaapseudonym
+                                                           pseudonymfor
+                                                                     forterminal
+                                                                         terminaldevices.
+                                                                                  devices.
+
+
+                         Algorithm 1: Generation of EDi Pseudonym
+                         Input: params, IDi
+                         Output: PIDi
+                         1. li ∈ Zq∗       //Generate a random constant
+                         2. Mi = li P;
+                         3. Ni = li Ppub ;
+                         4. AIDi = IDi ⊕ Ni ;
+                         5. s ∈ Zq∗        //Generate a random constant
+                                ′
+                         6. IDi = AIDi ⊕ Ni = AIDi ⊕ (li sP) = AIDi ⊕ sMi ;
+                         7. if IDi′ == IDi ) then
+                         8.        MIDi = H1( Ti , sAIDi ) ⊕ IDi′ ; Ti is the validity period of the PIDi
+                         9.        PIDi = { MIDi , Ti };
+                         10. else return null;
+                         11. return EDi ← PIDi
+
+                             To track the real identity of terminal devices, the KGC stores {PIDi , Mi , AIDi } in its
+                        secure database. In the future, these terminal devices will communicate using pseudonyms,
+                        which can help protect their real identity information.
+
+                        3.3. Generation of Terminal Device Keys
+                              When EDi obtains its pseudonym from the KGC, it selects a random number xi ∈ Zq∗
+                        as its key value and computes Xi = xi P. Then, EDi sends its pseudonym PIDi to KGC. The
+Entropy 2025, 27, 471                                                                                                       12 of 25
+
+
+
+                         KGC searches for PIDi in its database. If it exists, the KGC executes the following algorithm
+                         to generate the partial private key for EDi .
+                              Given the public parameters, params, and the terminal device pseudonym, PIDi , the
+                         KGC selects a random number ri ∈ Zq∗ and computes Ri = ri P. The KGC then computes
+                                                                  
+                         the following: h2i = H2 PIDi , Ri , Ppub , di = ri + sh2i (mod q) The partial private key
+                         Di = (di , Ri ) is then sent to EDi . Upon receiving Di , the terminal device EDi verifies
+                         whether the following equation holds: di P = Ri + h2i Ppub . If the equation holds, EDi
+                         accepts the partial private key. Otherwise,
+                                                                    it rejects it.
+                                                                                
+                              Finally, EDi computes h2i = H2 PIDi , Ri , Ppub , Ki = h2i Xi + Ri Then, it sets SKi =
+ Entropy 2025, 27, 471   di + h2i xi as its private key and PKi = (Ki , Ri ) as its public key. The implementation
+                                                                                                            13 of 25
+                         process is illustrated in Algorithm 2 and Figure 4.
+
+
+                                       EDi                                                               KGC
+
+                                 Select a constant xi ∈Z*q ,
+                                  Compute X i = xi P,
+                                                                      {PIDi}                                         *
+                                                                                    Select a constant ri ∈ Z q ,
+                                                                                    Compute Ri = r i P,
+                                                                                    h2i = H 2( PIDi , Ri , P pub),
+                                                                                    d i = r i + sh2i (mod q),
+                                                                                    Di = (d i , Ri ),
+                                                                             {Di}
+
+                                  Check if d i P ? = Ri + h2i P pub ,
+                                 Compute h = H 2( PID , R , P ),
+                                               2i            i    i    pub
+
+
+                                         K i = h 2i X i + Ri ,
+                                              SK i = d i + h2i xi ,
+                                              PK i = ( K i , Ri )
+
+
+
+                          Figure4.4.Process
+                         Figure      Processofofgenerating
+                                                 generatingterminal
+                                                            terminaldevice
+                                                                     devicekeys.
+                                                                            keys.
+
+                          3.4.  Generation
+                           Algorithm        2: and       Verification
+                                                Generation              of ia Key
+                                                                    of ED     Single Digital Signature
+
+                           Input:Toparams,
+                                      generate   PID   a digital signature, ED obtains a message: m ∈ (0,1)∗ . It then selects a
+                                                         i
+                          random
+                           Output: SKnumber,  , PK              u ∈ Z ∗ , and computes the following: U = u P, h =
+                                            i        i
+                           H3(m
+                           1. xi ∈, PID                  , t ) wherea trandom
+                                     Zq∗ ; , PK , U//Generate                         current timestamp. ED then computes V =
+                                                                               is theconstant
+                           u   +  h    SK
+                           2. Xi = xi P;     .  Thus,       the   output   signature   is σ = (U , V ) . Finally, ED sends the infor-
+                          mation
+                           3. ri ∈ Zq∗{PID
+                                         ; , m , //Generate
+                                                       PK , σ , t } toaarandom
+                                                                             nearby constant
+                                                                                     NDN router. The process is described in Algo-
+                          rithm    3.
+                           4. Ri = ri P;                            
+                           5. h2i = H2 PIDi , Ri , Ppub ;
+                          Algorithm 3: Generation of a Single Digital Signature
+                           6. di = ri
+                          Input:         + sh2i (mod
+                                    𝑝𝑎𝑟𝑎𝑚𝑠,           𝑃𝐼𝐷 ,q)𝑆𝐾  ; , 𝑃𝐾
+                           7. if (di P 𝜎== Ri+ h2i Ppub ) then
+                          Output:
+                          1.
+                           8.     𝑚h2i∈ = (0,1) H2∗ ; PIDi , Ri , Ppub ;
+                                            ∗
+                          2.
+                           9.     𝑢 K∈ =  𝑍 ;h X + R ;
+                                       i        2i i           i
+                          3.
+                           10.    𝑈    =
+                                     SK i = 𝑢 𝑃; di + h2i xi ;
+                          4.      ℎ = 𝐻3(𝑚 , 𝑃𝐼𝐷 , 𝑃𝐾 , 𝑈 , 𝑡 ); //𝑡 is the current timestamp
+                           11. 𝑉 PK
+                          5.           = i 𝑢= (+Kiℎ, Ri𝑆𝐾    ); ;
+                           12.
+                          6.    else  return
+                                  𝜎 = (𝑈 , 𝑉 );  null;
+                          7.      return{SK
+                           13. return       NDN             } ← 𝜎;
+                                                       Router
+                                                 i , PK i
+
+
+                              When performing digital signature verification, or when the NDN router receives the
+                          message {PID , m , PK , σ , t }, it first checks whether t is within the valid period, T , and
+                          whether t is fresh. If it is invalid, the message is discarded; otherwise, the NDN router
+                          computes h = H2 PID , R , P             , h = H3(m , PID , PK , t ) and verifies whether the
+Entropy 2025, 27, 471                                                                                                13 of 25
+
+
+
+                        3.4. Generation and Verification of a Single Digital Signature
+                             To generate a digital signature, EDi obtains a message: mi ∈ (0, 1)∗ . It then
+                        selects a random number, ui ∈ Zq∗ , and computes the following: Ui = ui P, h3i =
+                        H3(mi , PIDi , PKi , Ui , ti ) where ti is the current timestamp. EDi then computes Vi =
+                        ui + h3i SKi . Thus, the output signature is σi = (Ui , Vi ). Finally, EDi sends the information
+                        {PIDi , mi , PKi , σi , ti } to a nearby NDN router. The process is described in Algorithm 3.
+
+                         Algorithm 3: Generation of a Single Digital Signature
+                         Input: params, PIDi , SKi , PKi
+                         Output: σi
+                         1. mi ∈ (0, 1)∗ ;
+                         2. ui ∈ Zq∗ ;
+                         3. Ui = ui P;
+                         4. h3i = H3(mi , PIDi , PK i , Ui , ti ); //ti is the current timestamp
+                         5. Vi = ui + h3i SK i ;
+                         6. σi = (Ui , Vi );
+                         7. return NDN Router ← σi ;
+
+                            When performing digital signature verification, or when the NDN router receives
+                        the message {PIDi , mi , PKi , σi , ti }, it first checks whether ti is within the valid period, Ti ,
+                        and whether ti is fresh. If it is invalid, the message is discarded; otherwise, the NDN
+                        router computes h2i = H2 PIDi , Ri , Ppub , h3i = H3(mi , PIDi , PKi , ti ) and verifies whether
+                                                                  
+                        the equation Vi P = Ui + h3i Ki + h2i Ppub holds. If the equation holds, the NDN router
+                        accepts the signature, and the single digital signature verification is successful; otherwise,
+                        the signature is rejected.
+
+                        3.5. Generation and Verification of Aggregated Digital Signatures
+                              When an NDN router receives a large number of messages {PIDi , mi , PKi , σi , ti }
+                        from different EDi (i = 1, 2, . . . , n), it computes V = ∑ni=1 Vi and U = ∑ni=1 Ui ; it
+                        then outputs the aggregated signature σ = (U, V). Finally, the NDN router sends
+                        {mi , PIDi , PKi , ti }(i = 1, 2, . . . , n) along with σ to other NDN routers. The algorithm pro-
+                        cess is shown in Algorithm 4.
+
+                         Algorithm 4: Generation of Aggregated Digital Signature
+                         Input: σi
+                         Output: ς
+                         1. V = ∑in=1 Vi ;
+                         2. U = ∑in=1 Ui ;
+                         3. σ = (U, V );
+                         4. return NDN Routers ← σ ;
+
+                             When other NDN routers receive {mi , PIDi , PKi , ti }(i = 1, 2, . . . , n) and σ, the NDN
+                        routers 
+                                check the validity
+                                                  of the aggregated signature σ by verifying whether VP = U +
+                        ∑ni=1 h3i Ki + h2i Ppub holds, where h2i = H2 PIDi , Ri , Ppub and h3i = H3(mi , PIDi , PKi , ti ).
+                        If the equation holds, the aggregated signature is accepted, and the verification is successful;
+                        otherwise, the signature is rejected, and the verification fails.
+Entropy 2025, 27, 471                                                                                                 14 of 25
+
+
+
+                        4. Security Analysis
+                        Correctness Analysis
+                             The proof of the correctness of single signature verification is shown in Equation (2):
+
+                                                        Vi P      = (ui + h3i SK i ) P
+                                                                  = ui P + h3i (di + h2i xi ) P
+                                                                  = U i + h3i (di P + h2i xi P)                         (2)
+                                                                  = U i + h3i Ri + h2i Ppub + h2i Xi
+                                                                                          
+                                                                  = Ui + h3i Ki + h2i Ppub
+
+                             The proof of correctness of the aggregate signature verification is shown in Equation (3):
+
+                                                                       n
+                                                         VP       = ∑ Vi P
+                                                                    i =1 
+                                                                      n                      
+                                                                  = ∑ Ui + h3i Ki + h2i Ppub
+                                                                    i =1                                                  (3)
+                                                                      n        n               
+                                                                  = ∑ Ui + ∑ h3i Ki + h2i Ppub
+                                                                    i =1     i =1
+                                                                           n                
+                                                                  = U + ∑ h3i Ki + h2i Ppub
+                                                                              i =1
+
+
+                        5. Formal Security Analysis
+                             Under the condition that solving the ECDLP is extremely difficult, we have proven
+                        that the ECAE scheme possesses existential unforgeability against both Super Type I and
+                        Super Type II adversaries.
+
+                        Theorem 1. In the random oracle model, assuming that solving the ECDLP is difficult, the
+                        proposed certificateless signature scheme possesses existential unforgeability against a Super Type-I
+                        adversary. That is, if there exists a Super Type-I adversary SA1 that can submit queries to the
+                        random oracle model and win Game 1 with probability SuccSA1 , then there exists an algorithm β
+                        that can solve a random    instanceof the ECDLP in polynomial time, with a success probability of
+                                                                  q EPS
+                                       1                  1
+                        Succ β ≥ q              1− q                       SuccSA1
+                                     CU + q H          CU + q H
+
+
+                        Proof. Assume there exists a Super Type-I adversary SA1 that can break our proposed
+                        certificateless signature scheme with a non-negligible probability SuccSA1 . We can construct
+                        a polynomial-time algorithm β that utilizes SA1 to solve the ECDLP.
+                              Initialization Phase: Algorithm β initializes two tables: a hash table, LH1 (initially
+                        empty), and a key table, LK1 (initially empty). In Game 1, β selects an identity PID∗ as
+                        the challenge identity, sets the public key of the KGC as PKKGC , and sends the parameters
+                        params = (G, P, PKKGC , H) to SA1 .
+                              Query Phase of the Super Adversary:
+                        •    Create-user (PIDt ): The random oracle model takes PIDt as the input. If PIDt has al-
+                             ready been created, nothing happens. Otherwise, β runs the corresponding algorithm
+                             to generate the following: the partial private key Dt , the secret key xt , and the public
+                             key PKt . Then, β returns these values to SA1 .
+                        •    Hash Queries: (1) When SA1 queries the hash function at (PIDt , PKKGC ), if the list
+                             LH1 contains < ht , PIDt , PKKGC >, then β returns ht to SA1 . Otherwise, β randomly
+                             selects ht ∈ Zn∗ , returns it to SA1 , and adds < ht , PIDt , PKKGC > to LH1 . (2) When SA1
+                             queries the hash function at (m, ht , PIDt , Tt ), if LH1 contains < kt , m, ht , PIDt , Tt >,
+                             then β returns kt to SA1 . Otherwise, β randomly selects kt ∈ Zn∗ , returns it to SA1 , and
+                             adds < kt , m, ht , PIDt , Tt > to LH1 .
+Entropy 2025, 27, 471                                                                                               15 of 25
+
+
+
+                        •    request-public-key (PIDt ): Upon receiving a request-public-key query for identity
+                             PIDt , β checks if PIDt ̸= PID∗ . If true, β selects three random values at , bt , xt ∈ Zn∗ and
+                             computes the following: st ← at , ht ← bt , Rt ← at P − bt PKKGC , PKt = xt P + Rt . β up-
+                             dates the following: LH1 with < PIDt , Rt , ht >, LK1 with < PIDt , Rt , st > and
+                             < PIDt , PKt , xt >. Finally, β returns PKt to SA1 . Otherwise, β selects three random val-
+                             ues at , bt , xt ∈ Zn∗ and sets Rt ← at P, ht ← bt , st ← ⊥, PKt = xt P + Rt . β updates the
+                             following: LH1 with < PIDt , Rt , ht >, LK1 with < PIDt , Rt , ⊥ > and < PIDt , PKt , xt >.
+                             Finally, β returns PKt to SA1 .
+                        •    extract-partial-secret (PIDt ): Upon receiving an extract-partial-secret query for identity
+                             PIDt , if PIDt = PID∗ , β terminates the session. Otherwise, β checks LH1 for an entry
+                             < PIDt , Rt , st >. If such a record exists, β returns st to SA1 . Otherwise, β first performs
+                             a request-public-key (PIDt ) query and then returns st to SA1 .
+                        •    extract-secret (PIDt ): Upon receiving an extract-secret query for identity PIDt , β
+                             searches LK1 for < PIDt , PKt , xt >. If such a record exists, β returns xt to SA1 . Oth-
+                             erwise, β first performs an extract-partial-secret (PIDt ) query and then returns xt
+                             to SA1 .
+                        •    replace-public-key (PIDt , PKt , PKt′ ): Once β receives the query (PIDt , PKt , PKt′ ) from
+                             SA1 , it searches the list LK1 for an entry < PIDt , PKt , xt >. If such a record exists, β
+                             sets PIDt = PIDt′ and xt = ⊥. Otherwise, β first performs a request-public-key (PIDt )
+                             query and then sets PIDt = PIDt′ and xt = ⊥.
+                        •    super-sign (PIDt , mt ): Upon receiving a super-sign query with (PIDt , mt ) from SA1 ,
+                             β searches for the following: < PIDt , Rt , st > in the list LH1 and < PIDt , PKt , xt > in
+                             the list LK1 . Then, β generates a random value ct ∈ Zn∗ and computes the following:
+                             Vt ← ct , Tt = Vt P − kt (PKt + ht PKKGC ) . Then, β returns the signature σt = (Ut , Vt )
+                             to SA1 .
+                            Finally, β outputs a forged but valid signature (PIDt , mt , σt ). If PIDt = PID∗ , β ter-
+                        minates the simulation. Otherwise, β searches the tables LH1 and LK1 for the entries:
+                        < ht , PIDt , PKKGC >, < kt , m, ht , PKt , Tt >, < PIDt , st , Rt >, < PIDt , PKt , xt >. On the
+                        other hand, based on the Forking Lemma [27], through polynomial-time replay attacks
+                        under the same source of randomness but different hash oracle choices, it is possible
+                        to obtain two additional
+                                                 valid signatures. Eventually, three valid signatures are ob-
+                                  (j)      (j)   (j)
+                        tained: σt       = Ut , Vt , for j = 1, 2, 3. These signatures satisfy the following equation:
+                                                                                 
+                          (j)        (j)   (j)       (j)      (j)  (j)          (j)
+                        Vt = tt + kt xt + st               = tt + kt xt + rt + ht s mod n, for j = 1, 2, 3. Note that
+                        for SA1 to win the first game, it must have never queried the extract-partial-secret or the
+                        super-sign oracle. Using the above three equations, β can solve for the three unknowns
+                        xt , rt , s and s as the solution to a random instance of ECDLP, given by (P, Q = sP). So far,
+                        we have demonstrated that β can solve a given ECDLP instance. Next, we analyze the
+                        probability Succβ that β wins in Game 1.
+                        •    E1: β does not terminate in any extract-partial-secret queries.
+                        •    E2: SA1 successfully forges a valid signature (PIDt , mt , σt ).
+                        •    E3: The forged signature (PID t , mt , σt ) satisfies PID t = PID ∗ .
+                             The corresponding probabilities of the three events mentioned above are given as
+                                                         qEPS
+                        follows: Pr[E1 ] ≥ 1 − q 1+q            , Pr[E2 |E1 ] ≥ SuccSA1 , Pr[E3 |E1 ∧ E2 ] ≥ q 1+q , where
+                                                  CU    H                                                     CU  H
+                        qCU , qH , andqEPS represent the number of create-user queries, hash queries, and extract-
+                        partial-secret queries, respectively. In this case, the probability that β solves the given in-
+                        stance of ECDLP is as follows: Succβ = Pr[E1 ∧ E2 ∧ E3 ] = Pr[E1 ]Pr[E2 |E1 ]Pr[E3 |E1 ∧ E2 ] ≥
+                                            qEPS
+                            1            1
+                        qCU +qH 1 − qCU +qH        . Clearly, since SuccSA1 is non-negligible, β can solve ECDLP with
+                        a non-negligible probability Succβ . This contradicts the assumed difficulty of ECDLP. □
+Entropy 2025, 27, 471                                                                                              16 of 25
+
+
+
+                        Theorem 2. In the random oracle model, assuming that solving ECDLP is hard, the pro-
+                        posed certificateless signature scheme is existentially unforgeable against a Super Type-II ad-
+                        versary. That is, if there exists a Super Type-II adversary SA2 , which can query the ran-
+                        dom oracle model and win Game 2 with probability SuccSA2 , then there exists an algorithm
+                        β that can solve a random instance
+                                                          of ECDLP in polynomial time with a success probability:
+                                                                  q EPS
+                                       1                 1
+                        Succ β ≥ q              1− q                      SuccSA2 .
+                                     CU + q H          CU + q H
+
+
+                        Proof. Suppose there exists a Super Type-II adversary SA2 that can break our certificateless
+                        signature scheme with a non-negligible probability SuccSA2 . Then, we can construct a
+                        polynomial-time algorithm β that uses SA2 to solve ECDLP. That is, β is given a random
+                        instance of ECDLP ( P, Q = xt P). The goal of β is to compute the secret key xt . Initialization
+                        Phase: β selects an identity PID ∗ as the challenge identity in Game 2. It sets the public key
+                        PK KGC and sends the master key s along with the parameters, params = ( G, P, PK KGC , H ),
+                        to the adversary SA2 . β also maintains two lists, L H2 and LK2 , to record oracle query
+                        responses. Next, during the query phase, β interacts with SA2 and simulates the oracle
+                        model by responding to the adversary’s queries. Since the create-user, hash query, replace-
+                        public-key, and super-sign queries have already been defined in Theorem 1, we do not
+                        provide their descriptions here. In the following, we simulate the other oracle queries made
+                        by SA2 :
+                        •    request-public-key (PIDt ): When SA2 queries the public key of identity PIDt , β pro-
+                             ceeds as follows. If PIDt ̸= PID∗ , β generates two random values rt , xt ∈ Zn∗ and com-
+                             putes the following: Rt = rt P, ht = H(PIDt , PKKGC ), st = rt + ht s mod n, PKt = xt P +
+                             Rt . Then, β adds the tuples < PIDt , Rt , ht >, < PIDt , st , Rt > and < PIDt , PKt , xt > to
+                             the lists LH2 and LK2 . Finally, β returns PKt to SA2 . Otherwise, β selects a random
+                             value rt ∈ Zn∗ and sets Rt = rt P, ht = H(PIDt , PKKGC ), st = rt + ht s mod n, PKt =
+                             xt P + Rt . Then, β adds < PIDt , Rt , ht > to LH2 and < PIDt , st , Rt >, < PIDt , PKt , ⊥ >
+                             to LK2 . Finally, β returns PKt to SA2 .
+                        •    extract-partial-secret (PIDt ): When SA2 queries the partial private key for identity
+                             PIDt , β proceeds as follows: β searches for < PIDt , st , Rt > in LK2 . If such a record
+                             exists, β returns st to SA2 . Otherwise, β performs a request-public-key (PIDt ) query
+                             and returns st to SA2 .
+                        •    extract-secret (PIDt ): When SA2 queries the full private key of identity PIDt , β proceeds
+                             as follows: if PIDt = PID∗ , β terminates the session. Otherwise, β searches for
+                             < PIDt , PKt , xt > in LK2 . If such a record exists, β returns xt to SA2 . Otherwise, β
+                             performs a request-public-key (PIDt ) query and then returns xt to SA2 .
+                             Finally, SA2 outputs a forged but valid signature (PIDt , mt , σt ). If PIDt = PID∗ , the sim-
+                        ulation stops. Otherwise, β searches in list LK2 for < PIDt , st , Rt > and < PIDt , PKt , xt >.
+                        Based on the Forking Lemma [27], if there is polynomial replay under the same randomness
+                        and different hash oracle model choices, SA2 can generate
+                                                                                   another valid signature. Eventu-
+                                                                            (j)       (j)   (j)
+                        ally, we obtain two valid signatures: σt = Ut , Vt       for j = 1, 2, satisfying the following
+                                                                                         
+                                     (j)   (j)    (j)       (j)      (j)  (j)           (j)
+                        equation: Vt = tt + kt xt + st            = tt + kt xt + rt + ht s mod n for j = 1, 2. It is
+                        important to note that winning Game 2 requires that the oracle queries extract-secret and
+                        super-sign are never made. Using the two independent linear equations above, β can derive
+                        the two unknown values rt and xt and output them as the solution to the random ECDLP
+                        instance (P, Q = xt P). This, in turn, allows us to analyze the probability of β winning in
+                        Game 2. We introduce the events leading to success as follows:
+                        •    E1: β does not terminate in any extract-secret query.
+                        •    E2: SA2 successfully forges a valid signature (PIDt , mt , σt ).
+                        •    E3: The forged signature (PIDt , mt , σt ) satisfies PIDt = PID∗ .
+Entropy 2025, 27, 471                                                                                           17 of 25
+
+
+                                                                                                                   qES
+                                                                                                             1
+                             The probabilities of these events are given as follows: Pr[E1 ] ≥          1− q               ,
+                                                                                                           CU +qH
+                        Pr[E2 |E1 ] ≥ SuccSA1 , Pr[E3 |E1 ∧ E2 ] ≥ q 1+q , where qCU , qH , and qES denote the number
+                                                                    CU  H
+                        of create-user queries, hash queries, and extract-secret queries, respectively. Thus, the prob-
+                        ability that β solves the given instance of ECDLP is as follows: Succβ = Pr[E1 ∧ E2 ∧ E3 ] =
+                                                                              qES
+                        Pr[E1 ]Pr[E2 |E1 ]Pr[E3 |E1 ∧ E2 ] ≥ q 1+q 1 − q 1+q        . Since SuccSA2 is non-negligible,
+                                                              CU  H     CU   H
+                        β is able to solve ECDLP with non-negligible probability, Succβ , contradicting the difficulty
+                        of solving ECDLP. □
+
+                             In summary, the proposed ECAE scheme achieves existential unforgeability under the
+                        random oracle model based on the difficulty assumption of the Elliptic Curve Discrete Loga-
+                        rithm Problem (ECDLP). Through the proof of formal security, it effectively resists two types
+                        of adversaries and defends against advanced attacks such as public key replacement and
+                        key escrow, thereby providing provable security guarantees for NDN-IoT environments.
+
+                        Informal Security Analysis
+                              Anonymity: During communication, the true identity of the terminal device is hidden
+                        behind a pseudonym, such as PIDi = {MIDi , Ti }, where MIDi = H1(Ti , sAIDi ) ⊕ IDi ,
+                        and AIDi = IDi ⊕ Ni . Here, Ti represents the validity period of the pseudonym. Each
+                        terminal device uses a pseudonym PIDi generated by the KGC for communication. Apart
+                        from the KGC, no adversary can retrieve the real identity of the terminal device from
+                        the pseudonym.
+                              Unlinkability: During communication, the terminal device uses different pseudonyms
+                        for each interaction. Each message is signed using a different pseudonym and its cor-
+                        responding private key. There is no connection between the new and old pseudonyms.
+                        Therefore, an attacker cannot infer the terminal device from the new pseudonym, ensuring
+                        the unlinkability of the scheme.
+                              Message Authentication: In our scheme, every message generated by a terminal device
+                        must be signed before being sent to a nearby NDN router. The NDN router can verify the
+                        signature to ensure that the message has not been tampered with or forged by an attacker or
+                        an unauthorized device. Additionally, the ECAE scheme provides existential unforgeability
+                        against both Type-I and Type-II adversaries. Therefore, the proposed scheme meets the
+                        security requirements for message authentication.
+                              Conditional Traceability: When a terminal device malfunctions or causes an incident,
+                        the KGC can trace the real identity of the user. The KGC retrieves {PIDi , Mi , AIDi } from
+                        its secure database and computes IDi = AIDi ⊕ sMi to obtain the real identity of the
+                        malicious user. Since s is the master private key of the KGC, only the KGC has access to this
+                        information. Thus, only the KGC can trace the real identity of the terminal device, while no
+                        other entity can do so.
+                              Non-repudiation: Based on the analysis above, if a terminal device denies certain
+                        information, the KGC can identify its real identity through the pseudonym of the malicious
+                        device. Therefore, no device can deny its signature on a message.
+                              Resistance to Replay Attacks: A replay attack occurs when an attacker records or reuses
+                        communication messages to deceive the system. In the proposed scheme, the interactions
+                        between the ED, NDN router, and KGC incorporate random numbers and timestamps.
+                        The recipient can detect whether a message is a replayed one and effectively filter out any
+                        illegitimate replayed messages.
+                              Perfect Forward Secrecy: Suppose an attacker obtains the private key SK i = di + h2i xi
+                        of a terminal device, EDi . Since the temporary random number ui ∈ Zq∗ used by EDi during
+                        each signing session is independent of the private key and the signature σi = (Ui , Vi )
+                        includes Vi = ui + h3i SK i , which depends on ui , the attacker cannot derive ui from any
+Entropy 2025, 27, 471                                                                                                  18 of 25
+
+
+
+                             historical session, even if SK i is exposed. This is because recovering ui from Ui = ui P
+                             requires solving the ECDLP. Similarly, in the aggregate signature, σ = (U, V ), where
+                             V = ∑in=1 Vi , the value also depends on the temporary random numbers used in each
+                             session. This further ensures that even if a terminal device’s key is compromised, the
+                             confidentiality of previous sessions remains intact. Therefore, the ECAE scheme possesses
+                             the property of perfect forward secrecy.
+
+                             6. Performance Analysis
+                                   In this section, the ECAE scheme will be compared with the schemes proposed by
+                             Huang et al. [11], Yang et al. [15], Karati et al. [16], Thumbur et al. [17], and Zhu et al. [23]
+                             in terms of security features, the number of cryptographic operations, computational delay,
+                             and communication overhead. Due to its high efficiency and robust security properties, the
+                             Curve25519 elliptic curve has been widely adopted in various fields [28,29]. Therefore, this
+                             experiment selected Curve25519 as the underlying elliptic curve, with a security parameter
+                             of λ = 256. The curve is defined over the prime field p = 2255 − 19, and its equation is
+                             given by E : y2 = x3 + 48662x2 + x, where the x-coordinate of the base point P is 9.
+
+                             6.1. Security Functionality Comparison
+                                   Table 2 presents a functional comparison between the ECAE scheme and other exist-
+                             ing schemes. Notably, many current signature schemes do not ensure the anonymity of
+                             message sources, which may allow attackers to easily trace the origin of messages, thereby
+                             compromising user privacy. In addition, the group signature scheme proposed by Huang
+                             et al. [11] in recent years has improved authentication efficiency. However, its resistance
+                             to man-in-the-middle attacks is inadequate, giving attackers opportunities to insert them-
+                             selves between communicating parties, enabling eavesdropping, message tampering, or
+                             impersonation. By comparison, the scheme proposed by Karati et al. [16] appears relatively
+                             outdated. It lacks non-repudiation and unlinkability, making it vulnerable to signature
+                             forgery attacks, which compromise the integrity and authenticity of information. The
+                             schemes proposed by Karati et al. [16], Thumbur et al. [17], and Zhu et al. [23] share several
+                             common shortcomings, such as the absence of a timely signature update mechanism, mak-
+                             ing them ineffective against replay attacks. Bisheh-Niasar et al. [19] adopted the Edwards
+                             curve signature algorithm and focused primarily on hardware architecture. However, their
+                             scheme remains vulnerable to man-in-the-middle and replay attacks. Unlike these schemes,
+                             the solution proposed in this paper comprehensively meets all the security requirements
+                             listed in the table, offering a more complete and efficient approach to overcoming the
+                             limitations of existing schemes.
+
+                             Table 2. Comparison of security functionality.
+
+                                                Non-                               Signature          MITM         Replay
+                             Anonymity                         Unlinkability
+                                             Repudiation                         Forgery Attack       Attack       Attack
+                                                 √                    √                √                             √
+      Huang et al. [11]          ×                                                                      ×
+                                                   √                  √                 √               √             √
+       Yang et al. [15]          ×
+                                                                                                        √
+      Karati et al. [16]         ×                 ×                  ×                 ×                             ×
+                                                   √                  √                 √               √
+    Thumbur et al. [17]          ×                                                                                    ×
+                                                   √                  √                 √
+ Bisheh-Niasar et al. [19]       ×                                                                      ×             ×
+                                                   √                  √                 √               √
+        Zhu et al. [23]          ×                                                                                    ×
+                                 √                 √                  √                 √               √             √
+        ECAE (Ours)
+Entropy 2025, 27, 471                                                                                                      19 of 25
+
+
+
+                                6.2. Computation Delay
+                                     We simulated these methods on two Ubuntu 16.04 devices using the OpenSSL li-
+                                brary [30], GMP library [31], and PBC library [32]. The terminal device hardware used
+                                was a RASPBERRY PI 3B+ with 1 GB of LPDDR2 SDRAM and a 1.4 GHz BCM2837B0
+                                system-on-chip. The AG hardware used a computer with 4 GB of RAM and an INTEL(R)
+                                CELERON (R) J1900 CPU.
+                                     In the six schemes compared, the cryptographic operations used included hash opera-
+                                tions, point multiplication, point addition, XOR operations, exponentiation, and bilinear
+                                pairing operations, which are denoted as follows: Has, Mul, Add, Xor, EXP, and BPA. The
+                                execution time for each cryptographic operation is shown in Table 3.
+
+                                Table 3. Execution time of basic cryptographic operations (ms).
+
+      Operation                             Description                                BCM2837B0            Intel J1900
+         THas                  Execution time of the hash function                      0.0729 ms            0.0023 ms
+         TMul               Execution time of ECC point multiplication                 23.4405 ms            2.2260 ms
+         TAdd                 Execution time of ECC point addition                     0.1652 ms             0.0288 ms
+         TXor                   Execution time of XOR operation                        0.1650 ms             0.0490 ms
+         TEXP                   Execution time of exponentiation                        3.3280 ms            0.0390 ms
+         TBPA                   Execution time of bilinear pairing                     48.6600 ms            5.2750 ms
+
+
+                                      Table 4 provides a comparison of the number of cryptographic operations and their
+                                execution times across different schemes. It can be observed that the ECAE scheme ex-
+                                hibits the shortest overall execution time on the ED. Figure 5 shows a comparison of
+                                computational delays between the schemes. The total computation time of the ECAE
+                                scheme is 46.18% lower than Huang et al.’s [11] scheme, 26.82% lower than Yang et al.’s
+                                scheme [15], 12.27% lower than Karati et al.’s scheme [16], 19.07% lower than Thumbur
+                                et al.’s scheme [17], 20.35% lower than Bisheh-Niasar et al.’s scheme [19], and 7.50% lower
+                                than Zhu et al.’s scheme [23].
+
+                                Table 4. Comparison of the number of cryptography operations and execution time.
+
+             Scheme              Executor       Has        Mul        Add        Xor        EXP     BPA            Total
+                                   User          1          4          2          0          7       0
+       Huang et al. [11]                                                                                      152.2749 ms
+                                  Server         0          6          7          0          4       4
+                                   User          3          4          1          1          1       0
+        Yang et al. [15]                                                                                      111.9935 ms
+                                  Server         3          4          2          1          0       1
+                                   User          1          3          0          0          3       0
+       Karati et al. [16]                                                                                      93.4114 ms
+                                  Server         1          1          0          0          6       2
+                                   User          2          4          2          0          0       0
+     Thumbur et al. [17]                                                                                      101.0198 ms
+                                  Server         2          3          2          0          0       0
+                                   User          3          4          1          0          0       0
+  Bisheh-Niasar et al. [19]                                                                                    98.6290 ms
+                                  Server         1          2          1          0          0       0
+                                   User          4          3          4          0          0       0
+         Zhu et al. [23]                                                                                       88.5952 ms
+                                  Server         3          3          3          0          0       2
+                                   User          1          3          1          0          0       0
+              ECAE                                                                                             81.9544 ms
+                                  Server         4          5          6          0          0       0
+                                                                                                                                                    98.6290 ms
+                                                     [19]                 Server          1          2         1         0        0            0
+                                                                           User           4          3         4         0        0            0
+                                             Zhu et al. [23]                                                                                        88.5952 ms
+                                                                          Server          3          3         3         0        0            2
+Entropy 2025, 27, 471                                                                                                                                                  20 of 25
+                                                                           User           1          3         1         0        0            0
+                                                   ECAE                                                                                             81.9544 ms
+                                                                          Server          4          5         6         0        0            0
+
+
+                                                                     Computation Delay
+                         160                152.275
+
+                         140
+
+                         120                                      111.994
+
+
+      Time Consumption
+                                                                                                               101.020                98.629
+                         100                                                             93.411
+                                                                                                                                                        88.595
+                               81.954
+                         80
+
+
+            ms)
+                         60
+
+                         40
+
+                         20
+
+                           0
+                               ECAE     Huang et al.(2021)     Yang et al.(2022)    Karati et al.(2018)   Thumbur et al.(2019)   Bisheh-Niasar et   Zhu et al.(2022)
+                                                                                                                                    al.(2021)
+
+
+                                         Figure 5.
+                                        Figure  5. Comparison
+                                                   Comparison of
+                                                              ofcomputation
+                                                                 computationdelay
+                                                                             delay[11,15–17,19,23] .
+                                                                                    [11,15–17,19,23].
+
+                                               In Section
+                                              In   Section 4,4, aa comprehensive
+                                                                   comprehensivesecurity
+                                                                                     securityanalysis
+                                                                                               analysisof of
+                                                                                                           thethe
+                                                                                                                ECAE
+                                                                                                                  ECAE  scheme
+                                                                                                                           schemeis provided   to to
+                                                                                                                                     is provided
+                                        validate    its resistance
+                                         validate its    resistanceagainst   typical
+                                                                       against       attacks.
+                                                                               typical        Through
+                                                                                        attacks.        this this
+                                                                                                  Through     security analysis, we
+                                                                                                                   security           define
+                                                                                                                              analysis,   we the
+                                                                                                                                              define
+                                         attacks  we   can  defend    against as known   attacks, while  other  potential  attacks,
+                                        the attacks we can defend against as known attacks, while other potential attacks, due to   due  to their
+                                         unpredictability,
+                                        their                  are categorized
+                                               unpredictability,                 as unknown
+                                                                       are categorized         attacks. It
+                                                                                         as unknown        is assumed
+                                                                                                        attacks.   It is that unknown
+                                                                                                                         assumed     thatattacks
+                                                                                                                                          unknown
+                                         may    interfere   with   the  authentication  process  of these   seven  schemes,
+                                        attacks may interfere with the authentication process of these seven schemes, whereas  whereas   known
+                                         attacks do not. In the case of known attacks, each scheme exhibits fixed computational
+                                        known attacks do not. In the case of known attacks, each scheme exhibits fixed compu-
+                                         delays; however, in the case of unknown attacks, the computational delay may vary. To
+                                        tational delays; however, in the case of unknown attacks, the computational delay may
+                                         assess the impact of this uncertainty on performance, simulations were conducted using
+                                        vary. To assess the impact of this uncertainty on performance, simulations were conducted
+                                         C++ experiments, evaluating the performance of the authentication schemes under un-
+                                        using C++ experiments, evaluating the performance of the authentication schemes under
+                                         known attack conditions. By adjusting the ratio of unknown attacks to known attacks, the
+                                        unknown attack conditions. By adjusting the ratio of unknown attacks to known attacks,
+                                         computational delay for each scheme can be measured. The performance measurement
+                                        the  computational delay for each scheme can be measured. The performance measure-
+                                         parameter is defined as the average successful computational delay calculated by Equa-
+                                        ment     parameter
+                                         tion (4).             is defined
+                                                   Additionally,            as the
+                                                                     delayknown     averagethe
+                                                                                represents    successful   computational
+                                                                                                computational     delay under delay
+                                                                                                                                known    attacks, by
+                                                                                                                                      calculated
+                                        Equation
+                                         while delay (4).  Additionally, delayknown represents
+                                                        unknown represents the computational
+                                                                                                      the
+                                                                                                  delay    computational
+                                                                                                        under                 delay under
+                                                                                                                 unknown attacks,     which known
+                                                                                                                                             is a
+                                        attacks,   while
+                                         random value.      delay   unknown  represents  the  computational      delay   under  unknown      attacks,
+                                        which is a random value.
+                                                                                   delayunknown ∗ timesunknown + delayunknown ∗ timesunknown
+                                                             delayaverage =                                timesknown                                                      (4)
+                                                                   where timesunknown = ratiounknown ∗ timesall−attack
+
+                                             Figure 6 shows the relationship between the average computational delay of each
+                                        scheme and the proportion of unknown attacks. The vertical axis represents the average
+                                        computational delay, and the horizontal axis represents the proportion of unknown attacks
+                                        out of the total attacks. The seven schemes are represented by curves of different colors
+                                        and shapes. As seen in Figure 6, with the increase in the proportion of unknown attacks,
+                                        the average computational delay of each scheme gradually increases. Notably, the ECAE
+                                        scheme exhibits the smallest computational delay as the proportion of unknown attacks
+                                        increases. Through a comprehensive analysis of efficiency and security, it was concluded
+                                        that the proposed scheme has significant advantages in both aspects.
+                                                attacks, the average computational delay of each scheme gradually increases. Notably, the
+                                                ECAE scheme exhibits the smallest computational delay as the proportion of unknown
+Entropy 2025, 27, 471                           attacks increases. Through a comprehensive analysis of eﬃciency and security, it21 of
+                                                                                                                                 was  25con-
+                                                cluded that the proposed scheme has significant advantages in both aspects.
+
+
+                                                                Computation delay
+                                   7000             ECAE
+                                                    Huang et al.(2021)
+                                   6000             Yang et al.(2022)
+                                                    Karati et al.(2018)
+
+
+
+
+            Time Consumption(ms)
+                                                    Thumbur et al.(2019)
+                                   5000
+                                                    Bisheh-Niasar et al.(2021)
+                                                    Zhu et al.(2022)
+                                   4000
+
+                                   3000
+
+                                   2000
+
+                                   1000
+
+                                      0
+                                          0.1         0.2         0.3         0.4         0.5        0.6         0.7        0.8         0.9
+                                                                           Unknown Attacks Ration
+
+
+                                                Figure 6. 6.
+                                                  Figure  Computation
+                                                             Computationdelay
+                                                                         delay under
+                                                                               under aa ration
+                                                                                        rationofofunknown
+                                                                                                   unknown  attacks
+                                                                                                          attacks   [11,15–17,19,23].
+                                                                                                                  [11,15–17,19,23].
+
+                                                6.3.6.3. CommunicationOverhead
+                                                      Communication    Overhead
+
+                                                      InInthe
+                                                            the NDN packet forwarding mechanism, the transmission of an Interest packet
+                                                               NDN packet forwarding mechanism, the transmission of an Interest packet
+                                                   triggers the entire data transfer process. The Interest packet propagates through the
+                                                triggers the entire data transfer process. The Interest packet propagates through the net-
+                                                   network, and each router makes intelligent forwarding decisions based on the data name
+                                                work, and each router makes intelligent forwarding decisions based on the data name in
+                                                   in the Interest packet. Once the Interest packet reaches the producer, the data packet is
+                                                thegenerated
+                                                     Interest packet.    Once the Interest packet reaches the producer, the data packet is gen-
+                                                                and accompanied by a digital signature to ensure data integrity and source
+                                                erated   and accompanied
+                                                   authenticity.   These databy    a digital
+                                                                                 packets   aresignature
+                                                                                               transmittedto ensure
+                                                                                                             along the data integrity
+                                                                                                                          reverse  pathand  source
+                                                                                                                                         of the     authen-
+                                                                                                                                                Interest
+                                                ticity.
+                                                   packet and are forwarded by routers until they reach the initiator of the Interest. Therefore, and
+                                                         These  data  packets   are  transmitted   along   the  reverse   path of  the Interest  packet
+                                                     forwarded
+                                                arethe             by routers
+                                                        length of the  signatureuntil
+                                                                                  is anthey  reach the
+                                                                                        important       initiator
+                                                                                                    factor         of the Interest.
+                                                                                                           in determining            Therefore, the
+                                                                                                                             the communication        length
+                                                                                                                                                   costs.
+                                                of In
+                                                    the  signature
+                                                      this           is an
+                                                           experiment,       important
+                                                                          it was assumedfactor    in determining
+                                                                                            that the communicationthe      communication
+                                                                                                                        usage for             costs. In this
+                                                                                                                                   point multiplication
+                                                   in S
+                                                experiment,
+                                                        M  was  320  bits,  and  the  communication     usage   for  the  numbers   in
+                                                                it was assumed that the communication usage for point smultiplication  S  was   160 bits. in
+                                                S Table
+                                                    was 5320presents  the analysis
+                                                               bits, and            of the signature
+                                                                           the communication          length
+                                                                                                   usage   forinthe
+                                                                                                                 the numbers    in S Figure
+                                                                                                                     seven schemes.    was 1607 shows  a
+                                                                                                                                                 bits. Table
+                                                   comparison    of the  total communication     overheads   across   the seven  schemes.
+                                                5 presents the analysis of the signature length in the seven schemes. Figure 7 shows a
+                                                comparison of the total communication overheads across the seven schemes.
+                                                  Table 5. Signature length analysis.
+
+                                                                        Scheme                                     Signature Length
+                                                                  Huang et al. [11]                                     3S M + Ss
+                                                                   Yang et al. [15]                                     2S M + Ss
+                                                                  Karati et al. [16]                                    4S M + Ss
+                                                                Thumbur et al. [17]                                        3S M
+                                                              Bisheh-Niasar et al. [19]                                    2S M
+                                                                   Zhu et al. [23]                                     3S M + 2Ss
+                                                                        ECAE                                               2S M
+                                             Thumbur et al. [17]                                             3𝑆
+                                           Bisheh-Niasar et al. [19]                                         2𝑆
+Entropy 2025, 27, 471                           Zhu et al. [23]                                            3𝑆 + 2𝑆             22 of 25
+                                                   ECAE                                                      2𝑆
+
+
+
+
+                        Figure 7. Comparison of communication overheads across different schemes [11,15–17,19,23].
+                        Figure 7. Comparison of communication overheads across diﬀerent schemes [11,15–17,19,23].
+                             By analyzing Table 5 and Figure 7, it can be concluded that the signature lengths in
+                             By analyzing Table 5 and Figure 7, it can be concluded that the signature lengths in
+                        both the ECAE scheme and the scheme proposed by Bisheh-Niasar et al. are the shortest.
+                        both the ECAE scheme and the scheme proposed by Bisheh-Niasar et al. are the shortest.
+                        This is because both schemes employ fewer point multiplication operations during the
+                        This is because both schemes employ fewer point multiplication operations during the
+                        signature generation process and emphasize the inclusion of minimal data in the signature
+                        signature generation process and emphasize the inclusion of minimal data in the signa-
+                        design. Therefore, from the perspective of memory and communication overheads, the
+                        ture design. Therefore, from the perspective of memory and communication overheads,
+                        ECAE scheme demonstrates a notable performance advantage.
+                        the ECAE scheme demonstrates a notable performance advantage.
+                        7. Conclusions and Future Work
+                        7. Conclusions and Future Work
+                              The research results show that the signature algorithms used in NDN to ensure packet
+                        security   research
+                              Thestill          results show
+                                        have limitations         that the
+                                                             in terms          signature
+                                                                          of security     algorithms
+                                                                                        and              usedwith
+                                                                                             compatibility       in NDN      to ensure
+                                                                                                                       IoT devices.   To
+                        packet   security   still have   limitations    in  terms   of security  and   compatibility
+                        effectively address these issues, this paper proposes an efficient certificateless aggregate      with  IoT de-
+                        vices. To eﬀectively
+                        signature   scheme in the address
+                                                      NDN-IoTtheseenvironment.
+                                                                     issues, this paper     proposes
+                                                                                       By utilizing      an eﬃcient
+                                                                                                      low-cost           certificateless
+                                                                                                                  elliptic curve cryp-
+                        tosystems and conventional hash functions, the signature verification process in theelliptic
+                        aggregate    signature    scheme    in  the  NDN-IoT        environment.     By  utilizing   low-cost     NDN
+                        curve   cryptosystems      and   conventional      hash   functions,  the   signature
+                        architecture is optimized, thereby reducing the signature verification time overhead andverification    process
+                        in the
+                        the     NDN
+                             cache      architecture
+                                    overhead      of NDNis optimized,      thereby
+                                                             routers, easing       thereducing
+                                                                                       burden of  thecertificate
+                                                                                                       signaturemanagement
+                                                                                                                    verification time
+                                                                                                                                    and
+                        overhead    and   the  cache   overhead    of   NDN      routers, easing   the  burden
+                        achieving high compatibility with resource-constrained IoT devices. Experimental data     of  certificate  man-
+                        agement
+                        show   thatand
+                                    the achieving
+                                         ECAE scheme  highreduces
+                                                            compatibility
+                                                                       the totalwith  resource-constrained
+                                                                                  computation    time by up to   IoT   devices.
+                                                                                                                   46.18%        Exper-
+                                                                                                                             compared
+                        imental
+                        to        data
+                           existing      show that
+                                     schemes.          the ECAE even
+                                                  Furthermore,       scheme      reduces the
+                                                                             in unknown        totalscenarios,
+                                                                                           attack     computation       time by
+                                                                                                                  the ECAE        up to
+                                                                                                                                scheme
+                        46.18%   compared      to  existing   schemes.     Furthermore,     even   in  unknown
+                        maintains stable performance, with a signature communication usage of only 640 bits,         attack  scenarios,
+                        the ECAE scheme
+                        significantly   reducingmaintains
+                                                    systemstable
+                                                              resourceperformance,
+                                                                           requirements.withToa signature
+                                                                                                highlight communication
+                                                                                                             the advantages of    usage
+                                                                                                                                     the
+                        ECAE scheme, a comprehensive security evaluation was also conducted. The securitythe
+                        of  only  640  bits,  significantly    reducing     system    resource   requirements.      To   highlight    of
+                        advantages     of  the   ECAE     scheme,     a  comprehensive      security    evaluation
+                        this scheme is based on the ECDLP and has been verified under the random oracle model,          was   also con-
+                        proving   The it
+                        ducted. that   security    of this scheme
+                                          can effectively   resist Typeis based    on thewhile
+                                                                            I/II attacks  ECDLP  alsoand  has been
+                                                                                                       providing                  under
+                                                                                                                        verifiedsecurity
+                                                                                                                    multiple
+                        the randomsuch
+                        properties     oracle   model, proving
+                                            as anonymity            that it can eﬀectively
+                                                              and unforgeability.              resist Type
+                                                                                        The simulation        I/II attacks
+                                                                                                            results   show while    also
+                                                                                                                             that, with
+                        relatively low computational delay and communication overhead, the ECAE scheme offers
+                        all the security functions provided by other schemes.
+                              Our paper is based on the random oracle model (ROM). Although the ROM offers a
+                        concise and powerful framework for the security analysis of the ECAE scheme, it relies
+                        on several idealized assumptions that may not fully reflect real-world security scenarios.
+                        First, the ROM treats hash functions as perfect random functions, while real-world hash
+                        algorithms (e.g., SHA-3) are deterministic and may exhibit structural properties that attack-
+                        ers could exploit in targeted attacks, such as length extension or algebraic manipulation.
+                        Second, proof of security in the ROM does not directly provide concrete security guarantees
+                        in the standard model, especially in scenarios where hash functions are maliciously con-
+Entropy 2025, 27, 471                                                                                                        23 of 25
+
+
+
+                                 structed or are subject to side-channel leakage. For example, if an adversary can extract the
+                                 internal state of a hash function via physical side channels, the “unpredictability” assump-
+                                 tion inherent to the ROM is broken. Moreover, transitioning from the ROM to the standard
+                                 model typically necessitates stronger computational assumptions (e.g., DDH or LWE) or
+                                 more complex cryptographic constructions, which may lead to significant performance
+                                 degradation (e.g., increased group operations or larger key sizes). Although the ECAE
+                                 scheme has been proven to be secure under the ROM, future work should explore the
+                                 selection of hash functions that align with the abstract properties required by the ROM,
+                                 develop provably secure alternatives in the standard model, and address potential threats
+                                 such as the impact of quantum computing on the security of hash functions.
+                                       Furthermore, ECAE’s design—featuring constant-size aggregated signatures, pairing-
+                                 free verification, and lightweight ECC operations—naturally supports high scalability
+                                 under extreme network loads and massive packet volumes since routers can arbitrarily
+                                 verify many signatures in constant time and end devices incur only minimal per-message
+                                 overheads. However, actual performance under bursts of heterogeneous traffic still de-
+                                 pends on factors such as aggregation window size, hardware parallelism, network topology,
+                                 and the distribution of the Key Generation Center (KGC). Therefore, our future work will in-
+                                 clude large-scale simulations and testbed deployments to characterize latency–throughput
+                                 trade-offs across diverse topologies, optimize dynamic aggregation intervals and parallel
+                                 verification strategies, and explore distributed KGC architectures with adaptive parameter
+                                 tuning so as to maintain millisecond-level verification latency even as the numbers of
+                                 producers and data packets scale into the tens or hundreds of thousands.
+                                       In future research, we plan to explore the synergy of this scheme with other security
+                                 mechanisms to build a more comprehensive NDN-IoT security architecture to meet the
+                                 growing network threats. Additionally, we will investigate its practical performance under
+                                 real-world hash functions and address performance bottlenecks in high-traffic NDN-IoT
+                                 environments through systematic solutions. Beyond this, we aim to design extended
+                                 functionalities such as group signatures and ring signatures to enhance adaptability in
+                                 diverse application scenarios.
+
+                                 Author Contributions: Methodology, M.M.; Software, H.W. and C.W.; Validation, M.M. and
+                                 C.W.; Formal analysis, H.W., Y.G., R.Z., M.M. and C.W.; Investigation, C.W.; Resources, C.W.;
+                                 Writing—Original draft, H.W., Y.G., R.Z. and C.W.; Writing—Review and Editing, M.M. and C.W.;
+                                 Visualization, H.W.; Supervision, M.M. All authors have read and agreed to the published version of
+                                 the manuscript.
+
+                                 Funding: This research was funded by the Tianjin College Student Innovation and Entrepreneurship
+                                 Training Program, grant number 202410057084.
+
+                                 Data Availability Statement: The data are contained within the article.
+
+                                 Conflicts of Interest: The authors declare no conflicts of interest.
+
+References
+1.    Anjum, A.; Agbaje, P.; Hounsinou, S.; Guizani, N.; Olufowobi, H. D-NDNoT: Deterministic Named Data Networking for
+      Time-Sensitive IoT Applications. IEEE Internet Things J. 2024, 11, 24872–24885. [CrossRef]
+2.    Cobblah, C.; Xia, Q.; Gao, J.; Xia, H.; Kusi, G.; Obiri, I. A Secure and Lightweight NDN-Based Vehicular Network Using Edge
+      Computing and Certificateless Signcryption. IEEE Internet Things J. 2024, 11, 27043–27057. [CrossRef]
+3.    Walia, G.; Kumar, M.; Gill, S. AI-Empowered Fog/Edge Resource Management for IoT Applications: A Comprehensive Review,
+      Research Challenges, and Future Perspectives. IEEE Commun. Surv. Tutor. 2024, 26, 619–669. [CrossRef]
+4.    Fei, W.; Ohno, H.; Sampalli, S. A Systematic Review of IoT Security: Research Potential, Challenges, and Future Directions. ACM
+      Comput. Surv. 2024, 56, 1–40. [CrossRef]
+Entropy 2025, 27, 471                                                                                                                 24 of 25
+
+
+
+5.    Benmoussa, A.; Kerrache, C.; Lagraa, N.; Mastorakis, S.; Lakas, A.; Tahari, A. Interest Flooding Attacks in Named Data
+      Networking: Survey of Existing Solutions, Open Issues, Requirements, and Future Directions. ACM Comput. Surv. 2023, 55, 1–37.
+      [CrossRef]
+6.    Anjum, A.; Agbaje, P.; Mitra, A.; Oseghale, E.; Nwafor, E.; Olufowobi, H. Towards Named Data Networking Technology:
+      Emerging Applications, Use Cases, and Challenges for Secure Data Communication. Future Gener. Comput. Syst. 2024, 151, 12–31.
+      [CrossRef]
+7.    Patil, B.; Vydeki, D. Node Authentication and Trust-Aware Secure Routing in NDN-IoT Empowered Savvy City Applications.
+      Wirel. Pers. Commun. 2023, 132, 457–485. [CrossRef]
+8.    Xia, Q.; Obiri, I.; Gao, J.; Xia, H.; Zhang, X.; Asamoah, K.; Amofa, S. PRIDN: A Privacy Preserving Data Sharing on Named Data
+      Networking. IEEE Trans. Inf. Forensics Secur. 2024, 19, 677–692. [CrossRef]
+9.    Zhu, D.; Liang, J.; Li, T.; Zhang, H.; Geng, L.; Wu, D.; Zhang, T.; Liu, Y. A Survey of Security in Content Centric Networking.
+      J. Cyber Secur. 2020, 5, 121–143. [CrossRef]
+10.   Wang, X.; Wang, X.; Li, Y. NDN-Based IoT with Edge Computing. Future Gener. Comput. Syst. 2021, 115, 397–405. [CrossRef]
+11.   Huang, H.; Wu, Y.; Xiao, F.; Malekian, R. An Efficient Signature Scheme Based on Mobile Edge Computing in the NDN-IoT
+      Environment. IEEE Trans. Comput. Soc. Syst. 2021, 8, 1108–1120. [CrossRef]
+12.   Lou, J.; Zhang, Q.; Qi, Z.; Lei, K. A Blockchain-Based Key Management Scheme for Named Data Networking. In Proceedings of
+      the 2018 1st IEEE International Conference on Hot Information-Centric Networking (HotICN), Shenzhen, China, 15–17 August
+      2018; pp. 141–146.
+13.   Lei, K.; Fang, J.; Zhang, Q.; Lou, J.; Du, M.; Huang, J.; Wang, J.; Xu, K. Blockchain-Based Cache Poisoning Security Protection and
+      Privacy-Aware Access Control in NDN Vehicular Edge Computing Networks. J. Grid Comput. 2020, 18, 593–613. [CrossRef]
+14.   Alsamhi, S.; Almalki, F.; Afghah, F.; Hawbani, A.; Shvetsov, A.; Lee, B.; Song, H. Drones’ Edge Intelligence Over Smart
+      Environments in B5G: Blockchain and Federated Learning Synergy. IEEE Trans. Green Commun. Netw. 2022, 6, 295–312. [CrossRef]
+15.   Yang, Y.; He, D.; Vijayakumar, P.; Gupta, B.; Xie, Q. An Efficient Identity-Based Aggregate Signcryption Scheme with Blockchain
+      for IoT-Enabled Maritime Transportation System. IEEE Trans. Green Commun. Netw. 2022, 6, 1520–1531. [CrossRef]
+16.   Karati, A.; Islam, S.; Karuppiah, M. Provably Secure and Lightweight Certificateless Signature Scheme for IIoT Environments.
+      IEEE Trans. Ind. Inform. 2018, 14, 3701–3711. [CrossRef]
+17.   Rezaeibagha, F.; Mu, Y.; Huang, X.; Yang, W.; Huang, K. Fully Secure Lightweight Certificateless Signature Scheme for IIoT. IEEE
+      Access 2019, 7, 144433–144443. [CrossRef]
+18.   Thumbur, G.; Rao, G.; Reddy, P.; Gayathri, N.; Reddy, D. Efficient Pairing-Free Certificateless Signature Scheme for Secure
+      Communication in Resource-Constrained Devices. IEEE Commun. Lett. 2020, 24, 1641–1645. [CrossRef]
+19.   Bisheh-Niasar, M.; Azarderakhsh, R.; Mozaffari-Kermani, M. Cryptographic Accelerators for Digital Signature Based on Ed25519.
+      IEEE Trans. Very Large Scale Integr. Syst. 2021, 29, 1297–1305. [CrossRef]
+20.   Asami, T.; Namsraijav, B.; Kawahara, Y.; Sugiyama, K.; Tagami, A.; Yagyu, T.; Nakamura, K.; Hasegawa, T. Moderator-Controlled
+      Information Sharing by Identity-Based Aggregate Signatures for Information Centric Networking. In Proceedings of the 2nd
+      ACM Conference on Information-Centric Networking, San Francisco, CA, USA, 30 September–2 October 2015; p. 166.
+21.   Zhang, Z.; Liu, S.; King, R.; Zhang, L. Supporting Multiparty Signing over Named Data Networking. arXiv 2021, arXiv:2106.04030.
+      [CrossRef]
+22.   Xue, K.; Yang, J.; Xia, Q.; Wei, D.; Li, J.; Sun, Q.; Lu, J. CSEVP: A Collaborative, Secure, and Efficient Content Validation Protection
+      Framework for Information Centric Networking. IEEE Trans. Netw. Serv. Manag. 2022, 19, 1761–1775. [CrossRef]
+23.   Zhu, F.; Yi, X.; Abuadbba, A.; Khalil, I.; Nepal, S.; Huang, X. Authenticated Data Sharing With Privacy Protection and Batch
+      Verification for Healthcare IoT. IEEE Trans. Sustain. Comput. 2023, 8, 32–42. [CrossRef]
+24.   Al-Riyami, S.; Paterson, K.G. Certificateless Public Key Cryptography; Springer: Berlin/Heidelberg, Germany, 2003; Volume 2003,
+      p. 473, ISBN 3-540-20592-6.
+25.   Huang, X.; Mu, Y.; Susilo, W.; Wong, D.; Wu, W. Certificateless Signature Revisited; Springer: Berlin/Heidelberg, Germany, 2007;
+      Volume 4586, p. 322, ISBN 978-3-540-73457-4.
+26.   Huang, X.; Mu, Y.; Susilo, W.; Wong, D.; Wu, W. Certificateless Signatures: New Schemes and Security Models. Comput. J. 2012,
+      55, 457–474. [CrossRef]
+27.   Pointcheval, D.; Stern, J. Security Proofs for Signature Schemes; Springer: Berlin/Heidelberg, Germany, 1996; Volume 1070, p. 398,
+      ISBN 978-3-540-61186-8.
+28.   Ashraf, Z.; Sohail, A.; Yousaf, M. Robust and Lightweight Symmetric Key Exchange Algorithm for Next-Generation IoE. Internet
+      Things 2023, 22, 100703. [CrossRef]
+29.   Wu, G.; He, Q.; Jiang, J.; Zhang, Z.; Zhao, Y.; Zou, Y.; Zhang, J.; Wei, C.; Yan, Y.; Zhang, H. Topgun: An ECC Accelerator for
+      Private Set Intersection. ACM Trans. Reconfig. Technol. Syst. 2023, 16, 1–30. [CrossRef]
+30.   OpenSSL. Available online: https://www.openssl.org/ (accessed on 16 February 2025).
+Entropy 2025, 27, 471                                                                                                          25 of 25
+
+
+
+31.   GMP. Available online: https://gmplib.org/ (accessed on 16 February 2025).
+32.   PBC Library. Available online: https://crypto.stanford.edu/pbc/ (accessed on 16 February 2025).
+
+
+Disclaimer/Publisher’s Note: The statements, opinions and data contained in all publications are solely those of the individual
+author(s) and contributor(s) and not of MDPI and/or the editor(s). MDPI and/or the editor(s) disclaim responsibility for any injury to
+people or property resulting from any ideas, methods, instructions or products referred to in the content.
+

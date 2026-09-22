@@ -134,9 +134,13 @@ created: 2026-09-01
 
 ## Companion Files
 
-- [[math-notation]] — All extracted formulas (LaTeX)
-- [[protocols]] — Protocol step-by-step descriptions
+- [[protocols]] — Protocol step-by-step descriptions (crew-audited 2026-09-21)
 - [[analysis-report]] — Cross-paper analysis and research gaps
+- Formula source of truth: `summaries/<key>.md` Math sections + `schemes/<key>.md`
+  (`math-notation.md` removed 2026-09-21 — it carried invented equations
+  contradicting the audited summaries; do not regenerate from pre-audit data.
+  Note: `aggregate.py` still contains its generator — update or retire it before
+  any re-run.)
 
 ## Charts
 

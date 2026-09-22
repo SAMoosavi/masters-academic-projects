@@ -24,7 +24,7 @@ tags: [category, cryptanalysis, attacks, security]
 | [[shim2026]] | 2026 | Type I forgery on Zhu-Guan, Chen-Guan | ✗ | ✗ |
 | [[wei2025]] | 2025 | Novel forged signature attack (Type I) on PF-CLS class | ✓ | ✗ |
 | [[gong2023]] | 2023 | Forgery attack + improved scheme on LICLAS | ✓ | ✗ |
-| [[yue2025]] | 2025 | Rogue key attack on Zheng et al. CLAS | ✓ | ✓ |
+| [[yue2025]] | 2025 | Rogue key attack on Zheng et al. CLAS (NO Type-III claim) | ✓ | ✗ |
 | [[wu2025-signcryption]] | 2025 | Public key replacement on Dai et al. CLASC | ✓ | ✗ |
 
 ## Related Categories
