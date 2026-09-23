@@ -1,0 +1,1792 @@
+International Journal of Information Security (2024) 23:51–80
+https://doi.org/10.1007/s10207-023-00748-1
+
+    SPECIAL ISSUE PAPER
+
+
+
+A full privacy-preserving distributed batch-based certificate-less
+aggregate signature authentication scheme for healthcare wearable
+wireless medical sensor networks (HWMSNs)
+Osama Bassam J. Rabie1,2 · Shitharth Selvarajan3,4 · Tawfiq Hasanin1 · Gouse Baig Mohammed5 ·
+Abddulrhman M. Alshareef1 · Mueen Uddin6
+
+Accepted: 10 August 2023 / Published online: 20 November 2023
+© The Author(s) 2023, corrected Publication 2023
+
+
+Abstract
+The dynamic connectivity and functionality of sensors has revolutionized remote monitoring applications thanks to the com-
+bination of IoT and wireless sensor networks (WSNs). Wearable wireless medical sensor nodes allow continuous monitoring
+by amassing physiological data, which is very useful in healthcare applications. These text data are then sent to doctors via
+IoT devices so they can make an accurate diagnosis as soon as possible. However, the transmission of medical text data
+is extremely vulnerable to security and privacy assaults due to the open nature of the underlying communication medium.
+Therefore, a certificate-less aggregation-based signature system has been proposed as a solution to the issue by using elliptic
+curve public key cryptography (ECC) which allows for a highly effective technique. The cost of computing has been reduced
+by 93% due to the incorporation of aggregation technology. The communication cost is 400 bits which is a significant reduc-
+tion when compared with its counterparts. The results of the security analysis show that the scheme is robust against forging,
+tampering, and man-in-the-middle attacks. The primary innovation is that the time required for signature verification can be
+reduced by using point addition and aggregation. In addition, it does away with the reliance on a centralized medical server
+in order to do verification. By taking a distributed approach, it is able to fully preserve user privacy, proving its superiority.
+
+Keywords Healthcare-based wearable wireless medical sensor nodes (HWMSNs) · Certificate-less aggregate signature
+(CLAS) · Full privacy preservation · Distributed batch authentication · Elliptic curve discrete logarithm problem (ECDLP)
+
+
+                                                                   1 Introduction
+B Shitharth Selvarajan
+     s.selvarajan@leedsbeckett.ac.uk                               Internet of Things (IoT) has revolutionized the technology
+     Osama Bassam J. Rabie                                         by connecting physical objects (either virtually or directly)
+     Obrabie@kau.edu.sa                                            which made communications to happen in a smarter way
+1
+                                                                   [1]. The most aspect of this invention is to provide access
+     Department of Information Systems, Faculty of Computing
+                                                                   capabilities remotely in ad hoc manner via the Internet. This
+     and Information Technology, King Abdulaziz University,
+     Jeddah, Saudi Arabia                                          has revolutionized the remote monitoring applications to
+2                                                                  be accessible in real time. The core component of the IoT
+     Cybersecurity Center, King Abdulaziz University, Jeddah,
+     Saudi Arabia                                                  architecture is the wireless sensor networks [2]. Internet of
+3                                                                  Things has gained a lot of attraction among researchers since
+     Department of Computer Science, Kebri Dehar University,
+     Kebri Dehar, Ethiopia                                         the past decade. Remote monitoring and constant care can be
+4                                                                  made feasible under critical and unfavorable conditions with
+     School of Built Environment, Engineering and Computing,
+     Leeds Beckett University, Leeds LS1 3HE, UK                   the help of wireless sensors with Internet connectivity [3].
+5                                                                  The combination of medicine and wireless sensor devices
+     Department of Computer Science and Engineering,
+     Vardhaman College of Engineering, Hyderabad, India            connected via Internet of Things has made a new form of
+6                                                                  technology called healthcare wearable wireless medical
+     College of Computing and Information Technology,
+     University of Doha for Science and Technology, 24449 Doha,    sensor networks (HWMSNs). Internet of Things plays a
+     Qatar                                                         very vital role in case of remote monitoring via wireless
+
+
+                                                                                                                       123
+52                                                                                                                O. B. J. Rabie et al.
+
+
+
+
+Fig. 1 Basic IoT components in HWMSN
+
+
+sensor networks in case of medical industry. This invention      professional, and Internet connectivity [7]. Medical sensor
+has improved the medicare facilities to be available 24/7        nodes are usually implanted on the body of the patient
+via various applications relating to patient monitoring, drug    which was connected via wireless fidelity (WiFi) Internet
+management, diagnosis, tracking, etc. Medical profession-        connectivity. The medical text data collected get transmitted
+als, experts and patients are quite often benefitted with even   through the zonal node to a local medical server, and after
+in the physical absence of a patient. IEEE 802.11 (WiFi) and     getting the text data authenticated it will be sent to a central
+other communication technologies have made possible this         medical server for storage and research analysis insights.
+connectivity. Because of these capabilities, this technology        After getting authenticated, the text data will be sent to the
+enables wireless way of tracking, assorting and examining        certified medical professional for remote diagnosis. Since the
+the medical data [4]. IoT consists of a wide variety of struc-   medical text data get transmitted via a wide open communica-
+tural components broadly categorized into (1) smart objects,     tion channel, they are highly subjected to security and privacy
+(2) storage servers and (3) communication infrastructure [5].    attacks [11]. Hence, it is much important to ensure the legiti-
+Figure 1 provides a clear cut view of the components of IoT      macy and the legality of the transmitted physiological infor-
+in healthcare-based wearable wireless medical sensor net-        mation in case of healthcare-based wearable wireless medical
+work. The term wireless medical sensor networks (WMSNs)          sensor networks (HWMSNs) [8, 9]. If and when an attacker
+has been framed by the researchers corresponding to engi-        catches the medical information as a man-in-the-middle, it
+neering, medicine and biotechnology disciplines. Therefore,      is possible to get modified, impersonated, and then it leads
+wireless medical sensor networks consist of a collection         the medical professionals to erroneous diagnosis [10]. Hence
+of medical sensor nodes (MSNs) which are implanted               medical text data needs to be secured prior to transmission.
+on the body of a patient that provides constant tracking            Privacy is also an additional issue in case of healthcare
+and accumulation of physiological information (text data)        wearable wireless medical sensor nodes since the informa-
+regarding the well-being of the patient health. These text       tion transmitted is highly personal [12, 13]. A patient’s text
+data will be sent to the certified medical experts for further   datum is highly sensitive because any breach or tampering of
+diagnosis [6]. IoT provided an advantage by making the           data may result in faulty treatment with fatal or irrecoverable
+sensors available on the physical devices as wearable sensors    loss of patient’s health or even life. Most often the privacy
+which are cheap and cozy. These devices monitor various          breaches are often caused by internal privileged abuse, coun-
+medical information such as oxygen level (SPO2 ), heart          terfeit access/disclosure for money or other means, improper
+rate, blood glucose level, blood pressure rate, levels of pH,    disposal of unnecessary but sensitive data, loss or theft or the
+etc. A typical healthcare-based wearable wireless medical        involuntary sharing of data to an unauthorized organization.
+sensor network consists of the various components, viz.          This often induces physical stress; patients will lose the trust
+medical sensor networks, zonal node, local medical sensor,       and ultimately result in loss of reputation. Sometimes it may
+central medical sensor, patient, certified medical expert or     lead to financial threatening or life threatening moments too.
+
+
+123
+A full privacy-preserving distributed batch-based certificate-less aggregate signature…                                                    53
+
+
+When the medical text data storage gets attacked, then it is                  computational overhead and are subject to various attacks.
+impossible for the experts to provide timely solutions. This                  Hence the environment challenges the authentication
+creates awful, critical or dangerous situations for patients.                 scheme’s permeability. This makes the traditional signature
+It is therefore highly essential to achieve data integrity,                   schemes are insufficient and inefficient toward healthcare-
+message authentication, confidentiality, anonymity, forward                   based wearable wireless medical sensor networks. During
+and backward secrecy, unlinkability and traceability while                    verification if the server gets loaded with huge request,
+performing the data collection and transmission [14]. Since                   then there might be a possibility of denial-of-service attack
+the IoT devices utilized are resource-constrained in nature                   which increases the cost of verification soaring high. Hence
+by means of storage, communication and computation                            in order to address this problem, an authentication scheme
+resources which is another important challenge. Due to                        that addresses all the aforementioned challenges has to be
+these challenges, traditional cryptographic techniques such                   designed in order to ensure the security goals of the network.
+as RSA and AES are not conducive since they require
+high computational resources [15]. Authentication schemes                     1.1 Motivation
+proposed rely on loading the secret keys into the nodes
+suffers from key compromise attacks which may jeopardize                      In healthcare wearable wireless medical sensor networks, the
+the entire functioning of the network [16].                                   medical sensors are implanted on the patient’s body which
+    In order to ensure the security and privacy of the healthcare             constantly keeps track of various physiological parameters.
+wearable wireless medical sensor networks, cryptographic                      The information has to be transmitted through a wide open
+methodologies have played a prominent role especially pub-                    wireless communication channel which are highly prone to
+lic key cryptography (PKC). Public key cryptography comes                     compromise and threatening attacks. Certificate-less aggre-
+up with an exclusive solution termed as digital signatures                    gate signature schemes proposed also suffers from problems
+(DS). A digital signature is a form of cryptography that can be               such privacy preservation, security and traceability. Most of
+used to ensure the confidentiality, integrity, and authenticity               the schemes proposed utilize bilinear pairing and map-to-
+of a transaction [17]. Digital signatures ensure privacy, secu-               point hash functions which makes it inefficient since it incurs
+rity, anonymity, confidentiality, message authentication and                  high computational cost. It is the fact that the one-point mul-
+non-repudiation [18]. Several authentication schemes per-                     tiplication using bilinear pairing operation is 20 times slower
+taining to public key cryptography [19, 20], identity-based                   to that of the elliptic curves [27, 28]. Map-to-point hash func-
+public key cryptography (ID-PKC), certificate-less public                     tion requires high computation power and resources which
+key cryptography (CL-PKC) has been proposed. Public key                       have a negative impact on the computation, communication
+cryptography produces digital signatures which are subjected                  and verification costs [29]. The schemes also suffer from the
+to verification prior to transmission. This process of verifi-                central tendency problem which has to be addressed. Since
+cation involves high computation and communication costs                      the medical sensor nodes deals with highly sensitive med-
+[21]. It also suffers from the overhead of storing and pro-                   ical information of the patients, increase in the signature
+cessing of digital certificates [22, 23]. Shamir et al. [24]                  length has a degrading effect during signature verification.
+proposed a solution to the disadvantage of certificate pro-                   The nodes utilized in the healthcare wearable wireless medi-
+cessing referred to as identity-based public key cryptography.                cal sensor network are resource-constrained in nature, and it
+However, this technique suffers from key escrow problem.                      is necessary to design an authentication scheme that utilizes
+In order to overcome this problem, Al-Riyami et al. [25]                      minimized resource and resistant to various attacks. Thus
+proposed a solution referred to as certificate-less cryptog-                  there is a need to design a full privacy-preserving distributed
+raphy. This technique eliminates both the disadvantages of                    batch-based aggregate signature authentication scheme that
+processing a huge quantity of certificates and key escrow                     provides efficient authentication, thereby dwindling the com-
+problem. In order to alleviate the computational overhead                     putation, communication and verification delays associated
+incurred during verification, Boneh et al. [26] came up with                  during the transmission of text data.
+an aggregation technology that facilitates the grouping or
+batching the signature at a particular time or threshold where                1.2 Major contributions
+these collated signatures are processed in an instance of
+time, thereby diminishing the huge computation cost of the                    This work pinnacles the design of a certificate-less signature
+servers involved. Also when a part of the signature gets                      aggregation scheme to ensure full privacy for healthcare-
+aggregated like secret key and not the random primes cho-                     based wearable wireless medical sensor networks. The major
+sen, then it is called as partial aggregation. Authentication                 contributions of the proposed work are as follows:
+scheme proposed is not conducive for healthcare wear-
+able wireless medical sensor networks. The schemes pro-                       • The proposed authentication scheme employs elliptic
+posed utilized bilinear pairing technique which increases the                   curve-based public key cryptography to ensure security
+
+
+                                                                                                                                   123
+54                                                                                                                      O. B. J. Rabie et al.
+
+
+  and privacy in a distributed manner for the transmission of      Table 1 List of abbreviations
+  medicare text data.
+                                                                   Acronym              Description
+• The proposed data authentication scheme has not used
+  expensive operations like bilinear pairing and map-to-           HWMSN                Healthcare wearable wireless medical sensor
+  point hash functions which promotes the efficacy of the                                network
+  developed scheme. Instead it used point addition, XOR            IoT                  Internet of Things
+  operation and one-way generic hash functions which alle-         WSN                  Wireless sensor network
+  viate the computational burden incurred during signature         VANET                Vehicular ad hoc network
+  verification.
+                                                                   ECC                  Elliptic curve cryptography
+• The scheme employs protection to both the random part
+                                                                   IoV                  Internet of vehicle
+  and the secret key part of the authenticated cipher text data,
+                                                                   IEEE                 Institute of Electrical and Electronic Engineers
+  thereby achieving full privacy preservation.
+                                                                   Wi-Fi                Wireless fidelity
+• Since the distributed key generation methodology and
+  aggregation technique has been adopted, therefore it allevi-     WMSN                 Wireless medical sensor network
+  ates the central tendency over medical servers to perform        MSN                  Medical sensor nodes
+  signature verification. This reduces the computation and         SPO2                 Serum Pressure and Oxygen
+  communication costs incurred during the signature verifi-        pH                   Potential of hydrogen
+  cation.                                                          PKC                  Public key cryptography
+• The proposed scheme is resistant to existential signa-           RSA                  Rivest-Shamir-Adleman
+  ture forgery attacks, man-in-the-middle attacks and other        AES                  Advanced Encryption Standard
+  attacks which are proved under the elliptic curve discrete       DS                   Digital signatures
+  logarithm problem (ECDLP) by means of formal and infor-          ID-PKC               Identity-based public key cryptography
+  mal security analysis.                                           CL-PKC               Certificate-less public key cryptography
+                                                                   ECDLP                Elliptic curve discrete logarithm problem
+   Further the proposed scheme has been compared with              ECDHP                Elliptic curve computational Diffie-Hellman
+the other existing schemes and achieves message authenti-                                problem
+cation, integrity, traceability, anonymity, thereby making it      LMS                  Local medical server
+conducive for vehicular communications.                            CMS                  Central medical server
+                                                                   ZN                   Zonal node
+1.2.1 Organization of the paper                                    WeMSN                Wearable medical sensor node
+                                                                   CME                  Certified medical expert
+The structure of the proposed work has been organized as fol-      WBAN                 Wireless body area networks
+lows: Sect. 1 defines the introduction. Section 2 elaborates on    HP                   Hard problem
+the related existing data authentication schemes. Section 3        NS                   Network Simulator
+presents the background, including elliptic curve cryptog-         LTS                  Long-term support
+raphy, adversarial assumption, security model, and system          RAM                  Random access memory
+model and design goals. Section 4 details the proposed data
+                                                                   PDR                  Packet delivery ratio
+authentication scheme. Section 5 presents the formal and
+the informal security analysis. Section 6 provides the per-
+formance analysis of the proposed scheme; finally, Sect. 7
+concludes the paper. Table 1 gives list the list of abbrevia-         Castro et al. [30] came up with a first certificate-less aggre-
+tions used in the proposed scheme.                                 gate signature data authentication scheme. However, these
+                                                                   schemes are inefficient toward security attacks. Most of these
+                                                                   schemes have designed based on expensive operations like
+2 Related work                                                     bilinear pairing and map-to-point hash functions. However,
+                                                                   certificate-less aggregate signature schemes are unsuscepti-
+Healthcare wearable wireless medical sensor networks               ble to adopt the highly resource-constrained sensors utilized
+(HWMSNs) have attracted a lot of academicians and scien-           in wearable wireless medical sensor networks. Vallant et al.
+tists across the globe. Several contributions have been made       [31] came up with a pseudo-identity-based elliptic curve
+in designing an efficient data authentication to cater the needs   certificate-less cryptography solution which achieved mes-
+pertaining to HWMSNs. This section provides a detailed             sage authentication, anonymity, conditional traceability and
+analysis on various works proposed by different researchers.       revocability. However, the scheme has to be free from the
+
+
+123
+A full privacy-preserving distributed batch-based certificate-less aggregate signature…                                                     55
+
+
+revocation burden on the tracing authority. Shen et al. [32,                  pairing operation is used the length of the time incurred to ver-
+33] have developed an authentication scheme for HWM-                          ify also incurs time. Kamil et al. [42] proposed a full privacy
+SNs based on the public key infrastructure. The proposed                      preservation authentication schemes that achieves full aggre-
+work was based on bilinear pairings and Diffie Hellman                        gation. The scheme utilized outproved Zhong et al. [41]’s
+assumption. However, it becomes inefficient in handling the                   scheme and is inefficient toward type II attacks. The author
+wireless traffic during the process of signature verification.                proposed a new scheme that proves an improvement over the
+Kumar et al. [34] came up with a data authentication scheme                   scheme. The scheme suffers from communication overhead.
+designed specifically for HWMSNs. This work involves                          Kamil et al. [43] came up with an improved certificate-less
+expensive bilinear pairing operation which is a disadvantage                  aggregate signature scheme without bilinear pairing opera-
+in case of high density of signatures to be verified. Also the                tion. Their scheme utilized elliptic curve cryptography and
+energy consumption rate is high that are yet to be addressed.                 achieved batch authentication, autonomy and conditional pri-
+Wu et al. [35] found that the work proposed by [34] is inef-                  vacy preservation. Their scheme suffers from communication
+ficient toward type II attack and proposed an improvement                     overhead which is a drawback. Zhao et al. [44] came up
+to that scheme. Though the work seems to be effective, it                     with a certificate-less aggregate signature scheme for Inter-
+is inefficient since it uses expensive bilinear pairing oper-                 net of vehicles. Though the scheme utilizes elliptic curve
+ations. Also the work suffers from high computation and                       cryptographic technique, it suffers from the problem of han-
+communication cost that are supposed to be addressed. Liu                     dling pseudonyms. Mei et al. [45] proposed a certificate-less
+et al. [36] came up with a batch-based anonymous authenti-                    aggregate signature scheme that achieves conditional privacy
+cation scheme for m-healthcare crowd sensing applications.                    for Internet of vehicles environment. The scheme utilized
+Though it concurrently provides anonymity for medical data,                   bilinear pairing and pseudonyms to achieve conditional trace-
+it involves huge computation cost since it involves expensive                 ability. The computation cost is high since it involves four
+operations like bilinear pairing and map-to-point hash func-                  pairing operation. Their scheme is unsuitable for dense sce-
+tions. Zhang et al. [37] found that the work proposed by [34]                 narios. Xu et al. [46] proposed a certificate-less aggregate
+is inefficient and the signature can be forged easily. However,               signature scheme for vehicular ad hoc networks. Their pro-
+the scheme suffers from high computation cost due to bilinear                 posed scheme suffers from high computation and verification
+pairing operation. Xie et al. [38] came up with the solution to               costs. Shuai et al. [47] addressed the problem of desyn-
+the issue faced by [34] and provided a solution for it. Though                chronization attacks in WBANs by developing a lightweight
+the proposed work utilizes elliptic curves, it still suffers from             privacy-preserving data authentication scheme using XoR
+the computation cost especially while performing aggregate                    operation and one way hash functions. The proposed scheme
+verification which is not an advantage. Gayathri [39] came                    achieves mutual authentication and is resistant toward smart
+up with a certificate-less signature authentication scheme to                 card loss attack, replay attack, privileged insider attack, pass-
+address the problem of security. However, the verification                    word guessing attacks. However, the scheme suffers from the
+of signatures and the generation of private keys for the sen-                 problem of communication overhead which increases with
+sor nodes are done solely by the medical server itself. Hence                 the increases in the number of vehicles and signatures. Zhang
+there occurs the problem of central tendency. Also the scheme                 et al. [48] proposed a lightweight and secure anonymous user
+suffers from a serious design issue that it is not possible for               authentication protocol for wireless body area networks. The
+any sensor to pick a random prime to generate a secret key for                scheme utilized elliptic curve cryptography. Their scheme
+itself. An external entity prior to deployment has to perform                 achieved mutual authentication, data integrity, confidential-
+the operation. This poses a serious threat that if any of these               ity, identity privacy preservation and conditional traceability.
+sensor nodes are captured, it may lead to adverse situations.                 However, their scheme suffers from communication over-
+Kumar et al. [40] proposed a overview on the certificate-less                 head which is a major drawback. Ryu et al. [49] have come
+signatures and certificate-less aggregate signature schemes.                  up with a privacy preservation authentication protocol for
+The scheme proposed utilized bilinear pairing operation and                   wireless body area networks in healthcare applications. Their
+achieves revocability and traceability. The main drawback is                  scheme utilized XoR operations and one-way hash functions
+that the scheme suffers from bandwidth consumption.                           which makes it lightweight than the traditional asymmetric
+    Zhong et al. [41] proposed a full privacy preservation                    cryptographic operations. However, the scheme suffers from
+authentication scheme with full aggregation in VANETs. The                    communication overhead which is a major drawback. Jegad-
+scheme utilized pseudonym-based elliptic curve cryptogra-                     heesan et al. [50] proposed an efficient privacy-preserving
+phy for achieving security and privacy. Though the scheme                     anonymous mutual authentication scheme for wireless body
+achieves efficiency in addressing the bandwidth, computa-                     area networks. The scheme utilized bilinear pairing cryptog-
+tion and storage resources, it still faces problems due to                    raphy. The scheme achieves resiliency against bogus message
+pseudonym management during revocation. Since bilinear                        attacks. Their scheme lags in the cost for communication
+                                                                              which is a major disadvantage.
+
+
+                                                                                                                                    123
+56                                                                                                                                    O. B. J. Rabie et al.
+
+
+Table 2 Drawbacks of various existing authentication schemes
+
+References          Cryptography       Authentication          Benefits                           Drawbacks
+                    technique          method
+
+Shen et al. [32]    Bilinear pairing   Identity-based          Their proposed scheme has          Use of bilinear pairing
+                                                                been resilient to coalition        technique increases the
+                                                                attacks                            computation overhead during
+                                                                                                   verification
+Shen et al. [33]    Bilinear pairing   Identity-based          Their scheme achieves integrity,   Pairing operations results in the
+                                                                reduce bandwidth                   increase in the computation
+                                                                consumption and storage in         overhead
+                                                                WSNs
+Kumar et al.        Bilinear pairing   Identity-based          Their proposed scheme is           Computation and
+ [34]                                                           resilient against existential      communication cost has to be
+                                                                forgery on adaptive chosen         reduced due to the use of
+                                                                message and identity attacks       bilinear pairing
+Wu et al. [35]      Bilinear pairing   Identity-based          Their scheme found that the        Aggregation verification cost is
+                                                                work of Kumar et al. [34] is       more high than their chosen
+                                                                inefficient against type II        benchmark scheme
+                                                                attack
+Liu et al. [36]     Bilinear pairing   Identity-based          Their scheme can be able to        The scheme is vulnerable to
+                                                                perform large-scale                coalition and impersonation
+                                                                concurrent data anonymous          attacks
+                                                                batch verification for mobile
+                                                                healthcare crowd sensing
+                                                                systems
+Zhang et al. [37]   Bilinear Pairing   Identity-based          Their scheme can be able to        Still the improved scheme faces
+                                                                achieve batch authentication,       forgery and non-repudiation
+                                                                non-repudiation and                 attacks
+                                                                anonymity. Their scheme out
+                                                                proved that Liu et al. [36]’s
+                                                                scheme is inefficient and are
+                                                                prone to various attacks
+Xie et al. [38]     ECC                Certificate-less        Their scheme is resilient to       Computation cost can be
+                                                                forgery, identity tracing and      reduced further
+                                                                other security attacks
+Gayathri et al.     ECC                Certificate-less        Their scheme provides message      Does not support autonomy and
+ [39]                                                           authentication, integrity,         cannot achieve location
+                                                                anonymity, conditional             privacy Also, it cannot resist
+                                                                traceability, and revocation       DoS attack
+Kumar et al.        Bilinear pairing   Pseudonym-based         The scheme is secure and does      Computation cost can be
+ [40]                                                           partial aggregation which          reduced further
+                                                                provides conditional privacy
+                                                                preservation in an effective
+                                                                manner
+Zhong et al. [41]   Bilinear pairing   Pseudonym-based         Conditional privacy is achieved    Computation cost can be
+                                                                                                   reduced further
+Alhalabi et al.     Bilinear pairing   Pseudonym-based         Their scheme achieves full         Computation cost can be
+ [42]                                                           aggregation and hence privacy      reduced further
+                                                                preservation is achieved
+Kamil et al. [43]   ECC                Identity-based          Their proposed scheme is           However the scheme is insecure
+                                                                pairing free and achieves full     since it is peril to
+                                                                privacy preservation due to        denial-of-service attacks
+                                                                full aggregation
+Zhao et al. [44]    ECC                Pseudonym-based         Their proposed scheme is           Their proposed scheme is
+                                                                pairing-free and achieves only     insecure toward side channel
+                                                                partial aggregation                and password guessing attacks
+Mei et al. [45]     Bilinear pairing   Pseudonym-based         The proposed scheme achieves       The scheme is unsuitable for
+                                                                full aggregation and is secure     dense scenarios
+Xu et al. [46]      Bilinear pairing   Identity-based          The proposed scheme achieves       The scheme utilized bilinear
+                                                                partial aggregation and is         pairing method which
+                                                                secure                             increases the computation and
+                                                                                                   communication cost
+
+
+
+
+123
+A full privacy-preserving distributed batch-based certificate-less aggregate signature…                                                    57
+
+
+Table 2 (continued)
+
+References          Cryptography         Authentication           Benefits                            Drawbacks
+                    technique            method
+
+Shuai et al. [47]   XOR operation        Identity-based           Their proposed scheme is            The computation cost has to be
+                     and one-way                                   resilient toward                    reduced further
+                     hash function                                 de-synchronization attacks,
+                                                                   forward and backward
+                                                                   secrecy in WBANs
+Zhang et al. [48]   ECC                  Identity-based           Their scheme is resilient toward    The scheme suffers from
+                                                                   replay, insider, impersonation,     communication overhead
+                                                                   stolen smart card attacks
+Ryu et al. [49]     XOR operation        Identity-based           Their proposed scheme is            The communication cost
+                     and one-way                                   resilient toward                    increases with increase in the
+                     hash function                                 impersonation, password             number of messages
+                                                                   guessing, stolen-verifier table,
+                                                                   denial-of-service, identity
+                                                                   attacks
+Jegadheesan         Bilinear pairing     Identity-based           Their scheme achieves               The communication cost has to
+  et al. [50]                                                      anonymous authentication            be reduced due to the increase
+                                                                   and resistant against bogus         in the number of nodes
+                                                                   message attacks
+Shuai et al. [51]   ECC                  Identity-based           Their scheme achieves mutual        Their scheme suffers from high
+                                                                   authentication and are              computation cost which has to
+                                                                   resilient toward replay,            be reduced
+                                                                   impersonation and
+                                                                   man-in-the-middle attacks
+Shitharth et al.    XOR operation        Identity-based           Resilient to password guessing      The communication overhead is
+ [52]                and one-way                                   attacks, replay,                    high and increases with the
+                     hash function                                 Desynchronization attacks,          increase in the number of
+                                                                   impersonation, insider              nodes in the network
+                                                                   modification, smart card
+                                                                   stolen attacks, and
+                                                                   man-in-the-middle attacks
+Ji et al. [53]      ECC                  Certificate-less         Their scheme achieves batch         Signature length increases with
+                                                                   authentication of multiple           increase in the number of
+                                                                   clients simultaneously               nodes
+Mandal et al.       ECC                  Certificate-less         The proposed scheme achieves        The proposed scheme has to be
+ [54]                                                              anonymity, resistance to key        tested for big data-based
+                                                                   escrow problems, mutual             applications in healthcare
+                                                                   authentication between the          environments
+                                                                   sensor nodes attached to
+                                                                   patients and the application
+                                                                   provider
+Chennam et al.      ECC                  Certificate-less         Their scheme achieves               However the computation cost
+ [11]                                                              authentication, efficiency, and     is high which increases with
+                                                                   confidentiality                     the increase in the number of
+                                                                                                       nodes
+Chakravorthy        ECC                  Ciphertext-policy        Their proposed scheme is            The proposed scheme has to be
+ et al. [55]                              attribute-based          lightweight in nature and           tested for large scale
+                                          encryption               achieves user/attribute             environments
+                                                                   revocation
+Nyangaresi          XOR and              Identity-based           It is also resilient and robust     Their scheme has to be tested
+ et al. [11]         one-way hash                                    toward e-synchronization,         for large-scale environments
+                     functions                                       packet replays,                   in order to test whether it can
+                                                                     man-in-the-middle, privileged     achieve the same level of
+                                                                     insider, impersonation, online    security with less message
+                                                                     and offline password guessing     exchanges
+                                                                     attacks
+
+
+
+
+                                                                                                                                         123
+58                                                                                                                               O. B. J. Rabie et al.
+
+
+Table 2 (continued)
+
+References          Cryptography      Authentication      Benefits                            Drawbacks
+                    technique         method
+
+Wu et al. [57]      XOR and           Identity-based      Their proposed scheme achieves      The proposed scheme has to be
+                     one-way hash                          mutual authentication and are       tested for large scale
+                     functions                             resilient to insider, offline       environments
+                                                           password guessing, user
+                                                           forgery, sensor capture,
+                                                           gateway forgery, tracking,
+                                                           Desynchronization, attacks
+Jahan et al. [58]   XOR and           Identity-based      Their scheme covers                 The proposed scheme suffers
+                     one-way hash                          intra-BAN, inter-BAN, and           from high bandwidth
+                     functions                             beyond-BAN transmission in          consumptions
+                                                           a setting where the patient’s
+                                                           mobile phone is semi-trusted
+Iqbal et al. [60]   Homomorphic       Trapdoor based      Achieved desirable security         Their proposed scheme
+                     encryption                            goals and it distinguishes          increases the computation
+                                                           various trapdoors or                time which is increased by the
+                                                           possibility of leakage profiling    increase in the security levels
+                                                                                               and has to be tested for
+                                                                                               real-time environments
+Almuhaideb          XOR, one-way      Identity-based      Their scheme is                     Their proposed scheme has to
+ et al. [61]         hash functions                        computationally efficient           be tested in terms of
+                                                           since it uses only hash and         scalability in real-time
+                                                           XOR functions                       environments
+Almuhaideb          ECC, XOR and      Identity-based      Their schemes achieves secrecy,     Their scheme incurs
+ et al. [62]         one-way hash                          anonymity, revocation,              computation overhead due to
+                     functions                             session key disclosure,             the increase in the length of
+                                                           off-line guessing,                  the signature
+                                                           impersonation, Stolen
+                                                           controller node
+                                                           Desynchronization attacks
+
+
+
+    Shuai et al. [51] up with a privacy-preserving authentica-        and are resistant toward replay, impersonation, modifica-
+tion scheme for wireless body area networks. Their proposed           tion, main-in-the-middle, password guessing, insider and
+scheme utilized elliptic curve cryptography. The proposed             stolen smart card attacks. The major drawback is that the
+scheme achieves practicability and is suited for multi-               communication overhead increases with the increase in the
+server architecture without online third-party intervention.          number of nodes. Mandal et al. [54] have come up with a
+Their proposed scheme achieves forward secrecy, anonymity,            provably secure Certificate-less authentication protocol for
+untraceability and is resilient toward replay, impersonation          wireless body area networks. Their scheme utilized elliptic
+and man-in-the-middle attacks. However, the computation               curve cryptography technique. Their scheme can be able to
+cost is high and a drawback. Selvarajan et al. [52] proposed a        achieve anonymity, mutual authentication and are resilient
+lightweight group anonymous mutual authentication scheme              to key escrow problems, between the sensor nodes attached
+for wireless body area networks in order to address the               to patients and the application provider. Chennam et al. [11]
+issue of forward secrecy in vehicular ad hoc networks. Their          have come up with a group authentication and key distri-
+proposed authentication scheme utilized XoR operation                 bution mechanism for wireless body area networks. Their
+and one-way hash function to achieve mutual authentica-               proposed scheme utilized elliptic curve cryptography tech-
+tion, user anonymity and forward secrecy. Their scheme is             nique. Their scheme achieves authentication, confidentiality
+resilient toward password guessing attacks, Desynchroniza-            and efficiency. However, the computation cost is high which
+tion attacks, impersonation, modification, replay, smart card         increases with the increase in the number of nodes. Chakra-
+stolen attacks, and insider and man-in-the-middle attacks.            vorthy et al. [55] have come up with a ciphertext policy-based
+However, the scheme suffers from high communication over-             attribute encryption technique for wireless body area net-
+head which increases with the increase in the number of               works. Their proposed scheme is lightweight in nature and
+nodes in the network. Ji et al. [53] proposed a certificate-less      achieves user/attribute revocation. The proposed scheme has
+conditional privacy preservation authentication scheme for            to be tested for large scale environments. Nyangaresi et al.
+wireless body area networks. Their proposed scheme utilizes           [56] proposed a privacy-preserving three-factor authentica-
+elliptic curve cryptography technique. Their scheme pro-              tion protocol for wireless body area network to address
+vides mutual authentication, forward secrecy, user anonymity          the problem of secure forwarding. Their proposed scheme
+
+
+123
+A full privacy-preserving distributed batch-based certificate-less aggregate signature…                                                     59
+
+
+biometric data, smart card and password with fuzzy extrac-                    the existing authentication schemes are based on bilinear
+tor and one-way hash functions. Their proposed scheme                         pairing operation which is a main drawback [32–37, 40–42,
+has achieved mutual authentication, forward key secrecy,                      45, 46]. It is true that one-point multiplication of a bilinear
+anonymity, key escrow problem and untraceability. It is also                  pairing operation is 20 times slower than that of the ellip-
+resilient and robust toward e-synchronization, packet replays,                tic curve point multiplication operation [11]. Similarly, the
+man-in-the-middle, privileged insider, impersonation, online                  exiting schemes utilized identity-based cryptography which
+and offline password guessing attacks. Their scheme has                       suffers from key escrow problem.
+to be tested for large-scale environments in order to test                        Though some of the schemes utilize elliptic curve cryptog-
+whether it can achieve the same level of security with less                   raphy [11, 43, 44, 48, 51, 53, 55] which eliminates the central
+message exchanges. Wu et al. [57] proposed an authenti-                       dependency of the medical server or the central server it is
+cation scheme based on XOR and one-way Hash Functions                         still difficult to achieve autonomy and distributed authenti-
+which makes it lightweight. Their proposed scheme achieves                    cation. Few of the existing schemes [11, 47, 49, 52, 56–58]
+mutual authentication and are resilient to insider, offline                   utilize lightweight XoR operations and one-way hash func-
+password guessing, user forgery, sensor capture, gateway                      tions it still suffers from computation and communication
+forgery, tracking, de-synchronization attacks. However, the                   overhead which decreases the efficiency of the network. In
+scheme has to be tested for large scale environments. Jahan                   order to provide a trade-off between these requirements, it is
+et al. [58] proposed an end-to-end authentication mechanism                   essential to design a full privacy-preserving certificate-less
+for wireless body area networks. Their proposed scheme                        aggregate signature-based authentication scheme for health-
+assumes that the patients’ mobile phone is semi-trusted. Their                care wearable wireless medical sensor networks.
+scheme covers intra, inter and beyond body area network
+transmission. Their scheme is resilient toward masquerad-
+ing, secret gateway guessing, replay, forward and backward                    3 Background
+secrecy attacks. However, their scheme has to be tested
+for big data or large-scale environments. Almuhaideb et al.                   This chapter highlights the mathematical suppositions based
+[59] have come up with a survey on authentication in wire-                    on elliptic curves, background and the specifications related
+less body area networks. Their proposed work finds many                       to healthcare wearable wireless medical sensor networks.
+research gaps such as scalability, lack in performance, stor-
+age and resource constrined nature. Iqbal et al. [60] have                    3.1 Elliptic curve cryptography
+come up with a novel Homomorphic approach for preserv-
+ing privacy of the patient data in Telemedicine. Their work                   Public key cryptography has been the predominantly used
+proceeded by testing and by implementing audio datsets of                     cryptographic technique for encrypting data. In our proposed
+varying sizes while varying the security parameters. Their                    scheme, the elliptic curve cryptography has been chosen
+proposed approach achieved high amount of security while                      which plays an alternative role in providing high amount of
+processing mutiple levels of files. Almuhaideb et al. [61]                    security with smaller keys comparable to RSA. It works on
+proposed two secure and efficient WBAN authentication pro-                    the basis of developing security based on key pairs for public
+tocols between the sensors and a mobile device/controller.                    key encryption by utilizing the concept of elliptic curves. The
+Their proposed work has segregated the scheme into two                        definition of ECC defined by E as follows: x 2  y 3 + ay + b
+parts, namely authentication protocol-I for emergency med-                    mod P over a finite field F p , where a, b ε F p . Since the cho-
+ical reports and the authentication protocol-II for periodic                  sen elliptic curve is a non-singular elliptic curve the prime
+medical reports. The scheme proved its correctness by using                   value has been set as p > 3, by satisfying the condition
+BAN logic and achieves mutual authentication, which resists                   4a 2 + 27b2 !  0. It is obvious that the set of points (x, y)
+passive and active attacks. However, their proposed protocol                  defined over a finite field forms a cyclic group and the point
+has not addressed the feature of scalability. Almuhaideb et al.               of Infinity O [27, 28].
+[62] have come up with a work on inter-BAN authentication
+protocols for WBAN in a cloud-assisted environment. Their                     3.2 Adversarial assumptions
+proposed work achieves authentication, forward/backward
+secrecy, password attacks, revocation, replay, session key                    Elliptic Curve Discrete Logarithm Problem (ECDLP): For
+disclosure offline-guessing, impersonation attacks, etc. How-                 any given α, β ∈ F p , where β  y α where y ∈ Z q ∗ is a
+ever, their proposed work suffers from high computation cost                  positive integer. It is intransigent to find y from β.
+and communication costs which are supposed to be reduced.                        Elliptic Curve Computational Diffie–Hellman Problem
+Table 2 provides the comparative analysis of the various                      (ECDHP): For any two abstract points αP, βP ∈ F p , where
+authentication schemes pertaining to wireless body area net-                  α, β ∈ Z q ∗ which are unknown. It is intransigent to compute
+works. From the literature survey, it has been identified that                the point α β P in G.
+
+
+                                                                                                                                    123
+60                                                                                                                O. B. J. Rabie et al.
+
+
+3.3 System model                                                       5. Certified medical expert (CME) Professional: These are
+                                                                    responsible for having a direct contact with the patient and
+A typical healthcare-based wireless medical sensor network          the body of the patients. They are the doctors, nurses and
+architecture consists of four components, namely WeMSN              the medicare professionals who receive data via the central
+(wearable medical sensor node), zonal node (ZN), cen-               medical server installed in a particular medicare unit. They
+tral medical server (CMS), certified medical expert (CME).          are assumed to be partially or semi-trusted. Similarly the
+Figure 2 provides a depiction of the proposed architecture          patients are partially trusted.
+of a typical healthcare-based wearable wireless medical sen-
+sor network. Figure 3 provides the layered working model            3.4 Threat model
+of the proposed methodology. The functionalities of these
+different entities are as follows: 1. WeMSN: These are the          The inferences to ensure security for healthcare-based wear-
+wearable medical sensor nodes which are supposed to be              able wireless medical sensor network have been made via
+installed on the body of the patients. These are nodes that         [39]. Our proposed full privacy-preserving certificate-less
+pose smaller computation and storage capability. They are           aggregate signature data authentication scheme involves two
+mainly responsible for collecting the medical data like blood       types of attackers defined as type I attacker ξ1 and type II
+pressure, oxygen level, and blood glucose levels via the zonal      attacker ξ2 . Let ξ1 be the malicious user and ξ2 be the mali-
+node (ZN). Before the deployment of the sensor node the cer-        cious local medical server which generates the partial secret
+tified medical expert professional performs the registration        keys.
+of each node by taking its unique identifier and encrypting it          Type I Adversary: ξ1 being the malicious user cannot
+using a positive prime integer which acts as a secret key for       poses access control to the central medical server where it
+each sensor node. This facilitates the security while collect-      is possible for him to take access to modify the public access
+ing and transmitting messages to the zonal node. Wearable           privileges with any desirable quantity.
+medical sensor nodes are connected to the zonal nodes with              Type II Adversary:ξ2 be the malicious local medical server
+the help of wireless fidelity communication protocol (WiFi-         has access over the central medical server but cannot be able
+IEEE 802.11) [63]. They cannot be trusted.                          to modify the public keys of any sensor node.
+    2. ZN: These are also the sensor nodes which possess high           The security model has been chosen from [31] that act as
+computation and storage capacity than the wearable medical          a benchmark for our proposed data authentication scheme.
+sensor nodes. They are mainly responsible for aggregating           The security model has been developed via the game over the
+the individual signatures from the wearable mobile sensor           challenger C and an attacker thereby performs malevolent
+nodes by adding the signature of the zonal node and cen-            behavior where ξ ε (ξ1 , ξ2 ). An attacker can have complete
+tral medical server. By performing the Ex-OR operation, the         access permission over the transmission channel where the
+secret keys are generated which eliminates the central ten-         other components can reply. No way direct communication
+dency of the medical server. It is assumed that the wearable        is possible. An adversary can deploy replay, modification,
+medical sensor nodes registered or encrypted by the zonal           alteration delaying, interleaving, and deletion of messages in
+node has been utilized for a particular body of the patient.        the architecture.
+These nodes also register with the central medical server and
+receive its corresponding public parameters before initializa-
+tion. They can be partially trusted.                                4 Proposed authentication scheme
+    3. Central medical server (CMS): Since it is a gross pro-
+cessing unit, it is capable of performing huge computation          This section details the proposed methodology of a full
+and storage capability of 46 TB oracle solid state drive [72].      privacy-preserving data authentication scheme and its secu-
+It can be partially trusted and is responsible for generating       rity proofs via ECDLP supposition. The proposed full
+the system parameters necessary for the functioning of the          privacy-preserving data authentication scheme composed of
+system.                                                             eight different algorithms. Each of the algorithms will be
+    4. Local medical server (LMS): Since this is a stand-alone      executed by different components, namely WeMSN (wear-
+gross processing unit, it is also capable of performing huge        able medical sensor node), zonal node (ZN), central medical
+computation, storage and processing capabilities. The local         server (CMS), local medical server (LMS), certified medi-
+server is partially trusted and registers itself with the central   cal expert (CME). The proposed scheme consists of eight
+medical server during initialization. It is mainly responsi-        modules. Each module works based on algorithms, namely
+ble to perform signature verification during the transmission       (1)system initialization, (2) deployment, (3) distributed key
+of text data. It performs verification after the signatures are     generation, (4) signature generation, (5) aggregation, and
+aggregated via the zonal node.                                      (6) aggregation verification. Figure 4 represents the working
+                                                                    methodology of the proposed data authentication scheme.
+
+
+123
+A full privacy-preserving distributed batch-based certificate-less aggregate signature…                                                    61
+
+
+
+
+Fig. 2 Architecture of a healthcare-based wearable wireless medical sensor network
+
+
+
+
+Fig. 3 Layered Working model of the proposed data authentication scheme
+
+
+The notations utilized for the design of the proposed data                    5 Algorithm 1: System Initialization
+authentication scheme are elaborated in Table 3.
+                                                                              Input: Variables for security, Prime Integers
+                                                                                  Output: Creation of Public Variables
+                                                                                  Step 1: Let μ be the security parameter; the central medical
+4.1 System initialization                                                     server (CMS) selects two large primes r and s where the
+                                                                              elliptic curve has been defined by the equation
+In this phase, the central medical server (CMS), local medical
+server (LMS), and zonal node provide the certificate param-                   x 2  y 3 + ay + b mod P;        ∀a, bεFp                   (1)
+eters which are responsible for the system to perform its
+functionality. Algorithm 1 provides the steps supposed to be                    Step 2: The central medical server selects a random integer
+ensued.                                                                       ψ ε Z q ∗ as a master private/secret key
+
+
+                                                                                                                                   123
+62                                                                                                                             O. B. J. Rabie et al.
+
+Fig. 4 Working methodology of
+the proposed data authentication
+scheme
+
+
+
+
+   Step 3: Computes Cpub  ψ P as the system public key                                Passwordi
+                                                                                 CMS −→ CEi
+   Step 4: Central medical server creates the necessary public
+parameters as CMS  {ψ, Cpub }
+   Step 5: Similarly the local medical creates its master pri-                   CEPasswordi {CEP1 , CEP2 , . . . ,CEPn }
+vate/secret key. It selects Ω ε Z q ∗ as a secret key and
+computes L pub  ΩP as its public key                                               Step 13: After generating the private key which is a pass-
+   Step 6: It produces the public parameters as LMS                             word it then sends it to the local medical server as a copy in
+{Ω,L pub }                                                                       order to generate a One-time password to be sent for further
+   Step 7: Zonal node first authenticates itself with the central                verification which is generated randomly as a combination
+medical server by selecting a random integer λ ε Z q ∗ as its                    of letters and number making it as unique.
+secret key.                                                                            n
+                                                                                         i1 CEPasswordi
+   Step 8: Computes Tpub  λ P as the public key                                 CMS          −→           LMS
+   Step 9: Zonal node produces the system parameters as ZN
+ {λ, Tpub }                                                                           Fn(OTP)
+                                                                                 LMS −→ {OTP1 , OTP2 , . . . , OTPn }
+   Step 10: The central medical server chooses one way hash
+functions as                                                                           OTPi
+                                                                                 LMS −→ CEi
+       h 0 :G → Z q∗ ; h 1 : {0, 1} ∗ → Z q∗ ; h 2
+              : {0, 1} ∗ → Z q∗ ; h 3 : {0, 1} ∗ → Z q∗                             Step 14: Similarly each patient/care taker will be granted
+                                                                                 a password and an OTP for authentication so that they can
+   Step 11: The systems public parameters generated are                          read/download the prescription by entering it.
+given by Eq. (2) as follows:
+                                                                                 5.1 Deployment phase
+                                                                      
+Params  P, r , s, E, G, Cpub , L pub , Tpub , h 0 , h 1 , h 2 , h 3       (2)   In this phase, before deployment each of the medical sen-
+                                                                                 sor nodes it will be installed with the corresponding masked
+   Step 12: Similarly the Clinical Medical Experts registers                     identity so that the conditional privacy preservation can be
+themselves with the central medical server which assigns a                       achieved. When a conflict occurs, the local medical server
+private key as a password combination of their name, mobile                      can be able to revoke or identify the original identity of the
+number and date-of-birth which makes it unique and are as                        medical sensor node. Algorithm 2 provides the procedure to
+follows:                                                                         be ensued for the deployment phase.
+                                                                                    Algorithm 2: Deployment Phase
+      Name, Mob No, DoB
+CEi          −→           CMS                                                       Input: Public and private identity of a medical sensor node
+
+
+123
+A full privacy-preserving distributed batch-based certificate-less aggregate signature…                                                    63
+
+
+Table 3 Notations utilized in our scheme                                         Step 3: The local medical Server chooses an abstract inte-
+                                                                              ger δ ε Z q ∗ for each medical sensor node and computes Q i
+Symbols params         Explanation parameters
+                                                                               δ P as the public key.
+Eq                     Elliptic curve x 3 + ay + b (modP)                        Step 4: The public and the private parameters
+                                                                                                                                for a partic-
+                                                                                                                                         
+r, s                   Prime numbers
+                                                                              ular medical sensor node can be given as MSNID I , Q i .
+                                                                                 Step 5: These parameters are then sent to the central med-
+Fp                     Finite field of prime numbers
+                                                                              ical server for the masked identity generation
+G                      Cyclic group generated by a point P on a
+                        non-singular elliptic curve E
+                                                                                 Step 6: The central medical server after checking its
+P                      Generator of E(Fq )                                            identity iff {MSN
+                                                                              original                   IDI , Q i } 
+                                                                                                                      is true; then compute
+     Zq ∗               Prime field of integers                               Q i  MSNID I ⊕ h 0 ψ Q i ||ti ||Cpub ; ti implies the valid-
+{ψ, Cpub }             Central medical server (CMS) public key                ity period of the masked identity.
+                        and master key                                           Step 7: Central Medical Server after generating the
+                
+       , L pub         Local medical server (LMS) public and                  masked identity the deployment team performs the instal-
+                        master key                                            lation of the masked identity as follows
+               
+     λ, Z pub          Zonal node public and master key
+h0, h1, h2, h3         One-way hash functions                                 QMSNIDI  {Q i ||Q i ||ti }; ∀i
+MSNi , MSNID I         ith medical sensor node; original identity
+                         of a medical sensor node                                Step 8: In case of any conflicts the local medical server
+QMSNIDi Q              Pseudo-identity of a medical sensor node               computes the original identity of the medical sensor node
+                        i
+                        Public key of the medical sensor node
+                                                                              given by Eq. (3). The central medical server after performing
+                                                                              the masking it will send the data to the local medical server
+ti                     Timestamp
+                                                                              so that the revocation or tracing back happens.
+Mi                     Message i
+PPKi                   Partial private key i                                                                 
+ PPK j , PPKk           Partial private keys of CMS and LMS                   MSNID I  Q i ⊕ h 0 ψ||ti ||Cpub                            (3)
+                        before appending
+     Ql , Q m           Pseudo-identity of CMS and LMS
+                        before appending
+Qi                     Pseudo identity after appending
+                                                                              5.2 Distributed key generation phase
+SKMSNi                 Full private key of the Medical Sensor
+                        Node i                                                The private keys are generated by the zonal node and the
+SMSNPPKi               Public key of the medical sensor node i
+                                                                              local medical server simultaneously in a distributed fashion
+ ξ1 , ξ2                Malevolent user, Malevolent LMS or                    partially. They are appended together at the zonal node in a
+ δ                      CMS                                                   secured manner since it acts as an aggregator. The masked
+                        Secret key of the medical sensor node                 identity and the partial private keys for a corresponding med-
+                        Message signature
+                                                                              ical sensor node is then installed on the corresponding node.
+⊕                      Exclusive-OR operation                                 Algorithm 3 provides the procedure to be ensued for the Dis-
+||                     Concatenation operation                                tributed Key Generation Phase.
+                                                                                  Algorithm 3.1: Partial private key generation
+                                                                                  Input: Random number, masked identity of a medical
+       Output: Masked identity                                                sensor node
+       Step 1: Let the number of medical sensor nodes be defined                  Output: Partial private Keys
+as                                                                                Step 1: After receiving the masked identity from the cen-
+                                                                              tral medical server, the local medical server selects a random
+
+n                                                                             number ϕ ε Z q ∗ and computes Q l  ϕ P as the public key
+        MSNi  {MSN1 , MSN2 , MSN3 , . . . , MSNn }                           of local medical server.
+                                                                                 Step 2: The partof the partial private key PPK j P  ϕ ⊕
+i1
+
+                                                                              h 2 QMSNID I ||Q l L pub ;   ∀j.
+   Step 2: The original identity of the medical sensor nodes
+                                                                                 Step 3: The local medical server then sends the masked
+are given by
+                                                                              identity and thepartial private
+                                                                                                           key to the zonal node deploy-
+                                                                              ment phase as Q l , PPK j .
+
+n
+                                                 
+        MSNIDI  MSNID1 , MSNID2 , . . . , MSNIDn                                Step 4: Similarly the central medical server after produc-
+i1                                                                           ing the masked identity it selects an abstract number γ ε
+
+
+                                                                                                                                   123
+64                                                                                                               O. B. J. Rabie et al.
+
+
+Z q ∗ and computes Q m  γ P as the public key and pro-               Step 2: The sensor node contains secret keys
+duces the
+         part of the partial
+                                private key as PPKk P           which was installed selects an abstract number θi ε
+γ ⊕ h 3 Q M S N I D I ||Q m Cpub ; ∀k .                           Z q ∗ and computes           which further generates
+    Step 5: The central medical server then sends the masked
+identity and thepartial private
+                              key to the zonal node deploy-         Step 3: Further to secure this, it performs X i  h 4 · θi ⊕
+ment phase as Q m , PPKk .                                        SKMSNi mod p
+                                                                     Step 4: Therefore the message signature can be generated
+    Step 6: The partial private keys produced are then sent to
+the aggregator and produces a single entity ensued by Eq. (4)     as
+
+
+PPKi  PPKk + PPK j ∀ j , ∀k ε ∀i                          (4)                                                                   (8)
+
+   Step 7: Similarly the masked identities are aggregated         where τi is the generated message signature
+together and stored as a single entity as ensued by Eq. (5)          Step 5: The generated message signature is then sent to
+                                                                  the aggregator (zonal node) for aggregation in batch-wise
+Qi  Ql ⊕ Q m ;      ∀l , ∀m ε∀i                           (5)    fashion.
+
+     Step 8: Each of the medical sensor node contains             5.4 Aggregation phase
+                    
+MSi ← Q i , PPKi                                           (6)    The aggregation is carried out by the zonal node which was
+                                                                  proposed by Boneh et al. [3]. This helps us to diminish the
+   Under this phase full privacy preservation has been            computation and the communication cost involved. Batch
+ensured since it is impossible even if the attacker attempts to   aggregation has been performed. Each zonal node performs
+gain anyone of the partial private keys. Each medical sensor      the process of aggregation and outputs the aggregated sig-
+node takes it secret key which was already generated by the       nature to the local medical server for verification process
+local medical sensor node δ ε Z q ∗ and produces the public       which then sends the messages to the clinical experts for fur-
+key.                                                              ther diagnosis or treatment and a copy of it is encrypted and
+   Algorithm 3.2: Secret Key Generation                           uploaded to the central medical server. The steps involved in
+   Input: Partial private keys and masked identity of a med-      Algorithm 5 are as follows:
+ical sensor node                                                     Algorithm 5: Aggregation
+   Output: Secret key of a medical sensor node                       Input: Message Signatures
+   Step 1: The public key of the sensor node is SMSNPPKi            Output: Aggregated Signature
+δi P and sends it to the zonal node.                                 Step 1: The aggregation has been performed as
+   Step 2: The full private key of the medical sensor node        ensued which consists of medical sensor nodes
+                                                                  {MSN1 , MSN2 , MSN  3 , . . . , MSNn } along with their
+SKMSNi  {δi , PPKi }                                      (7)    masked identities QMSNID1 , QMSNID2 , . . . , QMSNIDn
+                                                                  and the public keys {SMSNPPK1 , SMSNPPK2 , . . . ,
+                                                                   SMSNPPKn } and the message signature pairs as
+5.3 Signature Generation Phase                                                                                               .
+                                                                     Step 2: The zonal node computes
+This algorithm ensures the authenticity and the integrity of
+the generated medical data generated from the sensor nodes.       
+                                                                  n
+
+Each sensor nodes after sensing performs signing via the                Xi
+                                                                  i1
+steps mentioned in Algorithm 4.
+    Algorithm 4: Message signature generation
+    Input: Masked identity, time stamp, secret keys and mes-         Step 3: Finally, the aggregator after performing aggre-
+sage                                                              gation outputs the certificate-less signature pairs given by
+    Output: Message signature                                     Eq. (9) as
+    Step 1: In order to produce a message signature now the
+medical sensor node has the message Mi ε{0,1}* , it uses                                                                         (9)
+its masked identity Q i , the secret key SKMSNi , the public
+parameters, timestamp ti
+
+
+123
+A full privacy-preserving distributed batch-based certificate-less aggregate signature…                                              65
+
+
+5.5 Aggregate Signature Verification                                             Step 4: Proof of the Lemma has been as follows:
+
+The generated aggregate message signature pairs are then
+checked for the timestamp, and if it is alive, then it is accepted
+for verification by the local medical server. Because once
+the timestamp gets expired, thereby may be a possibility
+of attacks. In order to avoid that the signature pair batches
+with expired timestamps are deleted. It is assumed that the
+revocation list of certificate signature pairs are stored and
+maintained at the each corresponding entities of healthcare-
+based wearable wireless medical sensor networks. The steps
+involved in the verification process are given in Algorithm 6.
+   Algorithm 6: Aggregate signature verification
+   Input: Aggregate signature pairs
+   Output: Accept or Reject
+   Step 1: Iff (timestamps of both masked identity ≤ the sen-
+sor node) then
+
+
+
+
+                                                                    (10)
+
+
+
+   Step 2: Each local medical server performs the verification
+via
+
+
+
+
+                                                                    (11)
+
+
+
+
+   Step 3: Compute the batch of the signature pairs as follows:
+
+
+
+
+                                                                                                                                   (13)
+
+
+
+                                                                    (12)
+
+
+                                                                                                                              123
+66                                                                                                                        O. B. J. Rabie et al.
+
+
+5.5.1 Clinical expert and treatment                                      Step 5: After prescribing the medication in order to upload
+                                                                      or to send the data to the patient, another OTP will be gener-
+The clinical experts having access to the local medical server        ated and is sent to the clinical expert mobile number.
+will access the local database based on the periodic and
+emergency reports received based on a batch-wise first-come-                RequestOTP
+                                                                      CEi     −→         LMS
+first-serve (FCFS) basis. Each clinical expert gets authorized
+by the central medical server and the local medical server                   OTPi
+and they will be given a security credential in the form of a         LMS −→ CEi ||Ti
+OTP other than the private key. Even if any of the medical
+professional or the clinical expert tries to manipulate the pri-         Step 6: On the patient/Care-taker end, if he/she does not
+vate key, it is impossible to get access to the local medical         enter the required password and the OTP given during the
+database since they need the OTP. If the web page or the              time of registration in the hospital, it is impossible to receive
+database remains inactive for more than two or three min-             or to read/ download the medication.
+utes, it will automatically lock along with the expiration of
+the session. If the clinical expert tries to issue a medication,      6 Security analysis
+then an additional OTP is required which has to match with
+the password and the session OTP. Hence even if an insider            The section highlights the security analysis carried out for the
+or the patient tries to manipulate, it is not possible. The steps     proposed full privacy-preserving data authentication scheme.
+involved in this process are as follows:                              The validation has been performed via both the formal and
+    Algorithm 7: Clinical Examination and Treatment                   informal security analysis. Security proofs are arrived for
+    Input: Credentials of the Clinical Expert (Private Key) &         the proposed certificate-less aggregate signature scheme by
+One-Time Password (OTP)                                               utilizing two types of attacking assumptions (A1 and A2 ). To
+    Output: Local Medical Database Accept or Reject                   demonstrate the efficiency in providing security and privacy
+    Step 1: Clinical Medical Expert first enters the password         aspects Random oracle Model is utilized.
+registered with the central medical server.                               Divarication Axiom [64]: Let ξ be a probabilistic poly-
+                                                                      nomial time Turing machine whose input only consists of
+      Passwordi                                                       public data. It is denoted that and the number of queries
+CEi −→ LMS                                                            that A can ask to the random oracle and the number of queries
+                                                                      that can ask to the signer. Assume that, within a time bound
+  Step 2: After the password gets authenticated the central           T , A produces, with probability                                     ,
+medical server sends the same data to the local medical server        a valid signature              . If the triples (X 1 , θ1 , X 2 ) can
+which then generates an OTP which is unique to each clinical          be simulated without knowing the secret key, with an indis-
+expert having access to the particular database of the patient.       tinguishable distribution probability, then there is another
+                                                                      machine that has control over the machine obtained from
+       Passwordi                                                      replacing interaction with the signer by simulation and pro-
+LMS −→ CMS
+                                                                      duces two valid signatures                    and
+                                                                      such that θ !  θ in the expected time                            .
+   Step 3: The local medical server after checking the cor-
+rectness of the entered password it generates a One-time
+Password and is sent to clinical expert for prescribing the
+                                                                      6.1 Formal security analysis
+medication with a time frame. If and when the OTP is not
+                                                                      Under the assumption of the security requirement, we strive
+entered within the time frame it will expire and the process
+                                                                      to prove that the proposed scheme is efficient and secure
+gets repeated again.
+                                                                      against forgery of signatures upon adaptively chosen mes-
+       OTPi                                                           sage attacks by utilizing the random oracle model. We then
+LMS −→ CEi ||Ti                                                      proceed to prove further our proposed scheme is secure.
+
+   Step 4: Before prescribing the medication, the clinical            Theorem 1 The proposed certificate-less aggregate signa-
+expert checks the timestamp of the message signature of the           ture scheme is unforgeable upon adaptive chosen message
+batch and if it is alive or fresh, then he will decrypt it by using   under hard ECDLP supposition.
+the private key assigned to him by the central medical server
+                                                                      Axiom 1 Based on the random oracle model (ROR), an
+during registration.
+                                                                      invader ξ1 at a probability-based polynomial time can
+                                                                      forge a certificate-less aggregate signature by a security
+      Decryption/Verification
+CEi           −→                Ti × CEpvk                           attack designed by Game I after making        queries to a
+
+
+123
+A full privacy-preserving distributed batch-based certificate-less aggregate signature…                                                   67
+
+
+random oracles where h i ∀iwhere i  1, 2, 3.      queries                 [Note: It is impossible to obtain the partial private key
+to the oracle for create-sensor node;      queries to the              PPKi by ξ1 by using QMSNID I . Even if he invokes the query
+oracle of partial private key;       queries to the ora-               it is not possible to find the partial private key ξ1 has to get
+cle of secret key;    queries to the oracle of signing. It             access into the partial private keys of both CMS and LMS
+the invader ξ1 can be able to forge a original signature               which is not feasible within a polynomial-time.]
+in polynomial time, then there is a challenger ß1 who                      Create-Sensor Node Query: Let us assume the invader
+solves ECDLP within time                     , iff 1 ≥ 10              requests for a masked identity QMSNID I .
+                                                                     . If the list contains (QMSNID I , SMSNPPKi , SKMSNi )
+                                                                       then ß1 examines SMSNPPKi if SMSNPPKi  ⊥. Iff
+Proof By the Assumption from ECDLP, Let p1 and p2                      SMSNPPKi ! ⊥ then ß1 sends SMSNPPKi to ξ1 . Else ß1
+be the two points on the elliptic curve E q |Fq ; where                selects a random value ∇i ε Z q ∗ then finds SMSNPPKi  ∇i
+p2  x p1 ; and an invader ξ1 can produce a message                    P and sets SKMSNi =∇i . Now ß1 transmits SMSNPPKi to
+                                        . Therefore a game is          ξ1 performs updation by updating the values in the list
+being built between the invader ξ1 and a challenger ß1 , where         L SMSNPPKi , SKMSNi .
+ß1 possess capabilities to run ξ1 to solve ECDLP as a sub-             If the list cannot include (QMSNID I , SMSNPPKi , SKMSNi )
+procedure with a trivial probability.                                  then ß1 sets SMSNPPKi ⊥ and selects a random value
+                                                                                ∗
+     Setup: The challenger ß1 , selects a mas-                         ∇ i ε Z q and finds SMSNPPKi  ∇i P and sets SKMSNi 
+
+ter key α and calculates the public key with                           ∇i . Now ß1 transmits SMSNPPKi to ξ1 performs adding the
+                                                                       values in the list L(QMSNID I , SMSNPPKi , SKMSNi ).
+ pub  ψ P and sends the system parameters
+C                                                              pms
+  P, p, q, E, G, Cpub , L pub , Z pub , h 0 , h 1 , h 2 , h 3     to
+ξ1 .                                                                       Secret-Key Query: Let us assume the invader requests for
+                                                                       a secret key.
+     H 2 Query: When ξ1 uses the query H2 with the param-
+                                                                       If the list contains (QMSNID I , SMSNPPKi , SKMSNi ) then
+eter (QMSNID I , Q l ), ß1 checks whether the tuple L h 2
+                                                                       ß1 examines SKMSNi , if SKMSNi  ⊥. Iff SKMSNi  ⊥,
+is already in the hash list L h 2 or not. If so, ß1 sends
+                                                                       then ß1 sends it SKMSNi to ξ1 . Else, ß1 by utilizing create-
+ℵh 2  H2 (QMSNID I , Q l ) to ξ1 . If else, ß1 selects a random       node query it generate SMSN             SMSN         . Then ß
+                                                                                                              PPKi           PPKi          1
+ℵh 2 ε Z q ∗ and appends it to (QMSNID I , Q l , ℵh 2 ) into the              transmits SMSNPPKi to ξ1 , and perform updation to the list
+hash list ℵh 2 . In the end ß1 transmitsℵh 2  H2 (QMSNID I ,                 L as (SMSNPPKi , SKMSNi ).
+Q l )toξ1 . H 3 Query: When ξ1 uses the query H3 with                         If the list cannot include (QMSNID I , SMSNPPKi , SKMSNi ),
+the parameter                                     , ß1 checks a               then ß1 performs a create node query and sends SKMSNi to
+tuple                                         in order to exam-               ξ1 and appends (QMSNID I , SMSNPPKi , SKMSNi ), to the
+ine whether the input is kept previously in the hash list                     list L.
+ℵh 2 . If so ß1 sends
+to ξ1 . Else, ß1 selects a random ℵh 3 ε Z q ∗ and appends it to                 Sign Query: When ξ1 executes the sign query on the mes-
+                                      into the hash listℵh 3 . In             sage Mi , ß1 checks if the tuple (QMSNID I , SMSNPPKi ℵh2 )
+the end, transmits                                       to ξ1 .              is in the list ℵh2 . Iff not ß1 gets ℵh2 from the tuple and
+    Partial Private Query: When ξ1 utilizes a partial private                 selects two random numbers i , Fi and finds               and
+query on a masked identity QMSNID I , ß1 calculates Q l , Q m                 Xi =Fi P and               transmits it to ξ1 and appends it to
+of both the central medical server and the local medical server                                                    list L.
+by choosing ϕ, γ ε Z q ∗ as the random number or integers                        With respect to the bifurcation axiom, ß1 has the abil-
+                                                                              ity to obtain two different legal signatures               and
+and examines whether the tuple (Q i , PPKi ) is present in                                in a polynomial time, where X i  Fi · θi ⊕
+the hash list ℵh 2 . If, ß1 finds that it has obtained a failed
+                                                                              SKMSNi mod p and Ź i  H́i · θi ⊕ SKMSNi mod p
+output and solution for the query. Else, ß1 finds the private
+                                                                              . Because by calculating
+key (PPKi  PPK k + PPK j ; ∀ j , ∀k ε∀i ;) ψ mod U and then
+the value of PPKi is sent to ξ1 .
+
+
+
+F́i X i − Fi X́ i       F́i SMSNPPKi ⊕ QMSNID I ⊕ Fi − Fi                  SMSNPPKi ⊕ QMSNID I ⊕ Fi
+                    
+   F́i − Fi                                                     F́i − Fi
+
+
+
+
+                                                                                                                                    123
+68                                                                                                                    O. B. J. Rabie et al.
+
+
+        
+     F́i SMSNPPKi ⊕ F́i QMSNID I ⊕ Fi F́i −Fi SMSNPPKi ⊕ Fi QMSNID I ⊕ Fi Fi
+                                                                                         SMSNPPKi
+                                          F́i − Fi
+
+
+   for 1 ≥ 10                                                                     ,
+ß1 can solve the ECDLP within a time less than
+120,686         . But, this is an absolute contradict when                                                   from the lists L h 2
+compared with the hardness and the intractability of                andL h 3 . If and when ß2 sets X i ∗=ξi ,ψ, X i ∗ P  ξi Cpub =ξi .
+ECDLP. Hence it is proved that the proposed scheme is                                                                       n
+                                                                      Finally when ß2 sets X́ i ∗  X i ∗ −                       Xi ∗
+efficient to resist forgery under chosen message attacks.                                                                i1, i!k
+                                                                    which by means                   ; so X́ i∗  PPK∗j −
+Theorem 2 If and when the scheme is resistant to cho-                ∗ ∗
+                                                                     n
+sen message attacks, then it is effective towards existential          θi ξ2i . ß2 chooses Fk ∗ εZ q ∗ randomly and then com-
+                                                                    i1
+forgery by means of aggregation chosen.
+                                                                    putes                                  . Therefore ß2 sets the
+Proof Let us assume that the forger ξ2 can crack the                hash value as 
+                                                                                          n
+proposed data authentication scheme. Assuming that the              and SKMSNi           i1 SKMSNi ∗. If the tuple H3 (Mi ∗,
+challenger, ß2 utilize the capability of ξ2 to solve the ECDLP.     QMSNIDi ∗, SKMSNi ∗, i ∗) is found in the list L h 3 , then ß2
+Now the challenger ß2 interacts with ξ2 and performs the            will make a try until it does not happen. Therefore, Accord-
+following:                                                          ing to the verification, the proposed certificate-less aggregate
+                                                                    signature scheme can be forged:
+    Setup: The challenger ß2 chooses a random master key
+ψ ε Z q ∗ and calculates the public key with Cpub  ψ P and
+initializes the oracle. When the game starts with a query by
+ß2 , ξ2 makes a list L (QMSNIDi , SMSNPPKi , PPK j , Q l ) or
+(QMSNIDi , SMSNPPKi , PPK k , Q m ) and gives answer to ß2
+query as follows:
+   H 2 Query: Whenever a masked -identity is presented to
+an oracle H2 , ß2 first throws a coin ci ε {0,1}in order to
+generate the probability. ci gives 0 when the probability is ε
+and gives 1 when the probability is 1 – ε. Therefore ß2 selects
+                                                                       Hence the obtained result is a contradiction to the ECDLP
+ξi ε Z q ∗ at random. If ci gives 0; then Pl  ξi P and when
+                                                                    assumption made. Thus the proposed scheme is resistant to
+gives 1 then ß2 gives Pl  ξi P. In both cases ß2 inserts a tuple   forgery attacks.
+(QMSNIDi , ξi , ci , Q l ) or                       into the list
+L h 2 → (QMSNIDi , ξi , ci , Q l ) or                         .     6.2 BAN Logic
+A tracking has to be observed on its response.
+    When ß2 produces the masked identities of n medical             This section verifies the correctness of the proposed authen-
+sensor nodes from the list L QMSNIDi *  {QMSNIDi ∗}; ∀i ;          tication scheme by providing an analysis using the Bur-
+the public keys L pk i *  {PPKi ∗}; ∀i ; which correlate to        rows–Abadi–Needham (BAN) logic [71]. It is apparent that
+every individual identity that are anonymous, Messages L M *        our proposed scheme has achieved the required security
+ {Mi ∗}; ∀i as well as certificate-less aggregate signatures       goals. The primitives of the BAN logic are as follows:
+                ; ∀i .
+    When ß2 identifies the particular nth tuple (QMSNIDi , ξi ,                                       R|≡ R ↔ S, R  (X )k
+                                                                    P1 : Message-Dispatch Rule :
+ci ,Q l ) from L h 2 with ck  1 and c j =1;∀i . But the tuples                                           R|≡ S| ∼ Y
+are (QMSNIDi ∗, PPKi ∗, Mi ∗) is not yet transmitted to the                                              R|≡ #(Y ), R|≡ S|∼ Y
+oracle. Else ß2 is unsuccessful and stops proceeding further.       P2 : Nonce − Verification Rule :
+                                                                                                              R|≡ S|≡ Y
+Iff ß2 succeeds, PPK j .P  ϕ ⊕ h 2 {QMSNIDi ||Q l }.Cpub ;
+Zi  ξi PPK j ∀ j !=∀k and hence the aggregate signatureX i .P                                R|≡ S ⇒ Y , R|≡ S|⇒ Y
+       n                                                            P3 : Jurisdiction Rule :
+ i1      {Fi θi + SKMSNi }.P. Further, ß2 finds the particular                                      R|≡ Y
+tuples (QMSNIDi ∗, SMSNPPKi ∗, SKMSNi ∗,i ∗, ξ2i ∗) and
+                                                                                                                     R|≡ #(Y )
+                                                                    P4 : Freshness − Conjuncatenation Rule :
+                                                                                                                    R|≡ #(Y , Z )
+
+123
+A full privacy-preserving distributed batch-based certificate-less aggregate signature…                                               69
+
+
+                                  R|≡ #Y , R|≡ S|≡ Y
+P5 : Session − Key Rule :                                                     A4 : CMS|≡ #T i
+                                              k
+                                         R|≡ R S
+                                              ↔
+                                                                              A5 : CMS|≡ M S N ⇒ Q i , Q i , T i
+   In order to prove the correctness of the proposed authenti-
+cation scheme, the following objectives are to be proved and                  A6 : LMS|≡ #T i
+are as follows:
+                                                                              A7 : L M S|≡ Z N ⇒ PPK j , Q i , L pub
+Obj 1: CMS: Cpub , QMSNIDl , CEpvk
+Obj 2: LMS: Q i , PPKi , OTPi
+Obj 3: Z N |≡ Fi , SKMSNi                                                     A8 : L M S|≡ Z N ⇒ PPKi , Q i
+Obj 4:
+Obj 5:                                                                        A9 : CMS|≡ Z N ⇒ PPK m , Q m , Cpub
+Obj 6: CMS|≡ Passwordi , OTPi , ti
+Obj 7: LMS|≡ Passwordi , OTPi , ti                                            A10 : Z N |≡ M S N ⇒ PPKi , Q i
+
+  The messages exchanged between the medical sensor
+nodes, local medical server, central medical server and the                   A11 : Z N |≡ M S N ⇒ Cpub , L pub , Tpub
+zonal node can be formulated as follows:
+                           
+M1 : MSN → LMS MSNIDl , Q i
+
+                                               
+M2 : CMS → MSN QMSNID I , Q i , Q i , Cpub , ti
+
+M3 : LMS → MSN{Q i , QMSNID I , L pub }
+                                                                            A13 : CE|≡ T i
+M4 : LMS → ZN Q k , PPK j
+                                                                            A14 : CE|≡ Z N ⇒ Cpub , L pub , Tpub , T i
+M5 : CMS → ZN Q m , PPK k
+                        
+M6 : ZN → MSN Q i , PPKi
+
+
+
+
+                                                                            A16 : CMS|≡ CE ⇒, CEpvk , T i
+M8 : CMS → CE Passwordi , CEpvk , T i
+
+                                                                            A17 : L M S|≡ CE ⇒, CEpvk , T i
+M9 : LMS → CE OTPi , CEpvk , T i
+
+   The pre-requisites for the formal proof verification are as
+follows:
+                        MSNID I , Q i
+A1 : MSN|≡ MSN             −→           CMS
+
+A2 : MSN|≡ #T i                                                                 According to these formulations and logical proposition
+                                                                              of BAN logic the formal correctness proof of the proposed
+A2 : MSN|≡ CMS ⇒ MSNID I , ψ, Q i , Cpub , T i                               scheme are as follows:
+
+
+                                                                                                                              123
+70                                                                                                                          O. B. J. Rabie et al.
+
+
+     By message 3, the following statement can be obtained:                     According to S13 , A11 , Obj 1 and Obj 3, we have
+                                 
+S1 : Z N  L pub , Tpub , QMSNID I MSN
+                                             ID I , Q i , Q i , Ti , C pub
+
+                                                                                                                                      (Obj 5)
+     According to S 1 , A1 and Obj 1, we have,
+                                                                                By message 4, the following statements can be obtained:
+
+
+     According to S 2 , A2 and Obj 2 and Obj 4, we have,
+                                                                                According to S15 , A11 , A10 , Obj 2 and Obj 4, we have
+
+
+     According to S 3 , A3 , and Obj 3, we have
+                                                                                According to S16 , A12 , A13 and Obj 3, we have
+                                                                  (Obj 3)
+
+     By message 1, the following statement is obtained:
+                                                                                According to S17 , A14 and Obj 1, we have
+S5 : CMS| MSN| ∼ QMSNID I , Q i , Q i , Ti , Cpub
+
+     According to S5 , A5 , Obj 2 and Obj 4, we have                                                                                  (Obj 4)
+
+S6 : CMS|≡ MSN|≡ QMSNID I , Q i , Q i , T i , Cpub                             By message 6, the following statement can be obtained:
+
+     According to S6 , A5 and Obj 3, we have                                  S19 : CMS| CE|CEpvk , Ti , Passwordi
+
+S7 : CMS|≡ MSN| ≡ QMSNID I , Q i , Q i , Ti , Cpub                             According to S19 , A15 , A16 , Obj 2 and Obj 4, we have
+                                                  (Obj 1)
+                                                                              S19 : CMS|≡ CE| ∼ CEpvk , T i , Passwordi
+     By message 2, the following statement can be obtained:
+                                                                                According to S 19 , A16 , and Obj 3, we have
+S8 : LMS| MSN| ∼ Q i , PPKi , L pub , QMSNID I
+                                                                              S20 : CMS|≡ CE| ≡ CEpvk , Ti ,       Passwordi         (Obj 6)
+     According to S8 , A6 , Obj 3 and Obj 4, we have
+                                                                                By message 6, the following statement can be obtained:
+S9 : LMS|≡ MSN|≡ Q i , PPKi , L pub , QMSNIDI
+                                                                              S21 : LMS| CE|CEpvk , Ti , OTPi
+     According to S9 , A7 , Obj 3, we have
+                                                                                According to S21 , A15 , A17 , Obj 2 and Obj 4, we have
+S10 : LMS|≡ MSN| ≡ Q i , PPKi , L pub , QMSNID I (Obj 2)
+                                                                              S22 : LMS| CE| ∼ CEpvk , Ti , OTPi
+     By message 5, the following statement can be obtained:
+
+                                                                                According to S 22 , A18 , A17 , and Obj 3, we have
+
+                                                                              S23 : LMS| CE| ≡ CEpvk ,     Ti , OTPi                (Obj 7)
+     According to S11 , A1 , A2 , Obj 2 and Obj 4, we have
+                                                                                  From the above performed analysis, it is apparent that
+                                                                              the proposed full privacy-preserving distributed batch-based
+                                                                              certificate-less signature authentication scheme for health-
+     According to S12 , A3 , Obj 1, we have                                   care wearable wireless medical sensor networks has achieved
+                                                                              all the necessary security objectives (Obj 1–7) and performs
+                                                                              efficient batch-wise authentication in a secured way.
+
+
+123
+A full privacy-preserving distributed batch-based certificate-less aggregate signature…                                                      71
+
+
+6.3 Informal security analysis                                                public parameters which is highly impossible. Even if local
+                                                                              medical server or the zonal node gets attacked, it is impossible
+Informal security analysis has been carried out in order                      to gain access since the private keys are partially made and in
+to assure that the proposed full privacy-preserving data                      a distributed fashion. The major possibility of impersonation
+authentication scheme is efficient in relative to message legit-              can happen either at the patient end or at the clinical expert
+imacy and legality, Non-repudiation, anonymity, traceability,                 end. If an invader impersonates himself as a doctor and even
+unlinkability and resistance to attacks.                                      if he knows or cracks the password, it is impossible to obtain
+   Data Integrity and Authentication: Whenever the data get                   the one-time password required to gain access to view the
+legally signed, it is meant to be authenticated. To assure the                system. Supposing that even if he attempts to gain access; it
+integrity of the data the verifier has to verify the timestamp                is impossible for him to send the fake prescription or to steal
+                                                       and veri-              the data because again it requires a one-time password which
+fies X i  h 4 ·θi ⊕SKMSNi mod p which is highly intractable.                 is difficult to crack. The major advantage of our proposed
+                                                                              scheme is that only an authorized person knows the private
+                                                                              key required to generate the OTP. Hence it is a two-way
+Anonymity Since the original identity of the sensor node is
+                                                                              door authentication mechanism which is difficult to crack.
+encrypted by the central server and the local server it is highly
+                                                                              If more than one attempt the corresponding entry will be
+impossible for the attacker to determine which entity possess
+                                                                              blocked or locked. Similarly of a patient tries to steal the
+that. It is also not possible to gain access even if the attacker
+                                                                              text data, it is not possible to steal the data since he needs a
+gets the data.
+                                                                              One-time password to access it. The limitation is set as only
+Traceability In our proposed scheme the sensor nodes can-
+                                                                              one try is allowed. The second try needs a verification from
+not be traced since the pseudo-identities are generated by
+                                                                              an information analyst professional who will be sitting at the
+two various entities in a distributed fashion. Only in case of
+                                                                              central or local medical server.
+conflicts the central medical sever or the local medical server
+                                                                                  (iv) Stolen verifier table attacks: Since the design of the
+with the authorization of the CMS can be traced toward its
+                                                                              scheme doesn’t maintain any explicit catalog it is not possible
+real identity.
+                                                                              for any invader to perform stolen verifier attack.
+Unlinkability Message signature generated from a medical
+                                                                                  (v) Key escrow attack: The attacker cannot be able to find
+sensor node
+                                                                              even the masked identity of the medical sensor node since
+contains the random component for pseudo-identity genera-
+                                                                              they are registered and generated by the central or local med-
+tion this can’t be related with the real identity since they are
+                                                                              ical server which is once more encrypted via the secret key
+encrypted via the secret keys. Hence one signature cannot be
+                                                                              of the zonal node with the help of one-way hash functions.
+linked in any way to that of the others.
+                                                                              This makes it more efficient to gain access to the individual
+                                                                              sensor nodes.
+                                                                                  (vi) Man-in-the-Middle Attacks: Assuming that any
+6.4 Resistance to attacks                                                     invader stays in the communication channel between. For
+                                                                              example, when the invader stays in between the medical sen-
+(i) Replay Attacks: This kind of attack is possible only                      sor node and the zonal node he cannot gain access to the
+when an attacker can be able to capture the message that                      secret key of the sensor node since it was not generated by it.
+has been already sent. Even the attacker can be able to                       Even if the invader stays in between the zonal node and the
+compensate the timestamp it is highly impossible since it                     local server, it is impossible to gain access without knowing
+engulf full aggregation including the random part of the                      the secret key of the zonal node and the local server com-
+signature being generated according to the equation X i                      bined. Even though, if the invader gains access to both the
+h 4 · Fi θi ⊕ SKMSNi mod p.                                                   keys it is not possible to gain the access privileges of the
+    (ii) Modification Attacks: According to the equation                      central storage server.
+                                                 is a generated                   (vii) Denial-of-service attacks: Since batch-wise aggre-
+signature with which contains an anonymous signature part                     gation is followed it reduces half of the computation time
+                that needs the simultaneous keys from the                     needed for signature verification. Therefore, it can be able
+central, local and zonal node. Hence it is not possible for                   to overcome the overhead incurred in single signature veri-
+an invader to perform modification attacks since they are                     fication which makes the verifier to be more available along
+strongly coupled.                                                             with its resources.
+    (iii) Impersonation and masquerading Attacks: In order                        (viii) Coalition-Resistant Attacks: It is not possible for any
+to perform an impersonation attack an attacker has to gain                    invader to generate a legal message signature due to the usage
+an access privilege of the public entities like central medical               of coalition resisting one way hash functions.
+server’s secret key for the system even if he has access to the
+
+
+                                                                                                                                    123
+72                                                                                                                                      O. B. J. Rabie et al.
+
+
+Table 4 Performance rate of
+various cryptographic functions    Function                      TBPF        T_MUL           T_BPAO          T_MPTH              T_E−M               T_Oh
+
+                                   Execution-time (ms)           3.61        1.63            1               1                   2.74                1
+
+
+Table 5 Execution analogy of the
+traditional data authentication    Methodology           Hard problem (HP)          Pairing operation            Aggregation type            Peril/safe
+schemes
+                                   Shen et al. [33]      CDHP                       Bilinear pairing             Partial                     Peril
+                                   Shuai et al. [47]     HP                         Non-bilinear pairing         Partial                     Peril
+                                   Zhang et al. [48]     ECDLP                      Non-bilinear pairing         Partial                     Safe
+                                   Ryu et al. [49]       HP                         Non-bilinear pairing         Full                        Safe
+                                   Peng et al. [52]      HP                         Non-bilinear pairing         Full                        Peril
+                                   Proposed              ECDLP                      Non-bilinear pairing         Full                        Safe
+
+
+Table 6 ECC-based group field
+range                              Method                Curve          Pairing              Cyclic        |P|             [G}            Group field
+                                                                                             group                                        range
+
+                                   Bilinear-pairing      E: x 2  y 3   e: G 1 × G 2         G 1 (P)       64              q  20         |G 1 |
+                                                          + y mod p       → GT                              Bytes            bytes          128 bytes
+                                   Elliptic curve        E: x 2        No                   G(P)          20              q  20         |G|
+                                                          y 3 +ay + b                                       Bytes            bytes          40 bytes
+                                                          mod p
+
+
+
+7 Performance analysis                                                  execution time required for performing point operation in a
+                                                                        bilinear pairing operation such that P  R + S where R, P,
+This section analyzes the performance of the proposed full              S ε G 1 ; T _MPTH —specify the execution time required to per-
+privacy-preserving data authentication scheme in terms of               form map-to-point hash operation such that e (R, S) where R,
+communication and computation costs. The analysis has been              S ε G 1 ; T_E−M -specifies the execution time required for per-
+performed for the chosen parameters in terms of message                 forming the multiplication operation via a scalar such that x.P
+signing, single signature and aggregate Signature verifica-             defined over an elliptic curve where R ε G and x ε Z q ∗ ; T_E−A -
+tion. The proposed scheme has been compared with the                    specify the execution time required for performing the point
+schemes like [11, 33, 47–49, 52]. Evaluation method has been            addition operation over an elliptic curve group such that P 
+adapted from [65, 66]. The proposed scheme utilizes Intel i8            R + S where R, P, S εG 1 ; T_oh - specify the execution time
+Neon processor, 3.20 GHz clock speed, 4 GB memory under                 required for performing the one-way hash operation. Table 6
+windows 8 operating system environment using MIRACL                     provides the ECC-based group field range.
+C++ cryptographic library [67]. Under bilinear pairing Tate
+pairing is used over the super singular elliptic curves with a          7.1 Cost of computation
+security parameter of length 80 bits. Bilinear pairing opera-
+tion can be defined by the form e: G 1 × G 2 → G T , where              According to the design of our proposed scheme, the compu-
+G defines the group operation. Our proposed scheme utilizes             tation cost can be evaluated at different entities, viz. medical
+elliptic curve cryptography which is a Koblitz curve defined            sensor node, zonal node, local medical server or central
+by the form x 2  y 3 + ay + b mod P; ∀ a, b ε F p over a finite        medical server. Performance analysis has been conducted
+field where the random prime p is set to 160 bits. The cryp-            under two different strategies with the benchmarks in the
+tographic operations are listed in Table 4. Table 5 provides            field. From Table 6, the bilinear pairing-based data authen-
+the execution analogy of the traditional data authentication            tication proposed by shen et al. [33] involves three bilinear
+schemes. From these tables, it is evident that the schemes              scalar multiplication operations, one bilinear point addition
+are insecure and vulnerable to attacks. The notations utilized          operation and one map-to-point hash operation approximat-
+in Table 4 can be defined as ensued: TBPF —execution time               ing to 9.54 ms. It takes three bilinear scalar multiplication
+required for the bilinear pairing operation e (R, S) where R,           operations and two map-to-point hash operations for sin-
+S ε G 1 ; T_MUL —specifies the execution time required to per-          gle message verification. In case of aggregation, it takes n
+form scalar multiplication such that x.P; T_BPAO —specify the           bilinear pairing operation, one bilinear scalar multiplication
+
+
+123
+A full privacy-preserving distributed batch-based certificate-less aggregate signature…                                                    73
+
+
+
+
+                                                                              Fig. 6 Graph for communication cost
+
+Fig. 5 Graph for computation cost
+
+                                                                              are analyzed first for the validity period and if it there then
+                                                                              it accepts the message for verification. On successful verifi-
+operation and n-1 bilinear point addition operation approx-                   cation of timestamps, the proposed scheme creates a batch
+imating 21.44 ms per 100 messages. In case of aggregation                     of signatures within the range of time t by using the aggre-
+signature verification process, it takes n bilinear pairing oper-             gate function. Once the batch gets created, the Zonal Node
+ation, one bilinear scalar multiplication operation and n-1                   verifies the signatures. In batch verification method, the mul-
+bilinear point addition operation approximating to 424 ms per                 tiple signatures can be verified at a time instead of verifying
+100 messages. For other chosen benchmarks [11, 47–49, 52]                     them one by one. By doing so the length of the aggregated
+the cost of computation for message signing takes approxi-                    signature during verification is considerably reduced and it
+mately 10.107 ms, 5.853 ms, 14.123 ms, and 10.107 ms.                         has significant impact on improving the overhead on compu-
+   For single signature verification the computation cost                     tation, communication efficiency and storage (Fig. 6).
+approximates to 13.476 ms, 7.483 ms, 14.123 ms, and
+11.23 ms. For aggregation the computation costs of the
+benchmarks approximates to 30.321 ms, 7.87 ms, 14.123 ms,                     7.2 Cost of communication
+and 11.23 ms per 100 messages. For our proposed scheme
+the computation cost for message signing approximates to                      The data aggregator (Zonal Node) sends the aggregated sig-
+one binary scalar multiplication operations, five binary point                nature either to the local or the central medical server for
+addition operations and one hash operation approximating                      verification. It is much desired that this transmission should
+to 3.753 ms. In case of single signature verification the                     possess less cost. To perform the analysis the parameter of
+cost of computation for our proposed scheme involves three                    security has been chosen to 64 bits. The calculation starts
+binary scalar multiplication operation, one binary point addi-                by selecting an element length of G 1 as 128 bytes and G
+tion operations and one hash operation approximating to                       as 40 bytes. Similarly for Z q ∗ , the range is 20 bytes, hash
+7.013 ms. In case of aggregation operation the cost of compu-                 function-20 bytes and times stamps-4 bytes. The ranges cho-
+tation involves three n times of binary scalar multiplication                 sen are utilized for both the bilinear pairing and it is evident
+operation, n times of binary point addition operations and                    from Table 8 that our proposed scheme requires only 520
+n hash operation approximating to 7.013 ms per 100 mes-                       bits, thereby achieving full aggregation and is secure and
+sages. In case of aggregate signature verification process,                   efficient when compared with its counterparts. The cost for
+the computation cost involves three 3n times of binary scalar                 communication has to be proceeded except the message. For
+multiplication operation, n times of binary point addition                    our proposed scheme, it involves three times of pairing and
+operations and n hash operation approximating to 7.013 ms                     one addition and one hash operation equating to 3*40 + 20
+per 100 messages. Figure 5 represents the graph comparison                    + 20  160 bytes*8  1280 bits.
+of the proposed scheme to that of the selected benchmarks.                       Similarly for Shen et al. [33], the communication cost
+From the graph it is evident that our proposed has been                       involves three times of scalar binary pairing multiplication
+efficient in dwindling the cost when compared with its coun-                  operation and one binary pairing operation and one addition
+terparts. The major novelty of the proposed scheme is the                     operation accounting to 3*128 + 40 + 20  444 bytes 
+use of aggregation and point addition which does not cause                    3552 bits. For other Shuai et al. [47], it involves 27 times
+delay in verification and also reduces overhead in the Zonal                  of hash operation accounting to 27*20  540 bytes  4320
+node by employing elliptic curve cryptography (ECC). In the                   bits. For Zhang et al. [48] the communication cost involves
+proposed scheme, the aggregation is performed in the Zonal                    one binary pairing operation and two times of scalar mul-
+Node. On the reception of the messages along with their time                  tiplication operation and one hash operation accounting to
+stamps are received by the Zonal Node. Initially the messages                 128 + 2*20 + 20  188 bytes  1504 bits. For Ryu et al.
+
+
+                                                                                                                                   123
+74                                                                                                                      O. B. J. Rabie et al.
+
+
+
+
+Fig. 7 Graph for the verification delay of the proposed scheme     Fig. 8 Comparison graph for the ratio of verification delay of the pro-
+                                                                   posed vs other schemes
+
+[49] the communication cost involves 14 times of hash oper-
+ation accounting to 14*20  280 bytes  2240 bits. For
+                                                                   Table 7 Experimental setup parameters
+Peng et al. [52] communication cost involves 23 times of
+hash operation accounting to 23*20  560bytes  4480 bits.         Parameter                            Specification
+From the analysis carried out Shen et al. [33] chose bilinear
+pairing operation which increases the encrypted text length.       Operating system                     Ubuntu Linux 18.04 LTS
+The schemes [47, 49, 52] involves the use of XoR operation         Area                                 400 * 200 m2
+and one-way hash function which diminish the communica-            Simulation time                      1200 s
+tion cost to a considerable extent, whereas it is not secure       Bandwidth                            2 Mbps
+since it does not involve any secure mechanism to selects          Communication protocol               IEEE 802.11p, 2.4 GHz WiFi
+the secret keys. Similarly, the scheme [48] involves the use
+of elliptic curve cryptography which has the similar impact
+as that of our proposed scheme. Hence it is evident that our       Table 8 Network setup
+proposed scheme is efficient than that of its counterparts.
+                                                                   Scenario          Medical experts         Patients          Sensors
+7.3 Verification delay
+                                                                   1                 1                       1                 1–10
+
+It is apparent that the verification of message signature is       2                 1                       3                 1–10
+directly subjected to the availability of central medical server   3                 3                       3                 10
+or the local medical server. In case of healthcare-based wear-
+able wireless medical sensor networks the zonal node creates
+an aggregated batch of message signatures for every 100 mes-       batch-based certificate-less aggregate signature authentica-
+sages. It is evident from the table that the proposed scheme       tion scheme for healthcare wearable wireless body area
+exhibits a verification delay for every 1000 messages approx-      networks. For our proposed scheme the simulation setup has
+imated to 7.013 ms. Hence our proposed scheme is efficient         been carried out by using network simulator (NS-3) tool.
+when compared with its counter benchmarks like [11, 47–49,         The simulation has been carried out on a laptop machine
+52] takes 424 ms, 30.321 ms, 7.87 ms, 14.123 ms, 25.829 ms,        with Ubuntu Linux-based operating system of version 18.04
+and 7.013 ms respectively. Figure 7 depicts the verifica-          LTS on an intel i3-core processor with 8 GB RAM. Table
+tion delay of the proposed scheme. Figure 8 represents the         7 provides details on the parameters used for the simula-
+comparison graph for the ratio of improvement in terms of          tion. Experimental analysis focused mainly on throughput
+signature verification exhibited by the traditional schemes        and end-to-end delay which has a direct impact on the number
+with respect to the proposed scheme. It is found that our          of messages exchanged inside the network. Table 8 provides
+scheme takes less cost of about 1280 bits for every single         details on the settings of the network utilized.
+message transmission and 400 bits for every n aggregated              The network setup has been constructed under three vary-
+message where the cost of communication gets decreased by          ing network scenarios which consist of varying set of medical
+significant improvement.                                           experts, patients and sensors installed in order to measure the
+                                                                   performance of the proposed scheme. The proposed scheme
+7.4 Experimentation                                                has utilized a few values mentioned in [68] order to perform
+                                                                   the execution. The setup has been made in such a way that the
+This section explains about the experimental simulation in         network consists of a user who sends packets for every five
+order to assess the performance of the full privacy distributed    seconds with messages of varying bit size ranging from 320,
+
+
+123
+      Table 9 Execution analogy of the proposed scheme vs other chosen schemes
+
+      Methodology        Signing cost (i)                Verification cost (ii)      Aggregation cost (per 100     Aggregate verification cost   Total cost   Performance increment
+                                                                                     messages) (iii)               (per 100 messages) (iv)       (ms)         (%)
+
+      Shen et al. [33]   3 T_BPSM + T_BPAO + T_MPT H ≈   3TBPF +2T _MPT H ≈          3n TBPF +T_BPSM +(n −         3n TBPF +T_BPSM +(n −         847          83
+                           9.54 ms                        21.44 ms                    1)T_BPAO ≈ 424 ms             1)T_BPAO ≈ 424 ms
+      Shuai et al.       9 T_Oh ≈ 10.107 ms              12 T_Oh ≈ 13.476 ms         6n T_Oh ≈ 6.738 ms            27 nT_Oh ≈ 30.321 ms          30.321       23
+       [47]
+      Zhang et al.       TBPF + T_BPSM + T_Oh ≈          TBPF +2T _BPSM +T_Oh ≈      nT BPF +2nT _BPSM +nT _Oh ≈   nT BPF +2nT _BPSM +nT _Oh ≈   7.87         89
+       [48]               5.853 ms                        7.483ms                     7.87 ms                       7.87 ms
+                                                                                                                                                                                      A full privacy-preserving distributed batch-based certificate-less aggregate signature…
+
+
+
+
+      Ryu et al. [49]    14 T_Oh ≈ 14.123 ms             14 T_Oh ≈ 14.123 ms         14 nT_Oh ≈ 14.123 ms          14 nT_Oh ≈ 14.123 ms          14.123       50
+      Peng et al. [52]   9 T_Oh ≈ 10.107 ms              10 T_Oh ≈ 11.23 ms          4n T_Oh ≈ 4.492 ms            23 nT_Oh ≈ 25.829 ms          25.829       27
+      Proposed           T_EC−SM + T_EC−A + T_oh ≈       3 T_EC−SM + T_EC−A + T_oh   3n T_EC−SM + n T_EC−A + n     (3n)T_EC−SM +(n) T_EC−A +     7.013        –
+                          3.753 ms                         ≈ 7.013 ms                 T_oh ≈ 7.013 ms                (n) T_oh ≈ 7.013 ms
+
+
+
+
+123
+                                                                                                                                                                                      75
+76                                                                                                                         O. B. J. Rabie et al.
+
+
+Table 10 Analogy of cost of communication
+
+Methodology                               Communication cost (bits)
+
+Shen et al. [33]                          1024
+Shuai et al. [47]                         574
+Zhang et al. [48]                         1524
+Ryu et al. [49]                           3872
+                                                                        Fig. 11 End-to-end delay for our proposed scheme
+Peng et al. [52]                          1656
+Proposed                                  520
+
+                                                                        (ii) Throughput
+440, 520, and 680 bits. Table 9 provides execution analogy                   Throughput can be defined as the number of messages
+of the proposed scheme Vs other chosen schemes. Table 10                     or packets transmitted per second. It is measured in
+gives analogy of cost of communication.                                      terms of bits per second (bps). It can be calculated
+                                                                             by using Eq. (15). The proposed scheme possesses
+                                                                             no varying since the number of sensors and data
+(i)    Packet delivery ratio (PDR)                                           exchanged are quite lower. Throughput becomes high
+       Packet delivery ratio can be defined the number of mes-               in case of dense environments. Figure 10 presents
+       sages received to that of the sent. It is utilized to assess          the overview of throughput exhibited by our proposed
+       the performance aspects of the network. From Fig. 9 it                scheme.
+       is evident that the packet delivery ratio increase with
+       decrease in the number of nodes and vice versa. When
+       the scenario becomes dense is frequent where conges-                                           n
+                                                                                                         i1 Packets received|Ti
+       tion might occur. Table 11 comparison of the security                  Throughput (bps)                                          (15)
+                                                                                                              Time Taken
+       features of the proposed Vs other schemes. Also, when
+       the distance between the nodes is far, the packet may
+       get lost. Hence the graph grows and then falls. Packet
+                                                                        (iii) End-to-end delay
+       delivery ratio can be calculated by using Eq. (14) as
+                                                                              End-to-End delay can be defined as the average time
+       follows:
+                                                                              taken by the transmitted packets from the source to that
+                                  Number of packets received                  of the destination. From Fig. 11, it is evident that as the
+Packet Delivery Ratio(%)                                    ∗100
+                                    Number of packet sent                     distance between the sensors decreases the end-to-end
+                                                                 (14)         delay gets higher and vice versa. Throughput can be
+
+Fig. 9 Packet delivery ratio of
+our proposed scheme
+
+
+
+
+Fig. 10 Throughput for our
+proposed scheme
+
+
+
+
+123
+A full privacy-preserving distributed batch-based certificate-less aggregate signature…                                                           77
+
+
+Table 11 Comparison of the security features of the proposed vs other schemes
+
+Security feature          Shen et al. [33]      Shuai et al. [47]      Zhang et al. [48]     Ryu et al. [49]      Peng et al. [52]     Proposed
+
+Integrity                 ✓                     ✓                      ✓                     ✓                    b                    ✓
+Authentication            ✓                     ✓                      ✓                     ✓                    ✓                    ✓
+Anonymity                 ✓                     ✓                      ✓                     ✓                    ✓                    ✓
+Traceability              ✓                     ✓                      ✓                     b                    b                    ✓
+Revocability              ✓                     b                      b                     b                    b                    b
+Unlinkability             ✓                     b                      ✓                     ✓                    ✓                    ✓
+Key Escrow                b                     b                      b                     b                    b                    ✓
+Impersonation             ✓                     ✓                      ✓                     ✓                    ✓                    ✓
+Modification              b                     b                      b                     ✓                    ✓                    ✓
+Masquerading              b                     b                      b                     b                    ✓                    ✓
+Replay                    ✓                     ✓                      ✓                     ✓                    ✓                    ✓
+Man-in-the-Middle         b                     ✓                      ✓                     ✓                    ✓                    ✓
+Denial-of-Service         b                     b                      b                     ✓                    b                    ✓
+
+
+
+
+       defined by Eq. (16) as follows:                                        The proposed scheme is lightweight since it uses one way
+                                                                              generic hash function and elliptic curve cryptography and
+End - to - end Delay                                                          achieves full privacy preservation in distributed batch-based
+  n
+       Packets transmitted {Destination − Source}                             verification.
+
+                           N                                                     Artificial intelligence-based security and privacy-based
+   i1
+                                                                              methods provides a viable solution by predicting the diagno-
+                                                                    (17)
+                                                                              sis of the patients [69]. Prediction is also possible and disease
+                                                                              can be detected at an early stage. This technology will erase
+                                                                              the burden of the clinical medical expert in detecting the dis-
+                                                                              eases and preventing it from next door infection [43]. Also
+8 Conclusion and future work                                                  use of blockchain will facilitate more security and privacy
+                                                                              by providing the immutability to the data [70]. Scalability
+In this paper, a full privacy-preserving distributed batch-                   and authentication for image medical data are also a concern
+based certificate-less aggregate signature authentication                     which is supposed to be addressed in our future work.
+scheme for healthcare wearable wireless medical sensor
+                                                                              Acknowledgements Not applicable.
+networks has been presented. Data once generated by the
+medical sensors implanted on the patient body are supposed                    Author’s contributions OBJR and TH contributed to data curation and
+to be authenticated prior to transmission. Privacy of the                     methodology; SS and GBM contributed to writing original draft; super-
+patient health information is an additional requirement that                  vision; project administration; conceptualization; and overall review
+                                                                              and editing. AMA and MU contributed to validation; visualization; and
+has to be addressed. The schemes proposed based on bilin-                     resources. All authors reviewed the final manuscript.
+ear pairing, elliptic curves and XoR operations are highly
+susceptible to a wide variety of security and privacy attacks                 Funding This project was funded by the Deanship of Scientific
+such as computation, communication overhead, increase in                      Research (DR) at King Abdulaziz University (KAU), Jeddah, Saudi
+                                                                              Arabia has funded this project, under Grant No. (RG-9-611-43). The
+the length of the signature and insecure without any secret                   authors, therefore, acknowledge with thanks DSR for technical and
+generating mechanism. Hence in order to provide a better                      financial support.
+trade-off between these requirements the proposed scheme is
+more efficient. It is evident that the proposed system exhibits               Data availability The data that support the findings of this study are
+                                                                              available from the corresponding author, upon reasonable request.
+only less communication, computation costs. It is also true
+that majority of the schemes do not support autonomy, loca-
+                                                                              Declarations
+tion privacy and distribution which gives a lead to the design
+of our proposed scheme. Our proposed scheme outperforms                       Conflict of interests The authors declare that they have no competing
+the chosen benchmarks in terms of computation and com-                        interests.
+munication costs and is resilient toward a variety of attacks.
+
+
+                                                                                                                                        123
+78                                                                                                                                  O. B. J. Rabie et al.
+
+
+Open Access This article is licensed under a Creative Commons               14. Altamimi, A.M.: Security and privacy issues in eHealthcare
+Attribution 4.0 International License, which permits use, sharing, adap-        systems: Towards trusted services. Int. J. Adv. Comput. Sci.
+tation, distribution and reproduction in any medium or format, as               Appl.Comput. Sci. Appl. 7(9), 229–236 (2016)
+long as you give appropriate credit to the original author(s) and the       15. Sarkar, A., Chatterjee, S.R., Chakraborty, M.: Role of cryptography
+source, provide a link to the Creative Commons licence, and indi-               in network security. In: The" Essence" of Network Security: An
+cate if changes were made. The images or other third party material             End-to-End Panorama, pp. 103–143. Springer, Singapore (2021)
+in this article are included in the article’s Creative Commons licence,     16. Wu, L., Du, X., Guizani, M., Mohamed, A.: Access control schemes
+unless indicated otherwise in a credit line to the material. If material        for implantable medical devices: A survey. IEEE Internet Things
+is not included in the article’s Creative Commons licence and your              J. 4(5), 1272–1283 (2017)
+intended use is not permitted by statutory regulation or exceeds the        17. Kumar, P., Kumari, S., Sharma, V., Li, X., Sangaiah, A.K.,
+permitted use, you will need to obtain permission directly from the copy-       Islam, S.H.: Secure CLS and CL-AS schemes designed for
+right holder. To view a copy of this licence, visit http://creativecomm         VANETs. J. Supercomput.Supercomput. (2018). https://doi.org/
+ons.org/licenses/by/4.0/.                                                       10.1007/s11227-018-2312-y
+                                                                            18. Raya, M., Hubaux, J.P.: The security of vehicular ad hoc networks.
+                                                                                In: Proceedings of the 3rd ACM Workshop on Security of Ad Hoc
+                                                                                and Sensor Networks, pp. 11–21. Alexandria, VA, USA (2005)
+References                                                                  19. Divakaran, J., Prashanth, S.K., Mohammad, G.B., Shitharth,
+                                                                                Mohanty, S.N., Arvind, C., Srihari, K., Abdullah, R.Y., Sundra-
+ 1. Wail Nourildean, S., Mohammed Salih, A.: Internet of things based           murthy, V.P., Shitharth, S., et al.: Improved handover authentication
+    wireless sensor network—WiFi coexistence in medical appli-                  in fifth-generation communication networks using fuzzy evolu-
+    cations. In: 2022 8th International Engineering Conference on               tionary optimisation with nano core elements in mobile healthcare
+    Sustainable Technology and Development (IEC), pp. 1–6 (2022).               applications. J. Healthc. Eng. Hindawi (2022). https://doi.org/10.
+    https://doi.org/10.1109/IEC54822.2022.9807574                               1155/2022/2500377
+ 2. Shakeri, M., Sadeghi-Niaraki, A., Choi, S.M., Riazul Islam, S.M.:       20. Lu, R., Lin, X., Zhu, H., Ho, P., Shen, X.: ECPP: efficient
+    Performance analysis of IoT-based health and environment WSN                conditional privacy preservation protocol for secure vehicular com-
+    deployment. Sensors (Switzerland) 20(5923), 1–22 (2020)                     munications. In: IEEE INFOCOM 2008—the 27th Conference on
+ 3. Atzori, L., Iera, A., Morabito, G.: The internet of things: a survey.       Computer Communications, Phoenix, AZ, USA (2008). https://
+    Comput. Netw.. Netw. 54(15), 2787–2805 (2010)                               doi.org/10.1109/INFOCOM.2008.179
+ 4. Wagh, S.S., More, A., Kharote, P.R.: Performance evaluation of          21. Ogundoyin, S.O.: An autonomous lightweight conditional privacy-
+    IEEE 802.15.4 protocol under coexistence of WiFi 802.11b. Pro-              preserving authentication scheme with provable security for vehic-
+    cedia Comput. Sci. 57, 745–751 (2015). https://doi.org/10.1016/j.           ular ad-hoc networks. Int. J. Comput. Appl. Comput. Appl. (2018).
+    procs.2015.07.467                                                           https://doi.org/10.1080/1206212X.2018.1477320
+ 5. Fotouhi, H., Cauevic, A., Lundqvist, K., Björkman, M.: Commu-           22. Ismail, S., Tahat, N.M.F., Ahmad, R.R.: A new digital signature
+    nication and security in health monitoring systems—a review. In:            scheme based on factoring and discrete logarithms. J. Math. Stat.
+    IEEE 40th Annual Computer Software and Applications Confer-                 4(4), 222–225 (2008)
+    ence (COMPSAC) pp. 545–554 (2016)                                       23. Lin, Q., Li, J., Huang, Z., Chen, W., Shen, J.: A short linearly homo-
+ 6. Yuce, M.R., Ng, S.W.P., Myo, N.L., Khan, J.Y., Liu, W.: Wireless            morphic proxy signature scheme. IEEE Access 6, 12966–12972
+    body sensor network using medical implant band. J. Med. Syst.               (2018)
+    31(6), 467–474 (2007)                                                   24. Shamir, A.: Identity-based cryptosystem and signatures schemes.
+ 7. Saeed, M.E.S., Liu, Q.-Y., Tian, G.Y., Gao, B., Li, F.: Remote              In: Blakley, G.R., Chaum, D. (eds.) Advances in cryptology.
+    authentication schemes for wireless body area networks based on             CRYPTO 1984. LNCS 196, pp. 47–53. Springer, Berlin (1984)
+    the Internet of Things. IEEE Internet Things J. 5(6), 4926–4944         25. Al-Riyami, S.S., Paterson K.G.: Certificate-less public key cryp-
+    (2018)                                                                      tography. In: Proceedings of the International Conference on
+ 8. Crosby, G.V., Ghosh, T., Murimi, R., Chin, C.A.: Wireless body              theory and Application of Cryptology and Information Security,
+    area networks for healthcare: a survey. Int. J. Ad Hoc Sensor Ubiq-         pp. 452–473, Springer, Taipei, Taiwan, November 2003
+    uitous Comput. 3(3), 1–26 (2012)                                        26. Shitharth, S., Manoharan, H., Khadidos, A.O., Shankar, A., Maple,
+ 9. Khadidos, A.O., Shitharth, S., Khadidos, A.O., Sangeetha, K.,               C., Khadidos, A.O., Mumtaz, S.: Improved security for multimedia
+    Alyoubi, K.H.: Healthcare Data security using IoT sensors based             data visualization using hierarchical clustering algorithm. ACM
+    on random hashing mechanism. J. Sens. vol. 2022, Article ID                 Trans Multimedia Comput. Commun. Appl. Just (2023). https://
+    8457116, 17, 2022. https://doi.org/10.1155/2022/8457116                     doi.org/10.1145/3610296
+10. Chaudhry, S.A., Mahmood, K., Naqvi, H., Khan, M.K.: An                  27. Koblitz, N.: Elliptic curve cryptosystems. Math. Comput. Comput.
+    improved and secure biometric authentication scheme for telecare            48(177), 203–209 (1987)
+    medicine information systems based on elliptic curve cryptogra-         28. Miller, V.: Use of elliptic curves in cryptography. In: Proceedings
+    phy. J. Med. Syst. 39(11), 1–12 (2015)                                      in Advances in Cryptology (Crypto), pp. 417–426 (1985)
+11. Chennam, K.K., Aluvalu, R., Shitharth, S.: An authentication            29. Ali, I., Chen, Y., Ullah, N., Kumar, R., He, W.: An efficient
+    model with high security for cloud database. In: Architectural              and provably secure ECC-based conditional privacy-preserving
+    Wireless Networks Solutions and Security Issues, Lecture Notes              authentication for vehicle-to-vehicle communication in VANETs.
+    in Network and Systems, Springer, Berlin, vol. 196(1), pp. 13–26            IEEE Trans. Veh. Technol. Veh. Technol. 70(2), 1278–1291 (2021)
+    (2021). https://doi.org/10.1007/978-981-16-0386-0_2                     30. Castro, R., Dahab, R.: Efficient certificate-less signatures suit-
+12. Singla, R., Kaur, N., Koundal, D., Bharadwaj, A.: Challenges and            able for aggregation. IACR Cryptology 2007. https://eprint.iacr.
+    developments in secure routing protocols for healthcare in WBAN:            org/2007/454.pdf
+    A comparative analysis. Wireless Pers. Commun.Commun. 122(2),           31. Vallent, T.F., Hanyurwimfura, D., Mikeka, C.: Efficient certificate-
+    1767–1806 (2022)                                                            less aggregate signature scheme with conditional privacy–preser-
+13. Zandesh, Z., Ghazisaeedi, M., Devarakonda, M.V., Haghighi: Legal            vation for vehicular ad hoc networks enhanced smart grid system.
+    framework for health cloud: A systematic review. Int. J. Med. Infor-        Sensors 21, 2900 (2021). https://doi.org/10.3390/s21092900
+    matics 132, 103953 (2019)
+
+
+123
+A full privacy-preserving distributed batch-based certificate-less aggregate signature…                                                              79
+
+
+32. Shen, L., Ma, J., Liu, X., Miao, M.: A provably secure aggregate          49. Ryu, H., Kim, H.: Privacy-preserving authentication protocol for
+    signature scheme for healthcare wireless sensor networks. J. Med.             wireless body area networks in healthcare applications. Healthcare
+    Syst. 40(11), 244 (2016)                                                      9, 1114 (2021). https://doi.org/10.3390/healthcare9091114
+33. Shen, L., Ma, J., Liu, X., Wei, F., Miao, M.: A secure and efficient      50. Jegadeesan, S., Azees, M., Ramesh Babu, N., Subramaniam, U.,
+    ID based aggregate signature scheme for wireless sensor networks.             Almakhles, J.D.: EPAW: efficient privacy preserving anonymous
+    IEEE Intern. Things J. 4(2), 546–554 (2017)                                   mutual authentication scheme for wireless body area networks
+34. Kumar, P., Kumari, S., Sharma, V., Sangaiah, A.K., Wei, J., Li,               (WBANs). IEEE Access 8, 48576–48586 (2020). https://doi.org/
+    X.: A certificate-less aggregate signature scheme for healthcare              10.1109/ACCESS.2020.2977968
+    wireless sensor network”. Sustain. Comput. Inf. Syst. 18, 80–89           51. Shuai, M., Liu, B., Yu, N., Xiong, L., Wang, C.: Efficient and
+    (2018). https://doi.org/10.1016/j.suscom.2017.09.002                          privacy-preserving authentication scheme for wireless body area
+35. Wu, L., Xu, Z., He, D., Wang, X.: New certificateless aggregate sig-          networks. J. Inf. Secur. Appl. 52, 102499, ISSN 2214-2126. (2020)
+    nature scheme for healthcare multimedia social network on cloud               https://doi.org/10.1016/j.jisa.2020.102499
+    environment. Secur. Commun. Netw., vol. 2018, Apr. 2018, Art.             52. Selvarajan, S., Srivastava, G., Khadidos, A.O., Khadidos, A.O.,
+    no. 2595273                                                                   Baza, M., Alsheri, A., Chun-Wei Lin. J.: An artificial intelligence
+36. Liu, J., Cao, H., Li, Q., Cai, F., Du, X., Guizani, M.: A large-scale         lightweight blockchain security model for security and privacy in
+    concurrent data anonymous batch verification scheme for mobile                IIoT systems. J. Cloud Comput. 12–38 (2023)
+    healthcare crowd sensing. IEEE Internet Things J. 6(2), 1321–1330         53. Ji, S., Gui, Z., Zhou, T., Yan, H., Shen, J.: An efficient and cer-
+    (2019). https://doi.org/10.1109/JIOT.2018.2828463                             tificateless conditional privacy-preserving authentication scheme
+37. Zhang, Y., Shu, J., Liu, X., Li, J., Zheng, D.: Security analysis of a        for wireless body area networks big data services. IEEE Access
+    large-scale concurrent data anonymous batch verification scheme               6, 69603–69611 (2018). https://doi.org/10.1109/ACCESS.2018.
+    for mobile healthcare crowd sensing. IEEE Intern. Things J. 6(1),             2880898
+    1287–1290 (2019)                                                          54. Mandal, S.: Provably secure certificateless protocol for wireless
+38. Xie, Y., Li, X., Zhang, S., Li, Y.: iCLAS: an improved certifi-               body area network. Wirel. Netw. 29, 1421–1438 (2023). https://
+    cateless aggregate signature scheme for healthcare wireless sensor            doi.org/10.1007/s11276-022-03205-4
+    networks. IEEE Access 7, 15170–15182 (2019). https://doi.org/10.          55. Chakravorthy, G.B., Vardhan, R.A., Shetty, K.K., Mahesh, K.,
+    1109/ACCESS.2019.2894895                                                      Shitharth, S.: Handling Tactful data in cloud using pkg encryp-
+39. Gayathri, N.B., Thumbur, G., Rajesh Kumar, P., Rahman, M.Z.U.,                tion technique. In: 4th Smart City Symposium, pp. 338–343 (2021)
+    Reddy, P.V., Lay-Ekuakille, A.: Efficient and secure pairing-free             https://doi.org/10.1049/icp.2022.0366
+    certificateless aggregate signature scheme for healthcare wireless        56. Nyangaresi, V.O.: Privacy preserving three-factor authentication
+    medical sensor networks. IEEE Internet Things J. 6(5), 9064–9075              protocol for secure message forwarding in wireless body area net-
+    (2019). https://doi.org/10.1109/JIOT.2019.2927089                             works. Ad Hoc Netw. 142, 103117. ISSN 1570-8705 (2023) https://
+40. Kumar, P., Kumari, S., Sharma, V., Li, X., Kumar, S.A., Islam,                doi.org/10.1016/j.adhoc.2023.103117
+    S.K.H.: Secure CLA and CL-AS schemes designed for VANETs.                 57. Wu, F., Li, X., Sangaiah, A.K., Xu, L., Kumari, S., Wu, L., Shen,
+    J. Supercomput. Supercomput. 75, 3076–3098 (2019). https://doi.               J.: A lightweight and robust two-factor authentication scheme for
+    org/10.1007/s11227-018-2312-y                                                 personalized healthcare systems using wireless medical sensor net-
+41. Zhong, H., Han, S., Cui, J., Zhang, J., Xu, Y.: Privacy-preserving            works. Fut. Gener. Comput. Syst. 82, 727–737, ISSN 0167-739X
+    authentication scheme with full aggregation in VANET. Inf. Sci.               (2018) https://doi.org/10.1016/j.future.2017.08.042
+    476, 211–221 (2019)                                                       58. Jahan, M., Zohra, F.T., Parvez, Md. K., Kabir, U., Al Radi, A.M.,
+42. Alhalabi, W., Al-Rasheed, A., Manoharan, H., Alabdulkareem,                   Kabir, S.: An end-to-end authentication mechanism for wireless
+    E., Alduailij, M., Alduailij, M., Selvarajan, S.: Distinctive mea-            body area networks, Smart Health, 2023, 100413, ISSN 2352-6483,
+    surement scheme for security and privacy in internet of things                https://doi.org/10.1016/j.smhl.2023.100413
+    applications using machine learning algorithms. Electronics 12,           59. Almuhaideb, A.M., Alqudaihi, K.S.: Authentication in wireless
+    747 (2023). https://doi.org/10.3390/electronics12030747                       body area network: taxonomy and open challenges. J. Intern.
+43. Kamil, I.A., Ogundoyin, S.O.: An improved certificateless aggre-              Things JIOT 3(4), 159–184 (2021)
+    gate signature scheme without bilinear pairings for vehicular ad          60. Iqbal, Y., Tahir, S., Tahir, H., Khan, F., Saeed, S., Almuhaideb,
+    hoc networks. J. Inf. Secur. Appl. 44, 184–200 (2019)                         A.M., Syed, A.M.: A novel homomorphic approach for preserving
+44. Zhao, Y., Hou, Y., Wang, L., Kumari, S., Khan, M.K., Xiong, H.: An            privacy of patient data in telemedicine. Sensors 22, 4432 (2022).
+    efficient certificateless aggregate signature scheme for the Internet         https://doi.org/10.3390/s22124432
+    of Vehicles. Trans. Emerg. Telecommun. Technol. 31, 1–20 (2020).          61. Almuhaideb, A.M., Alghamdi, H.A.: Secure and efficient WBAN
+    https://doi.org/10.1002/ett.3708                                              authentication protocols for intra-BAN Tier. J. Sens. Actuator
+45. Mei, Q., Xiong, H., Chen, J., Yanng, M., Kumari, S., Khan, M.K.:              Netw.Netw. 11, 44 (2022). https://doi.org/10.3390/jsan11030044
+    Efficient certificateless aggregate signature with conditional pri-       62. Almuhaideb, A.M., Alghamdi, H.A.: Design of inter-BAN authen-
+    vacy preservation in IoV. IEEE Syst. J. Early. Accessed 25 Feb                tication protocols for WBAN in a cloud-assisted environment.
+    2020 https://doi.org/10.1109/JSYST.2020.2966526                               Big Data Cogn. Comput. 6, 124 (2022). https://doi.org/10.3390/
+46. Xu, Z., He, D., Kumar, N., Choo, K.-K.R.: Efficient certificate-              bdcc6040124
+    less aggregate signature scheme for performing secure routing in          63. Kshirsagar, P.R., Manoharan, H., Alterazi, H.A., Alhebaishi, N.,
+    VANETs. Security Commun. Netw., vol. 2020, Feb. 2020, Art. No.                Rabie, O.B.J., Shitharth, S.: Construal attacks on wireless data stor-
+    5276813                                                                       age applications and unraveling using machine learning algorithm.
+47. Shuai, M., Xiong, L., Wang, C., Yu, N.: Lightweight and privacy-              J. Sens. vol 2022, Article ID 8457116, 17 pages, 2022. https://doi.
+    preserving authentication scheme with the resilience of desynchro-            org/10.1155/2022/9386989
+    nisation attacks for WBANs. IET Inf. Secur. Secur. 14(4), 380–390         64. Pointcheval, D., Stern, J.: Security arguments for digital signatures
+    (2020). https://doi.org/10.1049/iet-ifs.2019.0491                             and blind signatures. J. Cryptol. Cryptol. 13(3), 361–396 (2000)
+48. Zhang, J., Zhang, Q., Li, Z., Lu, X., Gan, Y.: A lightweight and          65. Khan, M.A., Ullah, I., Alsharif, M.H., Alghtani, A.H., Aly, A.A.,
+    secure anonymous user authentication protocol for wireless body               Chen, C.-M.: An efficient certificate-based aggregate signature
+    area networks. Secur. Commun. Netw. 2021, Article ID 4939589,                 scheme for internet of drones. Secur. Commun. Netw. vol. 2022,
+    (2021). https://doi.org/10.1155/2021/4939589.                                 Article ID 9718580. https://doi.org/10.1155/2022/9718580
+
+
+                                                                                                                                           123
+80                                                                                                                          O. B. J. Rabie et al.
+
+
+66. Khadidos, A.O., Shitharth, S., Manoharan, H., Yafoz, A., Khadi-     71. Burrows, M., Abadi, M., Needham, R.M.: A logic of authentication.
+    dos, A.O., Alyoubi, K.H.: An intelligent security framework based       Proc. R. Soc. Lond. A Math. Phys. Sci. Lond. A Math. Phys. Sci.
+    on collaborative mutual authentication model for smart city net-        426, 233–271 (1989)
+    works. In: IEEE Access (2022) https://doi.org/10.1109/ACCESS.       72. https://www.oracle.com/a/ocom/docs/engineered-systems/
+    2022.3197672                                                            database-appliance/oda-x9-2-ha-datasheet.pdf
+67. Shamus Software Ltd. MIRACL Library. Accessed: Jan. 2019.
+    [Online]. Available: http://www.shamus.ie/index.php?page=home
+68. Tian, L., Deronne, S., Latré, S., Famaey, J.: Implementation and
+                                                                        Publisher’s Note Springer Nature remains neutral with regard to juris-
+    validation of an IEEE 802.11 ah module for ns-3. In: Proceedings
+                                                                        dictional claims in published maps and institutional affiliations.
+    of the Workshop on Ns-3, ACM, 2016, pp. 49–56
+69. Selvarajan, S., Mouratidis, H.: A quantum trust and consultative
+    transaction-based blockchain cybersecurity model for healthcare
+    systems. Sci. Rep. 13(1), 7107 (2023). https://doi.org/10.1038/
+    s41598-023-34354-x
+70. Mirza, O.M., Mujlid, H., Manoharan, H., et al.: Mathematical
+    framework for wearable devices in the internet of things using
+    deep learning. In: Diagnostics, MDPI (2022). https://doi.org/10.
+    3390/diagnostics12112750
+
+
+
+
+123
+

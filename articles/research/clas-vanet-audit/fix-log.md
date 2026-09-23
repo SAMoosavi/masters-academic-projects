@@ -35,6 +35,14 @@
 | zhang2014 | pass 5/5 | verified 4 attacks, §4 scheme, Thm 1 iff |
 | zheng2023 | pass 4/4 | verified Han key-recovery, ECC-only, Tables II–III; fixed 10pp→12pp |
 
+## Professor Round-B sign-off + Round-C gate verdict (2026-09-22)
+
+- Round B: 24/24 Dr rows PASS (68 atomic notes, 2–3/paper). Professor audit: 68 files present; frontmatter valid on all (source:: + pages); in-vault concept [[wikilinks]] all resolve; content-orphan sweep = 10 lines, all inside the 2 closed-access collusion notes and all carrying explicit `(report … Lx)` record attributions (0 true orphans — no pages exist to cite).
+- Ruling on `source:: [[<key>-en]]`: PASS as designed — links resolve when the Obsidian vault root is `research/clas-vanet-audit/` (or `articles/`); only break if vault root = `atomic/` itself. Recommendation recorded: open `clas-vanet-audit/` as vault root.
+- Professor sample: tao2026 construction/figures notes match report + summary numbers (24.3%/48.9%/19.2%, eq.6) — VERIFIED.
+- Committed: `1bc4b2b` Round B (68 files).
+- GATE VERDICT: Round B G6 PASS → Round C (G7 Persian) ACCEPTED. persian_cleanup.py + fa_lint.py confirmed present in persian-writing skill scripts/.
+
 ## Professor final sign-off (2026-09-21)
 
 - G1 PASS: brief locked by user ("Locked, start all batches").

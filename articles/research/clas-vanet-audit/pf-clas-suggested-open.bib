@@ -1,0 +1,81 @@
+% Suggested PF-CLAS reading list — OPEN ACCESS (verified 2026-09-23 via OpenAlex)
+% Provenance: OpenAlex works search ("certificateless aggregate signature" + pairing-free,
+%   2 queries, counts 226/203) + per-DOI filter lookups; access date 2026-09-23.
+% Deduped against the 24-paper corpus in refs.bib (no overlaps).
+% Usage: \addbibresource{pf-clas-suggested-open.bib} — PDFs retrievable without subscription.
+
+@article{malhiEfficientCertificatelessAggregate2015,
+  title = {An Efficient Certificateless Aggregate Signature Scheme for Vehicular Ad-Hoc Networks},
+  author = {Malhi, Avleen Kaur and Batra, Shalini},
+  date = {2015-05-04},
+  journaltitle = {Discrete Mathematics \& Theoretical Computer Science},
+  volume = {17},
+  number = {1},
+  doi = {10.46298/dmtcs.2106},
+  url = {https://doi.org/10.46298/dmtcs.2106},
+  urldate = {2026-09-23},
+  abstract = {Foundational CLAS construction for VANETs (82 citations). Diamond open access.},
+  keywords = {certificateless aggregate signature, VANET, foundational, pairing-based},
+  note = {Suggested: earliest VANET-CLAS baseline in this set; PDF-verified 2026-09-23 as PAIRING-BASED (constant 3 pairings for aggregate verify, \S4 p.322) — read as the pre-pairing-free baseline, then compare against pairing-free successors}
+}
+
+@article{duEfficientCertificatelessAggregate2019,
+  title = {An Efficient Certificateless Aggregate Signature Scheme Without Pairings for Healthcare Wireless Sensor Networks},
+  author = {Du, Hongzhen and Wen, Qiaoyan and Zhang, Shanshan},
+  date = {2019},
+  journaltitle = {IEEE Access},
+  volume = {7},
+  pages = {42683--42693},
+  doi = {10.1109/ACCESS.2019.2907298},
+  url = {https://doi.org/10.1109/ACCESS.2019.2907298},
+  urldate = {2026-09-23},
+  abstract = {Pairing-free CLAS for healthcare WSN (50 citations). Gold open access (IEEE Access).},
+  keywords = {certificateless aggregate signature, pairing-free, healthcare WSN},
+  note = {Suggested: pairing-free CLAS outside VANET; cross-domain construction comparison}
+}
+
+@article{rabieFullPrivacyPreservingDistributed2023,
+  title = {A Full Privacy-Preserving Distributed Batch-Based Certificate-Less Aggregate Signature Authentication Scheme for Healthcare Wearable Wireless Medical Sensor Networks (HWMSNs)},
+  author = {Rabie, Osama Bassam J. and Selvarajan, Shitharth and Hasanin, Tawfiq and Mohammed, Gouse Baig and Alshareef, Abdulrhman M. and Uddin, Mueen},
+  date = {2023-11-20},
+  journaltitle = {International Journal of Information Security},
+  volume = {23},
+  number = {1},
+  pages = {51--80},
+  doi = {10.1007/s10207-023-00748-1},
+  url = {https://doi.org/10.1007/s10207-023-00748-1},
+  urldate = {2026-09-23},
+  abstract = {Batch certificate-less aggregate authentication with full privacy preservation (37 citations). Hybrid open access.},
+  keywords = {certificate-less aggregate signature, batch verification, privacy-preserving, HWMSN},
+  note = {Suggested: recent batch-verification design; compare its privacy model with VANET pseudonym schemes}
+}
+
+@article{kimCASCF2020,
+  title = {{CASCF}: Certificateless Aggregated SignCryption Framework for Internet-of-Things Infrastructure},
+  author = {Kim, Tai-hoon and Kumar, Gulshan and Saha, Rahul and Alazab, Mamoun and Buchanan, William Johnston and Rai, Mritunjay Kumar and Ganesan, Geetha and Thomas, Reji},
+  date = {2020},
+  journaltitle = {IEEE Access},
+  volume = {8},
+  pages = {94748--94756},
+  doi = {10.1109/ACCESS.2020.2995443},
+  url = {https://doi.org/10.1109/ACCESS.2020.2995443},
+  urldate = {2026-09-23},
+  abstract = {Certificateless aggregated signcryption framework for IoT (37 citations). Gold open access (IEEE Access).},
+  keywords = {certificateless aggregated signcryption, IoT, pairing-based},
+  note = {Suggested: pairs thematically with Dai 2022 / Wu-Chen 2025 CLASC line already in corpus, but CAUTION — PDF-verified 2026-09-23 as pairing-based (``Bilinear map is used in scheme'', conclusion); read for framework ideas, not as pairing-free evidence}
+}
+
+@article{manivannanSecureAuthenticationPrivacypreserving2020,
+  title = {Secure Authentication and Privacy-Preserving Techniques in Vehicular Ad-Hoc {NETworks} ({VANETs})},
+  author = {Manivannan, Dakshnamoorthy and Moni, Shafika Showkat and Zeadally, Sherali},
+  date = {2020-02-21},
+  journaltitle = {Vehicular Communications},
+  volume = {25},
+  pages = {100247},
+  doi = {10.1016/j.vehcom.2020.100247},
+  url = {https://doi.org/10.1016/j.vehcom.2020.100247},
+  urldate = {2026-09-23},
+  abstract = {Survey of VANET authentication and privacy techniques (211 citations). Hybrid open access.},
+  keywords = {VANET, authentication survey, privacy-preserving, background},
+  note = {Suggested: background only — broad VANET auth survey, not a CLAS construction}
+}

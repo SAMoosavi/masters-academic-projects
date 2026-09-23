@@ -1,0 +1,638 @@
+                                                                               SPECIAL SECTION ON EMERGING APPROACHES TO CYBER SECURITY
+
+
+Received April 25, 2020, accepted May 15, 2020, date of publication May 18, 2020, date of current version June 2, 2020.
+Digital Object Identifier 10.1109/ACCESS.2020.2995443
+
+
+
+
+CASCF: Certificateless Aggregated SignCryption
+Framework for Internet-of-Things
+Infrastructure
+TAI-HOON KIM 1 , (Member, IEEE), GULSHAN KUMAR 2 , RAHUL SAHA 2 ,
+MAMOUN ALAZAB 3 , (Senior Member, IEEE), WILLIAM J. BUCHANAN 4 ,
+MRITUNJAY KUMAR RAI 5 , G. GEETHA 2 , AND REJI THOMAS 6
+1 School of Economics and Management, Beijing Jiaotong University, Beijing 100044, China
+2 School of Computer Science and Engineering, Lovely Professional University, Phagwara 144411, India
+3 College of Engineering, IT and Environment, Charles Darwin University, Casuarina NT 0810, Australia
+4 BlockPassID Lab, Edinburgh Napier University, Edinburgh EH11 4DY, U.K.
+5 School of Electronics and Electrical Engineering, Lovely Professional University, Phagwara 144411, India
+6 Division of Research and Development, Lovely Professional University, Phagwara 144411, India
+
+Corresponding authors: Rahul Saha (rsahaaot@gmail.com) and Mamoun Alazab (mamoun.alazab@cdu.edu.au)
+
+
+
+
+  ABSTRACT The increasing number of devices in the age of Internet-of-Thing (IoT) has arisen a number of
+  problems related to security. Cryptographic processes, more precisely the signatures and the keys, increase
+  and generate an overhead on the network resources with these huge connections. Therefore, in this paper
+  we present a signcryption framework to address the above problems. The solution highlights the use of
+  aggregate signcryption and certificaless approach based on bilinear pairings. The use of signcryption with
+  aggregation and certificateless authentication reduces the time consumption, overhead and complexity. The
+  solution is also able to solve the key staling problems. Experimental results and comparative analysis based
+  on key parameters, memory utilization and bandwidth utilization have been measured. It confirms that the
+  presented work is efficient for IoT infrastructure.
+
+
+  INDEX TERMS Authentication, signature, signcryption, security, IoT, confidentiality.
+
+
+
+I. INTRODUCTION                                                                                     Inheriting the security problems of wireless networks, IoT
+Internet-of-Thing (IoT) is a technology enabler in present                                       also faces some severe security issues such as: authentication
+world. It derives an ecosystem made up of people, pro-                                           attacks, denial-of-services, camouflages, espionages, routing
+cess and technology; with more insights, the infrastructure                                      attacks and others [6]. Authentication attacks take another
+of IoTs uses web enabled smart devices with embedded                                             dimension in IoT where heterogeneous devices are connected
+systems, cloud storages, underlying internet structure and                                       to the network. Therefore, the security mechanism should be
+applications used by the users [1]. The objectives of mak-                                       strict enough to provide sufficient strength to the network
+ing life smoother and easier have craved the pathway of                                          without reducing the performance. Such a solution for IoT
+IoT in out technology. It is able to shape both the indus-                                       security has been provided in the present work. In the follow-
+trial and consumer worlds. The advantages of IoTs have                                           ing subsections discussion is made on some background of
+showed potentials in various domains such as healthcare,                                         the existing security mechanism and technology and relevant
+agriculture, finance, logistics, supply chains, education and                                    security derivations in recent years.
+many more [2]. With the increasing number of applications
+and forecasting of increased device connections also posing                                       A. BACKGROUND OF SECURITY
+severe challenges [3]. Security is one of the major concerns                                     Security is defined by a logical interpretation of being
+among the all [4], [5].                                                                          free from threats. It is obvious in this present world of
+                                                                                                 internet technology that the attacks are present everywhere
+                                                                                                 and making strategies for gaining access to the network
+   The associate editor coordinating the review of this manuscript and                           data. Therefore, it is required that any system requires
+approving it for publication was Muhammad Imran                 .                                some security parameters to be obtained by using security
+
+                     This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+94748                                                                                                                                                                 VOLUME 8, 2020
+T.-H. Kim et al.: CASCF: Certificateless Aggregated SignCryption Framework for Internet-of-Things Infrastructure
+
+
+
+
+tools. In IoT perspectives, the security requirements are as                            Aggregation schemes can be enhanced further by doing
+follows [7].                                                                         aggregations on the overall signcryptions. The objective
+   Confidentiality: The data in communication should not be                          of providing required security with reduced overhead and
+accessed by a third party.                                                           computation has led to such developments. An obfuscating
+   Authentication: The sender and receiver must prove their                          aggregate signcryption development for IoT is worth men-
+identity for data access.                                                            tioning here [27]. An application specific use of signcryption
+   Integrity: The data sent by the sender should be received                         aggregation is shown in [28] Another recent construction of
+by the receiver without any modification or alteration.                              such aggregation is shown in [29]. The algorithms shown
+   Non-repudiation: The sender or the receiver cannot deny                           in [27]–[29] are chosen for the comparison with the proposed
+about their responsibility of sending or receiving the data.                         certificateless scheme. Emphasizing on the last three research
+   Availability: The data should be available always by the                          works, some problems are identified. Firstly, the algorithms
+authenticated users in the network whenever and wherever                             of [27] and [28] are unable to provide a certificateless scheme
+required.                                                                            therefore, having a scope of improvement with certificateless
+   Apart from these access control and accountability are                            schemes. Secondly, key staling is a problem in all these three
+also required for IoT to manage the network properly.                                algorithms. These identified problems have motivated us to
+To accomplish these requirements cryptographic protocols                             find a signcryption solution for IoT framework.
+are used rigorously. Hash functions, symmetric/asymmetric                               The rest of the paper is organized as follows. Section II
+key cryptography, digital signatures are used by all the IoT                         explain the proposed approach/scheme detailing about the
+infrastructures [8]. Such cryptographic functionalities make                         preliminaries and phase wise descriptions with algorithms.
+security backbone overall and therefore, such algorithms                             Section III explains the experimental results, comparative
+need to be robust enough. Encryption techniques provide                              analysis and security validation. Section IV concludes the
+confidentiality, digital signatures provide integrity, authenti-                     paper highlighting the major findings of the experiment.
+cation and non-repudation. In generic security frameworks,
+these two techniques are processed separately. However,                              II. PROPOSED CASCF SCHEME
+researches have been conducted to integrate these two in                             In this section, we explain the problem definition, preliminar-
+single logical step and thus, signcryption processes come into                       ies used for the proposed scheme, network model followed by
+existence in cryptography [9].                                                       the detailed description of the functions.
+
+B. SIGNCRYPTION, AGGREGATES AND RECENT                                               A. PROBLEM DEFINITION
+DEVELOPMENTS                                                                         In IoTs, the devices are connected over Internet. IoT commu-
+Signcryption, as single logical step for digital signature and                       nication is affected by various security issues. To safeguard
+encryption, is able to reduce the computational costs and                            the data of IoT devices in communication and to provide
+communication overheads as compared with the traditional                             the required security services cryptography solutions have
+signature-then-encryption schemes. Correctness, efficiency,                          become integral part. Hence, the present work shows a solu-
+security in terms of forward secrecy, unforgeability are some                        tion for the IoTs. It ensures confidentiality, authentication,
+of the essential features of signcryption [10]. Various sign-                        integrity and non-repudiation services. The solution objecti-
+cryption algorithms have been developed in recent years.                             fies the following.
+A standard model of signcryption is shown in [11]. Vari-                                • To reduce the time consumption by using signcryption
+ous hyper elliptic curve based signcryption techniques are                                 method
+researched which prove their efficiency in terms of secu-                               • To reduce the overhead by the cryptographic processes
+rity [12]. Some other significant use of signcryption in                                   by using aggregate signcryption.
+various IoT based infrastructures are also worth mention-                               • To reduce the complexity of certificates by using certifi-
+ing [13]–[20]. To enhance the performance of signcryptions                                 cateless approach
+blockchain based signcryption is also derived [21]. With the
+need of post quantum resistance, lattices are introduced in
+                                                                                     B. PRELIMINARIES
+signcryption [22].
+                                                                                     Let G1 and G2 be the cyclic groups of same order q where G1
+   The successful implementation of signcryption for reduc-
+                                                                                     is additive group and G2 is multiplicative group. A bilinear
+ing computation and communication overhead in IoTs has
+                                                                                     map e: G1 × G2 → Ge is a function such that ∀u ∈ G1 and
+been processed forward by aggregating the signatures. Signa-
+                                                                                     ∀v ∈ G2 ; a, b ∈ Z it has the following [30]:
+ture aggregation schemes allow multiple signatures generated
+by multiple public keys for multiple messages to be aggre-                                                    e(ua , vb ) = e(u, v)ab           (1)
+gated into a single signature and verified accordingly [23].
+Various aggregate signature schemes are researched in recent                         These maps are also called as bilinear pairings as they asso-
+times. Significant use of aggregate signatures in vehicular ad                       ciate the elements of G1 and G2 to the elements of Ge .
+hoc networks are observed [24], [25]. Another such scheme                            Assuming g1 and g2 be the group generators of G1 and
+for healthcare-based application is researched [26].                                 G2 respectively, the admissible bilinear map is admissible
+
+VOLUME 8, 2020                                                                                                                                94749
+                                          T.-H. Kim et al.: CASCF: Certificateless Aggregated SignCryption Framework for Internet-of-Things Infrastructure
+
+
+
+
+if e(g1 , g2 ) is able to generate the elements of Ge and e is             TABLE 1. List of important notations and symbols.
+efficiently computable. Such admissible mapping should also
+possess the property of non-degeneracy and computability as
+defined below.
+
+1) NON-DEGENERACY
+A bilinear map e : G1 × G2 → Ge is non-degenerate if it
+satisfies the conditions:
+   1) Ker(e) = 0; e(u, v) = 0 ∀ u ∈ G1 implies v =
+       0 and vice versa
+   2) dim G1 = dim G2
+
+2) COMPUTABILITY
+There exists an efficient algorithm to compute e(g1 , g2 ),
+for g1 ∈ G1 and g2 ∈ G2 .
+
+3) COMPUTATIONAL DIFFIE-HELLMAN (CDH) PROBLEM
+For a cyclic group G of order q, CDH states that: For a given
+(g, ga , gb ) with any random generator g ∈ G and random
+a, b ∈ Zq , it is computationally intractable to compute gab .
+
+4) DECISIONAL BILINEAR DIFFIE-HELLMAN (DBDH)
+PROBLEM
+Let G be cyclic group of order q and with generator g. For
+a given ga and gb with uniformly and independently chosen
+a, b ∈ Zq , it is to be calculated gab is random in G.
+
+5) GAP DIFFIE-HELLMAN (GDH) PROBLEM
+Let G be cyclic group of order q and with generator g. Given,
+(ga , gb ) ∈ G1 with unknown a, b ∈ Zq , then compute gab ∈
+G1 with the help of DBDH oracle.
+
+C. SYSTEM MODEL                                                            FIGURE 1. System Model for the proposed scheme showing the
+                                                                           connection between end devices (sensor, mobiles) via router and gateway
+In the proposed scheme, two Raspberry Pi, three minicom-                   to internet.
+puters, five mobile phones and one desktop are considered to
+develop the IoT model. One Raspberry Pi 3 is made as client
+model and it is connected with DHT-11 and MQ-135 sensors
+                                                                           the final signcryption and validates the incoming signcryp-
+to collect the environmental data (experimental room). This
+                                                                           tions. The modifications in the existing algorithm [29] deals
+data is signed and forwarded to another Raspberry Pi 3 model
+                                                                           with the changes in the key generation process and master key
+which acts as a server for the sensor network capability.
+                                                                           creation. Subsequently, we obtain an improved framework
+Mobile phones are working as end devices. The desktop
+                                                                           for IoT signcryption. However, we have followed the same
+is working as a server where the sensor network server is
+                                                                           stages of execution as shown in the above mentioned process.
+also connected and the verification of the message is carried
+                                                                           The proposed framework modules are shown in Figure 2. The
+out here. Table-1 summarizes some important notations and
+                                                                           functioning of the scheme is sub categorized as: Setup, Partial
+symbols used in the proposed work and Figure 1 shows the
+                                                                           private key extract, User key generate, Signcrypt, Aggregate,
+system model carried out.
+                                                                           Aggregate verify and Aggregate unsigncrypt. Some of the
+                                                                           assumptions made for the scheme are:
+D. FUNCTIONAL DESCRIPTION
+The proposed scheme follows the work shown in [29]. The                       • KGC is secure and trusted.
+scheme involves the prime entities: Key Generation Center                     • Aggregation of signcryptions are done by a special mod-
+(KGC), a sender us and receiver ur , an aggregating set a of n                  ule ASG linking to a set of users separately.
+                                                                              • Aggregate unsigncryption is done by the receiver.
+users and Aggregate Signcryption Generator (ASG). KGC is
+responsible for generating keys. Sender and receiver are the               The detailed functioning of the scheme in the IoT framework
+parts of communicating nodes where us , ur ∈ a. ASG creates                is shown below.
+
+
+94750                                                                                                                                      VOLUME 8, 2020
+T.-H. Kim et al.: CASCF: Certificateless Aggregated SignCryption Framework for Internet-of-Things Infrastructure
+
+
+
+
+                                                                                     key Pr
+                                                                                         d  ui for the user ui through an assumed secure channel.
+                                                                                     The process is shown in Algorithm-2.
+
+                                                                                     Algorithm 2 Partial Private Key Generation
+                                                                                      1: Input: param, msk, IDui
+                                                                                      2: Output: Pr
+                                                                                                  d   ui
+                                                                                      3: Compute Qi = H1 (IDui )
+                                                                                      4: Pr
+                                                                                         d  ui = H1 [(msk.Qi )||(t + δt)]
+                                                                                      5: Return Pr
+                                                                                                 d ui
+
+
+
+                                                                                     3) USER KEY PAIR GENERATION
+                                                                                     After getting the partial private key from KGC, each user
+                                                                                     executes a process to generate public-private key pair. The
+FIGURE 2. The framework for the proposed scheme showing the viability                process inputs param and user’s identity IDui . It outputs a
+of KGC and ASG in fog layer for better computation aspect.
+                                                                                     private key Prui and a corresponding public key Puui for
+                                                                                     the user ui . The private key is kept secret with the user
+                                                                                     and the public key is shared without any certification. The
+1) SETUP                                                                             process is summarized in Algorithm 3. Signcrypt: Whenever
+This function is processed by KGC. It inputs a random point
+on an elliptic curve E over a finite field Zq with an order o =                      Algorithm 3 User Key Pair Generation
+qk where, random prime number q and k is an integer, and                              1: Input: param, Pr d  ui
+the other two integer elements a, b such that: y2 = x 3 + ax +                        2: Output: {Puui , Pr
+                                                                                                    d      d   ui }
+b, (a, b) < q. It then stores the master secret key (msk) with                        3: Choose a random number ru ∈ Z∗q
+itself and publishes system parameters (param) as shown in                            4: Prui = Pr
+                                                                                                 d ui .ru
+Algorithm 1.                                                                          5: Puui = ru .g1 .g2
+                                                                                      6: return {Prui , Puui }
+Algorithm 1 Set Up
+ 1: Input: y2 = x 3 + ax + b                                                         a registered user ui wants to communicate, it executes the
+ 2: Output: msk, param                                                               process of signcryption. The process takes inputs of param,
+ 3: Obtain a cyclic additive group G1 from Zq of prime order                         some state information 4, message M, identity of the its
+    q with generator g1                                                              own IDui , public key Puui , private key Prui , the identity of
+ 4: Obtain the non-zero elements of Zq to generate the cyclic                        the receiver IDur and its corresponding public key Puur . The
+    multiplicative group G2 . The order of this group should                         process outputs a signcrypted message C. The process is
+    be q and generator is g2 .                                                       shown in Algorithm 4.
+ 5: e: G1 × G1 → G2
+ 6: Select a random number r ∈ Z∗q → msk, G1 ⊆ Z∗q
+                                                                                     Algorithm 4 Signcryption
+ 7: Master public key (mpk) = r.g1 .g2                                                1: Input: param, 4, M, IDui , Puui , Prui , IDur , Puur
+ 8: Initialize the hash functions                                                     2: Output: C
+    H1 : {0, 1}∗ → G1 and H2 : {0, 1}∗ → {0, 1}k                                      3: Choose a random number ri ∈ Z∗q
+ 9: Store r and publish                                                               4: Compute Ui = r2 .g1 .g2
+    param : {G1 , G2 , e, g1 , g2 , mpk, H1 , H2 }                                    5: Compute Qur = H1 (IDur ||t)
+                                                                                      6: Compute Ti = e(mpk, Qur )r2
+                                                                                      7: Compute hi = H2 (Ui , Ti , ri , Puur , 4)
+                                                                                      8: Compute Vi = hi ⊕ M
+2) PARTIAL PRIVATE KEY GENERATION                                                     9: Compute Hi = H1 (Ui , Vi , IDui , Puui , IDur ,
+Once the system parameters are set up, KGC initializes the                               Puur )
+process of key generation for the users registering for the                          10: Compute H4 = H1 (4)
+network. KGC takes input param,msk, the identity of the user                         11: Compute Wi = ri Hi + ru H4
+IDui registering for the network and timestamp t of 128 bits.                        12: return C : {Ui , Vi , Wi }
+Timestamp helps for preventing stale or revocation of keys.
+Note that, the proposed scheme uses ICMetrics to generate
+the identity of the users and converted them into 128-bit                            4) AGGREGATE
+binary representation: IDui = {0, 1}128 [31]. This identity is                       Aggregate Signcryption Generator (ASG) follows the process
+generated by an individual user. KGC returns a partial private                       of aggregation. It inputs an aggregating set a of n users, some
+
+VOLUME 8, 2020                                                                                                                                  94751
+                                            T.-H. Kim et al.: CASCF: Certificateless Aggregated SignCryption Framework for Internet-of-Things Infrastructure
+
+
+
+
+state information 4, the identity of senders IDui and their                  Algorithm 7 Aggregate Unsigncryption
+public keys Puui , signcrypted ciphertexts Ci . It outputs an                 1: Input: : C, 4, IDur , Puur , Prur , IDui , Puui
+aggregate ciphertext C. The process is shown in Algorithm 5.                  2: Output: {M1 , M2 , .., Mn }
+                                                                              3: For i = 1 to n do
+Algorithm 5 Aggregation                                                       4: Compute Ti = e(Ui , Pr
+                                                                                                     d  ur )
+                                                                              5: Compute hi = H2 (Ui , Ti , rur Ui , IDur ,
+ 1: Input: a, 4, IDui , Puui , Ci , IDur
+ 2: Output: C
+                                                                                 Prur , 4)
+         Pn                                                                   6: Compute Mi = Vi ⊕ hi
+ 3: W =     i=1 Wi , i = 1, 2, .., n ∈ a
+                                                                              7: return {M1 , M2 , .., Mn }
+ 4: Combine Ui
+                                                                              8: End do
+ 5: Combine Vi
+ 6: C = {U1 , .., Un , V1 , .., Vn , W }
+ 7: Transmit C
+
+
+
+
+5) AGGREGATE VERIFY
+Any receiver who is receiving C is able to verify the aggre-
+gated signcryption. For this, the inputs the receiver needs
+appropriate public keys of the receivers for which that C is
+generated. The adversaries are unable to verify because the
+lack of key components availability. It compares the outputs                 FIGURE 3. Sequence of operations among the framework modules:
+and process further to unsigncryption if the comparison is                   sender, receiver, KGC and ASG.
+valid else connection is aborted. The process is shown in
+Algorithm 6.
+                                                                             III. EXPERIMENTAL RESULTS
+Algorithm 6 Aggregate Verification                                           In this section, performance of the proposed scheme has been
+                                                                             measured. The scheme is also compared with the existing
+ 1: Input: a, IDui , Puui , IDur , Puur , 4, C
+                                                                             schemes shown in [27][28] and [29]. Performance metrics,
+ 2: Output: Accept or Discard
+                                                                             comparative analysis and security analysis are shown in the
+ 3: For i = 1 to n do
+                                                                             following subsections.
+    Compute Hi = H1 (Ui , Vi , IDui , Puui , IDur , Puur ) End do
+                                                                             A. PERFORMANCE METRICS
+             0 = H (4)
+ 4: Compute H4    1                                                          Performance of the schemes are measured based on the fol-
+ 5: Compute I1 = e(W , Puui )                                                lowing metrics.
+ 6: Compute
+    I2 = e( ni=1 Qi , mpk) ni=1 e(Hi , Ui )e(H40 , ni=1 Puui )
+            P             Q                       P
+                                                                             1) THROUGHPUT
+ 7: if (I1 = I2 )
+                                                                             Throughput is defined as the number of messages success-
+    then accept C                                                            fully delivered per unit time. In this case, we have assumed
+    else                                                                     that, the network throughput is fixed and measurement is
+    discard and abort                                                        done only for the message signcryption functions. It has been
+ 8: return NULL
+                                                                             measured in bits/seconds.
+
+                                                                             2) DELAY
+6) AGGREGATE UNSIGNCRYPT                                                     It is defined as the round-trip time in the network. Gen-
+Once the verification is done for C, the receiver executes                   erally, delay is comprised of processing delay, queuing
+the unsigncryption process. The receiver uses C, the state                   delay,transmission delay and propagation delay. Assuming
+information 4, identity IDur and its public-private key pair                 that all the other delays are static, only processing delay has
+{Puur , Prur }, all the senders’ identities IDui and their corre-            been measured and compared.
+sponding public keys Puui and outputs n number of plaintexts.
+The unsigncryption process is shown in Algorithm 7.                          3) ENERGY CONSUMPTION
+   The overall scheme is summarized in Figure 3.                             IoT is comprised of devices which are resource constrained.
+It shows the connection between KGC, users (sender                           Therefore, the schemes developed for IoT security should
+and receiver) and ASG. The numbers in the figure                             provide less energy consumption. This metric is mea-
+represents the sequence of operation in the presented                        sured with residual energy parameter and represented in
+work.                                                                        percentage.
+
+94752                                                                                                                                        VOLUME 8, 2020
+T.-H. Kim et al.: CASCF: Certificateless Aggregated SignCryption Framework for Internet-of-Things Infrastructure
+
+
+
+
+FIGURE 4. Throughput comparison among CASCF and other approaches.                    FIGURE 5. Delay comparison among CASCF and other approaches.
+
+
+4) MEMORY CONSUMPTION
+This metric is measured in terms of kilobytes required for
+overall storage of keys, intermediate values and certificates
+(wherever the comparison approaches use certificates)
+
+5) COMPLEXITY
+The complexity of the schemes is measured in their individual
+operation complexity basis. The less complex algorithms are
+more suitable for IoT framework.
+
+B. EXPERIMENTAL RESULTS
+For the experimentation, we have used overall 5000 messages
+in the network setup as shown in Figure-1. Memory in KGC
+is maintained with 8GB RAM configuration and 1GB ROM                                 FIGURE 6. Residual energy comparison among CASCF and other
+separately only for aggregate signcryption process. Message                          approaches.
+size has been varied from 10 KB to 2MB with average size of
+1000KB. The comparative result is shown in Figure-4. The                             kind of certificateless approach and therefore having similar
+result shows that with the increasing number of messages                             kind of output. However, the reduction steps in CASCF pro-
+(number of bits), the performance of the schemes degrades.                           duces less delay. Overall, CASCF is able to obtain 25% less
+However, in comparison the degradation in the proposed                               delay as compared to other algorithms.
+scheme is less. It shows that CASCF is able to produce                                  Energy is another parameter which is very much important
+28.3%, 43.6%, and 17.9% better throughput as compared                                in IoT framework. The measurement has been calculated as
+to the schemes in [27],[28] and [29] respectively. The rea-                          the average residual energy of all the end devices cumula-
+son behind this throughput behaviour of CASCF is the use                             tively. The result is shown in Figure-6. The energy compari-
+of certificate-less approach and reducing the number steps                           son shown in the Figure-6 depicts that the algorithms of [27]
+involved in the processing as shown in the exiting schemes. In                       and [28] have an average energy consumption 45% of the
+the next experiment we have measured the processing delay                            total energy; however, at the beginning energy consumption
+of the schemes. The size of the message does not affect the                          is more for [28] and after 3000 messages [27] degrades more
+cryptographic schemes. So, the delay is the overall processing                       rapidly in residual energy. On the other hand, CASCF and
+of the signcrypted message, aggregation and receiver’s aggre-                        algorithm in [29] are better than the other two algorithms due
+gate unsigncryption. This has been measured by subtracting                           to the avoidance of certificates. Further, CASCF is more effi-
+the queuing delay, transmission delay and propagation delay                          cient by changing the key generation mechanism by reduc-
+from the roundtrip time where those delays are assumed                               ing the energy consumption by 48%, 49.7% and 15.6% as
+to be constant and the transmission channel is congestion                            compared to [27]–[29] respectively. Memories are important
+free. The delay output is shown in Figure-5. Figure-5 shows                          for any cryptographic process. With the increasing number of
+that CASCF possess the reduced delay as compared to other                            messages, it is obvious that individual memory consumption
+schemes. The certificateless signcryption creates an effect                          increases but in comparison results show that CASCF is more
+on this as the delays for creating certificates and verifying                        advantageous in term of memory as the consuming memory
+certificate are avoided here. The approach in [29] uses similar                      amount is less in the work. The other three algorithms show
+
+VOLUME 8, 2020                                                                                                                                      94753
+                                                T.-H. Kim et al.: CASCF: Certificateless Aggregated SignCryption Framework for Internet-of-Things Infrastructure
+
+
+
+
+                                                                                 an adversary that uses ga for random a and outputs ga2 with
+                                                                                 a probability P. A construction is made as A0 who receives
+                                                                                 u = ga and v = gb and works as follows. A0 runs A for n
+                                                                                 times on input u, v and u.v. If A returns correct answer every
+                                                                                                                      n                n
+                                                                                 time then A0 have A = gan , B = gb and C = g(a+b) . Thus,
+                                                                                                       q
+                                                                                                                        √
+                                                                                 A0 gives output as n AC.B where, n is the prime modulo
+                                                                                 q. The probability of this calculation if it is correct for a
+                                                                                 random generator g and unknown a, b becomes: Pn ,where
+                                                                                          Qn
+                                                                                                  P(g)
+                                                                                 P = Pn (i=1)Q a. Q b → 0. It validates that the proposed scheme
+                                                                                          (i=1)
+                                                                                 is intractable under CDH problem.
+                                                                                    Similarly, for DBDH, we first try to calculate the advan-
+                                                                                 tage for the adversary A. It takes a quadruple input as:
+FIGURE 7. Residual energy comparison among CASCF and other                       (g, ga , gb , gab ) and attempts to get the advantage of getting a
+approaches.                                                                      random gabc in G. If a, b are chosen uniformly with a random
+TABLE 2. Parameters for measuring complexity.                                    c in G, the correlation to make gabc will be difficult. The
+                                                                                 probability of such advantage for A is given as:
+
+                                                                                 Adv(A) = |P(Adv(g, ga , gb , gab ) − P(Adv(g, ga , gb , gc )|;
+                                                                                                         g ← e : {Gn × Gn }; {a, b, c} ← Z∗q                (2)
+
+                                                                                 For, the polynomial time-based systems like the proposed
+                                                                                 scheme, the advantage becomes zero. This infers that the
+memory usage of 25%, 36% and 18% more than the CASCF.                            CASCF is unable to solve DBDH, and hence it is safe. Now,
+Therefore, in view of memory utilization CASCF proves its                        extending the CDH problem with a random oracle, the GDH
+efficiency. The comparison result is shown in Figure-7.                          validation is conducted as mentioned in [29]. For an attacker
+   The measurement of the complexity has been done in two                        Å, it uses the proposed scheme with a master public key mpk
+parts: receiver side computational complexity and communi-                       with a generator ga and a random number l ⩽ qH1 , where
+cation complexity. We have followed the similar parameters                       H1 is the oracle and q is the maximum number of iterations
+and notation for this metric as mentioned in [29]. The nota-                     in oracle and receives a GDH tuple (g, ga , gb ) in G1 from an
+tions are summarized in Table-2 and the comparison is shown                      adversary A. Å sends A : G1 , G2 , e, g, mpk. As the queries
+in Table-3.                                                                      allowed for Å is only H1 therefore, for H2 queries it checks
+   Table-3 shows that the communication complexity is less                       if DBDH is true and checks if e(U , Pu) = e(U , g); if it is true
+as compared to the schemes describe in [27] and [28];                            and the tuple exist with a value of h, Å returns it or chooses
+however, [29] and CASCF show the similar kind of com-                            a random h, updates itself and sends to A. A then sends
+munication complexity. On the other hand, for sender side                        identities of the uses, public keys, and the messages, a forged
+complexity is more for CASCF but receiver side computation                       ciphertext C ∗ and some state information. Each identity to
+complexity and aggregator computation complexity are the                         be chosen from the set of n identities having the same prob-
+least among the all. As an overall, CASCF is efficient in terms                  ability. Moreover, the aggregate verification process should
+of complexity of computation and communication cost.                             also return true on the forged aggregated signcrypted message
+                                                                                 which leads for Å to calculate gab . This ensures that the
+C. SECURITY VALIDATION                                                           proposed scheme is secure against GDH assumption.
+The security analysis of CASCF with IoT infrastructure is
+explained here. The analysis consists of discussion about                        2) OTHER SECURITY REQUIREMENTS
+the Diffie-Hellman problems and other security features as                       a: CORRECTNESS
+required. CASCF uses the same attacker adversary model
+                                                                                 The following equality proves the verifiable correctness of
+with challenge response game to validate the Diffie-Hellman
+                                                                                 the proposed work.
+assumptions [29]. However, we have provided an intuitive
+discussion to validate the work. As before the aggregation,
+                                                                                  e(W , g)
+the base is signcryption, we have not included any explicit                              n
+discussion of signcryption security as it is mentioned in [32].
+                                                                                        X
+                                                                                   = e(    Wi , g)
+                                                                                         i=1
+1) DIFFIE-HELLMAN PROBLEMS                                                            n
+                                                                                     X                            
+We have analysed a reduction for CDH as if gan is solvable                         =e   (Pr
+                                                                                         d ui + ri Hi + ru H4 ), g
+from a given ga , then CDH problem is solvable. Let A be                                  i=1
+
+94754                                                                                                                                            VOLUME 8, 2020
+T.-H. Kim et al.: CASCF: Certificateless Aggregated SignCryption Framework for Internet-of-Things Infrastructure
+
+
+
+
+TABLE 3. Comparison of complexity.
+
+
+
+
+      n
+                                                                                     network performance. Bilinear map is used in scheme. More-
+     X                                              
+  =e    H1 (msk.Qi ) ↑ Extract(t +δt) + ri Hi +ru H4 , g
+                                                                                     over, timestamp is used in key generation process to obtain the
+          i=1
+     n
+    X           n                    n                                             freshness of the keys. The framework uses a set of nodes as
+                 Y                     X
+  =e   Qi , mpk     e(Hi , Ui )e(H40 ,   Puui )                            (3)       aggregate signature generator. Most viably, it is to be used fog
+         i=1               i=1                      i=1                              layer of IoT infrastructure. Performance is measured based
+                                                                                     on throughput, delay, energy consumption, memory con-
+b: UNFORGEABILITY                                                                    sumption. Results are compared with some existing schemes.
+The proposed CASCF in signcryption mode is unforgeable                               The complexities of the schemes are compared. Comparative
+against adaptive chosen message attacks. Two cases are con-                          analysis infers that the proposed scheme is efficient for IoTs.
+sidered here. A challenge-response game is initiated as men-                         Moreover, security analysis confirms the accomplishment
+tioned in [33]. A challenger C generates the public parameters                       of security objectives of the work. In the sender side, the
+param and msk by executing the setup algorithm. It sends                             computation complexity is more which is considered as a
+param to an adversary A0 . A0 then performs series of queries                        future objective.
+and outputs (ID0us , ID0ur , δ 0 ). In this, it is to be assured that A0
+has not extracted the partial private key as it uses a random                        ACKNOWLEDGMENT
+number and timestamp with hash. Another assumption is that                           (Tai-Hoon Kim and Gulshan Kumar contributed equally to
+for the chosen message, A0 is unable to use set keys or private                      this work.)
+key queries on ID0us . As a result, The output of aggregation
+verification is false and A0 is unable to proceed further. In an                     REFERENCES
+                                                                                      [1] J. Y. Khan and M. R. Yuce, Internet of Things (IoT): Systems and Applica-
+extensive scenario, if A0 is able to input a forged ciphertext                            tions, 1st ed. Singapore: Jenny Stanford, 2019.
+C in the aggregation, it cannot retract the key pairs as the                          [2] E. D. Matos, R. T. Tiburski, C. R. Moratelli, S. J. Filho, L. A. Amaral,
+challenger C wins the game by prohibiting A0 from getting                                 G. Ramachandran, B. Krishnamachari, and F. Hessel, ‘‘Context informa-
+                                                                                          tion sharing for the Internet of Things: A survey,’’ Comput. Netw., vol. 166,
+the partial private key or replacing the public keys.                                     Jan. 2020, Art. no. 106988.
+                                                                                      [3] A. Čolaković and M. Hadžialić, ‘‘Internet of Things (IoT): A review of
+c: INTRACTABILITY                                                                         enabling technologies, challenges, and open research issues,’’ Comput.
+Intractability of the proposed CASCF is discussed through                                 Netw., vol. 144, pp. 17–39, Oct. 2018.
+                                                                                      [4] H. HaddadPajouh, A. Dehghantanha, R. M. Parizi, M. Aledhari, and
+CDH and GDH assumptions.                                                                  H. Karimipour, ‘‘A survey on Internet of Things security: Requirements,
+                                                                                          challenges, and solutions,’’ Internet of Things, Nov. 2019, Art. no. 100129,
+d: FORWARD SECRECY                                                                        doi: 10.1016/j.iot.2019.100129.
+CASCF ensures the property of forward secrecy. In our                                 [5] S. Rizvi, R. Orr, A. Cox, P. Ashokkumar, and M. R. Rizvi, ‘‘Identifying
+                                                                                          the attack surface for IoT network,’’ Internet Things, vol. 9, Mar. 2020,
+scheme, if the master secret key msk of a KGC is compro-
+                                                                                          Art. no. 100162.
+mised, the attacker is able to get the partial secret key but                         [6] N. Neshenko, E. Bou-Harb, J. Crichigno, G. Kaddoum, and N. Ghani,
+unable to obtain the private key of the user as it is generated                           ‘‘Demystifying IoT security: An exhaustive survey on IoT vulnerabilities
+                                                                                          and a first empirical look on Internet-scale IoT exploitations,’’ IEEE Com-
+with msk and a random number. This random number is user                                  mun. Surveys Tuts., vol. 21, no. 3, pp. 2702–2733, 3rd Quart., 2019.
+specific and secret too. Therefore, to generate the private key,                      [7] V. Hassija, V. Chamola, V. Saxena, D. Jain, P. Goyal, and B. Sikdar,
+the attacker needs the random number ru , which is private to                             ‘‘A survey on IoT security: Application areas, security threats, and solution
+                                                                                          architectures,’’ IEEE Access, vol. 7, pp. 82721–82743, 2019.
+the user only. Thus, generation of private key is infeasible.                         [8] S. Zeadally, A. K. Das, and N. Sklavos, ‘‘Cryptographic technologies and
+Furthermore, timestamp is added to generate the keys which                                protocol standards for Internet of Things,’’ Internet of Things, Jun. 2019,
+preserves the freshness of the secret key. The above discus-                              Art. no. 100075, doi: 10.1016/j.iot.2019.100075.
+                                                                                      [9] Y. Zheng, ‘‘Digital signcryption or how to achieve cost(signature & encryp-
+sion clearly says that the proposed scheme is secure.                                     tion)  cost(signature) + cost(encryption),’’ Advances in Cryptology—
+                                                                                          CRYPTO (Lecture Notes in Computer Science), vol. 1294. New York, NY,
+IV. CONCLUSION                                                                            USA: Springer-Verlag, 1997, pp. 165–179.
+                                                                                     [10] Y. Yuan, ‘‘Security analysis of an enhanced certificateless signcryp-
+In the present work, a solution for IoT security has been                                 tion in the standard model,’’ Wireless Pers. Commun., vol. 112, no. 1,
+shown. It uses the aggregate signcryption to enhance the                                  pp. 387–394, May 2020.
+
+VOLUME 8, 2020                                                                                                                                                  94755
+                                                      T.-H. Kim et al.: CASCF: Certificateless Aggregated SignCryption Framework for Internet-of-Things Infrastructure
+
+
+
+
+[11] D. Dharminder and D. Mishra, ‘‘Understanding signcryption security in             TAI-HOON KIM (Member, IEEE) received the B.E. and M.E. degrees from
+     standard model,’’ Secur. Privacy, vol. 3, no. 3, pp. 1–15, May 2020.              Sungkyunkwan University, South Korea, and the Ph.D. degrees from the
+[12] S. Ullah, X.-Y. Li, and L. Zhang, ‘‘A review of signcryption schemes              University of Bristol, U.K. and the University of Tasmania, Australia. His
+     based on hyper elliptic curve,’’ in Proc. 3rd Int. Conf. Big Data Comput.         main research areas are security engineering for IT products, IT systems,
+     Commun. (BIGCOM), Aug. 2017, pp. 51–58.                                           development processes, and operational environments.
+[13] S. Belguith, N. Kaaniche, M. Hammoudeh, and T. Dargahi, ‘‘PROUD: Ver-
+     ifiable privacy-preserving outsourced attribute based SignCryption sup-
+     porting access policy update for cloud assisted IoT applications,’’ Future
+     Gener. Comput. Syst., Nov. 2019, doi: 10.1016/j.future.2019.11.012.               GULSHAN KUMAR received the B.Tech. degree in computer science engi-
+[14] A. Karati, C.-I. Fan, and R.-H. Hsu, ‘‘Provably secure and generalized            neering from the Amritsar College of Engineering, Amritsar, in 2009, and
+     signcryption with public verifiability for secure data transmission between       the M.Tech. and Ph.D. degrees from Lovely Professional University, India,
+     resource-constrained IoT devices,’’ IEEE Internet Things J., vol. 6, no. 6,       with area of specialization in position and location computation in wireless
+     pp. 10431–10440, Dec. 2019.                                                       sensor networks. He is currently working as an Associate Professor with
+[15] J. Qiu, K. Fan, K. Zhang, Q. Pan, H. Li, and Y. Yang, ‘‘An efficient              Lovely Professional University. He has many publications in well renowned
+     multi-message and multi-receiver signcryption scheme for heterogeneous            international journals and conferences.
+     smart mobile IoT,’’ IEEE Access, vol. 7, pp. 180205–180217, 2019.
+[16] V.-H. Hoang, E. Lehtihet, and Y. Ghamri-Doudane, ‘‘Password-based
+     authenticated key exchange based on signcryption for the Internet of
+                                                                                       RAHUL SAHA received the B.Tech. degree in computer science engineer-
+     Things,’’ in Proc. Wireless Days (WD), Manchester, U.K., Apr. 2019,
+     pp. 1–8.                                                                          ing from the Academy of Technology, West Bengal, and the M.Tech. and
+[17] E. Ahene, Z. Qin, A. K. Adusei, and F. Li, ‘‘Efficient signcryption with          Ph.D. degrees from Lovely Professional University, India, with area of
+     proxy re-encryption and its application in smart grid,’’ IEEE Internet            specialization in cryptography, position and location computation in wireless
+     Things J., vol. 6, no. 6, pp. 9722–9737, Dec. 2019.                               sensor networks. He is currently working as an Associate Professor with
+[18] C. Peng, J. Chen, M. S. Obaidat, P. Vijayakumar, and D. He, ‘‘Efficient           Lovely Professional University. He has many publications in well renowned
+     and provably secure multi-receiver signcryption scheme for multicast com-         international journals and conferences.
+     munication in edge computing,’’ IEEE Internet Things J., early access,
+     Oct. 25, 2019, doi: 10.1109/JIOT.2019.2949708.
+[19] S. Mandal, B. Bera, A. K. Sutrala, A. K. Das, K.-K.-R. Choo, and                  MAMOUN ALAZAB (Senior Member, IEEE) received the Ph.D. degree in
+     Y. Park, ‘‘Certificateless-Signcryption-Based three-factor user access con-
+                                                                                       computer science. He is currently an Associate Professor with the College
+     trol scheme for IoT environment,’’ IEEE Internet Things J., vol. 7, no. 4,
+                                                                                       of Engineering, IT and Environment, Charles Darwin University, Australia.
+     pp. 3184–3197, Apr. 2020.
+[20] X. Fan, T. Wu, Q. Zheng, Y. Chen, M. Alam, and X. Xiao, ‘‘HSE-                    He has more than 100 research articles. He is a Cyber-Security Researcher
+     voting: A secure high-efficiency electronic voting scheme based on                and a Practitioner with industry and academic experience. His research is
+     homomorphic signcryption,’’ Future Gener. Comput. Syst., Oct. 2019,               multidisciplinary that focuses on cyber security and digital forensics of
+     doi: 10.1016/j.future.2019.10.016.                                                computer systems including current and emerging issues in the cyber envi-
+[21] N. Eltayieb, R. Elhabob, A. Hassan, and F. Li, ‘‘A blockchain-based               ronment like cyber-physical systems and the Internet of Things, by taking
+     attribute-based signcryption scheme to secure data sharing in the cloud,’’        into consideration the unique challenges present in these environments,
+     J. Syst. Archit., vol. 102, Jan. 2020, Art. no. 101653.                           with a focus on cybercrime detection and prevention. He presented many
+[22] G. Kumar, R. Saha, M. K. Rai, R. Thomas, and T.-H. Kim, ‘‘A lattice               invited keynotes talks and panels at conferences and venues nationally and
+     signcrypted secured localization in wireless sensor networks,’’ IEEE Syst.        internationally (22 events in 2018 alone). He is an Editor on multiple editorial
+     J., early access, Jan. 20, 2020, doi: 10.1109/JSYST.2019.2961476.                 boards, including an Associate Editor of IEEE ACCESS and an Editor of
+[23] D. Boneh, ‘‘Aggregate Signatures,’’ in Encyclopedia of Cryptography and           Security and Communication Networks journal.
+     Security, S. Jajodia and H. C. A. Van Tilborg, Eds. Boston, MA, USA:
+     Springer, 2011.
+[24] I. A. Kamil and S. O. Ogundoyin, ‘‘An improved certificateless aggregate
+     signature scheme without bilinear pairings for vehicular ad hoc networks,’’       WILLIAM J. BUCHANAN is currently a Professor of cryptography.
+     J. Inf. Secur. Appl., vol. 44, pp. 184–200, Feb. 2019.                            He also leads the Blockpass ID Lab, Edinburgh Napier University. He has
+[25] J. Cui, J. Zhang, H. Zhong, R. Shi, and Y. Xu, ‘‘An efficient certificateless     authored 30 academic books and over 250 research articles. His main
+     aggregate signature without pairings for vehicular ad hoc networks,’’ Inf.        research interests include distributed ledger technology, identity systems,
+     Sci., vols. 451–452, pp. 1–15, Jul. 2018.                                         trust-based infrastructures, and cryptography. Along with this his work has
+[26] P. Kumar, S. Kumari, V. Sharma, A. K. Sangaiah, J. Wei, and X. Li, ‘‘A cer-       supported the creation of a number of spin-out companies and international
+     tificateless aggregate signature scheme for healthcare wireless sensor net-       patents. He was awarded an OBE for his services to cybersecurity, in 2017.
+     work,’’ Sustain. Comput., Inform. Syst., vol. 18, pp. 80–89, Jun. 2018.
+[27] Y. Shi, J. Han, X. Wang, J. Gao, and H. Fan, ‘‘An obfuscatable aggregat-
+     able signcryption scheme for unattended devices in IoT systems,’’ IEEE
+                                                                                       MRITUNJAY KUMAR RAI received the M.Eng. degree in digital system
+     Internet Things J., vol. 4, no. 4, pp. 1067–1081, Aug. 2017.
+[28] S. Ullah, F. Russo, L. Marcenaro, and B. Rinner, ‘‘Aggregate-signcryption         from the Motilal Nehru National Institute of Technology, Allahabad, India,
+     for securing smart camera IoT applications,’’ in Proc. Global Internet            and the Ph.D. degree from the ABV Indian Institute of Information Technol-
+     Things Summit (GIoTS), Bilbao, Spain, Jun. 2018, pp. 1–6.                         ogy and Management, Gwalior, India. He worked as an Associate Professor
+[29] Z. Eslami and N. Pakniat, ‘‘Certificateless aggregate signcryption: Secu-         at Lovely Professional University, Phagwara, India. He had published more
+     rity model and a concrete construction secure in the random oracle                than 50 research articles in reputed international conferences and journals.
+     model,’’ J. King Saud Univ.-Comput. Inf. Sci., vol. 26, no. 3, pp. 276–286,       His research interests include wireless networks, network security, and cog-
+     Sep. 2014.                                                                        nitive radio networks.
+[30] I. Ali, T. Lawrence, and F. Li, ‘‘An efficient identity-based signature
+     scheme without bilinear pairing for vehicle-to-vehicle communication in
+     VANETs,’’ J. Syst. Archit., vol. 103, Feb. 2020, Art. no. 101692.                 G. GEETHA is currently working as a Professor with Lovely Professional
+[31] S. Yadav and G. Howells, ‘‘Analysis of ICMetrics features/technology
+                                                                                       University, India. Her research interests include security and cryptography,
+     for wearable devices IOT sensors,’’ in Proc. 7th Int. Conf. Emerg. Secur.
+                                                                                       cyber-physical systems, and software engineering.
+     Technol. (EST), Canterbury, U.K., Sep. 2017, pp. 175–178.
+[32] C. Zhou, ‘‘An improved lightweight certificateless generalized signcryp-
+     tion scheme for mobile-health system,’’ Int. J. Distrib. Sensor Netw.,
+     vol. 15, no. 1, Jan. 2019, Art. no. 155014771882446.                              REJI THOMAS received the Ph.D. degree from IIT Delhi. He is currently a
+[33] B. Zhang, Z. Jia, and C. Zhao, ‘‘An efficient certificateless general-            Professor with Lovely Professional University, Phagwara, India. His research
+     ized signcryption scheme,’’ Secur. Commun. Netw., vol. 2018, pp. 1–11,            interests include logic, memory, and energy storage devices.
+     May 2018.
+
+94756                                                                                                                                                  VOLUME 8, 2020
+
