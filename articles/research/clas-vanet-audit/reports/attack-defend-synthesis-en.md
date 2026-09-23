@@ -15,7 +15,7 @@
 
 ## Method
 
-- Rebuilt 7 attack families from audited reports + dumps, one atomic note per family with `attack equation + why-defend + PF-transfer` and `source:: [[*-en]] p.X` grounding (2026-09-21 audit).
+- Rebuilt 7 attack families from audited reports + dumps, one atomic note per family with `attack equation + why-defend + PF-transfer` and `source::` + page grounding against the `<key>-en` report (2026-09-21 audit).
 - KGC trapdoor: `Q = alpha P`, `Wi - alpha hi Xi - Vi = di Q`, `Wi' = di Q + alpha hi' Xi + Vi'` passing `e(Wi',P) = e(Ri + ki Ppub + hi' Xi + Ui', Q)` (p.5, §III.A Shim2023); same as Zhang2014 `Q = tP` (pp.34-35) and Yuan2023 `Q = lP` (pp.6-7).
 - Replacement cancellation: Zhu-Guan `B = -h3 Ppub`, `z = a' + x' h4` with `B + A' + h3 Ppub + h4 X' = zP` (p.3, §3.1 Shim2026); Chen-Guan `theta = b - x' h4`, `c' = theta + x' h4'` reusing `B` (pp.3-4, §3.2); Xu `Kl' = zl P - h2l Ppub` (pp.13486-13487); Dai `K' = -h_ID Ppub` (p.5, Wu-Chen2025).
 - Eta/key-recovery: `eta = alpha - alpha'`, `A' = A + eta Spub` (pp.5-6, §III.C); `S = (beta-beta')(alpha-alpha')^-1`, `delta = beta - alpha S` (p.6, §III.D Shim2023).
@@ -33,7 +33,7 @@
 - LICLAS `Wi` flaw is blocked by PCAS `wi = [h3(d + alpha x) + y1 h4]`, `Y = sum h4 Y1`, `wP - Y = sum(h3 D + h1 Ppub)` with `-25%/-16.56%/-25.34%` gains (p.8, §5.2; pp.13-14, Gong2023).
 - Rogue-key is blocked by aggregator signature `s0` + two-step verification at `3|G| + 3|Zq*|` with Type-I/II-only model, no Type-III claim (pp.8-9; pp.12-13 Table 5, Yue2025).
 - Sum-cancellation is blocked by weighted aggregation or `H4` integrity tag, with `+30-50%` hardening cost and `n > 500` exceeding `100-300 ms` safety window (p.13; pp.17-19, Lode2026).
-- Breaks confirmed: Liu-LICLAS, Han-eCLAS, Zheng2023, Dai22, Chen[19], Zhu-Guan24, Chen-Guan25, Xiang/Du/Karati/Pakniat-CLS, Xiong-CPPA-D, Cui2018, Huang-QS (see per-attack notes above).
+- Breaks confirmed: Liu-LICLAS, Han-eCLAS, Zheng2023, Dai22, Chen[19], Zhu-Guan24, Chen-Guan25, Xiong-CPPA-D (see per-attack notes above; Xiang/Du/Karati/Pakniat-CLS, Cui2018 and Huang-QS second-hand via Lode2026 review §§pp.9-13, not directly read).
 - Unbroken PF-CLAS targets: Tao-Cui 2026 ES-CLAS (p.1), Vallent 2021 ECLAS eq.2 p.8 (eq.9 p.9 drops `Q_IDi`), Xu 2024 + BQS p.13488, Wu-Ye 2025 p.130, Gong PCAS p.8, Wu-Chen enhanced p.6, Yue 2025 pp.8-9, Iqbal HECC p.8 (reuses eCLAS[29]); PF-CLS target: Wei enhanced p.8; Abstract-only Han2022/Wu-Heng untestable.
 
 ## Limitations
