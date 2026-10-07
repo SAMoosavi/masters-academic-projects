@@ -11,6 +11,10 @@ Masters academic project: certificateless aggregate signatures for VANETs. All c
 - `proposal/summaries/` — 27 markdown paper summaries generated from papers (see `proposal/prompt.md` for workflow).
 - `gantt-chart/generate_gantt.py` — Persian RTL Gantt chart generator (Pillow).
 
+## Editing the seminar report
+
+Before editing `seminar/articles/report.tex`, read `seminar/articles/EDITING_RULES.md` (rules for expanding sections into prose; source notes are in `seminar/sam-work/source-review/`).
+
 ## Build commands
 
 ### Seminar article (the main one)
