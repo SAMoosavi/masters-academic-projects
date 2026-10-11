@@ -10,6 +10,22 @@ Masters academic project: certificateless aggregate signatures for VANETs. All c
 - `proposal/proposal.typ` — Research proposal (Typst + RTL). Uses `proposal/refrence.bib`.
 - `proposal/summaries/` — 27 markdown paper summaries generated from papers (see `proposal/prompt.md` for workflow).
 - `gantt-chart/generate_gantt.py` — Persian RTL Gantt chart generator (Pillow).
+- `articles/` — **Obsidian vault for the CLAS literature study.** Structure (see `articles/MOC.md`):
+  - `articles/MOC.md` — content map / index of the whole vault.
+  - `articles/مقالات/` — 31 paper reports (summary + math structure merged per paper).
+  - `articles/امضاها/` — signature-category nexus (CLAS, CLS, Signcryption, Pairing-Free, Standard-Model, Type-III, Detect-Invalid, Cryptanalysis).
+  - `articles/حملات/` — attacks (KGC, replacement, coalition, rogue-key, forgery), each referencing paper reports.
+  - `articles/دفاع/` — defenses (Type-III-resistance, standard-model, hash-binding, verifier-key), each referencing paper reports.
+  - `articles/تشخیص/` — detection of invalid/malicious signatures in aggregates (binary-search, identity-tracing, level3-kgc).
+  - `articles/refs.bib` — bibliography.
+
+## articles/ vault conventions
+
+- Every note is Obsidian-flavored Markdown: YAML frontmatter (`title`, `authors`, `year`, `doi`, `tags`), wikilinks `[[...]]`, callouts `> [!type]`.
+- **No duplication**: one fact lives in one file; other files link to it. Do not copy-paste content between `مقالات/`, `حملات/`, `دفاع/`, `تشخیص/` — link instead.
+- Paper files in `مقالات/` use key = `author+year` (e.g. `zhang2014.md`, `guo2024-drclas.md`). Link by filename: `[[zhang2014]]`.
+- Two papers are **Abstract-only** (no verified full text): `han2022`, `wu2025-collusion` — never invent equations for them.
+- Supplementary detection papers (`cao2025`, `guo2024-drclas`, `wang2022-clasrm`, `kabil2024-cham-clas`, `li2023-relclas`, `zhao2023-level3-cls`, `li2026-level3-cls`) came from the earlier malicious-signer-reports pass and are **not yet fully audited** — verify against PDFs before citing.
 
 ## Editing the seminar report
 
