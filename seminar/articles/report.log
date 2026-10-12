@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.10.7)  7 OCT 2026 23:28
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.10.8)  12 OCT 2026 22:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1731,7 +1731,13 @@ Overfull \hbox (0.3991pt too wide) in paragraph at lines 228--229
 واقعی را پنهان می‌کنند و مشارکت[]
  []
 
-[3] [4]
+[3]
+Overfull \hbox (6.79643pt too wide) in paragraph at lines 234--235
+[]\TU/Vazirmatn(0)/b/n/12 است. ویژگی‌هایی مانند توزیع‌شدگی، تغییرناپذیری و امکا
+ن ثبت قابل بررسی رویداد‌ها می‌توانند[]
+ []
+
+[4]
 LaTeX Font Info:    Font shape `TU/Vazirmatn(1)/b/n' will be
 (Font)              scaled to size 15.84007pt on input line 253.
  [5] [6]
@@ -1747,6 +1753,12 @@ Overfull \hbox (13.27188pt too wide) in paragraph at lines 318--319
  []
 
 [11]
+Overfull \hbox (15.67026pt too wide) in paragraph at lines 336--337
+[][]\TU/Vazirmatn(0)/b/n/12 این حجم از داده، به‌ویژه برای پردازش بلادرنگ در ماش
+ین‌های خودران، نیازمند ظرفیت ذخیره‌سازی[]
+ []
+
+
 Overfull \hbox (28.20432pt too wide) in paragraph at lines 340--341
 []\TU/Vazirmatn(0)/b/n/12 هم‌زمان با این چالش‌های مقیاس، تنوع فناوری‌های دسترسی
  مسئلهٔ استانداردسازی و تعامل‌پذیری[]
@@ -1765,7 +1777,7 @@ Overfull \hbox (2.17155pt too wide) in paragraph at lines 350--351
  []
 
 [14] [15] [16] [17] [18] [19] [20] [21] [22] [23]
-Overfull \hbox (16.83415pt too wide) in paragraph at lines 481--482
+Overfull \hbox (14.76735pt too wide) in paragraph at lines 481--482
 [][]\TU/Vazirmatn(0)/b/n/12 اثبات دانش‌صفر در مرور مازوکا و همکاران یکی از دسته
 ‌های افشای انتخابی[][][][][][][][][][][][] برای اعتبارنامه‌های[]
  []
@@ -1797,14 +1809,14 @@ Overfull \hbox (11.89331pt too wide) in paragraph at lines 555--556
  []
 
 [30]
-Overfull \hbox (2.18672pt too wide) in paragraph at lines 557--558
+Overfull \hbox (3.35977pt too wide) in paragraph at lines 557--558
 []\TU/Vazirmatn(0)/b/n/12 اساس مقدار اعتماد گره‌های دیگر به‌کار رفته است؛ نمونه
 ‌ای از این مدل‌ها، سامانهٔ []\TU/LibertinusSerif(0)/m/n/12 TrustVote[][][][][][
 ][][][][][][][][]
  []
 
 
-Overfull \hbox (13.62006pt too wide) in paragraph at lines 563--564
+Overfull \hbox (12.722pt too wide) in paragraph at lines 563--564
 [][]\TU/Vazirmatn(0)/b/n/12 در طرح سامانهٔ مدیریت اعتماد مقیاس‌پذیر زنجیره بلوک
 یی برای شبکه‌های اقتضایی خودرویی[][][][][][][][][][][][]،[]
  []
@@ -1901,7 +1913,7 @@ b/n/12 ۸[][][][][][][]\TU/Vazirmatn(0)/b/n/12 ]؛ دفتر‌های کل توز
  []
 
 [38] [39]
-Overfull \hbox (27.16318pt too wide) in paragraph at lines 654--655
+Overfull \hbox (25.97293pt too wide) in paragraph at lines 654--655
 []\TU/Vazirmatn(0)/b/n/12 برای رفع محدودیت‌های پیشین، راهکار‌هایی در منابع بررس
 ی‌شده پیشنهاد شده است. شاردینگ[][][][][][][][][][][][][]
  []
@@ -2009,14 +2021,14 @@ Overfull \hbox (3.29465pt too wide) in paragraph at lines 898--899
  []
 
 
-Overfull \hbox (3.74721pt too wide) in paragraph at lines 898--899
+Overfull \hbox (2.55696pt too wide) in paragraph at lines 898--899
 []\TU/Vazirmatn(0)/b/n/12 تجهیزات اصلی، شهرداری‌ها و تأمین‌کنندگان خدمات [[][][
 ][][][][]\TU/Vazirmatn(1)/b/n/12 ۳[][][][][][][]\TU/Vazirmatn(0)/b/n/12 ]. از ف
 ناوری‌های دفتر کل توزیع‌شده[][][][][][][][][][][][][]
  []
 
 [64]
-Overfull \hbox (8.21239pt too wide) in paragraph at lines 904--905
+Overfull \hbox (7.31433pt too wide) in paragraph at lines 904--905
 []\TU/Vazirmatn(0)/b/n/12 خروجی را در دستگاه‌هایی مقاوم در برابر دست‌کاری[][][]
 [][][][][][][][][] انجام می‌دهد و دست‌کاری سخت‌افزاری[]
  []
@@ -2051,7 +2063,18 @@ Overfull \hbox (6.89601pt too wide) in paragraph at lines 998--999
  و تکه‌تکه‌شدن مکرر شبکه را از ویژگی‌های[]
  []
 
-[71] [72] [73] [74] [75] [76] [77] [78]
+[71] [72] [73] [74] [75] [76]
+Overfull \hbox (1.07227pt too wide) in paragraph at lines 1022--1023
+[][]\TU/LibertinusSerif(0)/m/n/12 ECDLP[][][][][][][][][][][][][]\TU/Vazirmatn(
+0)/b/n/12 ، []\TU/LibertinusSerif(0)/m/n/12 ECDH[][][][][][][][][][][][][]\TU/V
+azirmatn(0)/b/n/12 ، منطق []\TU/LibertinusSerif(0)/m/n/12 BAN[][][][][][][][][]
+[][][][]\TU/Vazirmatn(0)/b/n/12 ، []\TU/LibertinusSerif(0)/m/n/12 AVISPA[][][][
+][][][][][][][][][] \TU/Vazirmatn(0)/b/n/12 و []\TU/LibertinusSerif(0)/m/n/12 S
+PAN[][][][][][][][][][][][][] \TU/Vazirmatn(0)/b/n/12 برای تحلیل حریم خصوصی طرا
+حی[]
+ []
+
+[77] [78]
 Overfull \hbox (7.88307pt too wide) in paragraph at lines 1033--1033
 []\TU/LibertinusSerif(0)/m/n/12 privacy-an overview,” \TU/LibertinusSerif(0)/m/
 it/12 International Journal of Network Security & Its Applications (IJNSA)[]
@@ -2087,10 +2110,10 @@ Package logreq Info: Writing requests to 'report.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 36820 strings out of 470015
- 767791 string characters out of 5475611
- 1643405 words of memory out of 6000000
- 64951 multiletter control sequences out of 15000+600000
+ 36818 strings out of 470015
+ 767761 string characters out of 5475611
+ 1642391 words of memory out of 6000000
+ 64949 multiletter control sequences out of 15000+600000
  636405 words of font info for 127 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  102i,13n,107p,4047b,5139s stack positions out of 10000i,1000n,20000p,200000b,200000s
