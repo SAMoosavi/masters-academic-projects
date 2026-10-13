@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "c109dfa80fa2fb70",
+        "id": "3433cb690aeb5245",
         "type": "tabs",
         "children": [
           {
-            "id": "f368b478d80f1328",
+            "id": "83396a5f9a9eb5f3",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "مقالات/wang2025-detectable.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "wang2025-detectable"
             }
           }
         ]
@@ -181,10 +185,15 @@
       "bases:Create new base": false
     }
   },
-  "active": "f368b478d80f1328",
+  "active": "83396a5f9a9eb5f3",
   "lastOpenFiles": [
     "تشخیص/binary-search.md",
     "MOC.md",
+    "مقالات/guo2024-drclas.md",
+    "مقالات/wang2025-detectable.md",
+    "مقالات/xu2023.md",
+    "مقالات/wu2025-pseudonyms.md",
+    "امضاها/CLAS.md",
     "مقالات/sedgFhVrv",
     "مقالات/sedKJDyr7",
     "مقالات/sedPZP6KD",
@@ -195,7 +204,6 @@
     "مقالات/zhao2023-level3-cls.md",
     "مقالات/li2023-relclas.md",
     "مقالات/li2026-level3-cls.md",
-    "مقالات/guo2024-drclas.md",
     "مقالات/wang2022-clasrm.md",
     "مقالات/kabil2024-cham-clas.md",
     "مقالات/cao2025.md",
@@ -212,9 +220,6 @@
     "حملات/KGC-attacks.md",
     "امضاها/Type-III.md",
     "امضاها/Standard-Model.md",
-    "امضاها/Signcryption.md",
-    "امضاها/Pairing-Free.md",
-    "امضاها/Detect-Invalid.md",
     "تشخیص",
     "دفاع",
     "حملات",
