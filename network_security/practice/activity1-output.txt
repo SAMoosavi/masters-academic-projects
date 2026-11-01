@@ -1,0 +1,94 @@
+==================================================================
+  Network Security - Activity 1 | Part 1: Footprinting
+==================================================================
+  User      : sam
+  Host      : omarchy
+  Date      : 2026-10-29  16:50:24 +0330
+  Local IP  : 172.21.1.13
+==================================================================
+
+$ resolvectl --legend=no query example.com
+example.com: 104.20.23.154                                  -- link: wlo1
+             172.66.147.243                                 -- link: wlo1
+             2606:4700:10::6814:179a                        -- link: wlo1
+             2606:4700:10::ac42:93f3                        -- link: wlo1
+
+$ resolvectl --legend=no query -t NS example.com
+example.com IN NS elliott.ns.cloudflare.com                 -- link: wlo1
+example.com IN NS hera.ns.cloudflare.com                    -- link: wlo1
+
+$ curl -s --max-time 10 https://ipinfo.io/104.20.23.154/json | jq '{ip, city, country, org}'
+{
+  "ip": "104.20.23.154",
+  "city": "San Francisco",
+  "country": "US",
+  "org": "AS13335 Cloudflare, Inc."
+}
+
+$ curl -sI --max-time 10 https://example.com | head -6
+HTTP/2 200 
+date: Thu, 29 Oct 2026 13:20:26 GMT
+content-type: text/html; charset=utf-8
+server: cloudflare
+last-modified: Sat, 24 Oct 2026 20:05:47 GMT
+allow: GET, HEAD
+==================================================================
+  Network Security - Activity 1 | Part 2: Scanning with Nmap
+==================================================================
+  User      : sam
+  Host      : omarchy
+  Date      : 2026-10-29  16:50:25 +0330
+  Local IP  : 172.21.1.13
+==================================================================
+
+$ nmap -sn 172.21.1.13
+Starting Nmap 7.992 ( https://nmap.org ) at 2026-10-29 16:50 +0330
+Nmap scan report for omarchy.local (172.21.1.13)
+Host is up (0.000071s latency).
+Nmap done: 1 IP address (1 host up) scanned in 0.00 seconds
+
+$ nmap -sT -sV --top-ports 1000 127.0.0.1
+Starting Nmap 7.992 ( https://nmap.org ) at 2026-10-29 16:50 +0330
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.00051s latency).
+Not shown: 998 closed tcp ports (conn-refused)
+PORT     STATE SERVICE VERSION
+631/tcp  open  ipp     CUPS 2.4
+1080/tcp open  socks5  (No authentication; connection failed)
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 7.11 seconds
+==================================================================
+  Network Security - Activity 1 | Part 3: Enumeration
+==================================================================
+  User      : sam
+  Host      : omarchy
+  Date      : 2026-10-29  16:50:33 +0330
+  Local IP  : 172.21.1.13
+==================================================================
+
+$ ss -lntp | head -12
+State  Recv-Q Send-Q      Local Address:Port  Peer Address:PortProcess
+LISTEN 0      511               0.0.0.0:20128      0.0.0.0:*    users:(("next-server (v1",pid=1533977,fd=21))
+LISTEN 0      128             127.0.0.1:1080       0.0.0.0:*    users:(("sharkvpn",pid=2078605,fd=48))
+LISTEN 0      512             127.0.0.1:49374      0.0.0.0:*    users:(("opencode.exe",pid=174484,fd=8))
+LISTEN 0      4096            127.0.0.1:631        0.0.0.0:*   
+LISTEN 0      4096        127.0.0.53%lo:53         0.0.0.0:*   
+LISTEN 0      5               127.0.0.1:6600       0.0.0.0:*    users:(("mpd",pid=913,fd=10))
+LISTEN 0      4096           172.17.0.1:53         0.0.0.0:*   
+LISTEN 0      511             127.0.0.1:38155      0.0.0.0:*    users:(("code",pid=4016958,fd=38))
+LISTEN 0      4096            127.0.0.1:45067      0.0.0.0:*   
+LISTEN 0      4096           127.0.0.54:53         0.0.0.0:*   
+LISTEN 0      50     [::ffff:127.0.0.1]:44239            *:*    users:(("java",pid=5619,fd=456))
+
+$ ip neigh
+172.21.1.91 dev wlo1 lladdr 94:ff:3c:fc:03:6e STALE 
+172.21.1.1 dev wlo1 lladdr 94:ff:3c:fc:03:6e REACHABLE 
+
+$ nmblookup -s /dev/null -A 172.21.1.13
+Looking up status of 172.21.1.13
+No reply from 172.21.1.13
+
+
+$ smbclient -s /dev/null -L //172.21.1.13 -N
+do_connect: Connection to 172.21.1.13 failed (Error NT_STATUS_CONNECTION_REFUSED)
